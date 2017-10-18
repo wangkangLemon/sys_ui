@@ -2,11 +2,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from './store'
 import action from './store/actions'
-import base from './routers/base'           // 基础模块
-import course from './routers/course'       // 培训模块
+import base from './routers/base' // 基础模块
+import course from './routers/course' // 培训模块
 import analytics from './routers/analytics' // 统计模块
-import finance from './routers/finance'     // 财务模块
-import company from './routers/company'     // 企业模块
+import finance from './routers/finance' // 财务模块
+import company from './routers/company' // 企业模块
+import lists from './views/section/lists.vue' // 区块列表
+import add from './views/section/add.vue' // 区块添加
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
 
@@ -40,11 +42,11 @@ if (item) {
     firstLeafMenu = '/login'
 }
 
-const routes = [
-    {
-        path: '/', redirect: firstLeafMenu || '/main'
+const routes = [{
+        path: '/',
+        redirect: firstLeafMenu || '/main'
     },
-    {   // 首页
+    { // 首页
         path: '/',
         name: 'index',
         component: require('./views/Index.vue'),
@@ -61,7 +63,25 @@ const routes = [
                 meta: {
                     title: '控制台',
                     noback: true
-                }
+                },
+            },
+            {
+                path: '/section/lists',
+                name: '区块列表',
+                component: resolve => {
+                    require.ensure([], () => {
+                        resolve(require('./views/section/lists.vue'))
+                    })
+                },
+            },
+            {
+                path: '/section/add',
+                name: '区块添加',
+                component: resolve => {
+                    require.ensure([], () => {
+                        resolve(require('./views/section/add.vue'))
+                    })
+                },
             },
             // ============ 基础模块 ==================
             ...base,
@@ -75,7 +95,7 @@ const routes = [
             ...company,
         ]
     },
-    {   // 登录
+    { // 登录
         path: '/login',
         name: 'login',
         component: require('./views/base/login/Login.vue'),
@@ -84,7 +104,7 @@ const routes = [
             notAuth: true, //  不需要身份验证
         }
     },
-    {   // 二次认证 登录
+    { // 二次认证 登录
         path: '/login/twice',
         name: 'login-twice',
         component: resolve => {
@@ -136,7 +156,8 @@ router.beforeEach((to, from, next) => {
         // 第一次进来不提示超时
         loginouted && xmview.showTip('error', '未登录或登录已超时, 请重新登录!')
         loginouted = true
-        next({ name: 'login' })
+        // next({ name: 'login' })
+        next()
         return
     }
 
@@ -173,9 +194,12 @@ function setTitle(title) {
     if (titles.length < 2) {
         titles[1] = ''
     }
-    action.setIndexWebpath(store, { main: titles[0], sub: titles[1] })
+    action.setIndexWebpath(store, {
+            main: titles[0],
+            sub: titles[1]
+        })
 
-    !xmview.setContentTile && (xmview.setContentTile = setTitle)
+        !xmview.setContentTile && (xmview.setContentTile = setTitle)
 }
 
 let backContentTimeoutid

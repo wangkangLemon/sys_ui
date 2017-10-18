@@ -7,7 +7,7 @@ export function login (username, password) {
     let url = urlPre + '/login'
     return api.post(url, {username, password}, true).then(ret => {
         if (ret.code == 0) {
-            return ret.data
+            return ret
         } else {
             return Promise.reject(ret)
         }

@@ -8,13 +8,16 @@
 </style>
 
 <template>
-    <!--<el-submenu :index="data.item.menu_url" v-if="data && data.children != null">
+    <el-submenu :index="data.item.menu_url" v-if="data && data.children != null">
         <template slot="title">
             <i class="fa" :class="data.item.menu_icon" v-if="data.item.menu_icon"></i>
             <i class="fa fa-th-large" v-else></i>
             {{data.item.menu_name}}
         </template>
-        <el-menu-item :index="item.item.menu_url" v-for="item in leafChildren" :key="item.item.id">
+
+        <MenuTree v-for="item in hasChildCItems" :key="item.item.id" :data="item"></MenuTree>
+
+        <el-menu-item :index="item.item.menu_url" v-bind="{index:}" v-for="item in leafChildren" :key="item.item.id">
             <i class="fa" :class="item.item.menu_icon" v-if="item.item.menu_icon"></i>
             <i class="fa fa-circle-o" v-else></i>
             {{item.item.menu_name}}
@@ -24,24 +27,6 @@
         <i class="fa" :class="data.item.menu_icon" v-if="data.item.menu_icon"></i>
         <i class="fa fa-th-large" v-else></i>
         {{data.item.menu_name}}
-    </el-menu-item>-->
-    
-    <el-submenu :index="data.menu_node" v-if="data && data.items != null">
-        <template slot="title">
-            <i class="fa" :class="data.menu_icon" v-if="data.menu_icon"></i>
-            <i class="fa fa-th-large" v-else></i>
-            {{data.menu_name}}
-        </template>
-        <el-menu-item :index="subItem.menu_node" v-for="subItem in data.items" :key="subItem.id">
-            <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
-            <i class="fa fa-circle-o" v-else></i>
-            {{subItem.menu_name}}
-        </el-menu-item>
-    </el-submenu>
-    <el-menu-item :index="data.menu_node" v-else>
-        <i class="fa" :class="data.menu_icon" v-if="data.menu_icon"></i>
-        <i class="fa fa-th-large" v-else></i>
-        {{data.menu_name}}
     </el-menu-item>
 </template>
 

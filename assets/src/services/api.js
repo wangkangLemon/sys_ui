@@ -98,21 +98,22 @@ function sendRequest (method, url, params, needLoding = false) {
             headers
         }).then((ret, xhr) => {
             resolve(ret, xhr)
-            console.log(ret)
         }).catch((err, xhr) => {
             reject({err, xhr})
         })
     })
 
-    url += '|' + requestId++
+    return pRequest
 
-    return new Promise((resolve, reject) => {
-        Promise.race([getTimeoutPromise(url), processResponse(pRequest, url)]).then((ret) => {
-            if (typeof ret !== 'function') resolve(ret)
-        }).catch(err => {
-            reject(err)
-        })
-    })
+    // url += '|' + requestId++
+
+    // return new Promise((resolve, reject) => {
+    //     Promise.race([getTimeoutPromise(url), processResponse(pRequest, url)]).then((ret) => {
+    //         if (typeof ret !== 'function') resolve(ret)
+    //     }).catch(err => {
+    //         reject(err)
+    //     })
+    // })
 }
 
 // 处理请求后的response数据

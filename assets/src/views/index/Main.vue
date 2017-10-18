@@ -152,6 +152,7 @@
 
 <template>
     <main id="index-main-container" v-if="mainData != null">
+        <div>123123</div>
         <section class="dashboard-analytics">
             <div class="col4">
                 <i class="fa fa-user"></i>
@@ -236,7 +237,7 @@
 
 <script>
 import Echars from 'echarts'
-import mainService from '../../services/base/mainService'
+// import mainService from '../../services/base/mainService'
 import * as timeUtils from '../../utils/timeUtils'
 let d = new Date()
 export default {
@@ -254,38 +255,39 @@ export default {
         }
     },
     created() {
-        mainService.getMain().then((ret) => {
-            this.mainData = ret.stat
-            this.listData = ret.list
-            let chartData = ret.chart
-            chartData.forEach((item) => {
-                this.xData.push(item.day)
-                this.viewUserData.push(item.num1)   // 学习人数
-                this.viewCourseData.push(item.num2) // 学习课程数
-                this.tryUserData.push(item.num3)    // 试看人数
-                this.tryCourseData.push(item.num4)  // 试看课程数
-            })
-        }).then(() => {
-            this.getLineChart()
-            var max1 = this.viewUserData.reduce(function(a, b) {
-                return Math.max(a, b)
-            })
-            var max2 = this.viewCourseData.reduce(function(a, b) {
-                return Math.max(a, b)
-            })
-            var max3 = this.tryUserData.reduce(function(a, b) {
-                return Math.max(a, b)
-            })
-            var max4 = this.tryCourseData.reduce(function(a, b) {
-                return Math.max(a, b)
-            })
-            var arr = [max1, max2, max3, max4]
-            this.maxResult = arr.reduce(function(a, b) {
-                return Math.max(a, b)
-            })
-        }).then(() => {
-            xmview.setContentLoading(false)
-        })
+        //this.mainData={'course_plan': 222, 'course_plan_offline': 3434,'user_yesterday': 666}
+        // mainService.getMain().then((ret) => {
+        //     this.mainData = ret.stat
+        //     this.listData = ret.list
+        //     let chartData = ret.chart
+        //     chartData.forEach((item) => {
+        //         this.xData.push(item.day)
+        //         this.viewUserData.push(item.num1)   // 学习人数
+        //         this.viewCourseData.push(item.num2) // 学习课程数
+        //         this.tryUserData.push(item.num3)    // 试看人数
+        //         this.tryCourseData.push(item.num4)  // 试看课程数
+        //     })
+        // }).then(() => {
+        //     this.getLineChart()
+        //     var max1 = this.viewUserData.reduce(function(a, b) {
+        //         return Math.max(a, b)
+        //     })
+        //     var max2 = this.viewCourseData.reduce(function(a, b) {
+        //         return Math.max(a, b)
+        //     })
+        //     var max3 = this.tryUserData.reduce(function(a, b) {
+        //         return Math.max(a, b)
+        //     })
+        //     var max4 = this.tryCourseData.reduce(function(a, b) {
+        //         return Math.max(a, b)
+        //     })
+        //     var arr = [max1, max2, max3, max4]
+        //     this.maxResult = arr.reduce(function(a, b) {
+        //         return Math.max(a, b)
+        //     })
+        // }).then(() => {
+        //     xmview.setContentLoading(false)
+        // })
     },
     methods: {
         getLineChart() { // 线性

@@ -31,14 +31,14 @@ module.exports = {
     },
     module: {
         rules: [
-            {
-                test: /\.(js|vue|jsx)$/,
-                loader: 'eslint-loader',
-                enforce: "pre",
-                options: {
-                    formatter: require('eslint-friendly-formatter')
-                }
-            },
+            // {
+            //     test: /\.(js|vue|jsx)$/,
+            //     loader: 'eslint-loader',
+            //     enforce: "pre",
+            //     options: {
+            //         formatter: require('eslint-friendly-formatter')
+            //     }
+            // },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',

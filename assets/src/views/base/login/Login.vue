@@ -158,6 +158,7 @@
     import {login} from '../../../services/base/authService'
     import authUtils from '../../../utils/authUtils'
     import treeUtils from '../../../utils/treeUtils'
+    // import treeUtils from '../../../../mocks/post/auth/login.json'
 
     export default {
         data () {
@@ -217,11 +218,12 @@
                         this.logining = true
                         // 请求接口
                         login(this.ruleForm2.account, this.ruleForm2.checkPass).then((ret) => {
-                            console.log(ret.auth_menu)
-                            authUtils.setNavMenu(treeUtils.arr2Tree(ret.auth_menu)) // 保存菜单
+                            console.log('=======')
+                            //authUtils.setNavMenu(treeUtils.arr2Tree(ret.auth_menu)) // 保存菜单
+                            // authUtils.setNavMenu(treeUtils.data.auth_menu) // 保存菜单
                             authUtils.setOperation(ret.auth_ops) // 保存权限信息
-                            authUtils.setAuthToken(ret.auth_token) // 保存token
-                            authUtils.setUserInfo(ret.auth_user) // 保存用户信息
+                            authUtils.setAuthToken(ret._exts.token) // 保存token
+                            authUtils.setUserInfo(ret.data.name) // 保存用户信息
                             xmview.showTip('success', '登录成功, 正在跳转...', 1e9)
                             setTimeout(() => {
                                 // 如果需要二次登录
@@ -230,13 +232,15 @@
                                 } else if (this.$route.query.returnUrl) {  // 判断是否需要回到上个页面
                                     window.location.href = this.$route.query.returnUrl
                                 } else {
-//                                    this.$router.replace({name: 'main'})
-                                    // 拿到左边的叶子节点
-                                    let item = treeUtils.arr2Tree(ret.auth_menu)[0]
-                                    while (item.children && item.children.length > 0)
-                                        item = item.children[0]
-//                                    window.location = item.item.menu_url
-                                    this.$router.push({path: item.item.menu_url})
+// //                                  this.$router.replace({name: 'main'})
+//                                     let item = treeUtils.arr2Tree(ret.auth_menu)[0]
+//                                     let item = treeUtils.data.auth_menu[0]
+//                                     while (item.children && item.children.length > 0)
+//                                     item = item.children[0]
+// //                                  window.location = item.item.menu_urlmenu_url
+                                    // this.$router.push({path: item.item.menu_url})
+                                    // console.log(item.item.menu_url)
+                                    this.$router.push({'path': '/main'})
                                 }
                             }, 400)
                         }).catch((ret) => {

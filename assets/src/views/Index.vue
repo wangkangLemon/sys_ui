@@ -219,7 +219,7 @@
             <el-row class="header wap-header" type="flex">
                 <el-col :span="20" class="logo">
                     <img src="../assets/images/logo.png">
-                    <h1>药视通供应商管理平台</h1>
+                    <h1>医线通供应商管理平台</h1>
                 </el-col>
                 <el-col :span="4">
                     <i class="iconfont icon-list" @click="handleIsShowMenue(!isShowMenue)"></i>
@@ -227,7 +227,7 @@
             </el-row>
             <el-row class="header" type="flex">
                 <el-col :span="8" :offset="2">
-                    <h2>药视通</h2>
+                    <h2>医线通</h2>
                 </el-col>
                 <el-col :span="24" class="header-right">
                     <div><i class="iconfont icon-xiaoxizhongxin"></i> <em></em></div>
@@ -255,9 +255,8 @@
                      @select="handleMenuClick"
                      :router="true">
                 <div class="nav-title">导航</div>
-                <MenuTree v-for="item in navMenus" :data="item" :key="item.item.id"></MenuTree>
+                <MenuTree v-for="item in navMenus" :data="item" :key="item.id"></MenuTree>
             </el-menu>
-
             <!--右边内容-->
             <section class="index-right-content" @click="handleIsShowMenue(false)">
                 <h2 class="right-title">
@@ -279,6 +278,7 @@
     import * as authService from '../services/base/authService'
     import MenuTree from './component/tree/MenuTree.vue'
     import authUtils from '../utils/authUtils'
+    import getMenutree from '../services/base/menutreeService.js'
 
     export default {
         data () {
@@ -312,11 +312,15 @@
             }
         },
         created () {
+             getMenutree(authUtils.getAuthToken()).then(ret=>{
+                this.$store.dispatch('setIndexNavMenu',{menu:ret});
+             })
+
             authUtils.authRefreshtoken() // 开启自动更新token
             xmview.setContentLoading = this.setContentLoading.bind(this)
             xmview.setContentBack = this.showContentBack.bind(this)
             // this.$store.dispatch('setIndexMenuActive', this.$route.path) // 设置选中的菜单
-            this.$store.dispatch('setIndexNavMenu', {menu: authUtils.getNavMenu()}) // 获取菜单
+            // this.$store.dispatch('setIndexNavMenu', {menu: authUtils.getNavMenu()}) // 获取菜单
         },
         mounted () {
             window.onresize = () => {
