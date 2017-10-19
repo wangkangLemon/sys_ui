@@ -242,7 +242,7 @@
             },
             // 批量删除
             delMulti () {
-                xmview.showDialog(`你将要删除选中的课程，操作不可恢复确认吗?`, () => {
+                xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
                     courseService.deleteDocMulty({doc_id: this.selectedIds}).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.dialogTree.isShow = false

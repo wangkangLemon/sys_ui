@@ -1,20 +1,21 @@
+// 系统模块
 // 培训模块
-const pathPre = '/course'
+const pathPre = '/sys'
 //  培训管理
 export default {
     path: pathPre,
     component: resolve => {
         require.ensure([], () => {
-            resolve(require('../views/course/Main.vue'))
+            resolve(require('../views/sys/Main.vue'))
         })
     },
     children: [
         {
-            path: 'index',
-            name: 'course-index',
+            path: 'admin',
+            name: 'sys-index',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/Index.vue'))
+                    resolve(require('../views/sys/Index.vue'))
                 })
             },
             meta: {
@@ -24,10 +25,10 @@ export default {
         },
         {
             path: 'add',
-            name: 'course-add',
+            name: 'sys-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/Form.vue'))
+                    resolve(require('../views/sys/Form.vue'))
                 })
             },
             meta: {
@@ -37,10 +38,10 @@ export default {
         },
         {
             path: 'edit/:course_id',
-            name: 'course-edit',
+            name: 'sys-edit',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/Form.vue'))
+                    resolve(require('../views/sys/Form.vue'))
                 })
             },
             meta: {
@@ -50,10 +51,10 @@ export default {
         },
         {
             path: 'video', // 视频管理
-            name: 'course-video',
+            name: 'sys-video',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/video/Index.vue'))
+                    resolve(require('../views/sys/video/Index.vue'))
                 })
             },
             meta: {
@@ -63,10 +64,10 @@ export default {
         },
         {
             path: 'video/add',
-            name: 'course-video-add',
+            name: 'sys-video-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/video/Add.vue'))
+                    resolve(require('../views/sys/video/Add.vue'))
                 })
             },
             meta: {
@@ -75,10 +76,10 @@ export default {
         },
         {
             path: 'doc', // 文档管理
-            name: 'course-doc',
+            name: 'sys-doc',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/doc/Index.vue'))
+                    resolve(require('../views/sys/doc/Index.vue'))
                 })
             },
             meta: {

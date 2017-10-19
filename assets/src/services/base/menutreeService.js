@@ -8,7 +8,7 @@ export default function getMenutree (token) {
     return api.post(url,{
         token
     }).then(ret => {
-        if (ret.code != -1) {
+        if (ret.code == 0) {
             return ret.data
         } else {
             return Promise.reject(ret)

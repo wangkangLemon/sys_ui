@@ -2,13 +2,14 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from './store'
 import action from './store/actions'
-import base from './routers/base' // 基础模块
-import course from './routers/course' // 培训模块
-import analytics from './routers/analytics' // 统计模块
-import finance from './routers/finance' // 财务模块
-import company from './routers/company' // 企业模块
-import lists from './views/section/lists.vue' // 区块列表
-import add from './views/section/add.vue' // 区块添加
+import base from './routers/base'              // 基础模块
+import course from './routers/course'          // 培训模块
+import analytics from './routers/analytics'    // 统计模块
+import finance from './routers/finance'        // 财务模块
+import company from './routers/company'        // 企业模块
+import sys from './routers/sys'                // 系统模块
+// import lists from './views/section/lists.vue'  // 系统模块
+// import add from './views/section/add.vue'      // 区块添加
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
 
@@ -65,24 +66,24 @@ const routes = [{
                     noback: true
                 },
             },
-            {
-                path: '/section/lists',
-                name: '区块列表',
-                component: resolve => {
-                    require.ensure([], () => {
-                        resolve(require('./views/section/lists.vue'))
-                    })
-                },
-            },
-            {
-                path: '/section/add',
-                name: '区块添加',
-                component: resolve => {
-                    require.ensure([], () => {
-                        resolve(require('./views/section/add.vue'))
-                    })
-                },
-            },
+            // {
+            //     path: '/section/lists',
+            //     name: '区块列表',
+            //     component: resolve => {
+            //         require.ensure([], () => {
+            //             resolve(require('./views/section/lists.vue'))
+            //         })
+            //     },
+            // },
+            // {
+            //     path: '/section/add',
+            //     name: '区块添加',
+            //     component: resolve => {
+            //         require.ensure([], () => {
+            //             resolve(require('./views/section/add.vue'))
+            //         })
+            //     },
+            // },
             // ============ 基础模块 ==================
             ...base,
             // ============ 培训模块 ==================
@@ -93,6 +94,8 @@ const routes = [{
             finance,
             // ============ 企业模块 ==================
             ...company,
+            // ============ 系统模块 ==================
+            sys,
         ]
     },
     { // 登录

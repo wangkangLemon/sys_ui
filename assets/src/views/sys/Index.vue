@@ -38,61 +38,49 @@
 <template>
     <article id="course-index-container">
         <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'course-add'})">
-                <i>添加课程</i>
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'sys-add'})">
+                <i>添加管理员</i>
             </el-button>
         </section>
 
         <article class="search">
             <section>
-                <i>课程名称</i>
+                <i>管理员姓名</i>
                 <el-input v-model="fetchParam.keyword" @keyup.enter.native="fetchData"></el-input>
             </section>
-
-            <section>
-                <i>状态</i>
-                <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData" :clearable="true">
-                    <el-option label="全部" value="-1"></el-option>
-                    <el-option label="正常" value="0"></el-option>
-                    <el-option label="下线" value="1"></el-option>
-                    <el-option label="待审" value="3"></el-option>
-                    <el-option label="审核失败" value="4"></el-option>
-                </el-select>
-            </section>
-
-            <DateRange title="创建时间" :start="fetchParam.time_start" :end="fetchParam.time_end" @changeStart="val=> fetchParam.time_start=val " @changeEnd="val=> fetchParam.time_end=val" :change="fetchData">
-            </DateRange>
 
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
+            
             <el-table-column type="selection"></el-table-column>
-            <el-table-column min-width="200" prop="name" label="课程">
+            <el-table-column min-width="200" prop="name" label="姓名">
             </el-table-column>
-            <el-table-column min-width="200" prop="category_name" label="所属栏目">
+            <el-table-column min-width="200" prop="category_name" label="角色">
+            </el-table-column>
+            <el-table-column min-width="200" prop="mobile" label="手机">
+            </el-table-column>
+            <el-table-column min-width="200" prop="email" label="邮箱">
+            </el-table-column>
+            <el-table-column min-width="200" prop="category_name" label="上次登录时间">
             </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">
                     <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
-                    <el-tag v-else-if="scope.row.status == 2" type="primary">转码中</el-tag>
-                    <el-tag v-else-if="scope.row.status == 3" type="primary">待审</el-tag>
-                    <el-tag v-else-if="scope.row.status == 4" type="primary">审核失败</el-tag>
-                    <el-tag v-else>已下线</el-tag>
+                    <el-tag v-else>禁用</el-tag>
                 </template>
-            </el-table-column>
-            <el-table-column width="190" prop="create_time_name" label="创建时间">
             </el-table-column>
             <el-table-column fixed="right" width="207" label="操作">
                 <template scope="scope">
                     <!--<el-button @click="preview(scope.$index, scope.row)" type="text" size="small">预览</el-button>-->
+                    <el-button @click="$router.push({name: 'course-edit', params: {courseInfo: scope.row, course_id: scope.row.id}})" type="text" size="small">详情
+                        <!--a-->
+                    </el-button>
                     <el-button @click="$router.push({name: 'course-edit', params: {courseInfo: scope.row, course_id: scope.row.id}})" type="text" size="small">编辑
                         <!--a-->
                     </el-button>
-                    <el-button @click="online(scope.$index, scope.row)" type="text" size="small" v-if="scope.row.status == 1">
-                        <i>{{ '上线' }}</i>
-                    </el-button>
-                    <el-button @click="offline(scope.$index, scope.row)" type="text" size="small" v-else>
-                        <i>{{ '下线' }}</i>
+                    <el-button @click="online(scope.$index, scope.row)" type="text" size="small">
+                        <i>禁用</i>
                     </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
 
@@ -113,12 +101,14 @@
 </template>
 
 <script>
-import courseService from '../../services/course/courseService'
+// import sysService from '../../services/sys/sysService.js'
+import authUtils from '../../utils/authUtils.js'
+import sysService from '../../services/sys/sysService.js'
 import DateRange from '../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
     return {
-        status: void -1, // 2- 视屏转码中 1-下线 0-正常
+        status: void 0, //  1-禁用 0-正常
         category: void 0, // 3- 供应商
         page: 1,
         page_size: 15,
@@ -151,6 +141,9 @@ export default {
         this.fetchData()
     },
     methods: {
+        userInfo () {
+            return authUtils.getUserInfo()
+        },
         initFetchParam() {
             this.fetchParam = getFetchParam()
         },
@@ -164,10 +157,11 @@ export default {
         },
         fetchData(val) {
             this.loadingData = true
-            return courseService.search(this.fetchParam).then((ret) => {
+            return sysService.fetchData(authUtils.getAuthToken()).then((ret) => {
                 this.data = ret.data
                 this.total = ret.total
                 this.loadingData = false
+                console.log(ret)
                 xmview.setContentLoading(false)
             })
         },
@@ -197,7 +191,7 @@ export default {
         },
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除项目 <span style="color:red">${row.name}</span> 操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除管理员 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
                 courseService.delete(row.id).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.data.splice(index, 1)

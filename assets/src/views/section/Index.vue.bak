@@ -181,7 +181,7 @@ export default {
         },
         // 下线
         offline(index, row) {
-            xmview.showDialog(`你将要下线课程 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+            xmview.showDialog(`你将要下线项目 <span style="color:red">${row.name}</span> 确认吗?`, () => {
                 courseService.offline(row.id).then((ret) => {
                     row.status = 1
                 })
@@ -189,7 +189,7 @@ export default {
         },
         // 上线
         online(index, row) {
-            xmview.showDialog(`你将要上线课程 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+            xmview.showDialog(`你将要上线项目 <span style="color:red">${row.name}</span> 确认吗?`, () => {
                 courseService.online(row.id).then((ret) => {
                     row.status = 0
                 })
@@ -197,7 +197,7 @@ export default {
         },
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除课程 <span style="color:red">${row.name}</span> 操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除项目 <span style="color:red">${row.name}</span> 操作不可恢复确认吗?`, () => {
                 courseService.delete(row.id).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.data.splice(index, 1)
@@ -206,7 +206,7 @@ export default {
         },
         // 批量删除
         delMulti() {
-            xmview.showDialog(`你将要删除选中的课程，操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
                 courseService.deleteMulty(this.selectedIds.join(',')).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.dialogTree.isShow = false
