@@ -101,6 +101,7 @@
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
+
             <el-tab-pane :disabled="!fetchParam.id" label="课时管理" name="classhour">
                 <!--<el-tab-pane label="课时管理" name="classhour">-->
                 <!--单节课-->
@@ -274,7 +275,7 @@ export default {
             fetchParam: getOriginData(),
             rules: {
                 name: { required: true, message: '请输入课程名称', trigger: 'change' },
-                category_id: { required: true, type: 'number', message: '请选择课程栏目', trigger: 'change' },
+                category_id: { required: true, type: 'number', message: '请选择课程栏目', trigger: 'onblur' },
                 image: { required: true, message: '请上传课程封面', trigger: 'change' },
                 lesson_type: { required: true, message: '请选择课程类型', trigger: 'change' },
             },

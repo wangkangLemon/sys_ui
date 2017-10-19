@@ -66,7 +66,8 @@
             </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">
-                    <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
+                    <el-tag v-if="scope.row.deleted == 1">已删除</el-tag>
+                    <el-tag v-else-if="scope.row.deleted == 0&&scope.row.disabled == 0" type="success">正常</el-tag>
                     <el-tag v-else>禁用</el-tag>
                 </template>
             </el-table-column>
@@ -101,8 +102,6 @@
 </template>
 
 <script>
-// import sysService from '../../services/sys/sysService.js'
-import authUtils from '../../utils/authUtils.js'
 import sysService from '../../services/sys/sysService.js'
 import DateRange from '../component/form/DateRangePicker.vue'
 
@@ -125,6 +124,7 @@ export default {
     },
     data() {
         return {
+            init:false,
             loadingData: false,
             data: [], // 表格数据
             total: 0,
@@ -137,7 +137,7 @@ export default {
             }
         }
     },
-    activated() {
+    created() {
         this.fetchData()
     },
     methods: {
@@ -148,8 +148,12 @@ export default {
             this.fetchParam = getFetchParam()
         },
         handleCurrentChange(val) {
-            this.fetchParam.page = val
-            this.fetchData()
+            if(this.init){
+                this.fetchParam.page = val
+                this.fetchData()
+            }else{
+                this.init = true
+            }
         },
         handleSizeChange(val) {
             this.fetchParam.page_size = val
@@ -157,7 +161,8 @@ export default {
         },
         fetchData(val) {
             this.loadingData = true
-            return sysService.fetchData(authUtils.getAuthToken()).then((ret) => {
+            console.log(2)
+            return sysService.fetchData().then((ret) => {
                 this.data = ret.data
                 this.total = ret.total
                 this.loadingData = false
@@ -175,16 +180,16 @@ export default {
         },
         // 下线
         offline(index, row) {
-            xmview.showDialog(`你将要下线课程 <span style="color:red">${row.name}</span> 确认吗?`, () => {
-                courseService.offline(row.id).then((ret) => {
+            xmview.showDialog(`你将要禁用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+                sysService.offline(row.id).then((ret) => {
                     row.status = 1
                 })
             })
         },
         // 上线
         online(index, row) {
-            xmview.showDialog(`你将要上线课程 <span style="color:red">${row.name}</span> 确认吗?`, () => {
-                courseService.online(row.id).then((ret) => {
+            xmview.showDialog(`你将要启用管理员<span style="color:red">${row.name}</span> 确认吗?`, () => {
+                sysService.online(row.id).then((ret) => {
                     row.status = 0
                 })
             })
@@ -192,7 +197,7 @@ export default {
         // 单条删除
         del(index, row) {
             xmview.showDialog(`你将要删除管理员 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
-                courseService.delete(row.id).then(() => {
+                sysService.delete(row.id).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.data.splice(index, 1)
                 })
@@ -201,7 +206,7 @@ export default {
         // 批量删除
         delMulti() {
             xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
-                courseService.deleteMulty(this.selectedIds.join(',')).then(() => {
+                sysService.deleteMulty(this.selectedIds.join(',')).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.dialogTree.isShow = false
                     setTimeout(() => {

@@ -159,7 +159,7 @@ router.beforeEach((to, from, next) => {
         // 第一次进来不提示超时
         loginouted && xmview.showTip('error', '未登录或登录已超时, 请重新登录!')
         loginouted = true
-        // next({ name: 'login' })
+        next({ name: 'login' })
         next()
         return
     }

@@ -181,7 +181,7 @@ export default {
         },
         // 下线
         offline(index, row) {
-            xmview.showDialog(`你将要下线课程 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+            xmview.showDialog(`你将要禁用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
                 courseService.offline(row.id).then((ret) => {
                     row.status = 1
                 })
@@ -189,7 +189,7 @@ export default {
         },
         // 上线
         online(index, row) {
-            xmview.showDialog(`你将要上线课程 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+            xmview.showDialog(`你将要启用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
                 courseService.online(row.id).then((ret) => {
                     row.status = 0
                 })

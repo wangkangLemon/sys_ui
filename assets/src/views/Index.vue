@@ -312,7 +312,7 @@
             }
         },
         created () {
-             getMenutree(authUtils.getAuthToken()).then(ret=>{
+             getMenutree().then(ret=>{
                 this.$store.dispatch('setIndexNavMenu',{menu:ret});
              })
 

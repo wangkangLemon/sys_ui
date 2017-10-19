@@ -5,10 +5,9 @@ const urlPre = config.apiHost + '/admin'
 class sysService {
 
     //拿到数据
-    fetchData (token) {
+    fetchData () {
         let url = urlPre + '/lists'
         return api.post(url,{
-            token
         }).then(ret => {
             if (ret.code == 0) {
                 return ret
@@ -31,9 +30,10 @@ class sysService {
     }
 
     // 创建
-    create({ category_id, name, image, description, tags, company_id, price, lesson_type }) {
-        let url = urlPre + '/'
-        return api.post(url, { category_id, name, image, description, tags, company_id, price, lesson_type }).then(ret => {
+    create({ role_id, name, mobile, email, password }) {
+        let url = urlPre + '/create'
+        console.log(url)
+        return api.post(url, { role_id, name, mobile, email, password }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -54,8 +54,13 @@ class sysService {
 
     // 删除
     delete(id) {
-        let url = `${urlPre}/${id}/`
+        alert('dellllllllllllllllllllllllllllllllllll')
+        // let url = `${urlPre}/${id}/`
+        let url = `${urlPre}/delete/${id}`
+        console.log(url)
         return api.del(url, {}).then(ret => {
+            console.log(1111111111111111)
+            console.log(ret)
             if (ret.code) {
                 return Promise.reject(ret)
             }

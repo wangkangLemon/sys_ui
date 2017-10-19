@@ -3,10 +3,9 @@ import config from '../../utils/config'
 const urlPre = config.apiHost + '/auth/menus'
 
 
-export default function getMenutree (token) {
+export default function getMenutree () {
     let url = urlPre
     return api.post(url,{
-        token
     }).then(ret => {
         if (ret.code == 0) {
             return ret.data
