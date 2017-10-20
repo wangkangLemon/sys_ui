@@ -71,12 +71,16 @@
             </el-form-item>-->
             <el-form-item label="角色" prop="role" :fetch-suggestions="querySearch" v-model.role="fetchParam.role" placeholder="请输入内容"
                 @select="handleSelect">
-                <el-input v-model="fetchParam.role"></el-input>
+                <!--<el-input v-model="fetchParam.role"></el-input>-->
+                <el-select v-model.role="fetchParam.role" placeholder="请输入角色" :change="getrole">
+                    <el-option  v-for="item in role_list" :label="item.role_name" :value="item.role_name"></el-option>
+                    <!--<el-option label="超级管理员" value="role_list.role_name"></el-option>-->
+                </el-select>
             </el-form-item>
             <el-form-item label="姓名" prop="price">
                 <el-input v-model.name="fetchParam.name"></el-input>
             </el-form-item>
-            <el-form-item label="手机号" prop="mobile" name="mobile">
+            <el-form-item label="手机号" prop="mobile">
                 <el-input v-model.mobile="fetchParam.mobile"></el-input>
             </el-form-item>
             <el-form-item label="邮箱"  prop="email">
@@ -98,6 +102,7 @@
 
 <script>
     import sysService from '../../services/sys/sysService.js'
+    import role_mService from '../../services/sys/role_mService.js'
     import vTags from '../component/form/Tags.vue'
     import config from '../../utils/config'
     import clone from 'clone'
@@ -117,7 +122,7 @@
                 fetchParam: getOriginData(),
                 rules: {
                     role: { required: true, message: '请输入角色', trigger: 'change' },
-                    mobile: { required: true, type: 'number', message: '请输入正确的手机号', trigger: 'change' },
+                    mobile: { required: true, type: 'string', message: '请输入正确的手机号', trigger: 'change' },
                     email: { required: true, message: '请输入邮箱地址', trigger: 'change' },
                     pass: { required: true, message: '请输入大于6位的数字', trigger: 'change' },
                 },
@@ -127,12 +132,14 @@
                     }],
                 },
                 resultData: [],
+                role_list:[],
             }
         },
         created() {
-            //     if (this.$route.params.course_id != undefined) {
+            xmview.setContentLoading(false);
+            //     if (this.$route.params.role_id != undefined) {
             //         courseService.getCourseInfo({
-            //             course_id: this.$route.params.course_id
+            //             role_id: this.$route.params.role_id
             //         }).then((ret) => {
             //             this.editLessonData = ret.lessons
             //             this.fetchParam = ret.course
@@ -151,11 +158,20 @@
             //                 })
             //             }
             //         })
-            //     }
-            xmview.setContentLoading(false);//他在页面加载前触发 没有结束事件
+            //     
+            this.getrole()
             this.loadingData=false;
         },
+         activated () {
+            
+        },
         methods: {
+            getrole(val){
+                role_mService.fetchData().then((ret)=>{
+                 this.role_list=ret.data;
+                console.log(this.role_list)
+                })
+            },
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
@@ -221,6 +237,8 @@
     function getOriginData() {
         return {
             role_id: '',
+            role:'',
+            role_name:'',
             category_name: '请选择栏目',
             name: '',
             mobile: '',

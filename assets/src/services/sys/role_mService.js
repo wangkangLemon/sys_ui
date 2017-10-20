@@ -1,12 +1,14 @@
 import * as api from '../api'
 import config from '../../utils/config'
-const urlPre = config.apiHost + '/admin'
+const urlPre = config.apiHost + '/role'
 
-class sysService {
-    //拿到数据 
+class role_mService {
+
+    //拿到数据
     fetchData () {
+        console.log('进入获取角色列表的请求方法')
         let url = urlPre + '/lists'
-        return api.post(url,{
+        return api.get(url,{
         }).then(ret => {
             if (ret.code == 0) {
                 return ret
@@ -16,12 +18,10 @@ class sysService {
         })
     }
 
-    
     // 搜索
-    search({ keyword = '', status = -1, role_id = 0, time_start, time_end, page, page_size }) {
-        let url = `${urlPre}/view/${id}`
-        alert(123)
-        return api.get(url, { keyword, status, role_id, time_start, time_end, page, page_size }, false).then(ret => {
+    search({ keyword = '', status = -1, category_id = 0, time_start, time_end, page, page_size }) {
+        let url = urlPre + '/lists'
+        return api.get(url, { keyword, status, category_id, time_start, time_end, page, page_size }, false).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -131,4 +131,4 @@ class sysService {
         })
     }
 }
-export default new sysService()
+export default new role_mService()

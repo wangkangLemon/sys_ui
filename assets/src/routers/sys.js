@@ -37,7 +37,7 @@ export default {
             }
         },
         {
-            path: 'edit/:course_id',
+            path: 'edit/:sys_id',
             name: 'sys-edit',
             component: resolve => {
                 require.ensure([], () => {

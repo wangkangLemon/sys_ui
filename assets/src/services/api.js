@@ -38,10 +38,12 @@ export function post (url, params, needLoading = false) {
 }
 
 export function put (url, params, needLoading) {
+    console.log('put()')
     return sendRequest('PUT', url, params, needLoading)
 }
 
 export function del (url, params, needLoading) {
+    console.log('del--------------------------------')
     return sendRequest('DELETE', url, params, needLoading)
 }
 

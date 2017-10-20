@@ -146,7 +146,7 @@ let loginouted = false
 router.afterEach((route) => {
     let title = route.meta.title
     if (title) {
-        document.title = title + ' - 药视通'
+        document.title = title + ' - 医线通'
     }
 
     // 设置选中的菜单

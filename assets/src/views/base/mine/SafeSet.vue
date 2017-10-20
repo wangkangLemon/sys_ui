@@ -57,7 +57,7 @@
                             <el-tag type="primary">已绑定微信号: {{wechat.data}}</el-tag>
                             <el-button type="text" @click="changeWechat">更换</el-button>
                         </span>
-                        <div>绑定后，登录药视通平台可用绑定微信账号扫码进行安全验证。</div>
+                        <div>绑定后，登录医线通平台可用绑定微信账号扫码进行安全验证。</div>
                     </div>
                 </section>
                 <section>
@@ -71,7 +71,7 @@
                             <el-tag type="primary">已绑定手机号码: {{sms.data}}</el-tag>
                             <el-button type="text" @click="changeSms">更换</el-button>
                         </span>
-                        <div>绑定后，登录药视通平台用该手机号码接收登录验证码。</div>
+                        <div>绑定后，登录医线通平台用该手机号码接收登录验证码。</div>
                     </div>
                 </section>
                 <section>
@@ -85,7 +85,7 @@
                             <el-tag type="primary">已绑定电子邮箱: {{email.data}}</el-tag>
                             <el-button type="text" @click="changeEmail">更换</el-button>
                         </span>
-                        <div>绑定后，登录药视通平台可用该邮箱接收登录验证码。</div>
+                        <div>绑定后，登录医线通平台可用该邮箱接收登录验证码。</div>
                     </div>
                 </section>
             </article>

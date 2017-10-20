@@ -320,7 +320,7 @@
             xmview.setContentLoading = this.setContentLoading.bind(this)
             xmview.setContentBack = this.showContentBack.bind(this)
             // this.$store.dispatch('setIndexMenuActive', this.$route.path) // 设置选中的菜单
-            // this.$store.dispatch('setIndexNavMenu', {menu: authUtils.getNavMenu()}) // 获取菜单
+            this.$store.dispatch('setIndexNavMenu', {menu: authUtils.getNavMenu()}) // 获取菜单
         },
         mounted () {
             window.onresize = () => {
