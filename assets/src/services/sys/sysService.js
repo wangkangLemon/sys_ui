@@ -33,11 +33,11 @@ class sysService {
     // 创建
     create({ role_id, name, mobile, email, password }) {
         let url = urlPre + '/create'
-        console.log(url)
         return api.post(url, { role_id, name, mobile, email, password }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
+                xmview.showTip('error',ret.message)
                 return Promise.reject(ret)
             }
         })

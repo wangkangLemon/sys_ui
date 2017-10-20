@@ -69,15 +69,14 @@
             <!--<el-form-item label="角色" prop="role_id">
                 <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.role_id"></CourseCategorySelect>
             </el-form-item>-->
-            <el-form-item label="角色" prop="role" :fetch-suggestions="querySearch" v-model.role="fetchParam.role" placeholder="请输入内容"
-                @select="handleSelect">
+            <el-form-item label="角色" prop="role_id" :fetch-suggestions="querySearch">
                 <!--<el-input v-model="fetchParam.role"></el-input>-->
-                <el-select v-model.role="fetchParam.role" placeholder="请输入角色" :change="getrole">
-                    <el-option  v-for="item in role_list" :label="item.role_name" :value="item.role_name"></el-option>
+                <el-select v-model="fetchParam.role_id" placeholder="请输入角色">
+                    <el-option  v-for="item in role_list" :label="item.role_name" :value="item.id"></el-option>
                     <!--<el-option label="超级管理员" value="role_list.role_name"></el-option>-->
                 </el-select>
             </el-form-item>
-            <el-form-item label="姓名" prop="price">
+            <el-form-item label="姓名" prop="name">
                 <el-input v-model.name="fetchParam.name"></el-input>
             </el-form-item>
             <el-form-item label="手机号" prop="mobile">
@@ -86,8 +85,8 @@
             <el-form-item label="邮箱"  prop="email">
                 <el-input v-model.email="fetchParam.email"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="pass">
-                <el-input v-model.password="fetchParam.password" auto-complete="off" type="password"></el-input>
+            <el-form-item label="密码" prop="password">
+                <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="price">
                 <el-input v-model.address="fetchParam.address"></el-input>
@@ -112,6 +111,31 @@
             vTags,
         },
         data() {
+            var validateAccount = (rule, value, callback) => {
+                let newValue = value || ''
+                if (newValue === '') {
+                    callback(new Error('请输入手机号或邮箱'))
+                }
+                if (newValue.indexOf('@') != -1) {
+                    if (!newValue.match(/^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/)) {
+                        callback(new Error('请输入正确的邮箱'))
+                    }
+                } else {
+                    if (!newValue.match(/^1[34578]\d{9}$/)) {
+                        callback(new Error('请输入正确的手机号'))
+                    }
+                }
+                if (this.ruleForm2.checkPass !== '') {
+                    this.$refs.ruleForm2.validateField('checkPass')
+                }
+                callback()
+            }
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入管理员密码'))
+                }
+                callback()
+            }
             return {
                 loadingData: false,
                 currentData: {
@@ -121,11 +145,11 @@
                 },
                 fetchParam: getOriginData(),
                 rules: {
-                    role: { required: true, message: '请输入角色', trigger: 'change' },
-                    mobile: { required: true, type: 'string', message: '请输入正确的手机号', trigger: 'change' },
-                    email: { required: true, message: '请输入邮箱地址', trigger: 'change' },
-                    pass: { required: true, message: '请输入大于6位的数字', trigger: 'change' },
-                },
+                    role_id: { required: true, message: '请输入角色', trigger: 'blur'},
+                    mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
+                    email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入大于6位的密码', trigger: 'blur' },
+            },
                 multi: {
                     data: [{
                         id: -1
@@ -169,7 +193,6 @@
             getrole(val){
                 role_mService.fetchData().then((ret)=>{
                  this.role_list=ret.data;
-                console.log(this.role_list)
                 })
             },
             btnNextClick() {
@@ -181,13 +204,15 @@
                         console.log(111111111111)
                         console.log(ret)
                         // 重置当前数据
-                        this.$refs[fetchParam].resetFields();//自己加的方法
+                        //this.$refs[fetchParam].resetFields();//自己加的方法
+                        this.fetchParam=getOriginData(),
                         this.currentData = {
                             data: [],
                             pindex: -1,
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
+                        xmview.showTip('success', '数据提交成功')
                     })
                 })
             },
@@ -195,13 +220,10 @@
             querySearch(queryString, cb) {
                 var restaurants = this.restaurants;
                 var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-                // 调用 callback 返回建议列表的数据
+                // 调用 callback 返回建议列表的数据返回建议列表的数据
                 cb(results);
             },
-            //选择角色组
-            handleSelect(item) {
-                console.log(item);
-            },
+ 
             // 保存章节
             submitChapter() {
                 if (!this.chapter.value) return

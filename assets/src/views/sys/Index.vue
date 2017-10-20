@@ -46,17 +46,23 @@
         <article class="search">
             <section>
                 <i>管理员姓名</i>
-                <el-input v-model="fetchParam.keyword" @keyup.enter.native="search" placeholder="请输入姓名"></el-input>
+                <el-input v-model="keyWord" placeholder="请输入姓名"></el-input>
             </section>
 
         </article>
 
-        <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
+        <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <el-table-column type="selection"></el-table-column>
-            <el-table-column min-width="200" prop="name" label="姓名">
+            <el-table-column min-width="200" prop="name" label="姓名" v-if="data">
             </el-table-column>
-            <el-table-column min-width="200" prop="category_name" label="角色">
+            <el-table-column min-width="200" prop="role_id" label="角色">
+                <template scope="scope">
+                    <span v-if="scope.row.role_id==1">超级管理员</span>
+                    <span v-else-if="scope.row.role_id==2">系统管理员</span>
+                    <span v-else-if="scope.row.role_id==3">编辑人员</span>
+                    <span v-else-if="scope.row.role_id==4">实习生</span>
+                </template>
             </el-table-column>
             <el-table-column min-width="200" prop="mobile" label="手机">
             </el-table-column>
@@ -125,7 +131,9 @@ export default {
             init:false,
             loadingData: false,
             data: [], // 表格数据
+            dataCache:[],
             total: 0,
+            keyWord:'',
             dialogVisible: false,
             selectedIds: [], // 被选中的数据id集合
             fetchParam: getFetchParam(),
@@ -162,7 +170,8 @@ export default {
             // this.loadingData = true   meiy
             // console.log(2)
             return sysService.fetchData(this.fetchParam).then((ret) => {
-                this.data = ret.data
+                //this.data = ret.data
+                this.dataCache = ret.data
                 this.total = ret.total
                 this.loadingData = false
                 // console.log(ret)
@@ -226,5 +235,13 @@ export default {
             return 
         }
     },
+    computed: {
+        tableData(){
+            var arr = this.dataCache.filter(v=>{
+                return v.name.indexOf(this.keyWord)>=0
+            })
+            return arr
+        }
+    }
 }
 </script>

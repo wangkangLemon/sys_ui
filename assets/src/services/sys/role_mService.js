@@ -6,7 +6,6 @@ class role_mService {
 
     //拿到数据
     fetchData () {
-        console.log('进入获取角色列表的请求方法')
         let url = urlPre + '/lists'
         return api.get(url,{
         }).then(ret => {
