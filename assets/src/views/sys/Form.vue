@@ -70,10 +70,8 @@
                 <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.role_id"></CourseCategorySelect>
             </el-form-item>-->
             <el-form-item label="角色" prop="role_id" :fetch-suggestions="querySearch">
-                <!--<el-input v-model="fetchParam.role"></el-input>-->
                 <el-select v-model="fetchParam.role_id" placeholder="请输入角色">
                     <el-option  v-for="item in role_list" :label="item.role_name" :value="item.id"></el-option>
-                    <!--<el-option label="超级管理员" value="role_list.role_name"></el-option>-->
                 </el-select>
             </el-form-item>
             <el-form-item label="姓名" prop="name">
@@ -111,31 +109,6 @@
             vTags,
         },
         data() {
-            var validateAccount = (rule, value, callback) => {
-                let newValue = value || ''
-                if (newValue === '') {
-                    callback(new Error('请输入手机号或邮箱'))
-                }
-                if (newValue.indexOf('@') != -1) {
-                    if (!newValue.match(/^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/)) {
-                        callback(new Error('请输入正确的邮箱'))
-                    }
-                } else {
-                    if (!newValue.match(/^1[34578]\d{9}$/)) {
-                        callback(new Error('请输入正确的手机号'))
-                    }
-                }
-                if (this.ruleForm2.checkPass !== '') {
-                    this.$refs.ruleForm2.validateField('checkPass')
-                }
-                callback()
-            }
-            var validatePass2 = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入管理员密码'))
-                }
-                callback()
-            }
             return {
                 loadingData: false,
                 currentData: {
@@ -145,10 +118,10 @@
                 },
                 fetchParam: getOriginData(),
                 rules: {
-                    role_id: { required: true, message: '请输入角色', trigger: 'blur'},
+                    role_id: { required: true, message: '请输入角色'},
                     mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
                     email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入大于6位的密码', trigger: 'blur' },
+                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入包含数字和字母且大于6位的密码', trigger: 'blur' },
             },
                 multi: {
                     data: [{
@@ -161,33 +134,14 @@
         },
         created() {
             xmview.setContentLoading(false);
-            //     if (this.$route.params.role_id != undefined) {
-            //         courseService.getCourseInfo({
-            //             role_id: this.$route.params.role_id
-            //         }).then((ret) => {
-            //             this.editLessonData = ret.lessons
-            //             this.fetchParam = ret.course
-            //             this.fetchParam.company_id = ret.course.company_id
-            //             this.courseTags = ret.course.tags.split(',')
-            //             if (this.fetchParam.lesson_type === 'single') {
-            //                 this.classhour.form = ret.lessons[0].lessons[0]
-            //             } else if (this.fetchParam.lesson_type === 'multi') {
-            //                 this.multi.data = ret.lessons[0].lessons
-            //                 this.multi.data.push({ id: -1 })
-            //             } else if (this.fetchParam.lesson_type === 'chapter') {
-            //                 this.resultData = ret.lessons
-            //                 this.resultData.forEach((pitem) => {
-            //                     pitem.status = 0
-            //                     pitem.lessons.push({ id: -1 })
-            //                 })
-            //             }
-            //         })
-            //     
+                if (this.$route.params.sys_id != undefined) {
+                    sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
+                        this.fetchParam = ret
+                        // this.fetchParam.role_id = ret.course.role_id
+                    })
+                }    
             this.getrole()
             this.loadingData=false;
-        },
-         activated () {
-            
         },
         methods: {
             getrole(val){
@@ -205,14 +159,15 @@
                         console.log(ret)
                         // 重置当前数据
                         //this.$refs[fetchParam].resetFields();//自己加的方法
-                        this.fetchParam=getOriginData(),
+                        xmview.showTip('success', '数据提交成功')
+                        // this.fetchParam=getOriginData(),
+                        this.$refs['form'].resetFields();
                         this.currentData = {
                             data: [],
                             pindex: -1,
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
-                        xmview.showTip('success', '数据提交成功')
                     })
                 })
             },

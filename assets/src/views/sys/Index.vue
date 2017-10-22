@@ -213,6 +213,7 @@ export default {
             xmview.showDialog(`你将要删除管理员 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
                 sysService.delete(row.id).then(() => {
                     // this.data.splice(index, 1)//删除选中项
+                    row.deleted = 1
                     xmview.showTip('success', '操作成功')
                 })
             })

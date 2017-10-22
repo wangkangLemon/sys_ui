@@ -18,10 +18,9 @@ class sysService {
 
     
     // 搜索
-    search({ keyword = '', status = -1, role_id = 0, time_start, time_end, page, page_size }) {
+    getAdminInfo(id) {
         let url = `${urlPre}/view/${id}`
-        alert(123)
-        return api.get(url, { keyword, status, role_id, time_start, time_end, page, page_size }, false).then(ret => {
+        return api.get(url,{},false).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
