@@ -134,7 +134,7 @@
         },
         created() {
             xmview.setContentLoading(false);
-                if (this.$route.params.sys_id != undefined) {
+                if (this.$route.params.sys_id != undefined) {    //路由id传递
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
                         // this.fetchParam.role_id = ret.course.role_id

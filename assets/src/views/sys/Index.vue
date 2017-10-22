@@ -193,20 +193,28 @@ export default {
         },
         // 禁用
         offline(index, row) {
-            xmview.showDialog(`你将要禁用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
-                sysService.offline(row.id).then((ret) => {
-                    console.log(2222222222)
-                    row.disabled = 1
+            if(row.deleted == 0){
+                xmview.showDialog(`你将要禁用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+                    sysService.offline(row.id).then((ret) => {
+                        row.disabled = 1
+                    })
                 })
-            })
+            }else{
+                 xmview.showDialog(`管理员 <span style="color:red">${row.name}</span> 已删除，无法禁用！`)
+            }
         },
         // 启用
         online(index, row) {
-            xmview.showDialog(`你将要启用管理员<span style="color:red">${row.name}</span> 确认吗?`, () => {
-                sysService.online(row.id).then((ret) => {
-                    row.disabled = 0
+            if(row.deleted == 0){
+                xmview.showDialog(`你将要启用管理员<span style="color:red">${row.name}</span> 确认吗?`, () => {
+                    sysService.online(row.id).then((ret) => {
+                        row.disabled = 0
+                    })
                 })
-            })
+            }else{
+                 xmview.showDialog(`管理员 <span style="color:red">${row.name}</span> 已删除，无法启用！`)
+            }
+            
         },
         // 单条删除
         del(index, row) {

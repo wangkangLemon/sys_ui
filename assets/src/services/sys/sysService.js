@@ -19,7 +19,7 @@ class sysService {
     
     // 搜索
     getAdminInfo(id) {
-        let url = `${urlPre}/view/${id}`
+        let url = `${urlPre}/view/${id}`         //传递的地址的id
         return api.get(url,{},false).then(ret => {
             if (ret.code == 0) {
                 return ret.data
