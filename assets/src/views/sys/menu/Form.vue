@@ -25,29 +25,24 @@
             <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
         </section>     
         <section class="submit-form">   
-            <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
-            <!--<el-form-item label="角色" prop="role_id">
-                <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.role_id"></CourseCategorySelect>
-            </el-form-item>-->
-            <el-form-item label="角色" prop="role_id" :fetch-suggestions="querySearch">
-                <el-select v-model="fetchParam.role_id" placeholder="请输入角色">
-                    <el-option  v-for="item in role_list" :key="item.id" :label="item.role_name" :value="item.id"></el-option>
-                </el-select>
+            <el-form label-width="120px" ref="form" :model="fetchParam">
+            <el-form-item label="菜单名称" prop="menu_name">
+                <el-input v-model.name="fetchParam.menu_name"></el-input>
             </el-form-item>
-            <el-form-item label="姓名" prop="name">
-                <el-input v-model.name="fetchParam.name"></el-input>
+            <el-form-item label="菜单标识" prop="menu_node">
+                <el-input v-model.mobile="fetchParam.menu_node"></el-input>
             </el-form-item>
-            <el-form-item label="手机号" prop="mobile">
-                <el-input v-model.mobile="fetchParam.mobile"></el-input>
+            <el-form-item label="父级菜单id"  prop="pid">
+                <el-input v-model.email="fetchParam.pid" type="number" ></el-input>
             </el-form-item>
-            <el-form-item label="邮箱"  prop="email">
-                <el-input v-model.email="fetchParam.email"></el-input>
+            <el-form-item label="菜单层级" prop="level">
+                <el-input v-model.password="fetchParam.level" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="password">
-                <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""></el-input>
+            <el-form-item label="排序字段" prop="sort">
+                <el-input v-model.address="fetchParam.sort"></el-input>
             </el-form-item>
-            <el-form-item label="地址" prop="price">
-                <el-input v-model.address="fetchParam.address"></el-input>
+            <el-form-item label="备注" prop="remark">
+                <el-input v-model.address="fetchParam.remark"></el-input>
             </el-form-item>
             <el-form-item label="">
                 <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
@@ -59,14 +54,10 @@
 </template>
 
 <script>
-    import sysService from '../../../services/sys/sysService.js'
-    import role_mService from '../../../services/sys/role_mService.js'
+    import sysService from '../../../services/sys/menuService.js'
     import config from '../../../utils/config'
     export default {
         name: 'sys-form',
-        components: {
-            vTags,
-        },
         data() {
             return {
                 imgUrl: '',
@@ -77,17 +68,6 @@
                     index: -1
                 },
                 fetchParam: getOriginData(),
-                rules: {
-                    role_id: { required: true, message: '请输入角色'},
-                    mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
-                    email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入包含数字和字母且大于6位的密码', trigger: 'blur' },
-            },
-                multi: {
-                    data: [{
-                        id: -1
-                    }],
-                },
                 resultData: [],
                 role_list:[],
             }
@@ -101,15 +81,9 @@
                         // this.fetchParam.role_id = ret.course.role_id
                     })
                 }    
-            this.getrole()
             this.loadingData=false;
         },
         methods: {
-            getrole(val){
-                role_mService.fetchData().then((ret)=>{
-                 this.role_list=ret.data;
-                })
-            },
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
@@ -132,58 +106,17 @@
                     })
                 })
             },
-            //拿到角色组
-            querySearch(queryString, cb) {
-                var restaurants = this.restaurants;
-                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-                // 调用 callback 返回建议列表的数据返回建议列表的数据
-                cb(results);
-            },
- 
-            // // 保存章节
-            // submitChapter() {
-            //     if (!this.chapter.value) return
-            //     if (this.resultData === null) this.resultData = []
-            //     this.resultData.push({
-            //         id: 0,
-            //         name: this.chapter.value,
-            //         sort: 0,
-            //         deleted: false,
-            //         status: 0,
-            //         lessons: [{
-            //             id: -1
-            //         }]
-            //     })
-            //     this.chapter.editStatus = false
-            // },
-            saveItemChapter(pitem, pindex) {
-                this.resultData[pindex].status = 0
-                this.$forceUpdate()
-            },
-            saveResult() {
-                let result = [{
-                    id: 0,
-                    name: '',
-                    sort: 0,
-                    deleted: false,
-                    lessons: []
-                }]
-            },
         }
     }
 
     function getOriginData() {
         return {
-            role_id: '',
-            role:'',
-            role_name:'',
-            category_name: '请选择栏目',
-            name: '',
-            mobile: '',
-            email: '',
-            password: '',
-            address: '',
-            id: 0
+            menu_name: '',
+            menu_node:'',
+            remark:'',
+            sort: 0,
+            pid: 0,
+            level: 0,
         }
     }
 

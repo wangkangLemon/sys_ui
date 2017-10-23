@@ -3,66 +3,15 @@
     @import "../../utils/mixins/common";
     #sys-form {
         @extend %content-container;
-        .el-form {
+        display: flex;
+        /*.el-form {
             max-width: 700px;
-        }
-        .el-tabs {
-            .el-tab-pane {
-                .mulit-class {
-                    .saveBtn {
-                        float: right;
-                        margin-top: 20px;
-                    }
-                    padding: 20px 100px;
-                    text-align: center;
-                    width: 75%;
-                    p {
-                        padding: 10px;
-                        margin-top: 10px;
-                        text-align: left;
-                        span {
-                            i {
-                                margin: 0 10px;
-                            }
-                        }
-                        .operate {
-                            float: right;
-                        }
-                        &.gray {
-                            text-align: center;
-                            background: #eee;
-                            margin-left: 50px;
-                            cursor: pointer;
-                        }
-                        .edit-status {
-                            display: block;
-                            margin: 10px 0 10px 50px;
-                            .el-input {
-                                width: 70%;
-                            }
-                            span {
-                                float: right;
-                            }
-                        }
-                        &.edit-status {
-                            text-align: left;
-                            margin-left: 50px;
-                            >.el-input {
-                                outline: none;
-                                line-height: 30px;
-                                padding-left: 10px;
-                                width: 70%;
-                            }
-                            >span {
-                                float: right;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        }*/
+        /*.upload-avatar{
+            width:30%;
+        }*/
         .submit-form {
-        width: 40%;
+        width: 45%;
         padding: 20px;
             .subButton {
                 text-align: center;
@@ -91,6 +40,26 @@
             <el-form-item label="姓名" prop="name">
                 <el-input v-model.name="fetchParam.name"></el-input>
             </el-form-item>
+            <!--<div class="el-form-item">
+                <label for="sex" class="el-form-item__label" style="width: 120px;">
+                    性别
+                </label>
+                <div class="el-form-item__content" style="margin-left: 120px;">
+                    <label class="el-radio radio">
+                    <span class="el-radio__input">
+                        <span class="el-radio__inner"></span>
+                        <input type="radio" class="el-radio__original" value="1">
+                    </span>
+                    <span class="el-radio__label">男</span></label> 
+                    <label class="el-radio radio">
+                        <span class="el-radio__input is-checked">
+                            <span class="el-radio__inner"></span>
+                            <input type="radio" class="el-radio__original" value="2">
+                        </span>
+                        <span class="el-radio__label">女</span>
+                    </label>
+                </div>
+            </div>-->
             <el-form-item label="手机号" prop="mobile">
                 <el-input v-model.mobile="fetchParam.mobile"></el-input>
             </el-form-item>
@@ -115,14 +84,10 @@
 <script>
     import sysService from '../../services/sys/sysService.js'
     import role_mService from '../../services/sys/role_mService.js'
-    import vTags from '../component/form/Tags.vue'
     import config from '../../utils/config'
     import clone from 'clone'
     export default {
         name: 'sys-form',
-        components: {
-            vTags,
-        },
         data() {
             return {
                 imgUrl: '',

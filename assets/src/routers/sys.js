@@ -64,7 +64,7 @@ export default {
             }
         },
         {
-            path: '/role/add',
+            path: 'role/add',
             name: 'role-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -77,7 +77,7 @@ export default {
             }
         },
         {
-            path: 'edit/:role_id',
+            path: 'role/edit/:role_id',
             name: 'role-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -104,7 +104,7 @@ export default {
             }
         },
         {
-            path: '/menu/add',
+            path: 'menu/add',
             name: 'menu-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -112,12 +112,12 @@ export default {
                 })
             },
             meta: {
-                title: '角色组添加',
+                title: '菜单添加',
                 noback: false
             }
         },
         {
-            path: 'edit/:role_id',
+            path: 'menu/edit/:role_id',
             name: 'menu-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -125,7 +125,7 @@ export default {
                 })
             },
             meta: {
-                title: '角色组更新',
+                title: '菜单更新',
                 noback: false
             }
         }, 
