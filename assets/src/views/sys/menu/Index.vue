@@ -1,7 +1,7 @@
-<!--角色组管理-->
+<!--菜单管理-->
 <style lang='scss' rel='stylesheet/scss'>
-@import "../../utils/mixins/common";
-@import "../../utils/mixins/topSearch";
+@import "../../../utils/mixins/common";
+@import "../../../utils/mixins/topSearch";
 
 #sys-index-container {
     @extend %content-container;
@@ -38,15 +38,15 @@
 <template>
     <article id="sys-index-container">
         <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'role-add'})">
-                <i>添加角色组</i>
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'menu-add'})">
+                <i>添加菜单</i>
             </el-button>
         </section>
 
         <article class="search">
             <section>
-                <i>角色组姓名</i>
-                <el-input v-model="keyWord" placeholder="请输入角色组"></el-input>
+                <i>菜单名称</i>
+                <el-input v-model="keyWord" placeholder="请输入菜单名称"></el-input>
             </section>
 
         </article>
@@ -54,30 +54,35 @@
         <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <el-table-column type="selection"></el-table-column>
-            <el-table-column min-width="200" prop="name" label="姓名" v-if="data">
+            <el-table-column min-width="100" prop="id" label="ID" v-if="data">
             </el-table-column>
-            <el-table-column min-width="200" prop="role_name" label="角色">
+            <el-table-column min-width="200" prop="menu_name" label="角色名">
             </el-table-column>
-            <el-table-column min-width="200" prop="mobile" label="手机">
+            <el-table-column min-width="200" prop="addtime" label="添加时间">
             </el-table-column>
-            <el-table-column min-width="200" prop="email" label="邮箱">
+            <el-table-column min-width="200" prop="uptime" label="更新时间">
             </el-table-column>
-            <el-table-column min-width="200" prop="category_name" label="上次登录时间">
+            <el-table-column min-width="200" prop="menu_node" label="菜单标识">
             </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">
-                    <el-tag v-if="scope.row.deleted == 1">已删除</el-tag>
-                    <el-tag v-else-if="scope.row.deleted == 0&&scope.row.disabled == 0" type="success">正常</el-tag>
+                    <el-tag v-if="scope.row.disabled == 0" type="success">正常</el-tag>
                     <el-tag v-else>禁用</el-tag>
                 </template>
+            </el-table-column>
+            <el-table-column min-width="200" prop="pid" label="父级菜单id">
+            </el-table-column>
+            <el-table-column min-width="200" prop="level" label="菜单层级">
+            </el-table-column>
+            <el-table-column min-width="200" prop="remark" label="标记">
             </el-table-column>
             <el-table-column fixed="right" width="207" label="操作">
                 <template scope="scope">
                     <!--<el-button @click="preview(scope.$index, scope.row)" type="text" size="small">预览</el-button>-->
-                    <el-button @click="$router.push({name: 'sys-edit', params: {sysInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">详情
+                    <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">详情
                         <!--a-->
                     </el-button>
-                    <el-button @click="$router.push({name: 'sys-edit', params: {sysInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">编辑
+                    <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">编辑
                         <!--a-->
                     </el-button>
                     <el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
@@ -100,13 +105,12 @@
             <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
         </div>
-
     </article>
 </template>
 
 <script>
-import sysService from '../../services/sys/sysService.js'
-import DateRange from '../component/form/DateRangePicker.vue'
+import sysService from '../../../services/sys/menuService.js'
+import DateRange from '../../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
     return {
@@ -161,12 +165,10 @@ export default {
             this.fetchData()
         },
         fetchData(val) {
-            // this.loadingData = true   meiy
             // console.log(2)
             return sysService.fetchData(this.fetchParam).then((ret) => {
-                //this.data = ret.data
+                // console.log(ret.data)
                 this.dataCache = ret.data
-                this.total = ret.total
                 this.loadingData = false
                 // console.log(ret)
                 xmview.setContentLoading(false)     
@@ -187,32 +189,23 @@ export default {
         },
         // 禁用
         offline(index, row) {
-            if(row.deleted == 0){
-                xmview.showDialog(`你将要禁用角色组 <span style="color:red">${row.name}</span> 确认吗?`, () => {
-                    sysService.offline(row.id).then((ret) => {
-                        row.disabled = 1
-                    })
+            xmview.showDialog(`你将要禁用菜单 <span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
+                sysService.offline(row.id).then((ret) => {
+                    row.disabled = 1
                 })
-            }else{
-                 xmview.showDialog(`角色组 <span style="color:red">${row.name}</span> 已删除，无法禁用！`)
-            }
+            })
         },
         // 启用
         online(index, row) {
-            if(row.deleted == 0){
-                xmview.showDialog(`你将要启用角色组<span style="color:red">${row.name}</span> 确认吗?`, () => {
-                    sysService.online(row.id).then((ret) => {
-                        row.disabled = 0
-                    })
+            xmview.showDialog(`你将要启用菜单<span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
+                sysService.online(row.id).then((ret) => {
+                    row.disabled = 0
                 })
-            }else{
-                 xmview.showDialog(`角色组 <span style="color:red">${row.name}</span> 已删除，无法启用！`)
-            }
-            
+            })
         },
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除角色组 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除菜单 <span style="color:red">${row.menu_name}</span>  此操作不可恢复确认吗?`, () => {
                 sysService.delete(row.id).then(() => {
                     // this.data.splice(index, 1)//删除选中项
                     row.deleted = 1
@@ -241,7 +234,7 @@ export default {
     computed: {
         tableData(){
             var arr = this.dataCache.filter(v=>{
-                return v.name.indexOf(this.keyWord)>=0
+                return v.menu_name.indexOf(this.keyWord)>=0
             })
             return arr
         }

@@ -196,22 +196,22 @@
                 cb(results);
             },
  
-            // 保存章节
-            submitChapter() {
-                if (!this.chapter.value) return
-                if (this.resultData === null) this.resultData = []
-                this.resultData.push({
-                    id: 0,
-                    name: this.chapter.value,
-                    sort: 0,
-                    deleted: false,
-                    status: 0,
-                    lessons: [{
-                        id: -1
-                    }]
-                })
-                this.chapter.editStatus = false
-            },
+            // // 保存章节
+            // submitChapter() {
+            //     if (!this.chapter.value) return
+            //     if (this.resultData === null) this.resultData = []
+            //     this.resultData.push({
+            //         id: 0,
+            //         name: this.chapter.value,
+            //         sort: 0,
+            //         deleted: false,
+            //         status: 0,
+            //         lessons: [{
+            //             id: -1
+            //         }]
+            //     })
+            //     this.chapter.editStatus = false
+            // },
             saveItemChapter(pitem, pindex) {
                 this.resultData[pindex].status = 0
                 this.$forceUpdate()

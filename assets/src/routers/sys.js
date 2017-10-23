@@ -55,7 +55,7 @@ export default {
             name: 'role-index',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/role/Index.vue'))
+                    resolve(require('../views/sys/role/Index.vue'))
                 })
             },
             meta: {
@@ -68,7 +68,7 @@ export default {
             name: 'role-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/role/Form.vue'))
+                    resolve(require('../views/sys/role/Form.vue'))
                 })
             },
             meta: {
@@ -81,7 +81,7 @@ export default {
             name: 'role-edit',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/role/Form.vue'))
+                    resolve(require('../views/sys/role/Form.vue'))
                 })
             },
             meta: {
@@ -89,7 +89,46 @@ export default {
                 noback: false
             }
         },
-
+         //菜单管理
+        {
+            path: 'menu',
+            name: 'menu-index',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/menu/Index.vue'))
+                })
+            },
+            meta: {
+                title: '系统',
+                noback: true
+            }
+        },
+        {
+            path: '/menu/add',
+            name: 'menu-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/menu/Form.vue'))
+                })
+            },
+            meta: {
+                title: '角色组添加',
+                noback: false
+            }
+        },
+        {
+            path: 'edit/:role_id',
+            name: 'menu-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/menu/Form.vue'))
+                })
+            },
+            meta: {
+                title: '角色组更新',
+                noback: false
+            }
+        }, 
 
     ]
 }

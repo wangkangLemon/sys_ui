@@ -1,15 +1,30 @@
 <!--课程表单：添加/修改-->
 <style lang="scss" rel="stylesheet/scss">
-    @import "../../utils/mixins/common";
+    @import "../../../utils/mixins/common";
     #sys-form {
         @extend %content-container;
         .el-form {
             max-width: 700px;
         }
+    
+        .submit-form {
+        width: 40%;
+        padding: 20px;
+            .subButton {
+                text-align: center;
+            }
+    }
     }
 </style>
 <template>
     <main id="sys-form">
+        <section class="upload-avatar">
+            <div class="img-container">
+                <img :src="imgUrl" />
+            </div>
+            <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
+        </section>     
+        <section class="submit-form">   
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
             <!--<el-form-item label="角色" prop="role_id">
                 <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.role_id"></CourseCategorySelect>
@@ -39,15 +54,14 @@
                 <el-button type="primary" @click="btnNextClick">确认</el-button>
             </el-form-item>
             </el-form>
+        </section>
     </main>
 </template>
 
 <script>
-    import sysService from '../../services/sys/sysService.js'
-    import role_mService from '../../services/sys/role_mService.js'
-    import vTags from '../component/form/Tags.vue'
-    import config from '../../utils/config'
-    import clone from 'clone'
+    import sysService from '../../../services/sys/sysService.js'
+    import role_mService from '../../../services/sys/role_mService.js'
+    import config from '../../../utils/config'
     export default {
         name: 'sys-form',
         components: {
@@ -126,22 +140,22 @@
                 cb(results);
             },
  
-            // 保存章节
-            submitChapter() {
-                if (!this.chapter.value) return
-                if (this.resultData === null) this.resultData = []
-                this.resultData.push({
-                    id: 0,
-                    name: this.chapter.value,
-                    sort: 0,
-                    deleted: false,
-                    status: 0,
-                    lessons: [{
-                        id: -1
-                    }]
-                })
-                this.chapter.editStatus = false
-            },
+            // // 保存章节
+            // submitChapter() {
+            //     if (!this.chapter.value) return
+            //     if (this.resultData === null) this.resultData = []
+            //     this.resultData.push({
+            //         id: 0,
+            //         name: this.chapter.value,
+            //         sort: 0,
+            //         deleted: false,
+            //         status: 0,
+            //         lessons: [{
+            //             id: -1
+            //         }]
+            //     })
+            //     this.chapter.editStatus = false
+            // },
             saveItemChapter(pitem, pindex) {
                 this.resultData[pindex].status = 0
                 this.$forceUpdate()
