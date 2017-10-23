@@ -1,6 +1,6 @@
 import * as api from '../api'
 import config from '../../utils/config'
-const urlPre = config.apiHost + '/admin'
+const urlPre = config.apiHost + '/role'
 
 class sysService {
     //拿到数据 

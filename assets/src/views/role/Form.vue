@@ -6,79 +6,10 @@
         .el-form {
             max-width: 700px;
         }
-        .el-tabs {
-            .el-tab-pane {
-                .mulit-class {
-                    .saveBtn {
-                        float: right;
-                        margin-top: 20px;
-                    }
-                    padding: 20px 100px;
-                    text-align: center;
-                    width: 75%;
-                    p {
-                        padding: 10px;
-                        margin-top: 10px;
-                        text-align: left;
-                        span {
-                            i {
-                                margin: 0 10px;
-                            }
-                        }
-                        .operate {
-                            float: right;
-                        }
-                        &.gray {
-                            text-align: center;
-                            background: #eee;
-                            margin-left: 50px;
-                            cursor: pointer;
-                        }
-                        .edit-status {
-                            display: block;
-                            margin: 10px 0 10px 50px;
-                            .el-input {
-                                width: 70%;
-                            }
-                            span {
-                                float: right;
-                            }
-                        }
-                        &.edit-status {
-                            text-align: left;
-                            margin-left: 50px;
-                            >.el-input {
-                                outline: none;
-                                line-height: 30px;
-                                padding-left: 10px;
-                                width: 70%;
-                            }
-                            >span {
-                                float: right;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        .submit-form {
-        width: 40%;
-        padding: 20px;
-            .subButton {
-                text-align: center;
-            }
-    }
     }
 </style>
 <template>
     <main id="sys-form">
-        <section class="upload-avatar">
-            <div class="img-container">
-                <img :src="imgUrl" />
-            </div>
-            <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
-        </section>     
-        <section class="submit-form">   
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
             <!--<el-form-item label="角色" prop="role_id">
                 <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.role_id"></CourseCategorySelect>
@@ -108,7 +39,6 @@
                 <el-button type="primary" @click="btnNextClick">确认</el-button>
             </el-form-item>
             </el-form>
-        </section>
     </main>
 </template>
 

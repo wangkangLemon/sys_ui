@@ -1,7 +1,7 @@
 // 系统模块
-// 培训模块
+// 管理员模块
 const pathPre = '/sys'
-//  培训管理
+//  管理员管理
 export default {
     path: pathPre,
     component: resolve => {
@@ -24,7 +24,7 @@ export default {
             }
         },
         {
-            path: 'add',
+            path: 'admin/add',
             name: 'sys-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -49,43 +49,47 @@ export default {
                 noback: false
             }
         },
+        //角色组路由导航
         {
-            path: 'video', // 视频管理
-            name: 'sys-video',
+            path: 'role',
+            name: 'role-index',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/sys/video/Index.vue'))
+                    resolve(require('../views/role/Index.vue'))
                 })
             },
             meta: {
-                title: '视频管理 - 系统',
+                title: '系统',
                 noback: true
             }
         },
         {
-            path: 'video/add',
-            name: 'sys-video-add',
+            path: '/role/add',
+            name: 'role-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/sys/video/Add.vue'))
+                    resolve(require('../views/role/Form.vue'))
                 })
             },
             meta: {
-                title: '添加视频 - 系统',
+                title: '角色组添加',
+                noback: false
             }
         },
         {
-            path: 'doc', // 文档管理
-            name: 'sys-doc',
+            path: 'edit/:role_id',
+            name: 'role-edit',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/sys/doc/Index.vue'))
+                    resolve(require('../views/role/Form.vue'))
                 })
             },
             meta: {
-                title: '文档管理 - 系统',
-                noback: true
+                title: '角色组更新',
+                noback: false
             }
-        }
+        },
+
+
     ]
 }
