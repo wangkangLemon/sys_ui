@@ -117,7 +117,7 @@ export default {
             }
         },
         {
-            path: 'menu/edit/:role_id',
+            path: 'menu/edit/:sys_id',
             name: 'menu-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -126,6 +126,46 @@ export default {
             },
             meta: {
                 title: '菜单更新',
+                noback: false
+            }
+        }, 
+         //节点管理
+        {
+            path: 'node',
+            name: 'node-index',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/node/Index.vue'))
+                })
+            },
+            meta: {
+                title: '系统',
+                noback: true
+            }
+        },
+        {
+            path: 'node/add',
+            name: 'node-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/node/Form.vue'))
+                })
+            },
+            meta: {
+                title: '节点添加',
+                noback: false
+            }
+        },
+        {
+            path: 'node/edit/:sys_id',
+            name: 'node-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/node/Form.vue'))
+                })
+            },
+            meta: {
+                title: '节点更新',
                 noback: false
             }
         }, 

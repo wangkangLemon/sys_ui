@@ -164,6 +164,7 @@
                     if (!valid) return
                     let req = sysService.create
                     if (this.fetchParam.id) req = sysService.update
+                    console.log(this.fetchParam.id)
                     req(this.fetchParam).then((ret) => {
                         console.log(111111111111)
                         console.log(ret)

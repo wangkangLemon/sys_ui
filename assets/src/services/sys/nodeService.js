@@ -1,6 +1,6 @@
 import * as api from '../api'
 import config from '../../utils/config'
-const urlPre = config.apiHost + '/admin'
+const urlPre = config.apiHost + '/node'
 
 class sysService {
     //拿到数据 
@@ -9,13 +9,14 @@ class sysService {
         return api.post(url,{
         }).then(ret => {
             if (ret.code == 0) {
+                // console.log(11111111111111111111111111)
+                // console(ret)
                 return ret
             } else {
                 return Promise.reject(ret)
             }
         })
     }
-
     
     // 搜索
     getAdminInfo(id) {
@@ -30,9 +31,9 @@ class sysService {
     }
 
     // 创建
-    create({ role_id, name, mobile, email, password }) {
+    create({ menu_name, menu_node, remark, sort, pid , level }) {
         let url = urlPre + '/create'
-        return api.post(url, { role_id, name, mobile, email, password }).then(ret => {
+        return api.post(url, { menu_name, menu_node, remark, sort, pid , level }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -41,12 +42,15 @@ class sysService {
             }
         })
     }
+
     // 更新
     update({ id, role_id, name, mobile, email, password, sex, avatar, address }) {
         let url = `${urlPre}/update/${id}`
         return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
-            if (ret.code) {
-                console.log('update()')
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                xmview.showTip('error',ret.message)
                 return Promise.reject(ret)
             }
         })

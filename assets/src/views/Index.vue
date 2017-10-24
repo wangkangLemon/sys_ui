@@ -183,7 +183,7 @@
         <el-row class="header header-pc" type="flex">
             <el-col :span="10" class="logo">
                 <img src="../assets/images/logo.png">
-                <h1>医线通供应商管理平台</h1>
+                <h1>医线通管理平台</h1>
             </el-col>
             <el-col :span="6">
                 <h2>{{ userInfo.company }}</h2>
@@ -219,7 +219,7 @@
             <el-row class="header wap-header" type="flex">
                 <el-col :span="20" class="logo">
                     <img src="../assets/images/logo.png">
-                    <h1>医线通供应商管理平台</h1>
+                    <h1>医线通管理平台</h1>
                 </el-col>
                 <el-col :span="4">
                     <i class="iconfont icon-list" @click="handleIsShowMenue(!isShowMenue)"></i>

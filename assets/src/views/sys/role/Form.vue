@@ -24,10 +24,10 @@
                     <el-input v-model.name="fetchParam.role_name"></el-input>
                 </el-form-item> 
                 <el-form-item label="添加时间" prop="role_addtime">
-                    <el-input v-model.name="fetchParam.addtime"></el-input>
+                    <el-input v-model.name="fetchParam.addtime" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="更新时间" prop="role_uptime">
-                    <el-input v-model.name="fetchParam.uptime"></el-input>
+                    <el-input v-model.name="fetchParam.uptime" disabled></el-input>
                 </el-form-item>
              </template>
 
@@ -99,7 +99,8 @@
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
                     let req = sysService.create
-                    if (this.fetchParam.id) req = sysService.update
+                    console.log('this.fetchParam.id-'+this.fetchParam.id)
+                    if (this.fetchParam) req = sysService.update
                     req(this.fetchParam).then((ret) => {
                         console.log(111111111111)
                         console.log(ret)

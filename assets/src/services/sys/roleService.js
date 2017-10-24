@@ -36,6 +36,7 @@ class sysService {
             if (ret.code == 0) {
                 return ret.data
             } else {
+                console.log(url)
                 xmview.showTip('error',ret.message)
                 return Promise.reject(ret)
             }
@@ -43,13 +44,17 @@ class sysService {
     }
 
     // 更新
-    update({ id, role_id, name, mobile, email, password, sex, avatar, address }) {
-        let url = `${urlPre}/${id}`
-        return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
+    update({ role_name }) {
+        let url = `${urlPre}/update/${id}`
+        return api.post(url, { role_name }).then(ret => {
             if (ret.code) {
                 console.log('update()')
                 return Promise.reject(ret)
                 
+            }else {
+                console.log(url)
+                xmview.showTip('error',ret.message)
+                return Promise.reject(ret)
             }
         })
     }

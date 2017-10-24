@@ -54,13 +54,13 @@
         <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <el-table-column type="selection"></el-table-column>
-            <el-table-column min-width="200" prop="id" label="ID" v-if="data">
+            <el-table-column min-width="50" prop="id" label="ID" v-if="data">
             </el-table-column>
-            <el-table-column min-width="200" prop="role_name" label="角色名">
+            <el-table-column min-width="100" prop="role_name" label="角色名">
             </el-table-column>
-            <el-table-column min-width="200" prop="addtime" label="添加时间">
+            <el-table-column min-width="100" prop="addtime" label="添加时间">
             </el-table-column>
-            <el-table-column min-width="200" prop="uptime" label="更新时间">
+            <el-table-column min-width="100" prop="uptime" label="更新时间">
             </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">
@@ -199,7 +199,7 @@ export default {
         del(index, row) {
             xmview.showDialog(`你将要删除角色组 <span style="color:red">${row.role_name}</span>  此操作不可恢复确认吗?`, () => {
                 sysService.delete(row.id).then(() => {
-                    // this.data.splice(index, 1)//删除选中项
+                    this.dataCache.splice(index, 1)//删除选中项
                     row.deleted = 1
                     xmview.showTip('success', '操作成功')
                 })
