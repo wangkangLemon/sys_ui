@@ -48,26 +48,26 @@
             <el-form-item label="姓名" prop="name">
                 <el-input v-model.name="fetchParam.name"></el-input>
             </el-form-item>
-            <!--<div class="el-form-item">
+            <div class="el-form-item">
                 <label for="sex" class="el-form-item__label" style="width: 120px;">
                     性别
                 </label>
                 <div class="el-form-item__content" style="margin-left: 120px;">
                     <label class="el-radio radio">
-                    <span class="el-radio__input">
+                    <span :class="{'el-radio__input':true,'is-checked':fetchParam.sex==1}">
                         <span class="el-radio__inner"></span>
-                        <input type="radio" class="el-radio__original" value="1">
+                        <input type="radio" class="el-radio__original" value="1" name="sex" v-model="fetchParam.sex">
                     </span>
                     <span class="el-radio__label">男</span></label> 
                     <label class="el-radio radio">
-                        <span class="el-radio__input is-checked">
+                        <span :class="{'el-radio__input':true,'is-checked':fetchParam.sex==2}">
                             <span class="el-radio__inner"></span>
-                            <input type="radio" class="el-radio__original" value="2">
+                            <input type="radio" class="el-radio__original" value="2" name="sex" v-model="fetchParam.sex">
                         </span>
                         <span class="el-radio__label">女</span>
                     </label>
                 </div>
-            </div>-->
+            </div>
             <el-form-item label="手机号" prop="mobile">
                 <el-input v-model.mobile="fetchParam.mobile"></el-input>
             </el-form-item>
@@ -233,7 +233,8 @@
             email: '',
             password: '',
             address: '',
-            id: 0
+            id: 0,
+            sex: 1
         }
     }
 

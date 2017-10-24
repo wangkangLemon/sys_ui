@@ -77,7 +77,7 @@
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
-                        console.log(ret)
+                        // console.log(ret)
                         // this.fetchParam.role_id = ret.course.role_id
                     })
                 }    
@@ -88,9 +88,9 @@
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
                     let req = sysService.create
-                    if (this.fetchParam.id) req = sysService.update
+                    console.log(this.$route.params.sys_id)
+                    if (this.$route.params.sys_id) req = sysService.update
                     req(this.fetchParam).then((ret) => {
-                        console.log(111111111111)
                         console.log(ret)
                         // 重置当前数据
                         xmview.showTip('success', '数据提交成功')
@@ -110,6 +110,7 @@
 
     function getOriginData() {
         return {
+            id:0,
             menu_name: '',
             menu_node:'',
             remark:'',

@@ -86,16 +86,16 @@ class sysService {
     }
 
     // 禁用管理员
-    offline(id) {
+    offline({id, role_id, name, mobile, email, password, sex, avatar, address ,disabled}) {
         let url = `${urlPre}/update/${id}`
         console.log('进入offline(id)')
-        return api.post(url, {})
+        return api.post(url, { id, role_id, name, mobile, email, password, sex, avatar, address ,disabled})
     }
 
     // 启用管理员
     online(id) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, {})
+        return api.post(url, { disabled: 0 })
     }
 
     // 获取添加编辑课程上传图片的url

@@ -89,7 +89,9 @@
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
                     let req = sysService.create
-                    if (this.fetchParam.id) req = sysService.update
+                    if (this.$route.params.sys_id) req = sysService.update
+                    console.log(req)
+                    // console.log(this.$route.params.sys_id)
                     req(this.fetchParam).then((ret) => {
                         console.log(111111111111)
                         console.log(ret)

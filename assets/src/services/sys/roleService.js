@@ -44,13 +44,12 @@ class sysService {
     }
 
     // 更新
-    update({ role_name }) {
+    update({ role_name,id }) {
         let url = `${urlPre}/update/${id}`
         return api.post(url, { role_name }).then(ret => {
-            if (ret.code) {
+            if (!ret.code) {
                 console.log('update()')
-                return Promise.reject(ret)
-                
+                 xmview.showTip('success',ret.message)  
             }else {
                 console.log(url)
                 xmview.showTip('error',ret.message)

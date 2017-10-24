@@ -33,7 +33,7 @@ class sysService {
         let url = urlPre + '/create'
         return api.post(url, { menu_name, menu_node, remark, sort, pid , level }).then(ret => {
             if (ret.code == 0) {
-                return ret.data
+                xmview.showTip('success',ret.message)  
             } else {
                 xmview.showTip('error',ret.message)
                 return Promise.reject(ret)
@@ -42,9 +42,9 @@ class sysService {
     }
 
     // 更新
-    update({ id, role_id, name, mobile, email, password, sex, avatar, address }) {
+    update({ id, menu_name, menu_node, remark, sort, pid, level }) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
+        return api.post(url, { menu_name, menu_node, remark, sort, pid, level }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {

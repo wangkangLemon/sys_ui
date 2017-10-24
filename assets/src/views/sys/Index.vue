@@ -68,8 +68,6 @@
             </el-table-column>
             <el-table-column min-width="200" prop="email" label="邮箱">
             </el-table-column>
-            <el-table-column min-width="200" prop="category_name" label="上次登录时间">
-            </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">
                     <el-tag v-if="scope.row.deleted == 1">已删除</el-tag>
@@ -120,6 +118,7 @@ function getFetchParam() {
         status: void 0, //  1-禁用 0-正常
         page: 1,
         page_size: 15,
+        disabled:0,
     }
 }
 
@@ -196,8 +195,10 @@ export default {
         offline(index, row) {
             if(row.deleted == 0){
                 xmview.showDialog(`你将要禁用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
-                    sysService.offline(row.id).then((ret) => {
-                        row.disabled = 1
+                    row.disabled = 1
+                    console.log(row)
+                    sysService.offline(row).then((ret) => {
+
                     })
                 })
             }else{

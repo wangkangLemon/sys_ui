@@ -23,7 +23,7 @@ class sysService {
         let url = `${urlPre}/view/${id}`         //传递的地址的id
         return api.get(url,{},false).then(ret => {
             if (ret.code == 0) {
-                return ret.data
+                return ret.data 
             } else {
                 return Promise.reject(ret)
             }
@@ -31,9 +31,9 @@ class sysService {
     }
 
     // 创建
-    create({ menu_name, menu_node, remark, sort, pid , level }) {
+    create({  node_name, node, remark, sort, pid , level }) {
         let url = urlPre + '/create'
-        return api.post(url, { menu_name, menu_node, remark, sort, pid , level }).then(ret => {
+        return api.post(url, { node_name, node, remark, sort, pid , level }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -44,9 +44,9 @@ class sysService {
     }
 
     // 更新
-    update({ id, role_id, name, mobile, email, password, sex, avatar, address }) {
+    update({ id, node_name, node, remark, sort, pid, level }) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
+        return api.post(url, { node_name, node, remark, sort, pid, level }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
