@@ -93,7 +93,6 @@
                         console.log(111111111111)
                         console.log(ret)
                         // 重置当前数据
-                        //this.$refs[fetchParam].resetFields();//自己加的方法
                         xmview.showTip('success', '数据提交成功')
                         // this.fetchParam=getOriginData(),
                         this.$refs['form'].resetFields();

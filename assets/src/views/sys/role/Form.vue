@@ -15,12 +15,23 @@
                 <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.role_id"></CourseCategorySelect>
             </el-form-item>-->
             
-            <el-form-item label="姓名" prop="role_name" v-if="this.$route.params.sys_id != undefined">
-                <el-input v-model.name="fetchParam.id"></el-input>
-                <el-input v-model.name="fetchParam.role_name"></el-input>
-                <el-input v-model.name="fetchParam.addtime"></el-input>
-                <el-input v-model.name="fetchParam.uptime"></el-input>
-            </el-form-item>
+            <!--地址栏有参数的时候获取的表单有19-23 行<-->
+            <template v-if="$route.params.role_id">
+                <el-form-item label="ID" prop="role_id">
+                    <el-input v-model.name="fetchParam.id" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="姓名" prop="role_name">
+                    <el-input v-model.name="fetchParam.role_name"></el-input>
+                </el-form-item> 
+                <el-form-item label="添加时间" prop="role_addtime">
+                    <el-input v-model.name="fetchParam.addtime"></el-input>
+                </el-form-item>
+                <el-form-item label="更新时间" prop="role_uptime">
+                    <el-input v-model.name="fetchParam.uptime"></el-input>
+                </el-form-item>
+             </template>
+
+            <!--  没有参数的时候 也就是新增 只加一个名字    -->
             <el-form-item label="姓名" prop="role_name" v-else>
                 <el-input v-model.name="fetchParam.role_name"></el-input>
             </el-form-item>
@@ -55,7 +66,7 @@
                 },
                 fetchParam: getOriginData(),
                 rules: {
-                    role_id: { required: true, message: '请输入角色'},
+                    // role_id: { required: true, message: '请输入角色'},
             },
                 multi: {
                     data: [{
@@ -68,8 +79,8 @@
         },
         created() {
             xmview.setContentLoading(false);
-                if (this.$route.params.sys_id != undefined) {    //路由id传递
-                    sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
+                if (this.$route.params.role_id!=undefined) {    //路由id传递
+                    sysService.getAdminInfo(this.$route.params.role_id).then((ret) => {
                         this.fetchParam = ret
                         console.log(ret)
                         // this.fetchParam.role_id = ret.course.role_id

@@ -44,7 +44,7 @@ class sysService {
 
     // 更新
     update({ id, role_id, name, mobile, email, password, sex, avatar, address }) {
-        let url = `${urlPre}/${id}`
+        let url = `${urlPre}/update/${id}`
         return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
             if (ret.code) {
                 console.log('update()')

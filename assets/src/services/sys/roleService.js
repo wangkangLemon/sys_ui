@@ -17,7 +17,7 @@ class sysService {
     }
 
     
-    // 搜索
+    // 根据ID显示
     getAdminInfo(id) {
         let url = `${urlPre}/view/${id}`         //传递的地址的id
         return api.get(url,{},false).then(ret => {
@@ -30,9 +30,9 @@ class sysService {
     }
 
     // 创建
-    create({ role_id, name, mobile, email, password }) {
+    create({ role_name}) {
         let url = urlPre + '/create'
-        return api.post(url, { role_id, name, mobile, email, password }).then(ret => {
+        return api.post(url, {role_name}).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -49,6 +49,7 @@ class sysService {
             if (ret.code) {
                 console.log('update()')
                 return Promise.reject(ret)
+                
             }
         })
     }

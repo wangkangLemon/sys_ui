@@ -4,11 +4,22 @@
     #sys-form {
         @extend %content-container;
         display: flex;
-        /*.el-form {
-            max-width: 700px;
-        }*/
+  
         /*.upload-avatar{
             width:30%;
+            text-align: center;
+            .img-container {
+            margin: 20px auto;
+            width: 170px;
+            height: 170px;
+            border: none;
+            >img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: #ededed;
+            }
+        }
         }*/
         .submit-form {
         width: 45%;
@@ -29,9 +40,6 @@
         </section>     
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
-            <!--<el-form-item label="角色" prop="role_id">
-                <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.role_id"></CourseCategorySelect>
-            </el-form-item>-->
             <el-form-item label="角色" prop="role_id" :fetch-suggestions="querySearch">
                 <el-select v-model="fetchParam.role_id" placeholder="请输入角色">
                     <el-option  v-for="item in role_list" :key="item.id" :label="item.role_name" :value="item.id"></el-option>
@@ -83,11 +91,18 @@
 
 <script>
     import sysService from '../../services/sys/sysService.js'
+    import mineService from '../../services/base/mineService'
+    import * as filterUtils from '../../utils/filterUtils'
     import role_mService from '../../services/sys/role_mService.js'
+    import ImagEcropperInput from '../component/upload/ImagEcropperInput.vue'
     import config from '../../utils/config'
     import clone from 'clone'
     export default {
         name: 'sys-form',
+        filterUtils,
+        components: {
+            ImagEcropperInput
+        },
         data() {
             return {
                 imgUrl: '',
@@ -126,6 +141,19 @@
             this.loadingData=false;
         },
         methods: {
+            // 裁切后的回调
+            cropperFn(data, ext) {
+                mineService.uploadAvatar({
+                    avatar: data,
+                    alias: `${Date.now()}${ext}`
+                }).then((ret) => {
+                    xmview.showTip('success', '上传成功')
+                    this.imgUrl = data
+                    authUtils.setAvatar(ret.data.url)
+                }).catch((ret) => {
+                    xmview.showTip('error', ret.message)
+                })
+            },
             getrole(val){
                 role_mService.fetchData().then((ret)=>{
                  this.role_list=ret.data;
