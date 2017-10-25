@@ -68,10 +68,12 @@
                     <el-tag v-else>禁用</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" width="305" label="操作">
+            <el-table-column fixed="right" width="207" label="操作">
                 <template scope="scope">
-                    <!--<el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">详情
-                    </el-button>-->
+                    <!--<el-button @click="preview(scope.$index, scope.row)" type="text" size="small">预览</el-button>-->
+                    <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">详情
+                        <!--a-->
+                    </el-button>
                     <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">编辑
                         <!--a-->
                     </el-button>
@@ -81,13 +83,8 @@
                     <el-button v-else @click="online(scope.$index, scope.row)" type="text" size="small">
                         <i>启用</i>
                     </el-button>
-                    <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">授权菜单
-                        <!--a-->
-                    </el-button>
-                    <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">授权节点
-                        <!--a-->
-                    </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
+
                 </template>
             </el-table-column>
         </el-table>
