@@ -89,6 +89,19 @@ export default {
                 noback: false
             }
         },
+        {
+            path: 'role/role_menus/:role_id',
+            name: 'role_menus',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/role/roleMenus.vue'))
+                })
+            },
+            meta: {
+                title: '角色组授权菜单',
+                noback: false
+            }
+        },
          //菜单管理
         {
             path: 'menu',

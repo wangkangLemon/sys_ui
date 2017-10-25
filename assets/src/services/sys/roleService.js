@@ -1,6 +1,7 @@
 import * as api from '../api'
 import config from '../../utils/config'
 const urlPre = config.apiHost + '/role'
+const urlPre_menu = config.apiHost + '/role_menus'
 
 class sysService {
     //拿到数据 
@@ -34,6 +35,7 @@ class sysService {
         let url = urlPre + '/create'
         return api.post(url, {role_name}).then(ret => {
             if (ret.code == 0) {
+                xmview.showTip('success',ret.message)
                 return ret.data
             } else {
                 console.log(url)
@@ -48,7 +50,6 @@ class sysService {
         let url = `${urlPre}/update/${id}`
         return api.post(url, { role_name }).then(ret => {
             if (!ret.code) {
-                console.log('update()')
                  xmview.showTip('success',ret.message)  
             }else {
                 console.log(url)
@@ -104,13 +105,48 @@ class sysService {
         return api.post(url, {})
     }
 
-    // 获取添加编辑课程上传图片的url
-    getUploadUrl({image, alias}) {
-        let url = `${urlPre}/upload`
-        return api.post(url, {image, alias}).then((ret) => {
-            return ret.data
+
+    //分配权限---------------------------
+
+     //拿到数据 
+    fetchDataImp ( id ) {
+        let url = urlPre_menu + '/lists'
+        console.log()
+        return api.get(url,{ role_id : id
+        }).then(ret => {
+            if (ret.code == 0) {
+                console.log( ret)
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
         })
     }
+    // 创建
+    createImp(id, ids) {
+        let url = urlPre_menu + '/create_multi'
+        return api.post(url, { role_id:id , menu_ids:ids }).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success',ret.message)
+                return ret.data
+            } else {
+                console.log(url)
+                xmview.showTip('error',ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+     // 删除
+    deleteImp(id) {
+        let url = `${urlPre_menu}/delete/${id}`
+        // console.log(url)
+        return api.get(url, {}).then(ret => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
 
 }
 export default new sysService()

@@ -101,10 +101,8 @@
                     let req = sysService.create
                     if (this.$route.params.role_id) req = sysService.update
                     req(this.fetchParam).then((ret) => {
-                        console.log(111111111111)
-                        console.log(ret)
+                        // console.log(ret)
                         // 重置当前数据
-                        //this.$refs[fetchParam].resetFields();//自己加的方法
                         xmview.showTip('success', '数据提交成功')
                         // this.fetchParam=getOriginData(),
                         this.$refs['form'].resetFields();
@@ -121,7 +119,7 @@
             querySearch(queryString, cb) {
                 var restaurants = this.restaurants;
                 var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-                // 调用 callback 返回建议列表的数据返回建议列表的数据
+                // 调用 callback 返回建议列表的数据
                 cb(results);
             },
  
