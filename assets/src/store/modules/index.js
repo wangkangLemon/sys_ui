@@ -5,7 +5,8 @@ import {
     INDEX_SETWEBPATH,
     INDEX_SET_NAVMENU,
     INDEX_SET__MENU_ACTIVE,
-    INDEX_SET__CLEARFETCHPARAM
+    INDEX_SET__CLEARFETCHPARAM,
+    INDEX_SET__SETSECMENU
 } from '../mutations'
 
 const Auth = {
@@ -15,6 +16,7 @@ const Auth = {
         navMenu: [], // 导航菜单
         navMenueActive: '', // 当前菜单的选中项
         clearFetchParam: false, // 是否清空筛选条件
+        secMenu:[],
     },
 
     mutations: {
@@ -30,7 +32,11 @@ const Auth = {
         },
         [INDEX_SET__CLEARFETCHPARAM] (state, need) {
             state.clearFetchParam = need
-        }
+        },
+        [INDEX_SET__SETSECMENU] (state, need) {
+            state.secMenu = need
+        },
+
     }
 }
 

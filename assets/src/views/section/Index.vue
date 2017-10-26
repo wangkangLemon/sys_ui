@@ -67,7 +67,8 @@
                         </div>
                     </div>
                 </div>-->
-                <MenuTree v-for="item in SecMenu" :data="item" :key="item.id"></MenuTree>
+                
+                <MenuTree :data="SecMenu" v-if="SecMenu.length"></MenuTree>
                 
             </section>
             <section class="right-container">
@@ -77,9 +78,9 @@
                     <button
                         type="button" class="el-button el-button--default">
                         
-                        <span>移动分类下内容</span></button> <button type="button" class="el-button el-button--danger"><span>删除分类</span></button></div>
+                        <span>移动分类下内容</span></button> <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button></div>
                 
-                <div class="el-card edit-content">
+                <!--<div class="el-card edit-content">
                     
                     <div class="el-card__body">
                         <form class="el-form el-form--label-right">
@@ -87,7 +88,7 @@
                                 <div class="el-form-item__content"
                                     style="margin-left: 90px;">
                                     <div class="el-input">
-                                        <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"></div>
+                                        <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"  v-model="selectData.name"></div>
                                 </div>
                             </div>
                             <div class="el-form-item"><label for="image" class="el-form-item__label" style="width: 90px;">分类logo</label>
@@ -121,22 +122,24 @@
                             </div>
                             <div class="el-form-item">
                                 
-                                <div class="el-form-item__content" style="margin-left: 90px;"><button type="button" class="el-button el-button--info"><span>保存</span></button>
+                                <div class="el-form-item__content" style="margin-left: 90px;"><button type="button" class="el-button el-button--info" @click="edit"><span>保存</span></button>
                                     
                                 </div>
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>-->
+                <SecCard @handleSave="edit" :data="$store.state.index.secMenu"></SecCard>
             </section>
-
+            <!--{{secMenu}}-->
     </article>
 </template>
 
 <script>
     //这是 主页面
     import cateService from '../../services/section/cateService.js'
-    import MenuTree from '../component/tree/MenuTreeS.vue'
+    import MenuTree from '../component/tree/MenuTreeSec.vue'
+    import SecCard from '../component/table/SecCard.vue'
     function getFetchParam() {
         return {
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
@@ -152,20 +155,33 @@
 
     export default {
         components: {
-            MenuTree
+            MenuTree,
+            SecCard
         },
+     
         data() {
             return {
                 loadingData: false,
                 SecMenu:[],
                 total: 0,
-                dialogVisible: false,
-                selectedIds: [], // 被选中的数据id集合
                 fetchParam: getFetchParam(),
+                selectData:{},
+            }
+        },
+        computed: {
+            // secMenu(){
+            //     this.selectData = Object.assign({},this.$store.state.index.secMenu)
+            //     return this.$store.state.index.secMenu
+            // }
+        },
+        watch: {
+            '$store.state.index.secMenu'(){
+                this.selectData = Object.assign({},this.$store.state.index.secMenu)
             }
         },
         activated() {
             this.loadingData=false
+            xmview.setLoading(false)
             this.fetchData()
         },
         methods: {
@@ -183,11 +199,11 @@
             fetchData() {
                 cateService.fetchData().then((ret) => {
                     console.log(222222222222)
+                        // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
+                        // console.log(ret)
                         this.SecMenu=ret.data
-                        console.log(ret)
-                        // this.$store.dispatch('setSecNavMenu',{SecMenu:ret});
+                        xmview.setContentLoading(false)     
                     })
-                this.loadingData = false
             },
             create( ) {
                 // console.log(11111111111111)
@@ -198,9 +214,14 @@
                         }, 300)
                     })
             },
-            edit( ) {
-                console.log(2222222222)
-                cateService.edit().then(() => {
+            edit(message) {
+                // if(){
+                //     xmview.showDialog('请先添加要保存的数据')
+                // }else{}
+                console.log(111111111)
+                 console.log(message)
+                cateService.edit(this.selectData).then((ret) => {
+                        console.log(2222222222)
                         console.log(ret)
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
@@ -210,7 +231,9 @@
 
             // 单条删除
             del() {
-                cateService.delete(id).then(() => {
+                console.log(111111112222221111113333111111111111111)
+                cateService.delete(this.selectData).then(() => {
+                    store.commit('increment', 10)
                     xmview.showTip('success', '操作成功')
                 })
             },

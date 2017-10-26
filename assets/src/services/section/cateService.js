@@ -34,6 +34,7 @@ class cateService {
         let url = urlPre + '/create'
         return api.post(url, { pid, name, image, model, path,sort }).then(ret => {
             if (ret.code == 0) {
+                 xmview.showTip('success',ret.message)
                 return ret.data
             } else {
                 xmview.showTip('error',ret.message)
@@ -42,10 +43,12 @@ class cateService {
         })
     }
     // 更新
-    edit({ pid, name, image, model, path,sort }) {
+    edit({ id, pid, name, image, model, path, sort }) {
         let url = `${urlPre}/edit/${id}`
+        console.log('edit======================')
         return api.post(url, { pid, name, image, model, path,sort }).then(ret => {
             if (ret.code == 0) {
+                 xmview.showTip('success',ret.message)
                 return ret.data
             } else {
                 xmview.showTip('error',ret.message)
@@ -59,7 +62,12 @@ class cateService {
         let url = `${urlPre}/delete/${id}`
         // console.log(url)
         return api.get(url, {}).then(ret => {
-            if (ret.code) {
+            if (ret.code == 0) {
+                 xmview.showTip('success',ret.message)
+                 
+                return ret.data
+            } else {
+                xmview.showTip('error',ret.message)
                 return Promise.reject(ret)
             }
         })

@@ -165,6 +165,7 @@ export default {
             return sysService.fetchData(this.fetchParam).then((ret) => {
                 // console.log(ret.data)
                 this.dataCache = ret.data
+                console.log(ret.data)
                 this.loadingData = false
                 // console.log(ret)
                 xmview.setContentLoading(false)     

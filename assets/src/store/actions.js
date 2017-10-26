@@ -16,7 +16,12 @@ const actions = {
     // 清空列表的筛选条件
     clearFetchParam (store, need) {
         store.commit(types.INDEX_SET__CLEARFETCHPARAM, need)
+    },
+    // 修改区块列表
+    setSecMenu (store, need) {
+        store.commit(types.INDEX_SET__SETSECMENU, need)
     }
+    
 }
 
 export default actions
