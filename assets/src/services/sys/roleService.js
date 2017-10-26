@@ -2,6 +2,7 @@ import * as api from '../api'
 import config from '../../utils/config'
 const urlPre = config.apiHost + '/role'
 const urlPre_menu = config.apiHost + '/role_menus'
+const urlPre_node = config.apiHost + '/role_nodes'
 
 class sysService {
     //拿到数据 
@@ -108,8 +109,9 @@ class sysService {
 
     //分配权限---------------------------
 
-     //拿到数据 
-    fetchDataImp ( id ) {
+    //菜单
+    //拿到数据 
+    fetchDataM ( id ) {
         let url = urlPre_menu + '/lists'
         console.log()
         return api.get(url,{ role_id : id
@@ -123,7 +125,7 @@ class sysService {
         })
     }
     // 创建
-    createImp(id, ids) {
+    createM(id, ids) {
         let url = urlPre_menu + '/create_multi'
         return api.post(url, { role_id:id , menu_ids:ids }).then(ret => {
             if (ret.code == 0) {
@@ -136,12 +138,50 @@ class sysService {
             }
         })
     }
-     // 删除
+
+    //节点
+    //拿到数据 
+    fetchDataN ( id ) {
+        let url = urlPre_node + '/lists'
+        console.log(url)
+        return api.get(url,{ role_id : id
+        }).then(ret => {
+            if (ret.code == 0) {
+                console.log( ret)
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 创建
+    createN(id, ids) {
+        let url = urlPre_node + '/create_multi'
+        return api.post(url, { role_id:id , menu_ids:ids }).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success',ret.message)
+                return ret.data
+            } else {
+                console.log(url)
+                xmview.showTip('error',ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+
+
+     // 删除 - 根据添加授权 请求role_id 和 menu_id 产生的 id来删除
     deleteImp(id) {
         let url = `${urlPre_menu}/delete/${id}`
         // console.log(url)
         return api.get(url, {}).then(ret => {
-            if (ret.code) {
+            if (ret.code==0) {
+                xmview.showTip('success',ret.message)
+                return ret.data
+            }else {
+                console.log(url)
+                xmview.showTip('error',ret.message)
                 return Promise.reject(ret)
             }
         })

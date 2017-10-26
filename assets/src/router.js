@@ -8,8 +8,8 @@ import analytics from './routers/analytics'    // 统计模块
 import finance from './routers/finance'        // 财务模块
 import company from './routers/company'        // 企业模块
 import sys from './routers/sys'                // 系统模块
-// import lists from './views/section/lists.vue'  // 系统模块
-// import add from './views/section/add.vue'      // 区块添加
+import section from './routers/section'        // 区块模块
+
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
 
@@ -96,6 +96,9 @@ const routes = [{
             ...company,
             // ============ 系统模块 ==================
             sys,
+            // ============ 区块模块 ==================
+            section,
+
         ]
     },
     { // 登录

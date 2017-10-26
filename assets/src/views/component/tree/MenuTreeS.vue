@@ -8,40 +8,40 @@
 </style>
 
 <template>
-    <el-submenu :index="data.item.menu_url" v-if="data && data.children != null">
+    <el-submenu  v-if="data && data.children != null">
         <template slot="title">
-            <i class="fa" :class="data.item.menu_icon" v-if="data.item.menu_icon"></i>
-            <i class="fa fa-th-large" v-else></i>
-            {{data.item.menu_name}}
+            {{data.item.name}}
         </template>
 
         <MenuTree v-for="item in hasChildCItems" :key="item.item.id" :data="item"></MenuTree>
-
-        <el-menu-item :index="item.item.menu_url" v-bind="{index:}" v-for="item in leafChildren" :key="item.item.id">
-            <i class="fa" :class="item.item.menu_icon" v-if="item.item.menu_icon"></i>
-            <i class="fa fa-circle-o" v-else></i>
-            {{item.item.menu_name}}
+        <template v-if="leafChildren">
+        <el-menu-item :index="item.item.id" v-bind="{index}" v-for="item in leafChildren" :key="item.item.id">
+            {{item.item.name}}
         </el-menu-item>
+           </template>
     </el-submenu>
-    <el-menu-item :index="data.item.menu_url" v-else>
-        <i class="fa" :class="data.item.menu_icon" v-if="data.item.menu_icon"></i>
-        <i class="fa fa-th-large" v-else></i>
-        {{data.item.menu_name}}
+    <el-menu-item :index="item.id" v-bind="{index}" v-for="item in data" :key="item.id" v-else>
+        <template v-if="data"> 
+        {{data.item.name}}
+        </template>
     </el-menu-item>
 </template>
 
 <script>
-    import MenuTree from './MenuTree.vue'
+    //这是 组件   
+    import MenuTree from './MenuTreeS.vue'
     export default{
         name: 'MenuTree',
         data () {
             return {
-                leafChildren: [], // 叶子节点
+                leafChildren: null, // 叶子节点
                 hasChildCItems: [], // 有子节点的item
             }
         },
         props: ['data'],
         created () {
+            console.log('++++++++++++++')
+            console.log(this.data)
             if (this.data == null) {
                 this.data = {}
             }

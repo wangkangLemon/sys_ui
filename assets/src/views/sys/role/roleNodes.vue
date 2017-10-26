@@ -27,7 +27,7 @@
 
         <!--底部的批量删除和移动两个按钮-->
         <div class="bottom-manage">
-            <el-button @click="createM">提交</el-button>
+            <el-button @click="createN">提交</el-button>
             <!--<el-button @click="deleteImp">删除</el-button>-->
         </div>
     </article>
@@ -52,7 +52,7 @@ export default {
     },
     activated () {
         this.fetchData()
-        this.fetchDataM()
+        this.fetchDataN()
     },
     methods: {
         //全选反选按钮
@@ -78,9 +78,9 @@ export default {
             })
         },
         //授权部分开始
-        fetchDataM(){
+        fetchDataN(){
             console.log(this.$route.params.role_id)
-            return roleService.fetchDataM(this.$route.params.role_id).then((ret) => {
+            return roleService.fetchDataN(this.$route.params.role_id).then((ret) => {
                 this.dataImp = ret.data
                 var arr = []
                 ret.data.forEach(v=>{
@@ -94,11 +94,11 @@ export default {
                 xmview.setContentLoading(false)     
             })
         },
-        createM(){
+        createN(){
             let ids=this.checkedMenus.join(',')
             console.log(111111111111111)
             console.log(ids)
-            roleService.createM(this.$route.params.role_id,ids).then((ret) => {
+            roleService.createN(this.$route.params.role_id,ids).then((ret) => {
                 this.fetchParamImp = ret
                 console.log(ret)
             })

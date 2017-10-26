@@ -1,0 +1,230 @@
+<!--公开课管理-->
+<style lang='scss' rel='stylesheet/scss'>
+    @import "../../utils/mixins/common";
+    @import "../../utils/mixins/topSearch";
+
+    #course-index-container {
+        @extend %content-container;
+
+        .manage-container {
+            @extend %right-top-btnContainer;
+            >* {
+                color: #fff;
+                border-radius: 5px;
+            }
+        }
+        >section{
+            display: inline-block;
+             vertical-align: top;
+        }
+        .left-container{
+            min-width: 300px;
+             border-right: 1px solid #ededed;
+        }
+        .right-container{
+            width: 50%;
+            margin-left: 15px;
+        }
+        .el-dialog__wrapper {
+            padding-top: 15px;
+            background: rgba(0, 0, 0, .5);
+            z-index: 1000;
+        }
+    }
+</style>
+
+<template>
+    <article id="course-index-container">
+
+            <section class="manage-container"><button type="button" icon="plus" class="el-button el-button--primary"  @click="create"><span>新建分类</span></button></section>
+            <section class="left-container">
+                <!--<div class="el-tree">
+                    <div class="el-tree-node">
+                        <div class="el-tree-node__content" style="padding-left: 0px; background: rgb(255, 255, 255);"><span class="el-tree-node__expand-icon is-leaf"></span>
+                            
+                            <span class="el-tree-node__label">公告</span></div>
+                        <div class="el-tree-node__children" style="display: none;"></div>
+                    </div>
+                    <div class="el-tree-node">
+                        <div class="el-tree-node__content" style="padding-left: 0px; background: rgb(255, 255, 255);"><span class="el-tree-node__expand-icon is-leaf"></span>
+                            
+                            <span class="el-tree-node__label">资讯</span></div>
+                        <div class="el-tree-node__children" style="display: none;"></div>
+                    </div>
+                    <div class="el-tree-node is-expanded is-current">
+                        <div class="el-tree-node__content" style="padding-left: 0px; background: rgb(228, 233, 241);"><span class="el-tree-node__expand-icon expanded"></span>
+                            
+                            <span class="el-tree-node__label">首页</span></div>
+                        <div class="el-tree-node__children" data-old-padding-top=""
+                            data-old-padding-bottom="" data-old-overflow="">
+                            <div class="el-tree-node">
+                                <div class="el-tree-node__content" style="padding-left: 16px; background: rgb(255, 255, 255);"><span class="el-tree-node__expand-icon is-leaf"></span>
+                                    
+                                    <span class="el-tree-node__label">推荐版块</span></div>
+                                <div class="el-tree-node__children"
+                                    style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <MenuTree v-for="item in SecMenu" :data="item" :key="item.id"></MenuTree>
+                
+            </section>
+            <section class="right-container">
+                <div><button type="button" class="el-button el-button--primary btn-selected"><span>修改分类</span></button>                    
+                    <button type="button" class="el-button el-button--default"><span>添加子分类</span></button>                    
+                    <button type="button" class="el-button el-button--default"><span>移动分类</span></button>
+                    <button
+                        type="button" class="el-button el-button--default">
+                        
+                        <span>移动分类下内容</span></button> <button type="button" class="el-button el-button--danger"><span>删除分类</span></button></div>
+                
+                <div class="el-card edit-content">
+                    
+                    <div class="el-card__body">
+                        <form class="el-form el-form--label-right">
+                            <div class="el-form-item is-required"><label for="name" class="el-form-item__label" style="width: 90px;">分类名称</label>
+                                <div class="el-form-item__content"
+                                    style="margin-left: 90px;">
+                                    <div class="el-input">
+                                        <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"></div>
+                                </div>
+                            </div>
+                            <div class="el-form-item"><label for="image" class="el-form-item__label" style="width: 90px;">分类logo</label>
+                                <div class="el-form-item__content"
+                                    style="margin-left: 90px;">
+                                    <div class="component-upload-uploadimg">
+                                        <div>
+                                            <ul class="el-upload-list el-upload-list--picture-card"></ul>
+                                            <div class="el-upload el-upload--picture-card" style="display: block;"><i class="el-icon-plus"></i><input type="file" name="file" accept="image/jpg,image/jpeg,image/png,image/gif"
+                                                    class="el-upload__input"></div>
+                                        </div>
+                                        <div class="el-dialog__wrapper" style="display: none;">
+                                            <div class="el-dialog el-dialog--tiny" style="top: 15%;">
+                                                <div class="el-dialog__header"><span class="el-dialog__title"></span>
+                                                    <div class="el-dialog__headerbtn"><i class="el-dialog__close el-icon el-icon-close"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="el-form-item"><label for="sort" class="el-form-item__label" style="width: 90px;">分类排序</label>
+                                <div class="el-form-item__content"
+                                    style="margin-left: 90px;">
+                                    <div class="el-input">
+                                        <input autocomplete="off" placeholder="最小的排在前面" type="text" rows="2" validateevent="true"
+                                            class="el-input__inner">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                
+                                <div class="el-form-item__content" style="margin-left: 90px;"><button type="button" class="el-button el-button--info"><span>保存</span></button>
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+    </article>
+</template>
+
+<script>
+    //这是 主页面
+    import cateService from '../../services/section/cateService.js'
+    import MenuTree from '../component/tree/MenuTreeS.vue'
+    function getFetchParam() {
+        return {
+            status: void - 1, // 2- 视屏转码中 1-下线 0-正常
+            category: void 0, // 3- 供应商
+            page: 1,
+            page_size: 15,
+            time_start: void 0,
+            time_end: void 0,
+            need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
+            keyword: void 0,
+        }
+    }
+
+    export default {
+        components: {
+            MenuTree
+        },
+        data() {
+            return {
+                loadingData: false,
+                SecMenu:[],
+                total: 0,
+                dialogVisible: false,
+                selectedIds: [], // 被选中的数据id集合
+                fetchParam: getFetchParam(),
+            }
+        },
+        activated() {
+            this.loadingData=false
+            this.fetchData()
+        },
+        methods: {
+            initFetchParam() {
+                this.fetchParam = getFetchParam()
+            },
+            handleCurrentChange(val) {
+                this.fetchParam.page = val
+                this.fetchData()
+            },
+            handleSizeChange(val) {
+                this.fetchParam.page_size = val
+                this.fetchData()
+            },
+            fetchData() {
+                cateService.fetchData().then((ret) => {
+                    console.log(222222222222)
+                        this.SecMenu=ret.data
+                        console.log(ret)
+                        // this.$store.dispatch('setSecNavMenu',{SecMenu:ret});
+                    })
+                this.loadingData = false
+            },
+            create( ) {
+                // console.log(11111111111111)
+                cateService.create().then(() => {
+                        console.log(ret)
+                        setTimeout(() => {
+                            this.fetchData() // 重新刷新数据
+                        }, 300)
+                    })
+            },
+            edit( ) {
+                console.log(2222222222)
+                cateService.edit().then(() => {
+                        console.log(ret)
+                        setTimeout(() => {
+                            this.fetchData() // 重新刷新数据
+                        }, 300)
+                    })
+            },
+
+            // 单条删除
+            del() {
+                cateService.delete(id).then(() => {
+                    xmview.showTip('success', '操作成功')
+                })
+            },
+            // 批量删除
+            delMulti() {
+                xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
+                    cateService.deleteMulty(this.selectedIds.join(',')).then(() => {
+                        xmview.showTip('success', '操作成功')
+                        setTimeout(() => {
+                            this.fetchData() // 重新刷新数据
+                        }, 300)
+                    })
+                })
+            },
+        },
+    }
+</script>

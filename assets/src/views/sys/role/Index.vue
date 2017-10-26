@@ -81,10 +81,10 @@
                     <el-button v-else @click="online(scope.$index, scope.row)" type="text" size="small">
                         <i>启用</i>
                     </el-button>
-                    <el-button @click="$router.push({name: 'role_menus', params: {roleInfo: scope.row, role_id: scope.row.id, role_name: scope.row.role_name}})" type="text" size="small">授权菜单
+                    <el-button @click="$router.push({name: 'role_menus', params: {roleInfo: scope.row, role_id: scope.row.id, role_name: scope.row.role_name }})" type="text" size="small">授权菜单
                         <!--a-->
                     </el-button>
-                    <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">授权节点
+                    <el-button @click="$router.push({name: 'role_nodes', params: {roleInfo: scope.row, role_id: scope.row.id, role_name: scope.row.role_name }})" type="text" size="small">授权节点
                         <!--a-->
                     </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>

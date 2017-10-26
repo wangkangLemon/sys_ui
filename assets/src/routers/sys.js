@@ -102,6 +102,19 @@ export default {
                 noback: false
             }
         },
+        {
+            path: 'role/role_nodes/:role_id',
+            name: 'role_nodes',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/role/roleNodes.vue'))
+                })
+            },
+            meta: {
+                title: '角色组授权节点',
+                noback: false
+            }
+        },
          //菜单管理
         {
             path: 'menu',
