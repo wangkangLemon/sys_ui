@@ -128,7 +128,7 @@
                         </form>
                     </div>
                 </div>-->
-                <SecCard @handleSave="edit" :data="this.selectData"></SecCard>
+                <SecCard @handleSave="handle" :data="this.selectData"></SecCard>
             </section>
             <!--{{secMenu}}-->
     </article>
@@ -149,6 +149,7 @@
             time_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
             keyword: void 0,
+            type: 'p',
         }
     }
 
@@ -192,15 +193,12 @@
             },
             fetchData() {
                 cateService.fetchData().then((ret) => {
-                    console.log(222222222222)
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
-                        // console.log(ret)
                         this.SecMenu=ret.data
                         xmview.setContentLoading(false)     
                     })
             },
             create( ) {
-                // console.log(11111111111111)
                 cateService.create().then(() => {
                         console.log(ret)
                         setTimeout(() => {
@@ -208,37 +206,52 @@
                         }, 300)
                     })
             },
-            //修改分类
-            edit(message) {
+            //处理保存的数据
+            handle( message ) {
                 // if(){
                 //     xmview.showDialog('请先添加要保存的数据')
                 // }else{}
-                console.log('edit0000000')
-                console.log(message)
-                cateService.edit(this.selectData).then((ret) => {
-                        console.log('000000000000000')
-                        console.log(ret)
+               console.log( message )
+            //    if( message.pid == 0 || message.pid == 1 ){
+               if( this.type == 'P'){
+                    cateService.create( message ).then(( ret ) => {
+                        setTimeout(() => {
+                            this.fetchData() // 重新刷新数据
+                        }, 300)
+                    })
+               }else {
+                    cateService.edit( message ).then(( ret ) => {
+                        setTimeout(() => {
+                            this.fetchData() // 重新刷新数据
+                        }, 300)
+                    })
+               }
+               
+            },
+            //编辑
+            edit( e ) {
+                cateService.edit(e).then((ret) => {
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
                         }, 300)
                     })
             },
             //添加根节点
-            addP(){
-                console.log('addP111111')
-                this.selectData={}
+            addP(p){
+                this.selectData=null
+                this.type = 'P'
 
             },
             //添加子分类
             addS(){
-                console.log('aaddS222222')
+                 this.selectData=null
+                 this.type = 'S'
             },
             // 单条删除
             del() {
-                xmview.showDialog('是否确认删除？', () => {
-                    console.log(111111112222221111113333111111111111111)
-                    cateService.delete(this.selectData).then(() => {
-                        store.commit('increment', 10)
+                xmview.showDialog(`您将要删除<span style="color:red">${this.selectData.name}</span>区块,确认吗？`, () => {
+                    cateService.delete(this.selectData.id).then(() => {
+                        // store.commit('increment', 10)
                         xmview.showTip('success', '操作成功')
                     })
                 })

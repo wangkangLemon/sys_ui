@@ -76,8 +76,8 @@
                 }
             })
             this.data1 = arr
-            console.log('---------++++++++++++++')
-            console.log(this.data1)
+            // console.log('---------++++++++++++++')
+            // console.log(this.data1)
 
             let hasChildCItems = []
             let leafChildren = []

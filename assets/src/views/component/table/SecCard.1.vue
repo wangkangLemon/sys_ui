@@ -79,6 +79,9 @@
                 // }
         },
         methods: {
+            initData(){
+                
+            },
             save(){
                 this.$emit('handleSave',this.selectData)
             }

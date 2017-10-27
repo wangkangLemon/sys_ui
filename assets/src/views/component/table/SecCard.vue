@@ -7,7 +7,8 @@
                                 <div class="el-form-item__content"
                                     style="margin-left: 90px;">
                                     <div class="el-input">
-                                        <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"  v-model="this.selectData.name"></div>
+                                        <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"  v-model="selectData.name"></div>
+                                        {{selectData.name}}
                                 </div>
                             </div>
                             <div class="el-form-item"><label for="image" class="el-form-item__label" style="width: 90px;">分类logo</label>
@@ -54,25 +55,42 @@
          data() {
             return {
                 SecMenu:[],
-                selectData:{},
+                selectData:{
+                    id:0,
+                    pid:0,
+                    name:'',
+                },
             }
         },
         props: ['data'],
         created () {
-            console.log(1111111)
-            console.log(this.data)
         },
         watch: {
             'data'(){
-                 this.selectData = Object.assign({},this.data)
+                //判断是否存在传过来的数据 有则使用无则初始化
+                if(this.data){
+                    this.selectData = Object.assign({},this.data)
+                }else{
+                    this.initData() 
+                }
+                 
             }
             // '$store.state.index.secMenu'(){
             //     this.selectData = Object.assign({},this.$store.state.index.secMenu)
             // }
         },
         methods: {
+            initData(){
+                this.selectData={
+                    id:null,
+                    pid:0,
+                    name:'',
+                }
+            },
             save(){
-                this.$emit('handleSave',this.selectData)
+                xmview.showDialog(this.selectData,()=>{
+                    this.$emit('handleSave',this.selectData)
+                })
             }
          
         }
