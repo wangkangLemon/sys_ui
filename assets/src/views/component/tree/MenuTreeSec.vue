@@ -8,18 +8,18 @@
 </style>
 
 <template>
-    <el-submenu v-if="data && data.children != null">
+    <!--<el-submenu v-if="data && data.children != null">
         <template slot="title">
             {{data.item.name}}
         </template>
 
         <MenuTree v-for="item in hasChildCItems" :key="item.item.id" :data="item"></MenuTree>
         <template v-if="leafChildren">
-            <!--<el-menu-item :index="item.item.id" v-bind="{index}" v-for="item in leafChildren" :key="item.item.id">
+        <el-menu-item :index="item.item.id" v-bind="{index}" v-for="item in leafChildren" :key="item.item.id">
             {{item.item.name}}
-        </el-menu-item>-->
+        </el-menu-item>
         </template>
-    </el-submenu>
+    </el-submenu>-->
     <el-tree v-else :data="data1" :props="defaultProps" @node-click="handleNodeClick">{{this.data}}</el-tree>
     <!--<el-menu-item :index="item.id" v-bind="{index}" v-for="item in data" :key="item.id" v-else>
         <template v-if="data"> 
@@ -99,6 +99,7 @@
         },
         methods: {
             handleNodeClick(a){
+                
                 this.$store.dispatch('setSecMenu',a);
             }
         }

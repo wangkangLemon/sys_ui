@@ -22,7 +22,7 @@
              border-right: 1px solid #ededed;
         }
         .right-container{
-            width: 50%;
+            width: 60%;
             margin-left: 15px;
         }
         .el-dialog__wrapper {
@@ -72,16 +72,15 @@
                 
             </section>
             <section class="right-container">
-                <div><button type="button" class="el-button el-button--primary btn-selected"><span>修改分类</span></button>                    
-                    <button type="button" class="el-button el-button--default"><span>添加子分类</span></button>                    
-                    <button type="button" class="el-button el-button--default"><span>移动分类</span></button>
-                    <button
-                        type="button" class="el-button el-button--default">
-                        
-                        <span>移动分类下内容</span></button> <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button></div>
+                <div><button type="button" class="el-button el-button--primary"><span>修改分类</span></button>                    
+                    <button type="button" class="el-button" @click="addP"><span>添加根节点</span></button>                    
+                    <button type="button" class="el-button" @click="addS"><span>添加子分类</span></button>                    
+                    <button type="button" class="el-button "><span>移动分类</span></button>
+                    <button type="button" class="el-button "><span>移动分类下内容</span></button> 
+                    <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button>
+                </div>
                 
                 <!--<div class="el-card edit-content">
-                    
                     <div class="el-card__body">
                         <form class="el-form el-form--label-right">
                             <div class="el-form-item is-required"><label for="name" class="el-form-item__label" style="width: 90px;">分类名称</label>
@@ -129,7 +128,7 @@
                         </form>
                     </div>
                 </div>-->
-                <SecCard @handleSave="edit" :data="$store.state.index.secMenu"></SecCard>
+                <SecCard @handleSave="edit" :data="this.selectData"></SecCard>
             </section>
             <!--{{secMenu}}-->
     </article>
@@ -168,15 +167,10 @@
                 selectData:{},
             }
         },
-        computed: {
-            // secMenu(){
-            //     this.selectData = Object.assign({},this.$store.state.index.secMenu)
-            //     return this.$store.state.index.secMenu
-            // }
-        },
+
         watch: {
             '$store.state.index.secMenu'(){
-                this.selectData = Object.assign({},this.$store.state.index.secMenu)
+                this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             }
         },
         activated() {
@@ -214,40 +208,43 @@
                         }, 300)
                     })
             },
+            //修改分类
             edit(message) {
                 // if(){
                 //     xmview.showDialog('请先添加要保存的数据')
                 // }else{}
-                console.log(111111111)
-                 console.log(message)
+                console.log('edit0000000')
+                console.log(message)
                 cateService.edit(this.selectData).then((ret) => {
-                        console.log(2222222222)
+                        console.log('000000000000000')
                         console.log(ret)
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
                         }, 300)
                     })
             },
+            //添加根节点
+            addP(){
+                console.log('addP111111')
+                this.selectData={}
 
+            },
+            //添加子分类
+            addS(){
+                console.log('aaddS222222')
+            },
             // 单条删除
             del() {
-                console.log(111111112222221111113333111111111111111)
-                cateService.delete(this.selectData).then(() => {
-                    store.commit('increment', 10)
-                    xmview.showTip('success', '操作成功')
-                })
-            },
-            // 批量删除
-            delMulti() {
-                xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
-                    cateService.deleteMulty(this.selectedIds.join(',')).then(() => {
+                xmview.showDialog('是否确认删除？', () => {
+                    console.log(111111112222221111113333111111111111111)
+                    cateService.delete(this.selectData).then(() => {
+                        store.commit('increment', 10)
                         xmview.showTip('success', '操作成功')
-                        setTimeout(() => {
-                            this.fetchData() // 重新刷新数据
-                        }, 300)
                     })
                 })
+                
             },
+        
         },
     }
 </script>
