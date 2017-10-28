@@ -20,6 +20,10 @@ const actions = {
     // 修改区块列表
     setSecMenu (store, need) {
         store.commit(types.INDEX_SET__SETSECMENU, need)
+    },
+    //区块列表存储Pid
+    savePid(store, need){
+        store.commit(types.INDEX_SET__SETSECPID, need)
     }
     
 }

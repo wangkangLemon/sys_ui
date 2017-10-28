@@ -72,11 +72,11 @@
                 
             </section>
             <section class="right-container">
-                <div><button type="button" class="el-button el-button--primary"><span>修改分类</span></button>                    
-                    <button type="button" class="el-button" @click="addP"><span>添加根节点</span></button>                    
-                    <button type="button" class="el-button" @click="addS"><span>添加子分类</span></button>                    
-                    <button type="button" class="el-button "><span>移动分类</span></button>
-                    <button type="button" class="el-button "><span>移动分类下内容</span></button> 
+                <div><button type="button" class="el-button" :class="{'el-button--primary':type=='update'}" @click="changeType('update')"><span>修改分类</span></button>                    
+                    <button type="button" class="el-button" :class="{'el-button--primary':type=='P'}" @click="changeType('P')"><span>添加根节点</span></button>                    
+                    <button type="button" class="el-button" :class="{'el-button--primary':type=='S'}" @click="changeType('S')"><span>添加子分类</span></button>                    
+                    <button type="button" class="el-button" :class="{'el-button--primary':type=='C'}" @click="changeType('C')" ><span>移动分类</span></button>
+                    <button type="button" class="el-button" :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" ><span>移动分类下内容</span></button> 
                     <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button>
                 </div>
                 
@@ -128,7 +128,7 @@
                         </form>
                     </div>
                 </div>-->
-                <SecCard @handleSave="handle" :data="this.selectData"></SecCard>
+                <SecCard @handleSave="handle" :data="selectData" :type="type"></SecCard>
             </section>
             <!--{{secMenu}}-->
     </article>
@@ -149,7 +149,7 @@
             time_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
             keyword: void 0,
-            type: 'p',
+           
         }
     }
 
@@ -166,12 +166,15 @@
                 total: 0,
                 fetchParam: getFetchParam(),
                 selectData:{},
+                type: 'update',
+
             }
         },
 
         watch: {
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
+ 
             }
         },
         activated() {
@@ -213,7 +216,12 @@
                 // }else{}
                console.log( message )
             //    if( message.pid == 0 || message.pid == 1 ){
-               if( this.type == 'P'){
+               if( this.type == 'P'|| this.type == 'S' ){
+                    if(this.type == 'P'){
+                        message.pid=0
+                    } else if( this.type == 'S'){
+                        message.pid=this.$store.state.index.secPid
+                    }
                     cateService.create( message ).then(( ret ) => {
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
@@ -236,16 +244,22 @@
                         }, 300)
                     })
             },
-            //添加根节点
-            addP(p){
-                this.selectData=null
-                this.type = 'P'
+            // //添加根节点
+            // addP(p){
+            //     this.selectData=null
+            //     this.type = 'P'
 
-            },
-            //添加子分类
-            addS(){
-                 this.selectData=null
-                 this.type = 'S'
+            // },
+            // //添加子分类
+            // addS(){
+            //      this.selectData=null
+            //      this.type = 'S'
+            // },
+            changeType(type){
+                this.type = type
+                if(type!="update"){
+                    this.$store.dispatch('setSecMenu',null);
+                }
             },
             // 单条删除
             del() {

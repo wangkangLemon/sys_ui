@@ -55,6 +55,7 @@
                         pid: v.pid,
                         model:v.model,
                         path:v.path,
+                        level:v.level,
                         children: []
                     })
                 }
@@ -69,6 +70,7 @@
                                 pid: v.pid,
                                 model:v.model,
                                 path:v.path,
+                                level:v.level,
                                 children: []
                             })
                         }
@@ -99,8 +101,11 @@
         },
         methods: {
             handleNodeClick(a){
-                
+                if( a.level == 0 ){
+                    this.$store.dispatch('savePid',a.id)
+                }
                 this.$store.dispatch('setSecMenu',a);
+       
             }
         }
     }

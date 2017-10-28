@@ -56,24 +56,22 @@
             return {
                 SecMenu:[],
                 selectData:{
-                    id:0,
-                    pid:0,
                     name:'',
                 },
             }
         },
-        props: ['data'],
+        props: ['data','type'],
         created () {
         },
         watch: {
+            'type'(){
+                   this.initData()
+            },
             'data'(){
                 //判断是否存在传过来的数据 有则使用无则初始化
                 if(this.data){
                     this.selectData = Object.assign({},this.data)
-                }else{
-                    this.initData() 
-                }
-                 
+                }   
             }
             // '$store.state.index.secMenu'(){
             //     this.selectData = Object.assign({},this.$store.state.index.secMenu)
@@ -82,8 +80,6 @@
         methods: {
             initData(){
                 this.selectData={
-                    id:null,
-                    pid:0,
                     name:'',
                 }
             },
