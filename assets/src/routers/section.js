@@ -51,7 +51,7 @@ export default {
             }
         },
         {
-            path: 'edit/:section_id',
+            path: 'edit/:sys_id',
             name: 'section-edit',
             component: resolve => {
                 require.ensure([], () => {

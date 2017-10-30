@@ -26,8 +26,10 @@
         </section>     
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :model="fetchParam">
-                <el-form-item label="ID" prop="category">
-                    <el-input v-model.name="fetchParam.id"></el-input>
+                <el-form-item  v-if="$route.params.sys_id" label="ID" prop="category">
+                    <el-input v-model.name="fetchParam.id" disabled></el-input>
+                </el-form-item>
+                 <el-form-item v-else >
                 </el-form-item>
                 <el-form-item label="设置" prop="category">
                     <el-input v-model.name="fetchParam.category"></el-input>
@@ -71,10 +73,21 @@
         },
         created() {
 
+            // xmview.setContentLoading(false);
+            // console.log('this.$route.params.sys_id='+this.$route.params.sys_id )
+            //     if (this.$route.params.sys_id != undefined) {    //路由id传递
+            //         alert(2) 
+            //         sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
+            //             this.fetchParam = ret
+            //             console.log(ret)
+            //         })
+            //     }    
+            // this.loadingData=false;
+        },
+        activated () {
             xmview.setContentLoading(false);
             console.log('this.$route.params.sys_id='+this.$route.params.sys_id )
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
-                    alert(2) 
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
                         console.log(ret)
@@ -82,15 +95,12 @@
                 }    
             this.loadingData=false;
         },
-        activated () {
-            xmview.setContentLoading(false);
-        },
         methods: {
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
                     let req = sysService.create
-                    if (this.$route.params.sys_id) req = sysService.update
+                    if (this.$route.params.sys_id) req = sysService.edit
                     console.log(req)
                     // console.log(this.$route.params.sys_id)
                     req(this.fetchParam).then((ret) => {
@@ -114,12 +124,10 @@
 
     function getOriginData() {
         return {
-            menu_name: '',
-            menu_node:'',
-            remark:'',
-            sort: 0,
-            pid: 0,
-            level: 0,
+            category: '',
+            field:'',
+            val:'',
+            describe: 0,
         }
     }
 

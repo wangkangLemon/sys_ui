@@ -168,7 +168,7 @@ export default {
         },
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除设置 <span style="color:red">${row.node_name}</span>  此操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除设置 <span style="color:red">${row.category}</span>  此操作不可恢复确认吗?`, () => {
                 sysService.delete(row.id).then(() => {
                     this.dataCache.splice(index, 1)//删除选中项
                     row.deleted = 1

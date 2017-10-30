@@ -22,7 +22,7 @@ class dataService {
         let url = `${urlPre}/get/${id}`         //传递的地址的id
         return api.get(url,{},false).then(ret => {
             if (ret.code == 0) {
-                alert(1)
+                // alert(1)
                 return ret.data
             } else {
                 return Promise.reject(ret)
@@ -31,9 +31,9 @@ class dataService {
     }
 
     // 创建
-    create({ pid, name, image, model, path,sort }) {
-        let url = urlPre + '/create'
-        return api.post(url, { pid, name, image, model, path,sort }).then(ret => {
+    create({ id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, date, tags, tags_color, sort }) {
+        let url1 = urlPre + '/create'
+        return api.post(url1, { id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, date, tags, tags_color, sort }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data
@@ -47,7 +47,7 @@ class dataService {
     edit({ id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, date, tags, tags_color, sort }) {
         let url1 = `${urlPre}/edit/${id}`
         console.log('edit======================')
-        return api.post(url1, { category_id, ref_type, ref_id, ref_sync, title, image, url, desc, date, tags, tags_color, sort }).then(ret => {
+        return api.post(url1, { id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, date, tags, tags_color, sort }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data

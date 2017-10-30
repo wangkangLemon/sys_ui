@@ -22,7 +22,6 @@ class setService {
         let url = `${urlPre}/get/${id}`         //传递的地址的id
         return api.get(url,{},false).then(ret => {
             if (ret.code == 0) {
-                alert(22)
                 return ret.data
             } else {
                 return Promise.reject(ret)
@@ -31,9 +30,9 @@ class setService {
     }
 
     // 创建
-    create({ pid, name, image, model, path,sort }) {
+    create({ category, field, val, describe }) {
         let url = urlPre + '/create'
-        return api.post(url, { pid, name, image, model, path,sort }).then(ret => {
+        return api.post(url, {  category, field, val, describe }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data

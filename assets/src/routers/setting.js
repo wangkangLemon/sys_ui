@@ -38,7 +38,7 @@ export default {
             }
         },
         {
-            path: 'edit/:setting_id',
+            path: 'edit/:sys_id',
             name: 'setting-edit',
             component: resolve => {
                 require.ensure([], () => {

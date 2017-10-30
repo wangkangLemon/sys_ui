@@ -145,7 +145,7 @@ export default {
         },
         fetchData(val) {
             return sysService.fetchData(this.fetchParam).then((ret) => {
-                // console.log(ret.data)
+                console.log(ret.data)
                 this.dataCache = ret.data
                 this.loadingData = false
                 xmview.setContentLoading(false)     
@@ -167,7 +167,7 @@ export default {
       
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除数据 <span style="color:red">${row.node_name}</span>  此操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除第 <span style="color:red">${row.id}</span> 条数据,  此操作不可恢复确认吗?`, () => {
                 sysService.delete(row.id).then(() => {
                     this.dataCache.splice(index, 1)//删除选中项
                     row.deleted = 1
