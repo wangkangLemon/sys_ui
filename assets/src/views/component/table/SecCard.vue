@@ -8,7 +8,23 @@
                                     style="margin-left: 90px;">
                                     <div class="el-input">
                                         <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"  v-model="selectData.name"></div>
-                                        {{selectData.name}}
+                                        <!--{{selectData.name}}-->
+                                </div>
+                            </div>
+                            <div class="el-form-item is-required"><label for="name" class="el-form-item__label" style="width: 90px;">模型标识</label>
+                                <div class="el-form-item__content"
+                                    style="margin-left: 90px;">
+                                    <div class="el-input">
+                                        <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"  v-model="selectData.model"></div>
+                                        <!--{{selectData.model}}-->
+                                </div>
+                            </div>
+                            <div class="el-form-item is-required"><label for="name" class="el-form-item__label" style="width: 90px;">跳转路径</label>
+                                <div class="el-form-item__content"
+                                    style="margin-left: 90px;">
+                                    <div class="el-input">
+                                        <input autocomplete="off" type="text" rows="2" validateevent="true" class="el-input__inner"  v-model="selectData.path"></div>
+                                        <!--{{selectData.path}}-->
                                 </div>
                             </div>
                             <div class="el-form-item"><label for="image" class="el-form-item__label" style="width: 90px;">分类logo</label>
@@ -57,6 +73,8 @@
                 SecMenu:[],
                 selectData:{
                     name:'',
+                    model:'',
+                    path:''
                 },
             }
         },
@@ -81,6 +99,8 @@
             initData(){
                 this.selectData={
                     name:'',
+                    model:'',
+                    path:''
                 }
             },
             save(){

@@ -15,39 +15,53 @@ export default {
             name: 'section-category',
             component: resolve => {
                 require.ensure([], () => {
+                    resolve(require('../views/section/category.vue'))
+                })
+            },
+            meta: {
+                title: '区块',
+                noback: true
+            }
+        },
+        //数据管理
+        {
+            path: 'data',
+            name: 'section-data',
+            component: resolve => {
+                require.ensure([], () => {
                     resolve(require('../views/section/Index.vue'))
                 })
             },
             meta: {
-                title: '区块分类',
+                title: '区块',
                 noback: true
             }
         },
-        // {
-        //     path: 'add',
-        //     name: 'section-add',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/section/Form.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '区块添加',
-        //         noback: false
-        //     }
-        // },
-        // {
-        //     path: 'edit/:section_id',
-        //     name: 'section-edit',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/section/Form.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '区块更新',
-        //         noback: false
-        //     }
-        // },
+        {
+            path: 'add',
+            name: 'section-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/section/Form.vue'))
+                })
+            },
+            meta: {
+                title: '数据添加',
+                noback: false
+            }
+        },
+        {
+            path: 'edit/:section_id',
+            name: 'section-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/section/Form.vue'))
+                })
+            },
+            meta: {
+                title: '数据更新',
+                noback: false
+            }
+        },
     ]
 }

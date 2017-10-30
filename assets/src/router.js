@@ -9,6 +9,7 @@ import finance from './routers/finance'        // 财务模块
 import company from './routers/company'        // 企业模块
 import sys from './routers/sys'                // 系统模块
 import section from './routers/section'        // 区块模块
+import setting from './routers/setting'        // 设置模块
 
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
@@ -98,7 +99,8 @@ const routes = [{
             sys,
             // ============ 区块模块 ==================
             section,
-
+            // ============ 设置模块 ==================
+            setting,
         ]
     },
     { // 登录

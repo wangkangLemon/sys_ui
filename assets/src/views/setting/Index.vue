@@ -1,4 +1,4 @@
-<!--数据管理-->
+<!--设置管理-->
 <style lang='scss' rel='stylesheet/scss'>
 @import "../../utils/mixins/common";
 @import "../../utils/mixins/topSearch";
@@ -38,15 +38,15 @@
 <template>
     <article id="sys-index-container">
         <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'section-add'})">
-                <i>添加数据</i>
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'setting-add'})">
+                <i>添加设置</i>
             </el-button>
         </section>
 
         <article class="search">
             <section>
-                <i>数据名称</i>
-                <el-input v-model="keyWord" placeholder="请输入数据名称"></el-input>
+                <i>设置名称</i>
+                <el-input v-model="keyWord" placeholder="请输入设置名称"></el-input>
             </section>
 
         </article>
@@ -54,23 +54,25 @@
         <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <el-table-column type="selection"></el-table-column>
-            <el-table-column min-width="100" prop="id" label="区块id" v-if="data">
+            <el-table-column min-width="100" prop="id" label="记录id" v-if="data">
             </el-table-column>
-            <el-table-column min-width="100" prop="category_id" label="栏目id">
+            <el-table-column min-width="100" prop="category" label="设置">
             </el-table-column>
-            <el-table-column min-width="100" prop="ref_id" label="引用id">
+            <el-table-column min-width="100" prop="field" label="字段名">
             </el-table-column>
-            <el-table-column min-width="400" prop="title" label="标题">
+            <el-table-column min-width="180" prop="val" label="字段值">
+            </el-table-column>
+            <el-table-column min-width="400" prop="describe" label="超长字段存储">
             </el-table-column>
             <el-table-column min-width="100" prop="addtime" label="添加时间">
             </el-table-column>
-            <el-table-column min-width="100" prop="tags" label="标签">
+            <el-table-column min-width="100" prop="uptime" label="更新时间">
             </el-table-column>
-            <el-table-column fixed="right" width="170" label="操作">
+            <el-table-column fixed="right" width="200" label="操作">
                 <template scope="scope">
-                    <el-button @click="$router.push({name: 'section-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">详情
+                    <el-button @click="$router.push({name: 'setting-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">详情
                     </el-button>
-                    <el-button @click="$router.push({name: 'section-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">编辑
+                    <el-button @click="$router.push({name: 'setting-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">编辑
                     </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                 </template>
@@ -88,7 +90,7 @@
 </template>
 
 <script>
-import sysService from '../../services/section/dataService.js'
+import sysService from '../../services/setting/setService.js'
 import DateRange from '../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
@@ -164,10 +166,9 @@ export default {
             })
             this.selectedIds = ret
         },
-      
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除数据 <span style="color:red">${row.node_name}</span>  此操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除设置 <span style="color:red">${row.node_name}</span>  此操作不可恢复确认吗?`, () => {
                 sysService.delete(row.id).then(() => {
                     this.dataCache.splice(index, 1)//删除选中项
                     row.deleted = 1
@@ -191,7 +192,7 @@ export default {
     computed: {
         tableData(){
             var arr = this.dataCache.filter(v=>{
-                return v.title.indexOf(this.keyWord)>=0
+                return v.describe.indexOf(this.keyWord)>=0
             })
             return arr
         }
