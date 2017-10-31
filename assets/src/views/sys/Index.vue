@@ -117,7 +117,7 @@ function getFetchParam() {
     return {
         status: void 0, //  1-禁用 0-正常
         page: 1,
-        page_size: 15,
+        page_size: 3,
         disabled:0,
     }
 }
@@ -154,27 +154,27 @@ export default {
             this.fetchParam = getFetchParam()
         },
         handleCurrentChange(val) {
-            if(this.init){                 //init是true进来 限制fetchData初始化不请求
+            console.log(`当前页= ${val}`);
+            
+            // if(this.init){                 //init是true进来 限制fetchData初始化不请求
                 this.fetchParam.page = val
                 this.fetchData()
-            }else{
-                this.init = true
+            // }else{
+            //     this.init = true
                 
-            }
+            // }
         },
-        handleSizeChange(val) {
+        handleSizeChange( val) {
+            console.log( this.fetchParam.page_size )
+            console.log(`每页 ${val} 条`);
             this.fetchParam.page_size = val
             this.fetchData()
         },
         fetchData(val) {
-            // this.loadingData = true   meiy
-            // console.log(2)
             return sysService.fetchData(this.fetchParam).then((ret) => {
-                //this.data = ret.data
                 this.dataCache = ret.data
                 this.total = ret.total
                 this.loadingData = false
-                // console.log(ret)
                 xmview.setContentLoading(false)     
             })
         },
@@ -235,7 +235,7 @@ export default {
                     xmview.showTip('success', '操作成功')
                     this.dialogTree.isShow = false
                     setTimeout(() => {
-                        this.fetchData() // 重新刷新数据
+                        this.fetchData()  // 重新刷新数据
                     }, 300)
                 })
             })

@@ -66,31 +66,31 @@
                     <!--1：同步 0：不同步-->
                 </el-form-item>
                 <el-form-item label="标题" prop="title">
-                    <el-input v-model.address="fetchParam.title"></el-input>
+                    <el-input v-model.title="fetchParam.title"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" prop="image">
-                    <el-input v-model.address="fetchParam.image"></el-input>
+                    <el-input v-model.image="fetchParam.image"></el-input>
                 </el-form-item>
                 <el-form-item label="链接" prop="url">
-                    <el-input v-model.address="fetchParam.url"></el-input>
+                    <el-input v-model.url="fetchParam.url"></el-input>
                 </el-form-item>
                 <el-form-item label="描述" prop="desc">
-                    <el-input v-model.address="fetchParam.desc"></el-input>
+                    <el-input v-model.desc="fetchParam.desc"></el-input>
                 </el-form-item>
                 <el-form-item label="日期字符串" prop="date">
-                    <el-input v-model.address="fetchParam.date" type="date"></el-input>
+                    <el-input v-model.date="fetchParam.date" type="date"></el-input>
                 </el-form-item>
                 <!--<el-form-item label="标签" prop="tags">
                     <el-input v-model.address="fetchParam.tags"></el-input>
                 </el-form-item>-->
                 <el-form-item label="标签">
-                    <vTags v-model="courseTags"></vTags>
+                    <vTags v-model.tags="courseTags"></vTags>
                 </el-form-item>
                 <el-form-item label="颜色值" prop="tags_color">
-                    <el-input v-model.address="fetchParam.tags_color"></el-input>
+                    <el-input v-model.color="fetchParam.tags_color"></el-input>
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
-                    <el-input v-model.address="fetchParam.sort" type="number"></el-input>
+                    <el-input v-model.sort="fetchParam.sort" type="number"></el-input>
                 </el-form-item>
                 <el-form-item label="">
                     <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
@@ -143,8 +143,7 @@
                     console.log('进入了编辑')
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
-                        this.courseTags = ret.course.tags.split(',')
-                        console.log(ret)
+                        this.courseTags = ret.tags.split(',')
                     })
                 }else{
                     this.fetchParam = getOriginData()
