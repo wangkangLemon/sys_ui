@@ -3,6 +3,41 @@ import config from '../../utils/config'
 const urlPre = config.apiHost + '/course'
 
 class CourseService {
+
+    //种类数据请求
+    // 搜索
+    search_cate({ id, name, category_type, pid, level, ended, disabled }) {
+        let url = urlPre + '/category/lists'
+        return api.get(url, { id, name, category_type, pid, level, ended, disabled }, false).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 创建
+    create_cate({ name, remark, sort, category_type, pid, company_id, ended, disabled }) {
+        let url = urlPre + '/category/create'
+        return api.post(url, { name, remark, sort, category_type, pid, company_id, ended, disabled }).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+     // 更新
+    update_cate({ name, remark, sort, category_type, pid, company_id, ended, disabled, course_defid }) {
+        let url = `${urlPre}/category/edit/${id}`
+        return api.put(url, { name, remark, sort, category_type, pid, company_id, ended, disabled, course_defid }).then(ret => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+    //课程数据请求
     // 搜索
     search({ keyword = '', status = -1, category_id = 0, time_start, time_end, page, page_size }) {
         let url = urlPre + '/search'
@@ -98,16 +133,17 @@ class CourseService {
         })
     }
 
-    // 设置课时
-    setLessons ({course_id, jsonstr}) {
-        let url = `${urlPre}/${course_id}/lesson`
-        return api.put(url, jsonstr)
-    }
+    // // 设置课时
+    // setLessons ({course_id, jsonstr}) {
+    //     let url = `${urlPre}/${course_id}/lesson`
+    //     return api.put(url, jsonstr)
+    // }
 
     // 获取课程信息
     getCourseInfo ({course_id}) {
         let url = `${urlPre}/${course_id}`
         return api.get(url).then((ret) => {
+            console.log(2222222222222)
             return ret.data
         })
     }
