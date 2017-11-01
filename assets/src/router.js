@@ -140,6 +140,7 @@ const routes = [{
     },
 ]
 
+
 const router = new VueRouter({
     base: '/view',
     mode: 'history',

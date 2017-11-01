@@ -9,41 +9,41 @@ export default {
         })
     },
     children: [{
-            path: '/category',
+            path: 'category',
             name: 'course-index',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/Index.vue'))
+                    resolve(require('../views/course/category/Index.vue'))
                 })
             },
             meta: {
-                title: '课程',
+                title: '课程种类',
                 noback: true
             }
         },
         {
             path: 'add',
-            name: 'course-add',
+            name: 'cate-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/Form.vue'))
+                    resolve(require('../views/course/category/Form.vue'))
                 })
             },
             meta: {
-                title: '系统添加',
+                title: '课程种类添加',
                 noback: false
             }
         },
         {
             path: 'edit/:course_id',
-            name: 'course-edit',
+            name: 'cate-edit',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/course/Form.vue'))
+                    resolve(require('../views/course/category/Form.vue'))
                 })
             },
             meta: {
-                title: '系统更新',
+                title: '课程种类更新',
                 noback: false
             }
         },

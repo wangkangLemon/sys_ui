@@ -1,23 +1,13 @@
 <!--公开课管理-->
 <style lang='scss' rel='stylesheet/scss'>
-    @import "../../utils/mixins/common";
-    @import "../../utils/mixins/topSearch";
+    @import "../../../utils/mixins/common";
+    @import "../../../utils/mixins/topSearch";
 
     #course-index-container {
         @extend %content-container;
 
         .manage-container {
             @extend %right-top-btnContainer;
-            >* {
-                color: #fff;
-                border-radius: 5px;
-            } // 添加课程
-            .add {
-                background: rgb(0, 204, 255);
-            } // 管理栏目
-            .catmange {
-                background: rgb(153, 102, 204);
-            }
         }
 
         .search {
@@ -27,39 +17,31 @@
             margin-top: 15px;
         }
 
-        .el-dialog__wrapper {
-            padding-top: 15px;
-            background: rgba(0, 0, 0, .5);
-            z-index: 1000;
-        }
     }
 </style>
 
 <template>
     <article id="course-index-container">
         <section class="manage-container">
-            <button type="button" class="el-button el-button--primary">
-                <i class="el-icon-plus"></i><span><i>添加课程</i></span>
+            <button type="button" class="el-button el-button--primary" @click="$router.push({ name:'cate-add' })">
+                <i class="el-icon-plus"></i><span><i>添加课程栏目</i></span>
             </button>            
-            <button type="button" class="el-button el-button--warning">
+            <!--<button type="button" class="el-button el-button--warning">
                 <i class="el-icon-menu"></i><span><i>管理栏目</i></span>
-            </button>            
+            </button> -->
         </section>
 
         <article class="search">
             <section>
                 <i>课程名称</i>
-                <el-input v-model="fetchParam.keyword" @keyup.enter.native="fetchData"></el-input>
+                <el-input v-model="fetchParam.name" @keyup.enter.native="fetchData"></el-input>
             </section>
 
             <section>
                 <i>状态</i>
-                <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData" :clearable="true">
-                    <el-option label="全部" value="-1"></el-option>
-                    <el-option label="正常" value="0"></el-option>
-                    <el-option label="下线" value="1"></el-option>
-                    <el-option label="待审" value="3"></el-option>
-                    <el-option label="审核失败" value="4"></el-option>
+                <el-select v-model="fetchParam.disabled" placeholder="未选择" @change="fetchData" :clearable="true">
+                    <el-option label="禁用" value="0"></el-option>
+                    <el-option label="启用" value="1"></el-option>
                 </el-select>
             </section>
 
@@ -76,11 +58,14 @@
             </el-table-column>
             <el-table-column min-width="100" prop="name" label="栏目名称">
             </el-table-column>
-            <el-table-column min-width="100" prop="model" label="模型">
-            </el-table-column>
-            <el-table-column min-width="100" prop="sort" label="排序">
-            </el-table-column>
             <el-table-column min-width="100" prop="category_type" label="栏目分类">
+            </el-table-column>
+            <el-table-column min-width="100" prop="pid" label="父级id">
+            </el-table-column>
+            <el-table-column min-width="100" prop="level" label="栏目层级">
+            </el-table-column>
+            <el-table-column min-width="100" prop="sort" label="种类">
+
             </el-table-column>
 
             <el-table-column width="100" label="状态">
@@ -94,7 +79,7 @@
             </el-table-column>
               <el-table-column fixed="right" width="180" label="操作">
                 <template scope="scope">
-                    <el-button @click="$router.push({name: 'course-edit', params: {sysInfo: scope.row, course_id: scope.row.id}})" type="text" size="small">编辑
+                    <el-button @click="$router.push({name: 'cate-edit', params: {sysInfo: scope.row, course_id: scope.row.id}})" type="text" size="small">编辑
                     </el-button>
                     <el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
                         <i>禁用</i>
@@ -108,7 +93,7 @@
         </el-table>
 
         <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
-            :page-size="fetchParam.page_size" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -121,15 +106,15 @@
 </template>
 
 <script>
-    import courseService from '../../services/course/courseService.js'
-    import DateRange from '../component/form/DateRangePicker.vue'
+    import courseService from '../../../services/course/courseService.js'
+    import DateRange from '../../component/form/DateRangePicker.vue'
 
     function getFetchParam() {
         return {
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
             category: void 0, // 3- 供应商
             page: 1,
-            page_size: 15,
+            pagesize: 15,
             time_start: void 0,
             time_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
@@ -163,18 +148,19 @@
                 this.fetchParam = getFetchParam()
             },
             handleCurrentChange(val) {
+                console.log(`当前页= ${val}`);
                 this.fetchParam.page = val
                 this.fetchData()
             },
             handleSizeChange(val) {
-                this.fetchParam.page_size = val
+                console.log(`每页 ${val} 条`);
+                this.fetchParam.pagesize = val
                 this.fetchData()
             },
             fetchData(val) {
                 this.loadingData = true
                 return courseService.search_cate(this.fetchParam).then((ret) => {
                     this.data = ret
-                    console.log(ret)
                     this.total = ret.total
                     this.loadingData = false
                     xmview.setContentLoading(false)
@@ -207,7 +193,7 @@
             // 单条删除
             del(index, row) {
                 xmview.showDialog(`你将要删除项目 <span style="color:red">${row.name}</span> 操作不可恢复确认吗?`, () => {
-                    courseService.delete(row.id).then(() => {
+                    courseService.delete_cate(row.id).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.data.splice(index, 1)
                     })

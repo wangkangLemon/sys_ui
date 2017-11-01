@@ -93,7 +93,7 @@ import DateRange from '../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
     return {
-        status: void 0, //  1-禁用 0-正常
+        // status: void 0, //  1-禁用 0-正常
         page: 1,
         page_size: 15,
     }

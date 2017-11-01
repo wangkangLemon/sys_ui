@@ -1,6 +1,6 @@
 <!--课程表单：添加/修改-->
 <style lang="scss" rel="stylesheet/scss">
-@import "../../utils/mixins/common";
+@import "../../../utils/mixins/common";
 #course-form {
     @extend %content-container;
     .el-form {
@@ -71,12 +71,12 @@
                     <el-form-item label="所属栏目" prop="category_id">
                         <CourseCategorySelect type="newcourse" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_name"></CourseCategorySelect>
                     </el-form-item>
-                    <el-form-item label="课程名称" prop="name">
+                    <el-form-item label="栏目名称" prop="name">
                         <el-input v-model="fetchParam.name"></el-input>
                     </el-form-item>
                     <el-form-item label="课程封面图" prop="image">
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
-                        <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
+                        <CropperImg ref="igcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
                     </el-form-item>
                     <el-form-item label="课程介绍" prop="description">
                         <el-input v-model="fetchParam.description" type="textarea" :autosize="{ minRows: 4, maxRows: 6}" placeholder="请输入内容">
@@ -233,15 +233,15 @@
 </template>
 
 <script>
-import courseService from '../../services/course/courseService'
-import CourseCategorySelect from '../component/select/CourseCategory.vue'
-import vTags from '../component/form/Tags.vue'
-import CropperImg from '../component/upload/ImagEcropperInput.vue'
-import DialogVideo from './component/DialogVideo.vue'
-import UploadFile from '../component/upload/UploadFiles.vue'
-import VideoPreview from '../component/dialog/VideoPreview.vue'
-import DocPreview from '../component/dialog/DocShow.vue'
-import config from '../../utils/config'
+import courseService from '../../../services/course/courseService'
+import CourseCategorySelect from '../../component/select/CourseCategory.vue'
+import vTags from '../../component/form/Tags.vue'
+import CropperImg from '../../component/upload/ImagEcropperInput.vue'
+import DialogVideo from '../component/DialogVideo.vue'
+import UploadFile from '../../component/upload/UploadFiles.vue'
+import VideoPreview from '../../component/dialog/VideoPreview.vue'
+import DocPreview from '../../component/dialog/DocShow.vue'
+import config from '../../../utils/config'
 import clone from 'clone'
 export default {
     name: 'course-form',

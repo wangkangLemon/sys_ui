@@ -1,4 +1,4 @@
-<!--课程表单：添加/修改-->
+<!--区块表单：添加/修改-->
 <style lang="scss" rel="stylesheet/scss">
     @import "../../utils/mixins/common";
     #sys-form {
@@ -61,10 +61,6 @@
                 <el-form-item label="引用id"  prop="ref_id">
                     <el-input v-model.email="fetchParam.ref_id" type="number" ></el-input>
                 </el-form-item>
-                <el-form-item label="是否与引用同步" prop="ref_sync">
-                    <el-input v-model.password="fetchParam.ref_sync" type="number"></el-input> 
-                    <!--1：同步 0：不同步-->
-                </el-form-item>
                 <el-form-item label="标题" prop="title">
                     <el-input v-model.title="fetchParam.title"></el-input>
                 </el-form-item>
@@ -124,18 +120,6 @@
                 role_list:[],
                 courseTags: [],
             }
-        },
-        created() {
-            // xmview.setContentLoading(false);
-            // console.log('this.$route.params.sys_id='+ this.$route.params.sys_id )
-            //     if (this.$route.params.sys_id != undefined) {    //路由id传递
-            //         console.log('进入了编辑')
-            //         sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
-            //             this.fetchParam = ret
-            //             console.log(ret)
-            //         })
-            //     }    
-            // this.loadingData=false;
         },
         activated () {
             xmview.setContentLoading(false);
