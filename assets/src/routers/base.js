@@ -98,27 +98,5 @@ export default [
             },
         ]
     },
-    { // 数据分析
-        path: '/analytics',
-        component: resolve => {
-            require.ensure([], () => {
-                resolve(require('../views/base/analytics/Main.vue'))
-            })
-        },
-        children: [
-            {
-                path: 'export',
-                name: 'analytics-export',
-                component: resolve => {
-                    require.ensure([], () => {
-                        resolve(require('../views/base/analytics/Export.vue'))
-                    })
-                },
-                meta: {
-                    title: '导出 - 数据分析',
-                    noback: true
-                }
-            }
-        ]
-    }
+  
 ]

@@ -22,7 +22,7 @@ export default {
             }
         },
         {
-            path: 'add',
+            path: 'cate-add',
             name: 'cate-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -35,7 +35,7 @@ export default {
             }
         },
         {
-            path: 'edit/:course_id',
+            path: 'cate-edit/:course_id',//
             name: 'cate-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -47,31 +47,31 @@ export default {
                 noback: false
             }
         },
-        // {
-        //     path: 'video', // 视频管理
-        //     name: 'course-video',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/course/video/Index.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '视频管理 - 系统',
-        //         noback: true
-        //     }
-        // },
-        // {
-        //     path: 'video/add',
-        //     name: 'course-video-add',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/course/video/Add.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '添加视频 - 系统',
-        //     }
-        // },
+        {
+            path: 'video', // 视频管理
+            name: 'course-video',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/Video.vue'))
+                })
+            },
+            meta: {
+                title: '视频管理 - 培训',
+                noback: true
+            }
+        },
+        {
+            path: 'video/add',
+            name: 'course-video-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/video/Add.vue'))
+                })
+            },
+            meta: {
+                title: '添加视频 - 培训',
+            }
+        },
         // {
         //     path: 'doc', // 文档管理
         //     name: 'course-doc',

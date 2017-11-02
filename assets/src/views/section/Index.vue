@@ -51,12 +51,12 @@
 
         </article>
 
-        <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
+        <el-table class="data-table" v-loading="loadingData" :data="id" :fit="true" @select="selectRow" @select-all="selectRow" border v-if="SecCateName">
             
             <el-table-column type="selection"></el-table-column>
             <el-table-column min-width="100" prop="id" label="区块id" v-if="data">
             </el-table-column>
-            <el-table-column min-width="100" prop="category_id" label="栏目id">
+            <el-table-column min-width="100" prop="formdateName" label="栏目名称">
             </el-table-column>
             <el-table-column min-width="100" prop="ref_id" label="引用id">
             </el-table-column>
@@ -90,6 +90,7 @@
 <script>
 import sysService from '../../services/section/dataService.js'
 import DateRange from '../component/form/DateRangePicker.vue'
+import cateService from '../../services/section/cateService.js'
 
 function getFetchParam() {
     return {
@@ -117,13 +118,32 @@ export default {
             dialogTree: {
                 isShow: false,
                 selectedId: void 0,
-            }
+            },
+            SecCateName:null
         }
     },
     activated () {
         this.fetchData()
+        this.fetchCate()
     },
     methods: {
+        getCategory_name(id){
+            let i = null
+            this.SecCateName.forEach(v=>{
+                if(v.id==id){
+                    i = v.name
+                }
+            })
+            return i
+        },
+        //获取栏目名称
+        fetchCate() {
+                cateService.fetchData().then((ret) => {
+                        // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
+                        this.SecCateName=ret.data
+                        xmview.setContentLoading(false)     
+                    })
+            },
         userInfo () {
             return authUtils.getUserInfo()
         },
@@ -145,7 +165,7 @@ export default {
         },
         fetchData(val) {
             return sysService.fetchData(this.fetchParam).then((ret) => {
-                console.log(ret.data)
+                // console.log(ret.data)
                 this.dataCache = ret.data
                 this.loadingData = false
                 xmview.setContentLoading(false)     
@@ -194,6 +214,14 @@ export default {
                 return v.title.indexOf(this.keyWord)>=0
             })
             return arr
+        },
+        id(){
+            if(this.dataCache.length>0&&this.SecCateName){
+                this.dataCache.forEach(v=>{
+                    v.formdateName = this.getCategory_name(v.category_id)       
+                })
+            }
+            return this.dataCache
         }
     }
 }

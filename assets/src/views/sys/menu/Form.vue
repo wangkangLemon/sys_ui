@@ -95,6 +95,8 @@
                         // 重置当前数据
                         xmview.showTip('success', '数据提交成功')
                         // this.fetchParam=getOriginData(),
+                        //如果请求的是create创建成功 就push到角色组授权页面授权this.$router.push({name: 'section-edit')
+
                         this.$refs['form'].resetFields();
                         this.currentData = {
                             data: [],

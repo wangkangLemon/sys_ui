@@ -39,11 +39,7 @@ let authUtils = {
         localStorage.setItem(KEY_AUTHTOKEN, JSON.stringify({token: token, ttl: Date.now() + KEY_AUTHTOKEN_TTL * 1000}))
     },
     getUserInfo () {
-        //localStorage.setItem('KEY_AUTHUSERINFO',`{"id":3,"company_id":2,"company":"演示用制药企业","organization_id":0,"company_category":1,"department_id":0,"dep_name":"","mobile":"","email":"gongye@vodjk.com","name":"工业","is_passwd":true,"avatar":"","birthday":"","sex":1,"job":"","id_number":"","education":"","province":"","address":"ssss","disabled":0,"last_login_ip":"0","last_login_time":"2017-10-16T13:56:23+08:00","last_login_time_name":"","last_active_time":"2017-01-18T15:26:57+08:00","last_active_time_name":"2017-01-18 15:26:57","last_appstart":"ios","join_time":"","create_day":"2016-01-08T00:00:00+08:00","create_time_name":"2016-01-08 13:14:59","create_time_unix":1452230099,"update_time_name":"2017-10-02 05:45:55","update_time_unix":1506894355,"roles":[101],"organizations":[],"agent_id":0,"product_id":0}`)
         let str = localStorage.getItem(KEY_AUTHUSERINFO)
-        // console.log('-----------------------------------------------------')
-        // console.log(localStorage.getItem(KEY_AUTHUSERINFO))
-        // console.log(localStorage.getItem(str))
         if (str)
             return JSON.parse(str)
         else
