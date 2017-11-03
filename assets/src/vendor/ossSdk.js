@@ -1,10 +1,10 @@
 export default function (ossOption, changeToken) {
     if (ossOption) {
-        ossOption.accessKeyId = ossOption.accessKeyId;
-        ossOption.accessKeySecret = ossOption.accessKeySecret;
-        ossOption.stsToken = ossOption.securityToken;
-        ossOption.bucket = ossOption.bucketName;
-        ossOption.region = ossOption.region;
+        ossOption.accessKeyId = ossOption.AccessKeyId;
+        ossOption.accessKeySecret = ossOption.AccessKeySecret;
+        ossOption.stsToken = ossOption.SecurityToken;
+        ossOption.bucket = ossOption.BucketName;
+        ossOption.region = ossOption.Region;
         ossOption.secure = location.protocol === 'https:'
         // region: 'oss-cn-beijing',
         //     accessKeyId: 'STS.FAHYC9xQu9hULJpFaZLJ1LFSo',
@@ -13,7 +13,6 @@ export default function (ossOption, changeToken) {
         //     bucket: 'yst-vod',
         //     secure: location.protocol === 'https:'
     }
-
     var client = window.OSS && new OSS.Wrapper(ossOption);
     var checkPointIndexes = {};
     var _this = this;
@@ -63,6 +62,7 @@ export default function (ossOption, changeToken) {
 
     // 上传文件
     this.uploadFile = function (name, file, progress, success, error) {
+        debugger
         var checkpoint = getCheckPoint(file) || {};
         checkpoint.file = file;
         client.multipartUpload(name, file, {

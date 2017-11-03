@@ -50,11 +50,9 @@
             <section>
                 <i>状态</i>
                 <el-select :clearable="true" v-model="fetchParam.status" placeholder="请选择" @change="fetchData">
-                   <el-option label="待审核" value="0"></el-option>
-                   <el-option label="转码中" value="1"></el-option>
-                   <el-option label="转码失败" value="2"></el-option>
-                   <el-option label="审核成功" value="3"></el-option>
-                   <el-option label="审核失败" value="4"></el-option>
+                    <el-option label="转码中" :value="1"></el-option>
+                    <el-option label="转码失败" :value="2"></el-option>
+                    <el-option label="正常" :value="0"></el-option>
                 </el-select>
             </section>
 
@@ -92,15 +90,15 @@
                     prop="duration"
                     label="时长">
             </el-table-column>
-            <el-table-column
-                    width="120"
-                    label="状态">
+            <el-table-column width="120" label="状态">
                 <template scope="scope">
-                    <el-tag v-if="scope.row.status == 0" type="primary">启用</el-tag>
-                    <el-tag v-else-if="scope.row.status == 1" type="warning">禁用</el-tag>
-                    <el-button type="text" v-if="scope.row.status == 1" size="small"
-                               @click="refreshStatus(scope.$index, scope.row)">刷新
-                    </el-button>
+                    <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
+                    <el-tag v-else-if="scope.row.status == 1" type="primary">转码中</el-tag>
+                    <el-tag v-else-if="scope.row.status == 2" type="primary">转码失败</el-tag>
+                    <!--<el-tag v-else-if="scope.row.status == 3" type="primary">审核成功</el-tag>
+                    <el-tag v-else-if="scope.row.status == 4" type="primary">审核失败</el-tag>-->
+                    <el-tag v-else>正常</el-tag>
+                    <el-button type="text" v-if="scope.row.status == 1" size="small" @click="refreshStatus(scope.$index, scope.row)">刷新</el-button>
                 </template>
             </el-table-column>
             <el-table-column
@@ -195,7 +193,8 @@
             page: 1,
             page_size: 15,
             create_start: '',
-            create_end: ''
+            create_end: '',
+            status:null,
         }
     }
 
@@ -314,10 +313,10 @@
             // 预览视频
             preview (index, row) {
                 // 拿到播放地址
-                courseService.getVideoPreviewUrl(row.id).then((ret) => {
+                courseService.getVideoPreviewUrl(row.material_id).then((ret) => {
                     this.videoUrl = ret.video
                     this.row = row
-                    this.$refs.videoPreview.show(row.name)
+                    this.$refs.videoPreview.show(row.file_name)
                 })
             },
             // 处理图片上传完毕
@@ -326,7 +325,7 @@
             },
             // 刷新视频状态
             refreshStatus (index, row) {
-                courseService.refreshVideoStatus({id: row.id}).then((ret) => {
+                courseService.refreshVideoStatus({id: row.material_id}).then((ret) => {
                     row.status = 0
                 })
             }

@@ -16,12 +16,6 @@ class VideoService {
     //     })
     // }
 
-    // 添加
-    create({ name, tags, source_type, source_url }) {
-        let url = `${urlPre}/`
-        return api.post(url, { name, tags, source_type, source_url })
-    }
-
     // 修改
     update({ id, name, tags, cover, duration }) {
         let url = `${urlPre}/${id}/`
@@ -66,22 +60,30 @@ class VideoService {
             return ret.data
         })
     }
+
+
+
+
+
+
+
+
+
     //------------------------
     // 获取视频
-    //{ gov_id, material_id, title, page, page_size, create_start, create_end }
-    getVideo() {
+    //{ gov_id, material_id, title, page, page_size, create_start, create_end, status }
+    getVideo( gov_id, material_id, title, page, page_size, create_start, create_end, status ) {
         let url = `${urlPre}/lists`
-        return api.get(url).then((ret) => {
+        return api.get(url, gov_id, material_id, title, page, page_size, create_start, create_end, status ).then((ret) => {
             console.log(ret)
             return ret.data
         })
     }
 
     // 添加视频
-    addVideo({ name, company_id, tags, source_type, source_url }) {
-        company_id = company_id || authUtils.getUserInfo().company_id
-        let url = `${config.apiHost}/com/${company_id}/course/video`
-        return api.post(url, { name, company_id, tags, source_type, source_url })
+    create({ file_name,  size, gov_id, tags, source_type, source_url }) {
+        let url = `${urlPre}/create`
+        return api.post(url, { file_name,  size, gov_id, tags, source_type, source_url })
     }
 
     // 修改视频
@@ -92,9 +94,8 @@ class VideoService {
     }
 
     // 获取oss的上传token
-    getOssToken({ companyid } = {}) {
-        companyid = companyid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${companyid}/course/video/upload`
+    getOssToken() {
+        let finalUrl = `${config.apiHost}/video/upload`
         return api.get(finalUrl).then((ret) => {
             return ret.data
         })
@@ -103,7 +104,7 @@ class VideoService {
     // 刷新视频状态
     refreshVideoStatus({ companyid, id } = {}) {
         companyid = companyid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${companyid}/course/video/refresh/aliyun/status`
+        let finalUrl = `${urlPre}/refresh/${id}`
         return api.post(finalUrl, { id })
     }
 
@@ -119,7 +120,7 @@ class VideoService {
 
     // 获取视频预览地址
     getVideoPreviewUrl(id) {
-        let url = `${urlPre}/video/preview/${id}`
+        let url = `${urlPre}/get/${id}`
         return api.get(url).then((ret) => {
             return ret.data
         })

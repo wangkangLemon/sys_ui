@@ -9,7 +9,7 @@ export default {
         })
     },
     children: [{
-            path: 'category',
+            path: 'category',//栏目主页
             name: 'course-index',
             component: resolve => {
                 require.ensure([], () => {
@@ -22,7 +22,7 @@ export default {
             }
         },
         {
-            path: 'cate-add',
+            path: 'cate-add',  //栏目添加
             name: 'cate-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -35,7 +35,7 @@ export default {
             }
         },
         {
-            path: 'cate-edit/:course_id',//
+            path: 'cate-edit/:course_id',  //栏目编辑
             name: 'cate-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -61,7 +61,7 @@ export default {
             }
         },
         {
-            path: 'video/add',
+            path: 'video/add',//视频添加
             name: 'course-video-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -72,18 +72,31 @@ export default {
                 title: '添加视频 - 培训',
             }
         },
+        {
+            path: 'manage', // 公开课管理
+            name: 'course-manage-public',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/Public.vue'))
+                })
+            },
+            meta: {
+                title: '公开课 - 课程管理',
+                noback: true
+            }
+        },
         // {
-        //     path: 'doc', // 文档管理
-        //     name: 'course-doc',
+        //     path: 'manage/add-course', // 添加和编辑课程
+        //     name: 'course-manage-addCourse',
         //     component: resolve => {
         //         require.ensure([], () => {
-        //             resolve(require('../views/course/doc/Index.vue'))
+        //             resolve(require('../views/course/manage/AddCourse.vue'))
         //         })
         //     },
         //     meta: {
-        //         title: '文档管理 - 系统',
-        //         noback: true
+        //         title: '添加课程-培训',
         //     }
-        // }
+        // },
+      
     ]
 }

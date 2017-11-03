@@ -201,9 +201,10 @@
 </template>
 
 <script>
-    import courseService from '../../../services/courseService'
+    import courseService from '../../../services/course/courseService.js'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import CourseCategorySelect from '../../component/select/CourseCategory.vue'
+    // import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
     import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
 
     function getFetchParam() {

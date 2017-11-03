@@ -168,7 +168,7 @@ export default {
                 }, ret => {
                     // 创建视频
                     videoService.create({
-                        file_name: item.name,
+                        file_name: item.file_name,
                         tags: item.tags.join(','),
                         source_type: 'aliyun',
                         source_url: ret.res.requestUrls[0].split('?')[0]

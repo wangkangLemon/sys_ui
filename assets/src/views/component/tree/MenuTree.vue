@@ -32,6 +32,9 @@
             <i class="fa fa-th-large" v-else></i>
             {{data.menu_name}}
         </template>
+        
+         <MenuTree v-for="item in hasChildCItems" :key="item.item.id" :data="item"></MenuTree>
+
         <el-menu-item :index="subItem.menu_node" v-for="subItem in data.items" :key="subItem.id">
             <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
             <i class="fa fa-circle-o" v-else></i>
