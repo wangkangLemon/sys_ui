@@ -149,7 +149,7 @@
                                :onSuccess="handleOnUploaded"></UploadImg>
                 </el-form-item>
                 <el-form-item label="视频时长">
-                    <el-input v-model="videoModel.duration"</el-input>
+                    <el-input v-model="videoModel.duration"></el-input>
                 </el-form-item>>
                 <el-form-item label="视频标签">
                     <vTags v-model="videoModel.tags"></vTags>
@@ -198,23 +198,23 @@
         }
     }
 
-    // function  formatTimeStr(Long) {
-    //     let hour = 0;
-    //     let minute = 0;
-    //     let second = 0;
+    function  formatTimeStr(Long) {
+        let hour = 0;
+        let minute = 0;
+        let second = 0;
  
-    //     second = intValue() / 1000;
+        second = intValue() / 1000;
  
-    //     if (second > 60) {
-    //         minute = second / 60;
-    //         second = second % 60;
-    //     }
-    //     if (minute > 60) {
-    //         hour = minute / 60;
-    //         minute = minute % 60;
-    //     }
-    //     return (getTwoLength(hour) + ":" + getTwoLength(minute)  + ":"  + getTwoLength(second));
-    // }
+        if (second > 60) {
+            minute = second / 60;
+            second = second % 60;
+        }
+        if (minute > 60) {
+            hour = minute / 60;
+            minute = minute % 60;
+        }
+        return (formatTimeStr(hour) + ":" + formatTimeStr(minute)  + ":"  + formatTimeStr(second));
+    }
 
     export default{
         data () {

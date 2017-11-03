@@ -8,59 +8,50 @@
 </style>
 
 <template>
-    <!--<el-submenu :index="data.item.menu_url" v-if="data && data.children != null">
-        <template slot="title">
-            <i class="fa" :class="data.item.menu_icon" v-if="data.item.menu_icon"></i>
-            <i class="fa fa-th-large" v-else></i>
-            {{data.item.menu_name}}
-        </template>
-        <el-menu-item :index="item.item.menu_url" v-for="item in leafChildren" :key="item.item.id">
-            <i class="fa" :class="item.item.menu_icon" v-if="item.item.menu_icon"></i>
-            <i class="fa fa-circle-o" v-else></i>
-            {{item.item.menu_name}}
-        </el-menu-item>
-    </el-submenu>
-    <el-menu-item :index="data.item.menu_url" v-else>
-        <i class="fa" :class="data.item.menu_icon" v-if="data.item.menu_icon"></i>
-        <i class="fa fa-th-large" v-else></i>
-        {{data.item.menu_name}}
-    </el-menu-item>-->
-    
-    <el-submenu :index="data.menu_node" v-if="data && data.items != null">
-        <template slot="title">
+    <el-submenu :index="data.menu_node" v-if="data && data.items != null"> <!-- 最外层 el-submenu -if  ,el-menu-item -else -->
+        <template slot="title">  <!-- 第1层 要用slot-->
             <i class="fa" :class="data.menu_icon" v-if="data.menu_icon"></i>
-            <i class="fa fa-th-large" v-else></i>
-            {{data.menu_name}}
+            <i class="fa fa-th-large" v-else></i> {{data.menu_name}}
         </template>
-        
-        <!--<MenuTree v-for="item in hasChildCItems" :key="item.item.id" :data="item"></MenuTree>-->
-        <MenuTree v-for="sonItem in data.items.items" :key="sonItem.item.id" :data="sonItem"></MenuTree>
-
-        <el-menu-item :index="subItem.menu_node" v-for="subItem in data.items" :key="subItem.id">
-            <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
-            <i class="fa fa-circle-o" v-else></i>
-            {{subItem.menu_name}}
-        </el-menu-item>
+        <template>  <!-- 第2层  el-submenu -if  ,el-menu-item -else -->
+            <el-submenu :index="subItem.menu_node" v-for="subItem in data.items" :key="subItem.id" v-if="subItem.items.length!=0">
+                <template slot="title">
+                    <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
+                    <i class="fa fa-circle-o" v-else></i> {{subItem.menu_name}}
+                </template>
+                <template>
+                    <el-menu-item index="subSubItem.menu_node" v-for="subSubItem in subItem.items">
+                        <!--<template slot="title">-->
+                        <i class="fa" :class="subSubItem.menu_icon" v-if="subSubItem.menu_icon"></i>
+                        <i class="fa fa-circle-o" v-else></i> {{subSubItem.menu_name}}
+                        <!--</template>-->
+                    </el-menu-item>
+                </template>
+            </el-submenu>
+            <el-menu-item :index="subItem.menu_node" v-else>
+                <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
+                <i class="fa fa-circle-o" v-else></i> {{subItem.menu_name}}
+            </el-menu-item>
+        </template>
     </el-submenu>
     <el-menu-item :index="data.menu_node" v-else>
         <i class="fa" :class="data.menu_icon" v-if="data.menu_icon"></i>
-        <i class="fa fa-th-large" v-else></i>
-        {{data.menu_name}}
+        <i class="fa fa-th-large" v-else></i> {{data.menu_name}}
     </el-menu-item>
 </template>
 
 <script>
     import MenuTree from './MenuTree.vue'
-    export default{
+    export default {
         name: 'MenuTree',
-        data () {
+        data() {
             return {
                 leafChildren: [], // 叶子节点
                 hasChildCItems: [], // 有子节点的item
             }
         },
         props: ['data'],
-        created () {
+        created() {
             if (this.data == null) {
                 this.data = {}
             }
@@ -79,6 +70,8 @@
             this.hasChildCItems = hasChildCItems
             this.leafChildren = leafChildren
         },
-        components: {MenuTree}
+        components: {
+            MenuTree
+        }
     }
 </script>
