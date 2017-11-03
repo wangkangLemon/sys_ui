@@ -54,10 +54,10 @@ class CourseService {
 
 
     //课程数据请求
-    // 搜索
-    search({ keyword = '', status = -1, category_id = 0, time_start, time_end, page, page_size }) {
-        let url = urlPre + '/search'
-        return api.get(url, { keyword, status, category_id, time_start, time_end, page, page_size }, false).then(ret => {
+    // 搜索 
+    search({ course_name = '', status = -1, category_id = 0, time_start, time_end, page, page_size }) {
+        let url = urlPre + '/lists'
+        return api.get(url, { course_name, status, category_id, time_start, time_end, page, page_size }, false).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -67,9 +67,9 @@ class CourseService {
     }
 
     // 创建
-    create({ category_id, name, image, description, tags, company_id, price, lesson_type }) {
-        let url = urlPre + '/'
-        return api.post(url, { category_id, name, image, description, tags, company_id, price, lesson_type }).then(ret => {
+    create({ gov_id, course_name, image, description, tags, company_id, type, material_type, material_id, need_testing, status}) {
+        let url = urlPre + '/create'
+        return api.post(url, { gov_id, course_name, image, description, tags, company_id, type, material_type, material_id, need_testing, status }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -79,9 +79,9 @@ class CourseService {
     }
 
     // 更新
-    update({ id, category_id, name, image, description, tags, company_id, price, lesson_type }) {
+    update({ id, category_id, course_name, image, description, tags, company_id, type, material_type, material_id, need_testing, status }) {
         let url = `${urlPre}/${id}`
-        return api.put(url, { category_id, name, image, description, tags, company_id, price, lesson_type }).then(ret => {
+        return api.put(url, { category_id, course_name, image, description, tags, company_id, type, material_type, material_id, need_testing, status }).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

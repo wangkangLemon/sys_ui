@@ -33,7 +33,8 @@
             {{data.menu_name}}
         </template>
         
-         <MenuTree v-for="item in hasChildCItems" :key="item.item.id" :data="item"></MenuTree>
+        <!--<MenuTree v-for="item in hasChildCItems" :key="item.item.id" :data="item"></MenuTree>-->
+        <MenuTree v-for="sonItem in data.items.items" :key="sonItem.item.id" :data="sonItem"></MenuTree>
 
         <el-menu-item :index="subItem.menu_node" v-for="subItem in data.items" :key="subItem.id">
             <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
