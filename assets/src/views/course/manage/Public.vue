@@ -272,7 +272,7 @@
             offline (index, row) {
                 let txt = row.status == 0 ? '下线' : '上线'
                 let finalStatus = row.status == 0 ? 1 : 0
-                xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+                xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
                     courseService.offlineCourse({course_id: row.id, disabled: finalStatus}).then((ret) => {
                         row.status = finalStatus
                     })
@@ -280,7 +280,7 @@
             },
             // 单条删除
             del (index, row) {
-                xmview.showDialog(`你将要删除课程 <span style="color:red">${row.name}</span> 操作不可恢复确认吗?`, () => {
+                xmview.showDialog(`你将要删除课程 <span style="color:red">${row.course_name}</span> 操作不可恢复确认吗?`, () => {
                     courseService.deleteCourse({course_id: row.id}).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.data.splice(index, 1)

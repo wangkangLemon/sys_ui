@@ -70,10 +70,10 @@
             <el-tab-pane label="课程信息" name="first">
                 <el-form label-width="120px" ref="formFirst" :rules="rulesFirst" :model="fetchParam">
                     <el-form-item label="所属栏目" prop="category_id">
-                        <CourseCategorySelect type="course" :placeholder="fetchParam.cat_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
+                        <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
                     </el-form-item>
-                    <el-form-item label="课程名称" prop="name">
-                        <el-input v-model="fetchParam.name"></el-input>
+                    <el-form-item label="课程名称" prop="course_name">
+                        <el-input v-model="fetchParam.course_name"></el-input>
                     </el-form-item>
                     <el-form-item label="课程封面图" prop="image">
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
@@ -127,7 +127,7 @@
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane :disabled="!fetchParam.id" label="考试题目设置" name="second" class="testing-set">
+            <el-tab-pane :disabled="!fetchParam.contentid" label="考试题目设置" name="second" class="testing-set">
                 <el-form>
                     <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index">
                         <el-form-item label="" v-if="!readonly">
@@ -230,7 +230,7 @@ export default {
             fetchParam: getOrignData(),
             courseTags: [],
             rulesFirst: { // 课程信息的校验规则
-                name: { required: true, message: '请输入课程名称', trigger: 'change' },
+                course_name: { required: true, message: '请输入课程名称', trigger: 'change' },
                 category_id: { required: true, type: 'number', message: '请选择课程栏目', trigger: 'change' },
                 image: { required: true, message: '请上传课程封面', trigger: 'change' },
                 description: { required: true, message: '请输入课程介绍', trigger: 'change' },
@@ -246,14 +246,13 @@ export default {
     created() {
         this.uploadDocUrl = courseService.getCourseDocUploadUrl()
         this.uploadImgUrl = courseService.getManageImgUploadUrl()
-        console.log('this.$route.params.courseInfo===='+this.$route.params.courseInfo)
+        console.log(this.$route.params.courseInfo)
         if (this.$route.params.courseInfo) {
-            alert(this.$route.params.courseInfo)
             this.fetchParam = this.$route.params.courseInfo
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')
-        } else if (this.$route.query.id) {
-            courseService.getCourseInfo({ course_id: this.$route.query.id }).then((ret) => {
+        } else if (this.$route.query.contentid) {
+            courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
                 this.fetchParam = ret.course
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
                 xmview.setContentTile('编辑课程-培训')
@@ -276,9 +275,9 @@ export default {
             }
         },
         'activeTab'(val) {
-            if (val === 'second' && this.fetchTesting.length < 1 && this.fetchParam.id) {
+            if (val === 'second' && this.fetchTesting.length < 1 && this.fetchParam.contentid) {
                 xmview.setContentLoading(true)
-                courseService.getTestingInfo({ course_id: this.fetchParam.id }).then((data) => {
+                courseService.getTestingInfo({ course_id: this.fetchParam.contentid }).then((data) => {
                     this.fetchTesting = data
                     this.fetchTesting.forEach((item) => {
                         if (item.category == 1) {
@@ -309,13 +308,14 @@ export default {
                 if (!isValidate) return
                 let p
                 // 如果是编辑
-                if (this.fetchParam.id) {
+                console.log(this.fetchParam.contentid)
+                if (this.fetchParam.contentid) {
                     p = courseService.editCourse(this.fetchParam).then((ret) => {
                         this.activeTab = 'second'
                     })
                 } else {
                     p = courseService.addCourse(this.fetchParam).then((ret) => {
-                        this.fetchParam.id = ret.data.id
+                        this.fetchParam.contentid = ret.data.contentid
                         this.activeTab = 'second'
                     })
                 }
@@ -333,7 +333,7 @@ export default {
         },
         // 处理上传文档
         handleUploadMedia(response) {
-            this.fetchParam.material_id = response.data.id
+            this.fetchParam.material_id = response.data.contentid
         },
         // 图片裁切成功回调
         cropperImgSucc(imgData) {
@@ -343,8 +343,8 @@ export default {
         },
         // 处理视频选取
         handleVideoSelected(row) {
-            this.fetchParam.material_name = row.name
-            this.fetchParam.material_id = row.id
+            this.fetchParam.material_name = row.material_name
+            this.fetchParam.material_id = row.contentid
         },
         addTesting(type, index) {
             this.fetchTesting.splice(index, 0, testingFactory.getTestingSet(type))
@@ -392,7 +392,7 @@ export default {
             }
             xmview.setContentLoading(true)
             courseService.addOrEditTesting({
-                course_id: this.fetchParam.id,
+                course_id: this.fetchParam.contentid,
                 subjects: encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
             }).then((ret) => {
                 xmview.showTip('success', '操作成功')
@@ -403,7 +403,7 @@ export default {
             })
         },
         handleUploadDoc(rep) { // 文档上传完毕
-            this.fetchParam.material_id = rep.data.id
+            this.fetchParam.material_id = rep.data.contentid
         },
         // 课程类型改变
         typeChange(val) {
@@ -421,10 +421,10 @@ export default {
 
 function getOrignData() {
     let orignData = { // 课程信息部分
-        id: void 0,
+        contentid: void 0,  //切换tab
         category_id: void 0,
-        cat_name: void 0,
-        name: void 0,
+        course_name: void 0,
+        category_name: void 0,
         image: void 0,
         tags: void 0,
         material_type: void 0,

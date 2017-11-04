@@ -97,6 +97,30 @@ export default {
                 title: '添加课程-培训',
             }
         },
+        {
+            path: 'manage/course-category-manage', // 栏目管理
+            name: 'course-manage-course-category-manage',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/CategoryManage.vue'))
+                })
+            },
+            meta: {
+                title: '栏目管理-培训',
+            }
+        },
+        {
+            path: 'manage/course-answer-analysis/:id', // 答案分析
+            name: 'course-manage-course-answer-analysis',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/AnswerAnalysis.vue'))
+                })
+            },
+            meta: {
+                title: '课程题目分析',
+            }
+        },
       
     ]
 }
