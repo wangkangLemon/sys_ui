@@ -73,7 +73,7 @@ export default {
             }
         },
         {
-            path: 'manage', // 公开课管理
+            path: 'manage/public', // 公开课管理
             name: 'course-manage-public',
             component: resolve => {
                 require.ensure([], () => {
@@ -85,18 +85,18 @@ export default {
                 noback: true
             }
         },
-        // {
-        //     path: 'manage/add-course', // 添加和编辑课程
-        //     name: 'course-manage-addCourse',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/course/manage/AddCourse.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '添加课程-培训',
-        //     }
-        // },
+        {
+            path: 'manage/add-course', // 添加和编辑课程
+            name: 'course-manage-addCourse',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/AddCourse.vue'))
+                })
+            },
+            meta: {
+                title: '添加课程-培训',
+            }
+        },
       
     ]
 }

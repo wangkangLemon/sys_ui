@@ -75,7 +75,7 @@
 </template>
 
 <script>
-    import courseService from '../../../services/courseService'
+    import courseService from '../../../services/course/courseService.js'
     export default{
         data () {
             return {

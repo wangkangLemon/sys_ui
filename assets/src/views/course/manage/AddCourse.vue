@@ -209,13 +209,13 @@
 </template>
 
 <script>
-import courseService from '../../../services/courseService'
+import courseService from '../../../services/course/courseService.js'
 import UploadImg from '../../component/upload/UploadImg.vue'
 import CropperImg from '../../component/upload/ImagEcropperInput.vue'
 import DialogVideo from '../component/DialogVideo.vue'
 import UploadFile from '../../component/upload/UploadFiles.vue'
 import CourseCategorySelect from '../../component/select/CourseCategory.vue'
-import CourseAlbumSelect from '../../component/select/CourseAlbum.vue'
+import CourseAlbumSelect from '../../component/select/CourseAlbum'
 import testingFactory from '../utils/testingFactory'
 import formUtils from '../../../utils/formUtils'
 import vTags from '../../component/form/Tags.vue'
@@ -246,7 +246,9 @@ export default {
     created() {
         this.uploadDocUrl = courseService.getCourseDocUploadUrl()
         this.uploadImgUrl = courseService.getManageImgUploadUrl()
+        console.log('this.$route.params.courseInfo===='+this.$route.params.courseInfo)
         if (this.$route.params.courseInfo) {
+            alert(this.$route.params.courseInfo)
             this.fetchParam = this.$route.params.courseInfo
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')

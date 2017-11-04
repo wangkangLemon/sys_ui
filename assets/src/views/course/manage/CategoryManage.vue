@@ -128,7 +128,7 @@
 </template>
 
 <script type="text/jsx">
-    import courseService from '../../../services/courseService'
+    import courseService from '../../../services/course/courseService.js'
     import treeUtils from '../../../utils/treeUtils'
     import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
     import UploadImg from '../../component/upload/UploadImg.vue'

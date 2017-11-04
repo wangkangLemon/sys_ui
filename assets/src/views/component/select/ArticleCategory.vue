@@ -19,7 +19,7 @@
 
 <script>
     import treeUtils from '../../../utils/treeUtils'
-    import courseService from '../../../services/course/courseService.js'
+    import ArticleService from '../../../services/articleService'
     export default{
         props: {
             value: [String, Number, Array],
@@ -35,10 +35,6 @@
             showNotCat: { // 是否显示未分类的选项
                 type: Boolean,
                 default: true
-            },
-            type: {
-                type: String,
-                default: ''
             }
         },
         data () {
@@ -66,7 +62,7 @@
                     this.options = this.lastData
                 } else {
                     this.loading = true
-                    courseService.getCategoryTree({companyid: this.companyid, type: this.type})
+                    ArticleService.getCategoryTree({companyid: this.companyid})
                         .then(ret => {
                             // 不显示未分类那一项
                             if (!this.showNotCat) {
@@ -101,7 +97,7 @@
                 let currItem = treeUtils.findItem(this.options, val, 'value')
 
                 if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
-                courseService.getCategoryTree({type: this.type, companyid: this.companyid, id: val[val.length - 1]})
+                ArticleService.getCategoryTree({companyid: this.companyid, id: val[val.length - 1]})
                     .then(ret => {
                         // 重新组合数据
                         ret.map((item) => {

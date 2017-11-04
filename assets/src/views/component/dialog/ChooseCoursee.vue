@@ -54,7 +54,7 @@
     </article>
 </template>
 <script>
-    import courseService from '../../../services/courseService'
+    import courseService from '../../../services/course/courseService.js'
     import CourseCategorySelect from '../../component/select/CourseCategory.vue'
     export default {
         props: ['value'],

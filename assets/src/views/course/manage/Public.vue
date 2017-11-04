@@ -49,9 +49,6 @@
             <el-button type="warning" icon="menu" @click="$router.push({name:'course-manage-course-category-manage'})">
                 <i>管理栏目</i>
             </el-button>
-            <el-button type="success" icon="menu" @click="$router.push({name:'course-manage-course-album-manage'})">
-                <i>专辑管理</i>
-            </el-button>
         </section>
 
         <article class="search">
@@ -98,12 +95,12 @@
             <el-table-column type="selection"></el-table-column>
             <el-table-column
                     min-width="200"
-                    prop="name"
+                    prop="course_name"
                     label="课程">
             </el-table-column>
             <el-table-column
                     min-width="200"
-                    prop="cat_name"
+                    prop="category_name"
                     label="所属栏目">
             </el-table-column>
             <el-table-column
@@ -118,12 +115,12 @@
             </el-table-column>
             <el-table-column
                     width="80"
-                    prop="score"
+                    prop="score_pass"
                     label="总分数">
             </el-table-column>
             <el-table-column
                     width="80"
-                    prop="limit_time_string"
+                    prop="limit_time"
                     label="限时">
             </el-table-column>
             <el-table-column
@@ -137,17 +134,17 @@
             </el-table-column>
             <el-table-column
                     width="190"
-                    prop="create_time_name"
+                    prop="addtime"
                     label="创建时间">
             </el-table-column>
             <el-table-column
                     fixed="right"
-                    width="207"
+                    width="227"
                     label="操作">
                 <template scope="scope">
                     <!--<el-button @click="preview(scope.$index, scope.row)" type="text" size="small">预览</el-button>-->
                     <el-button
-                            @click="$router.push({name: 'course-manage-addCourse', params: {courseInfo: scope.row}, query: {id: scope.row.id}})"
+                            @click="$router.push({name: 'course-manage-addCourse', params: {courseInfo: scope.row}, query: {id: scope.row.contentid}})"
                             type="text" size="small">编辑 <!--a-->
                     </el-button>
                     <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
@@ -209,15 +206,16 @@
 
     function getFetchParam() {
         return {
-            status: void 0, // 2- 视屏转码中 1-下线 0-正常
-            category: void 0, // 1-工业 默认-公开课
+            gov_id: void 0, // 部门id
             category_id: void 0, // 栏目id
+            course_name:'',
+            type:'',
             page: 1,
             page_size: 15,
             time_start: void 0,
             time_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
-            keyword: void 0,
+            status: void 0, // 2- 视屏转码中 1-下线 0-正常
         }
     }
     export default{
@@ -256,7 +254,7 @@
             fetchData (val) {
                 this.loadingData = true
                 return courseService.getPublicCourselist(this.fetchParam).then((ret) => {
-                    this.data = ret.data
+                    this.data = ret
                     this.total = ret.total
                     this.loadingData = false
                     xmview.setContentLoading(false)

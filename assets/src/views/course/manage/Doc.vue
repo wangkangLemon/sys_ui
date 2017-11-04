@@ -203,7 +203,7 @@
 </template>
 
 <script>
-    import courseService from '../../../services/courseService'
+    import courseService from '../../../services/course/courseService.js'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import IndustryCompanySelect from '../../component/select/IndustryCompany.vue'
     import UploadFile from '../../component/upload/UploadFiles.vue'

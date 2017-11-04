@@ -20,7 +20,7 @@
                     <i class="fa fa-circle-o" v-else></i> {{subItem.menu_name}}
                 </template>
                 <template>
-                    <el-menu-item index="subSubItem.menu_node" v-for="subSubItem in subItem.items">
+                    <el-menu-item :index="subSubItem.menu_node" v-for="subSubItem in subItem.items"  :key="subSubItem.id">
                         <!--<template slot="title">-->
                         <i class="fa" :class="subSubItem.menu_icon" v-if="subSubItem.menu_icon"></i>
                         <i class="fa fa-circle-o" v-else></i> {{subSubItem.menu_name}}

@@ -90,7 +90,7 @@
 <script>
     import vTags from '../../component/form/Tags.vue'
     import OssSdk from '../../../vendor/ossSdk'
-    import courseService from '../../../services/courseService'
+    import courseService from '../../../services/course/courseService.js'
     import authUtils from '../../../utils/authUtils'
 
     let ossSdk = new OssSdk()
