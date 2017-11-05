@@ -15,7 +15,14 @@ class TreeUtils {
     arr2Tree (arr, pid = 0, pidKey = 'parent_id', idKey = 'id', processItemFn) {
         if (arr == null || arr.length < 1) return null
         let ret = []
+         
+     
         arr.forEach((item) => {
+            console.log('+++++++++++++++++++')
+            console.log('pid='+pid)
+            console.log('pidKey='+pidKey)
+            console.log(item[pidKey])
+            console.log(item)
             if (item[pidKey] !== pid)
                 return
 
@@ -34,6 +41,7 @@ class TreeUtils {
 
     // 数组转为elementui的cascader和tree数据结构
     arr2Cascader (arr, pid = 0, pidKey = 'parent_id', idKey = 'id', labelKey = 'name', valKey = 'id', hasChildrenKey = 'has_children') {
+        
         return this.arr2Tree(arr, pid, pidKey, idKey, (item) => {
             return {
                 label: item[labelKey],
@@ -42,8 +50,12 @@ class TreeUtils {
                 children: item[hasChildrenKey] ? [{label: '加载中...'}] : null
             }
         })
-    }
 
+
+
+        
+    }
+          
     /**
      * 查找某一项
      * @param arr 数据

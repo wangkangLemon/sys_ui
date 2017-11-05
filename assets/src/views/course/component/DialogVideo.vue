@@ -17,14 +17,14 @@
             <section class="search">
                 <section>
                     <i>名称</i>
-                    <el-input v-model="fetchParam.keyword" @keyup.enter.native="fetchData"></el-input>
+                    <el-input v-model="fetchParam.file_name" @keyup.enter.native="fetchData"></el-input>
                 </section>
             </section>
     
             <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" border>
-                <el-table-column prop="name" label="标题">
+                <el-table-column prop="file_name" label="标题">
                 </el-table-column>
-                <el-table-column prop="duration_name" width="80" label="时长">
+                <el-table-column prop="duration" width="80" label="时长">
                 </el-table-column>
                 <el-table-column fixed="right" width="70" label="操作">
                     <template scope="scope">
@@ -44,7 +44,7 @@
 import videoService from '../../../services/course/videoService'
 export default {
     props: {
-        onSelect: Function,
+        onSelect: Function, //从父组件传过来的方法 改变时把row传回去
         value: Boolean,
     },
     data() {
@@ -54,7 +54,7 @@ export default {
             loadingData: false,
             total: 0,
             fetchParam: {
-                keyword: void 0,
+                file_name: void 0,
                 status: 0,
                 page: 1,
                 page_size: 15,
@@ -81,13 +81,14 @@ export default {
         fetchData() {
             this.loadingData = true
             videoService.search(this.fetchParam).then((ret) => {
-                this.data = ret.data
+                this.data = ret
                 this.total = ret.total
                 this.loadingData = false
                 xmview.setContentLoading(false)
             })
         },
         selectVideo(index, row) {
+            // this.$emit('selectVideo',row)
             this.setShowDialog(false)
             this.onSelect && this.onSelect(row)
         },

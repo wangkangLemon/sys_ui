@@ -21,7 +21,6 @@ class dataService {
         let url = `${urlPre}/get/${id}`         //传递的地址的id
         return api.get(url,{},false).then(ret => {
             if (ret.code == 0) {
-                // alert(1)
                 return ret.data
             } else {
                 return Promise.reject(ret)

@@ -66,10 +66,8 @@ class CourseService {
     // 获取公开课列表 { course_name = '', status, category_id , time_start, time_end, page, page_size }
     getPublicCourselist({ course_name = '', status, category_id , time_start, time_end}) {
         let url = urlPre + '/lists'
-        console.log(url)
         return api.get(url, { course_name, status, category_id, time_start, time_end }, false).then(ret => {
             if (ret.code == 0) {
-                console.log(ret)
                 return ret.data
             } else {
                 return Promise.reject(ret)
@@ -78,10 +76,12 @@ class CourseService {
     }
 
     // 创建
-    addCourse({ gov_id, course_name, image, description, tags, company_id, type, material_type, material_id, need_testing, status}) {
+    addCourse({  category_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status}) {
+
         let url = urlPre + '/create'
-        return api.post(url, { gov_id, course_name, image, description, tags, company_id, type, material_type, material_id, need_testing, status }).then(ret => {
+        return api.post(url, {  category_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status }).then(ret => {
             if (ret.code == 0) {
+                // console.log(ret)
                 return ret.data
             } else {
                 return Promise.reject(ret)
@@ -98,10 +98,10 @@ class CourseService {
         })
     }
     // 修改课程
-    editCourse({ govid, contentid, category_id, course_name, image, tags, material_type, material_id, description, need_testing, limit_time, limit_repeat, score_pass }) {
+    editCourse({ govid, contentid, category_id, course_name, image, tags, material_type, material_id, description, need_testing, status, limit_time, limit_repeat, score_pass }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/edit/${contentid}`
-        return api.post(finalUrl, { category_id, course_name, image, tags, material_type, material_id, description, need_testing, limit_time, limit_repeat, score_pass }).then((ret) => {
+        return api.post(finalUrl, { category_id, course_name, image, tags, material_type, material_id, description, need_testing, limit_time, status, limit_repeat, score_pass }).then((ret) => {
             return ret.data
         })
     }
@@ -110,14 +110,14 @@ class CourseService {
     offlineCourse({ govid, course_id, disabled }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/sys/course/${course_id}/disable`
-        console.log(finalUrl)
+        // console.log(finalUrl)
         return api.post(finalUrl, { disabled })
     }
 
     // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)
     getManageImgUploadUrl({ govid } = {}) {
         govid = govid || authUtils.getUserInfo().company_id
-        return `${config.apiHost}/com/${govid}/course/image`
+        return `${config.apiHost}/course/image/${govid}`
     }
 
     // 删除课程
@@ -147,42 +147,43 @@ class CourseService {
         return api.post(finalUrl, { id, catid })
     }
 
-    // 弹出框请求的视频列表
-    getVideo4Dialog({ govid, status, keyword, page, page_size }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/video/search`
-        return api.get(finalUrl, { keyword, status, page, page_size })
-    }
+    // // 弹出框请求的视频列表
+    // getVideo4Dialog({ govid, status, keyword, page, page_size }) {
+    //     govid = govid || authUtils.getUserInfo().company_id
+    //     let finalUrl = `${config.apiHost}/com/${govid}/course/video/search`
+    //     return api.get(finalUrl, { keyword, status, page, page_size })
+    // }
 
     // 获取文档上传url
     getCourseDocUploadUrl({ govid } = {}) {
         govid = govid || authUtils.getUserInfo().company_id
-        return `${config.apiHost}/com/${govid}/course/doc/upload`
+        return `${config.apiHost}/course/doc/upload`
     }
 
     // 添加编辑课程上传图片
-    uploadCover4addCourse({ govid, avatar, alias = Date.now() + '.jpg' }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let url = `${config.apiHost}/com/${govid}/course/image`
-        return api.post(url, { avatar, alias }).then((ret) => {
+    uploadCover4addCourse({ image, alias = Date.now() + '.jpg' }) {
+        let url = `${config.apiHost}/course/subject/image`
+        return api.post(url, { image, alias }).then((ret) => {
             return ret.data
         })
     }
 
     // 获取课程题目
-    getTestingInfo({ govid, course_id }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/${course_id}/subject/edit`
-        return api.get(finalUrl).then((ret) => {
-            return ret.data.subjects
+    getTestingInfo({ course_id }) {
+        // govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/course/subject/lists`
+        alert(1)
+        return api.get(finalUrl,{ course_id }).then((ret) => {
+            // console.log(ret)
+            return ret.data
         })
     }
 
     // 添加或修改题目
     addOrEditTesting({ govid, course_id, subjects }) {
         govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/${course_id}/subject/`
-        return api.put(finalUrl, subjects).then((ret) => {
+        let finalUrl = `${config.apiHost}/course/subject/updates/${course_id}`
+        return api.post(finalUrl, subjects).then((ret) => {
             return ret.data
         })
     }
@@ -190,11 +191,17 @@ class CourseService {
     // ============================================= 栏目 开始 ======================================================
     
     // 获取课程栏目树
-    getCategoryTree({ govid, id = 'tree', type, filter = true }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/children`
-        return api.get(finalUrl, { id, filter, type }).catch((ret) => {
-            ret.tipCom.close()
+    // getCategoryTree({ id = 'tree', type, filter = true }) {
+    //     let finalUrl = `${config.apiHost}/course/category/children`
+    //     return api.get(finalUrl, { id, filter, type }).catch((ret) => {
+    //         ret.tipCom.close()
+    //         return ret
+    //     })
+    // }
+    getCategoryTree({ id = 'tree', type, filter = true }) {
+        let finalUrl = urlPre + '/category/lists'
+        return api.get(finalUrl, { id, filter, type }).then((ret) => {
+            // console.log(ret)
             return ret
         })
     }
@@ -220,7 +227,7 @@ class CourseService {
     updateCategory({ govid, type, name, image, sort, id }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-        return api.put(finalUrl, { type, name, image, sort })
+        return api.post(finalUrl, { type, name, image, sort })
     }
 
     // 删除栏目

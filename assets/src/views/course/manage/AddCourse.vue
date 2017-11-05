@@ -70,7 +70,8 @@
             <el-tab-pane label="课程信息" name="first">
                 <el-form label-width="120px" ref="formFirst" :rules="rulesFirst" :model="fetchParam">
                     <el-form-item label="所属栏目" prop="category_id">
-                        <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
+                        <!--<CourseCategorySelect type="course" :placeholder="fetchParam.name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>-->
+                        <CourseCategorySelect type="course" :placeholder="fetchParam.name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
                     </el-form-item>
                     <el-form-item label="课程名称" prop="course_name">
                         <el-input v-model="fetchParam.course_name"></el-input>
@@ -93,9 +94,9 @@
                             <i>{{fetchParam.material_name}}</i>
                         </el-button>
                     </el-form-item>
-                    <el-form-item label="所属专辑">
+                    <!--<el-form-item label="所属专辑">
                         <CourseAlbumSelect :placeholder="fetchParam.album_name" v-model="fetchParam.albumid"></CourseAlbumSelect>
-                    </el-form-item>
+                    </el-form-item>-->
                     <el-form-item label="课程介绍" prop="description">
                         <el-input v-model="fetchParam.description" type="textarea" :autosize="{ minRows: 4, maxRows: 6}" placeholder="请输入内容">
                         </el-input>
@@ -232,7 +233,7 @@ export default {
             rulesFirst: { // 课程信息的校验规则
                 course_name: { required: true, message: '请输入课程名称', trigger: 'change' },
                 category_id: { required: true, type: 'number', message: '请选择课程栏目', trigger: 'change' },
-                image: { required: true, message: '请上传课程封面', trigger: 'change' },
+                // image: { required: true, message: '请上传课程封面', trigger: 'change' },
                 description: { required: true, message: '请输入课程介绍', trigger: 'change' },
                 material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
                 need_testing: { required: true, type: 'number', message: '请选择是否需要课后考试', trigger: 'change' },
@@ -243,10 +244,10 @@ export default {
             readonly: false, // 只读模式
         }
     },
-    created() {
+ 
+    activated() {
         this.uploadDocUrl = courseService.getCourseDocUploadUrl()
         this.uploadImgUrl = courseService.getManageImgUploadUrl()
-        console.log(this.$route.params.courseInfo)
         if (this.$route.params.courseInfo) {
             this.fetchParam = this.$route.params.courseInfo
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
@@ -279,13 +280,13 @@ export default {
                 xmview.setContentLoading(true)
                 courseService.getTestingInfo({ course_id: this.fetchParam.contentid }).then((data) => {
                     this.fetchTesting = data
-                    this.fetchTesting.forEach((item) => {
-                        if (item.category == 1) {
-                            item.options.forEach((optionItem, index) => {
-                                if (optionItem.correct == 1) item.correct = index
-                            })
-                        }
-                    })
+                    // this.fetchTesting.forEach((item) => {
+                    //     if (item.category == 1) {
+                    //         item.options.forEach((optionItem, index) => {
+                    //             if (optionItem.correct == 1) item.correct = index
+                    //         })
+                    //     }
+                    // })
                     xmview.setContentLoading(false)
                 })
             }
@@ -308,14 +309,14 @@ export default {
                 if (!isValidate) return
                 let p
                 // 如果是编辑
-                console.log(this.fetchParam.contentid)
                 if (this.fetchParam.contentid) {
                     p = courseService.editCourse(this.fetchParam).then((ret) => {
                         this.activeTab = 'second'
                     })
                 } else {
                     p = courseService.addCourse(this.fetchParam).then((ret) => {
-                        this.fetchParam.contentid = ret.data.contentid
+                        alert(99)
+                        this.fetchParam.contentid = ret.contentid
                         this.activeTab = 'second'
                     })
                 }
@@ -337,14 +338,14 @@ export default {
         },
         // 图片裁切成功回调
         cropperImgSucc(imgData) {
-            courseService.uploadCover4addCourse({ avatar: imgData }).then((ret) => {
+            courseService.uploadCover4addCourse({ image: imgData }).then((ret) => {
                 this.fetchParam.image = ret.url
             })
         },
         // 处理视频选取
         handleVideoSelected(row) {
-            this.fetchParam.material_name = row.material_name
-            this.fetchParam.material_id = row.contentid
+            this.fetchParam.material_name = row.title
+            this.fetchParam.material_id = row.material_id
         },
         addTesting(type, index) {
             this.fetchTesting.splice(index, 0, testingFactory.getTestingSet(type))
@@ -375,11 +376,15 @@ export default {
             for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
                 // 处理单选题的正确答案选中
                 if (item.category == 1 && typeof item.correct == 'number') {
-                    item.options.map((itemOptions) => {
-                        delete itemOptions.correct
-                    })
-                    item.options[item.correct].correct = 1
-                    delete item.correct
+                    console.log(item)
+                    if(item.options){
+                        item.options.map((itemOptions) => {
+                            delete itemOptions.correct
+                        })
+                        item.options[item.correct].correct = 1
+                        delete item.correct
+                    }
+                  
                 }
 
                 // 修复sort属性
@@ -423,8 +428,9 @@ function getOrignData() {
     let orignData = { // 课程信息部分
         contentid: void 0,  //切换tab
         category_id: void 0,
+        category_type:void 0, //栏目分类	1.课程栏目; 2.应试培训栏目
         course_name: void 0,
-        category_name: void 0,
+        name: void 0, //栏目名称	
         image: void 0,
         tags: void 0,
         material_type: void 0,

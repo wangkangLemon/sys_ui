@@ -6,15 +6,15 @@ const urlPre = config.apiHost + '/video'
 
 class VideoService {
     // // 搜索
-    // search({ status, keyword, page, page_size, time_start, time_end }) {
-    //     let url = `${urlPre}/search`
-    //     if (status == null || status === '') {
-    //         status = -1
-    //     }
-    //     return api.get(url, { status, keyword, page, page_size, time_start, time_end }).then((ret) => {
-    //         return ret.data
-    //     })
-    // }
+    search({ status, keyword,  time_start, time_end }) {
+        let url = `${urlPre}/lists`
+        if (status == null || status === '') {
+            status = -1
+        }
+        return api.get(url, { status, keyword, time_start, time_end }).then((ret) => {
+            return ret.data
+        })
+    }
 
     // 修改
     update({ id, name, tags, cover, duration }) {

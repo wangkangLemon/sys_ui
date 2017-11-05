@@ -52,7 +52,7 @@
         </section>
 
         <section class="right-container">
-            <div v-show="fetchParam.parent_id != 0">
+            <div v-show="fetchParam.pid != 0">
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改栏目</el-button>
                 <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子栏目</el-button>
 
@@ -61,18 +61,18 @@
                 <el-button type="danger" @click="deleteCategory">删除栏目</el-button>
             </div>
 
-            <div v-show="fetchParam.parent_id === 0">
+            <div v-show="fetchParam.pid === 0">
                 <el-button type="primary">添加根节点</el-button>
             </div>
 
             <el-card class="edit-content">
                 <el-form label-position="right" label-width="90px" :rules="rules" :model="fetchParam" ref="form">
                     <el-form-item label="分类名称" prop="name">
-                        <el-input v-model="fetchParam.name" :disabled="fetchParam.parent_id == null"></el-input>
+                        <el-input v-model="fetchParam.name" :disabled="fetchParam.pid == null"></el-input>
                     </el-form-item>
                     <el-form-item label="栏目logo" prop="image">
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl"
-                                   :disabled="fetchParam.parent_id == null"
+                                   :disabled="fetchParam.pid == null"
                                    :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>
                     <el-form-item label="课程类型" prop="type">
@@ -82,11 +82,11 @@
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="栏目排序" prop="sort">
-                        <el-input placeholder="最小的排在前面" :disabled="fetchParam.parent_id == null"
+                        <el-input placeholder="最小的排在前面" :disabled="fetchParam.pid == null"
                                   v-model.number="fetchParam.sort"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="info" @click="submitForm" :disabled="fetchParam.parent_id == null">保存
+                        <el-button type="info" @click="submitForm" :disabled="fetchParam.pid == null">保存
                             <!--zhankeng-->
                         </el-button>
                     </el-form-item>
@@ -127,7 +127,7 @@
     </article>
 </template>
 
-<script type="text/jsx">
+<script >
     import courseService from '../../../services/course/courseService.js'
     import treeUtils from '../../../utils/treeUtils'
     import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
@@ -203,7 +203,7 @@
                     this.nodeSelected = data // 记录当前节点
                     this.$refs.uploadImg.clearFiles()
                     this.fetchParam = data.item
-                    this.fetchParam.parent_id = data.value // 重新指向当前的id
+                    this.fetchParam.pid = data.value // 重新指向当前的id
                     this.activeTab = 'edit'
                 } else if (type == 2) {
                     this.moveToNode = node
@@ -218,7 +218,7 @@
                 this.activeTab = 'add'
                 // 清空选中项
                 this.$refs.courseCategory.clearSelected()
-                this.fetchParam.parent_id = 0
+                this.fetchParam.pid = 0
             },
             // 提交表单
             submitForm () {
@@ -246,7 +246,7 @@
                             }
 
                             // 如果是添加的根节点
-                            if (this.fetchParam.parent_id === 0) this.$refs.courseCategory.initData()
+                            if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
                             else if (!this.nodeSelected.children) this.nodeSelected.children = [{label: '加载中...'}]
                             else if (this.nodeSelected.children[0].value) this.nodeSelected.children.push(addedItem)
                             this.fetchParam = getFetchParam()
@@ -317,7 +317,7 @@
 
     function getFetchParam () {
         return {
-            parent_id: void 0,
+            pid: void 0, //父级id
             type: void '',
             name: void 0,
             image: void 0,

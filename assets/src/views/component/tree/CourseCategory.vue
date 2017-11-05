@@ -42,6 +42,7 @@
             },
             // 给子元素获取数据的方法
             getData (params) {
+                // return courseService.getCategoryTree(params)
                 return courseService.getCategoryTree(params)
             },
             // 初始化数据, 可以将数据重置

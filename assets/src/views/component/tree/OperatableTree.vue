@@ -75,7 +75,34 @@
                 return this.getData(params).then(ret => {
                     xmview.setContentLoading(false)
                     if (!parentNode) {
-                        this.setCurrVal(treeUtils.arr2Cascader(ret, 0, void 0, void 0, 'name', 'id'))
+                        this.setCurrVal(treeUtils.arr2Cascader(ret.data, 0, void 0, void 0, 'name', 'id'))
+                        
+                        // courseService.search_cate({
+                        //     pid: val[val.length-1]
+                        // }).then((ret) => {
+                        //     // this.options.forEach(v => {
+                        //     //     if (v.value == val[val.length-1]) {
+                        //     //         ret.forEach(retItem => {
+                        //     //             console.log(retItem)
+                        //     //             arr.push({
+                        //     //                 data: retItem,
+                        //     //                 label: retItem.name,
+                        //     //                 value: retItem.id,
+                        //     //                 children: retItem.ended ? null : []
+                        //     //             })
+                        //     //         })
+                        //     //         v.children = arr
+                        //     //     }
+                        //     // })
+
+                        //     var arr = ret.map(v=>{
+                        //         v.label = v.name
+                        //     v.value = v.id
+                        //     v.children = v.ended ? null : []
+                        //     return v
+                        // })
+
+        
                     } else {
                         ret.map((item) => {
                             item.label = item.name
@@ -94,7 +121,7 @@
             // 清空选中项
             clearSelected () {
                 this.selectable = false
-            }
+            },
         },
         components: {}
     }
