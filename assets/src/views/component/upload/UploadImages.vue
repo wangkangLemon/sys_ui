@@ -49,7 +49,7 @@
             // 上传的文件字段名
             name: {
                 type: String,
-                default: 'file',
+                default: 'image',
             },
             // 上传成功后的回调
             onSuccess: Function,

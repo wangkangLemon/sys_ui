@@ -48,11 +48,6 @@ class VideoService {
         return api.post(url, { id })
     }
 
-    // 获取上传封面的url
-    getUploadCoverUrl() {
-        return `${urlPre}/cover`
-    }
-
     // 获取视频预览信息
     getPreviewInfo(id) {
         let url = `${urlPre}/${id}/preview`
@@ -89,7 +84,7 @@ class VideoService {
     // 修改视频
     updateVideo({ name, company_id, tags, cover, duration, id }) {
         company_id = company_id || authUtils.getUserInfo().company_id
-        let url = `${urlPre}/video/${id}`
+        let url = `${urlPre}/${id}`
         return api.put(url, { name, comid: company_id, tags, cover, duration })
     }
 
@@ -110,7 +105,7 @@ class VideoService {
 
     // 获取上传封面的url
     getUploadCoverUrl() {
-        return `${urlPre}/video/cover`
+        return `${urlPre}/cover`
     }
 
     deleteVideo({ id }) {

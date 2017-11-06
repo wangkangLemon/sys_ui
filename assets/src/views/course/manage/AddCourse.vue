@@ -315,7 +315,6 @@ export default {
                     })
                 } else {
                     p = courseService.addCourse(this.fetchParam).then((ret) => {
-                        alert(99)
                         this.fetchParam.contentid = ret.contentid
                         this.activeTab = 'second'
                     })

@@ -102,6 +102,7 @@
     <div class="component-upload-uploadimg" ref="container" :class="{'uploaddisabled':disabled }">
         <el-upload :headers="headers" :disabled="disabled"
                    :action="url"
+                   :name="name"
                    list-type="picture-card"
                    :multiple="false"
                    :before-upload="beforeUpload"
@@ -128,6 +129,11 @@
             url: {
                 type: String,
                 default: ''
+            },
+            // 上传的文件字段名
+            name: {
+                type: String,
+                default: 'image',
             },
             // 上传成功后的回调
             onSuccess: Function,
@@ -156,7 +162,7 @@
                 }
             },
             'defaultImg' (val) {
-                this.currImg = val ? [{name: val, url: config.apiHost + val}] : []
+                this.currImg = val ? [{name: val, url: val}] : [] //url: config.apiHost  + val
             },
             'disabled' (val) {
                 this.isShowDelAndPreview(!val)

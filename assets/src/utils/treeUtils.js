@@ -13,9 +13,9 @@ class TreeUtils {
      * return 结果  [{ item, children:[ {item,children}, {}] }] 没有children 说明是叶子节点
      */
     arr2Tree (arr, pid = 0, pidKey = 'parent_id', idKey = 'id', processItemFn) {
+
         if (arr == null || arr.length < 1) return null
         let ret = []
-         
      
         arr.forEach((item) => {
             console.log('+++++++++++++++++++')
@@ -43,6 +43,7 @@ class TreeUtils {
     arr2Cascader (arr, pid = 0, pidKey = 'parent_id', idKey = 'id', labelKey = 'name', valKey = 'id', hasChildrenKey = 'has_children') {
         
         return this.arr2Tree(arr, pid, pidKey, idKey, (item) => {
+            
             return {
                 label: item[labelKey],
                 value: item[valKey] + '',

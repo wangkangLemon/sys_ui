@@ -11,6 +11,7 @@ class CourseService {
         let url = urlPre + '/category/lists'
         return api.get(url, { id, name, category_type, pid, level, ended, disabled, page, pagesize }, false).then(ret => {
             if (ret.code == 0) {
+                console.log(ret)
                 return ret.data
             } else {
                 return Promise.reject(ret)
@@ -115,9 +116,9 @@ class CourseService {
     }
 
     // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)
-    getManageImgUploadUrl({ govid } = {}) {
-        govid = govid || authUtils.getUserInfo().company_id
-        return `${config.apiHost}/course/image/${govid}`
+    getManageImgUploadUrl({image, alias, biz, extpath}) {
+         let finalUrl = `${config.apiHost}/common/upload/file`
+        return api.post(finalUrl, {image, alias, biz, extpath})
     }
 
     // 删除课程
@@ -162,6 +163,7 @@ class CourseService {
 
     // 添加编辑课程上传图片
     uploadCover4addCourse({ image, alias = Date.now() + '.jpg' }) {
+        
         let url = `${config.apiHost}/course/subject/image`
         return api.post(url, { image, alias }).then((ret) => {
             return ret.data
@@ -171,7 +173,8 @@ class CourseService {
     // 获取课程题目
     getTestingInfo({ course_id }) {
         // govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/course/subject/lists`
+        let finalUrl = `${config.apiHost}/course/subject/listoptions`
+        
         alert(1)
         return api.get(finalUrl,{ course_id }).then((ret) => {
             // console.log(ret)
@@ -184,7 +187,13 @@ class CourseService {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/subject/updates/${course_id}`
         return api.post(finalUrl, subjects).then((ret) => {
-            return ret.data
+             if (ret.code == 0) {
+                 xmview.showTip('success',ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error',ret.message)
+                return Promise.reject(ret)
+            }
         })
     }
 

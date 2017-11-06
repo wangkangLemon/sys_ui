@@ -321,7 +321,7 @@
             },
             // 处理图片上传完毕
             handleOnUploaded (ret) {
-                this.videoModel.cover = config.apiHost + ret.data.url
+                this.videoModel.cover = ret.data.url
             },
             // 刷新视频状态
             refreshStatus (index, row) {
