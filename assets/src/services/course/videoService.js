@@ -19,7 +19,7 @@ class VideoService {
     // 修改
     update({ id, name, tags, cover, duration }) {
         let url = `${urlPre}/${id}/`
-        return api.put(url, { name, tags, cover, duration })
+        return api.post(url, { name, tags, cover, duration })
     }
 
     // 删除
@@ -82,10 +82,11 @@ class VideoService {
     }
 
     // 修改视频
-    updateVideo({ name, company_id, tags, cover, duration, id }) {
-        company_id = company_id || authUtils.getUserInfo().company_id
-        let url = `${urlPre}/${id}`
-        return api.put(url, { name, comid: company_id, tags, cover, duration })
+    updateVideo({ file_name, gov_id, tags, cover, duration, material_id }) {
+        gov_id = gov_id || authUtils.getUserInfo().gov_id
+        alert(2)
+        let url = `${urlPre}/${material_id}`
+        return api.post(url, { file_name, gov_id: gov_id, tags, cover, duration })
     }
 
     // 获取oss的上传token
@@ -123,7 +124,7 @@ class VideoService {
     // 审核状态
     auditVideo(form) {
         let finalUrl = `${urlPre}/video/${form.id}/audit`
-        return api.put(finalUrl, form)
+        return api.post(finalUrl, form)
     }
 
 

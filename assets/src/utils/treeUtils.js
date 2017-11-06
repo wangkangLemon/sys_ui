@@ -18,11 +18,11 @@ class TreeUtils {
         let ret = []
      
         arr.forEach((item) => {
-            console.log('+++++++++++++++++++')
-            console.log('pid='+pid)
-            console.log('pidKey='+pidKey)
-            console.log(item[pidKey])
-            console.log(item)
+            // console.log('+++++++++++++++++++')
+            // console.log('pid='+pid)
+            // console.log('pidKey='+pidKey)
+            // console.log(item[pidKey])
+            // console.log(item)
             if (item[pidKey] !== pid)
                 return
 

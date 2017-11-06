@@ -115,11 +115,39 @@ class CourseService {
         return api.post(finalUrl, { disabled })
     }
 
-    // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)
-    getManageImgUploadUrl({image, alias, biz, extpath}) {
-         let finalUrl = `${config.apiHost}/common/upload/file`
-        return api.post(finalUrl, {image, alias, biz, extpath})
+    // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个 )
+    // getManageImgUploadUrl({ companyid } = {}) {   //=======commonUploadImageBase 
+    //     companyid = companyid || authUtils.getUserInfo().company_id
+    //     return `${config.apiHost}/com/${companyid}/course/image`
+    // }
+    // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)  =====直接传图
+    commonUploadImage() { 
+        return `${config.apiHost}/com/course/image`
     }
+
+
+
+    // 公共添加编辑课程上传图片  ---传base64
+    commonUploadImageBase({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
+        
+        let url = `${config.apiHost}/common/upload/file`
+        return api.post(url, {image, alias, biz, extpath}).then((ret) => {
+            xmview.showTip('success',ret.message)
+            return ret.data
+        })
+    }
+
+    // 添加编辑课程上传图片  ---传base64
+    uploadCover4addCourse({ image, alias = Date.now() + '.jpg' }) {
+        let url = `${config.apiHost}/course/subject/image`
+        return api.post(url, { image, alias }).then((ret) => {
+            return ret.data
+        })
+    }
+
+
+
+
 
     // 删除课程
     deleteCourse({ govid, course_id }) {
@@ -161,14 +189,7 @@ class CourseService {
         return `${config.apiHost}/course/doc/upload`
     }
 
-    // 添加编辑课程上传图片
-    uploadCover4addCourse({ image, alias = Date.now() + '.jpg' }) {
-        
-        let url = `${config.apiHost}/course/subject/image`
-        return api.post(url, { image, alias }).then((ret) => {
-            return ret.data
-        })
-    }
+   
 
     // 获取课程题目
     getTestingInfo({ course_id }) {
@@ -207,9 +228,9 @@ class CourseService {
     //         return ret
     //     })
     // }
-    getCategoryTree({ id = 'tree', type, filter = true }) {
+    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1 }) {
         let finalUrl = urlPre + '/category/lists'
-        return api.get(finalUrl, { id, filter, type }).then((ret) => {
+        return api.get(finalUrl, { id, filter, type, pid, level }).then((ret) => {
             // console.log(ret)
             return ret
         })

@@ -71,7 +71,7 @@
                 <el-form label-width="120px" ref="formFirst" :rules="rulesFirst" :model="fetchParam">
                     <el-form-item label="所属栏目" prop="category_id">
                         <!--<CourseCategorySelect type="course" :placeholder="fetchParam.name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>-->
-                        <CourseCategorySelect type="course" :placeholder="fetchParam.name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
+                        <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
                     </el-form-item>
                     <el-form-item label="课程名称" prop="course_name">
                         <el-input v-model="fetchParam.course_name"></el-input>
@@ -247,14 +247,19 @@ export default {
  
     activated() {
         this.uploadDocUrl = courseService.getCourseDocUploadUrl()
-        this.uploadImgUrl = courseService.getManageImgUploadUrl()
+        this.uploadImgUrl = courseService.commonUploadImage()
         if (this.$route.params.courseInfo) {
             this.fetchParam = this.$route.params.courseInfo
+            console.log(this.$route.params.courseInfo)
+            
+            console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
+            this.fetchParam.name= this.$route.params.courseInfo.name
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')
         } else if (this.$route.query.contentid) {
             courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
                 this.fetchParam = ret.course
+                this.fetchParam.course_name= this.$route.params.courseInfo.course_name
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
                 xmview.setContentTile('编辑课程-培训')
             }).catch((ret) => {
@@ -337,7 +342,7 @@ export default {
         },
         // 图片裁切成功回调
         cropperImgSucc(imgData) {
-            courseService.uploadCover4addCourse({ image: imgData }).then((ret) => {
+            courseService.commonUploadImageBase({ image: imgData }).then((ret) => {
                 this.fetchParam.image = ret.url
             })
         },

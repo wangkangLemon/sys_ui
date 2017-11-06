@@ -178,6 +178,7 @@
 
     function getVideoModel () {
         return {
+            material_id: void 0,
             file_name: '',
             gov_id: void 0,
             cover: void 0,
@@ -259,7 +260,7 @@
             fetchData () {
                 this.loadingData = true
                 return courseService.getVideo().then((ret) => {
-                    console.log(this.fetchParam)
+                    console.log(ret)
                     this.data = ret
                     this.total = ret.total
                     this.loadingData = false
@@ -282,6 +283,7 @@
                 this.videoModel.tags = this.videoModel.tags ? this.videoModel.tags.split(',') : []
 
                 this.dialogAdd.confirmFn = () => {
+                    console.log(this.videoModel)
                     courseService.updateVideo(this.videoModel).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.fetchData()
