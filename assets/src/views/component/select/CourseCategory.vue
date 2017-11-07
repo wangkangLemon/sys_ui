@@ -148,7 +148,7 @@
                         currItem.children = arr
 
                         this.loading = false
-                        xmview.setContentLoading(false)
+                        xmview.setContentLoading(false)  
                     })
 
 

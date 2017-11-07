@@ -47,8 +47,10 @@
         </section>
 
         <section class="left-container">
+            <!--这是view-->
             <CourseCategoryTree v-model="treeData" ref="courseCategory"
-                                :onNodeClick="treeNodeClick.bind(this,1)"></CourseCategoryTree>
+                                :onNodeClick="treeNodeClick.bind(this,1)">
+            </CourseCategoryTree>
         </section>
 
         <section class="right-container">
@@ -202,7 +204,7 @@
                     this.nodeParentSelected = node.parent// 记录父节点
                     this.nodeSelected = data // 记录当前节点
                     this.$refs.uploadImg.clearFiles()
-                    this.fetchParam = data.item
+                    this.fetchParam = data
                     this.fetchParam.pid = data.value // 重新指向当前的id
                     this.activeTab = 'edit'
                 } else if (type == 2) {

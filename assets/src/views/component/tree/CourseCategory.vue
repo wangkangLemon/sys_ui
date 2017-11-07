@@ -1,6 +1,7 @@
 <!--课程栏目-->
 
-<template>
+<template> 
+    <!--这是父组件-->
     <OperatableTree v-model="data" ref="tree" @onNodeClick="handleNodeClick" :getData="getData"></OperatableTree>
 </template>
 

@@ -228,9 +228,9 @@ class CourseService {
     //         return ret
     //     })
     // }
-    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1 }) {
+    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1 , ended, name }) {
         let finalUrl = urlPre + '/category/lists'
-        return api.get(finalUrl, { id, filter, type, pid, level }).then((ret) => {
+        return api.get(finalUrl, { id, filter, type, pid, level, ended, name }).then((ret) => {
             // console.log(ret)
             return ret
         })
