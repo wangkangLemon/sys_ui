@@ -21,7 +21,7 @@
 
         .right-container {
             margin-left: 15px;
-            width: 555px;
+            width: 700px;
             .edit-content {
                 margin: 10px 0 0
             }
@@ -199,6 +199,14 @@
             },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
+                console.log('===========treeNodeClick    this.nodeSelected==========  ')
+                console.log(this.nodeSelected ) //选中的节点对象
+                console.log('id='+node.id)
+                if(this.nodeSelected!==undefined){
+                    this.fetchParam.name =this.nodeSelected.label
+                    this.fetchParam.id=node.id
+                }
+                // console.log(data.value )  //选中的id ==子集的pid
                 if (type == 1) {
                     if (this.nodeSelected && this.nodeSelected.value === data.value) return
                     this.nodeParentSelected = node.parent// 记录父节点

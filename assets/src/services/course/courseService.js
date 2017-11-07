@@ -5,6 +5,63 @@ const urlPre = config.apiHost + '/course'
 
 class CourseService {
 
+    // ============================================= 栏目 开始 ======================================================
+
+    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1 }) {
+        let finalUrl = urlPre + '/category/lists'
+        // alert('进入getData')
+        return api.get(finalUrl, { id, filter, type, pid, level }).then((ret) => {
+            // console.log(ret)
+            return ret
+        })
+    }
+
+    // 获取上传栏目图片的url
+    getUploadCategoryImgUrl({ govid } = {}) {
+        govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/com/${govid}/course/category/image`
+        return finalUrl
+    }
+
+    // 添加栏目
+    addCategory({ govid, parent_id, type, name, image, sort }) {
+        govid = govid || authUtils.getUserInfo().company_id
+        let reqParam = { parent_id, type, name, image, sort }
+        if (parent_id === 0) delete reqParam['parent_id']
+
+        let finalUrl = `${config.apiHost}/com/${govid}/course/category`
+        return api.post(finalUrl, reqParam)
+    }
+
+    // 修改栏目
+    updateCategory({ govid, type, name, image, sort, id }) {
+        govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
+        return api.post(finalUrl, { type, name, image, sort })
+    }
+
+    // 删除栏目
+    deleteCategory({ govid, id }) {
+        govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
+        return api.del(finalUrl, {})
+    }
+
+    // 移动栏目
+    moveCategory({ govid, id, to }) {
+        govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}/move`
+        return api.post(finalUrl, { to })
+    }
+
+    // 移动栏目下内容
+    moveCategoryContent({ govid, id, to }) {
+        govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}/move/content`
+        return api.post(finalUrl, { to })
+    }
+
+
     //========================种类数据请求===================================
     // 搜索
     search_cate({ id, name, category_type, pid, level, ended, disabled, page, pagesize}) {
@@ -217,70 +274,6 @@ class CourseService {
             }
         })
     }
-
-    // ============================================= 栏目 开始 ======================================================
-    
-    // 获取课程栏目树
-    // getCategoryTree({ id = 'tree', type, filter = true }) {
-    //     let finalUrl = `${config.apiHost}/course/category/children`
-    //     return api.get(finalUrl, { id, filter, type }).catch((ret) => {
-    //         ret.tipCom.close()
-    //         return ret
-    //     })
-    // }
-    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1 , ended, name }) {
-        let finalUrl = urlPre + '/category/lists'
-        return api.get(finalUrl, { id, filter, type, pid, level, ended, name }).then((ret) => {
-            // console.log(ret)
-            return ret
-        })
-    }
-
-    // 获取上传栏目图片的url
-    getUploadCategoryImgUrl({ govid } = {}) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/image`
-        return finalUrl
-    }
-
-    // 添加栏目
-    addCategory({ govid, parent_id, type, name, image, sort }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let reqParam = { parent_id, type, name, image, sort }
-        if (parent_id === 0) delete reqParam['parent_id']
-
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category`
-        return api.post(finalUrl, reqParam)
-    }
-
-    // 修改栏目
-    updateCategory({ govid, type, name, image, sort, id }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-        return api.post(finalUrl, { type, name, image, sort })
-    }
-
-    // 删除栏目
-    deleteCategory({ govid, id }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-        return api.del(finalUrl, {})
-    }
-
-    // 移动栏目
-    moveCategory({ govid, id, to }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}/move`
-        return api.post(finalUrl, { to })
-    }
-
-    // 移动栏目下内容
-    moveCategoryContent({ govid, id, to }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}/move/content`
-        return api.post(finalUrl, { to })
-    }
-
 
     // ============================================= 专辑 开始 ======================================================
     
