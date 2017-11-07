@@ -97,6 +97,18 @@ class CourseService {
             }
         })
     }
+    //     // 获取上传栏目图片的url
+    // getUploadCategoryImgUrl({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
+    //     // govid = govid || authUtils.getUserInfo().company_id
+    //     let finalUrl = `${config.apiHost}/common/upload/file`
+    //       return api.post(url, {image, alias, biz, extpath}).then((ret) => {
+    //         xmview.showTip('success',ret.message)
+    //         return ret.data
+    //     })
+    // }
+    getUploadCategoryImgUrl() { 
+        return `${config.apiHost}/common/upload/file`
+    }
     // 删除
     delete_cate(id) {
         let url = `${urlPre}/category/delete/${id}/`

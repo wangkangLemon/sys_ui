@@ -32,8 +32,8 @@
         methods: {
             handleNodeClick ({data, node, store}) {
                 this.onNodeClick && this.onNodeClick(data, node, store)
-                console.log('===========onNodeClick    data==========  ')
-                console.log(data)
+                // console.log('===========onNodeClick    data==========  ')
+                // console.log(data)
             },
             removeItem (item, parent) {
                 this.$refs.tree.removeItem(item, parent)

@@ -25,7 +25,7 @@
         },
         watch: { //续
             'value' (val) {
-                console.log('================watch value=========')
+                console.log('================watch   1 val  2this.data=========')
                 console.log(val)
                 console.log(this.data)
                 if (val.length != this.data.length) {

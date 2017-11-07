@@ -24,7 +24,11 @@ const actions = {
     //区块列表存储Pid
     savePid(store, need){
         store.commit(types.INDEX_SET__SETSECPID, need)
-    }
+    },
+    //课程分类存储id name
+    // saveCourseCate(store, need){
+    //     store.commit(types.INDEX_SET__SETSAVECOURSECATE, need)
+    // }
     
 }
 

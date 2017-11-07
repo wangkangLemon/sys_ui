@@ -77,10 +77,16 @@
                                    :disabled="fetchParam.pid == null"
                                    :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>
-                    <el-form-item label="课程类型" prop="type">
-                        <el-radio-group v-model="fetchParam.type">
-                            <el-radio v-model="fetchParam.type" label="course">单节课程</el-radio>
-                            <el-radio v-model="fetchParam.type" label="newcourse">系列课程</el-radio>
+                    <el-form-item label="课程类型" prop="category_type">
+                        <el-radio-group v-model="fetchParam.category_type">
+                            <el-radio :label="1">课程栏目</el-radio>
+                            <el-radio :label="2">应试课程栏目</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="是否最终菜单" prop="ended">
+                        <el-radio-group v-model="fetchParam.ended">
+                            <el-radio :label="0">否</el-radio>
+                            <el-radio :label="1">是</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="栏目排序" prop="sort">
@@ -187,7 +193,7 @@
                 this.dialogConfirm.isShow = true
                 this.dialogConfirm.msg = `是否确认删除栏目 <i style="color:red">${node.label}</i> 吗？`
                 this.dialogConfirm.confirmClick = () => {
-                    courseService.deleteCategory({id: node.value}).then(() => {
+                    courseService.delete_cate({id: node.value}).then(() => {
                         xmview.showTip('success', '操作成功!')
                         this.$refs.courseCategory.removeItem(node, this.nodeParentSelected)
                         node = null
@@ -199,20 +205,18 @@
             },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
-                console.log('===========treeNodeClick    this.nodeSelected==========  ')
-                console.log(this.nodeSelected ) //选中的节点对象
-                console.log('id='+node.id)
-                if(this.nodeSelected!==undefined){
-                    this.fetchParam.name =this.nodeSelected.label
-                    this.fetchParam.id=node.id
-                }
-                // console.log(data.value )  //选中的id ==子集的pid
+                // console.log('===========treeNodeClick    this.nodeSelected   node==========  ')
+                // console.log(this.nodeSelected ) //选中的节点对象
+                console.log(node)
                 if (type == 1) {
                     if (this.nodeSelected && this.nodeSelected.value === data.value) return
                     this.nodeParentSelected = node.parent// 记录父节点
                     this.nodeSelected = data // 记录当前节点
                     this.$refs.uploadImg.clearFiles()
-                    this.fetchParam = data
+                    // this.fetchParam.name=node.data.data.name
+                    // this.fetchParam.id=node.data.data.id
+                    // this.fetchParam.ended=node.data.data.ended
+                    this.fetchParam=node.data.data
                     this.fetchParam.pid = data.value // 重新指向当前的id
                     this.activeTab = 'edit'
                 } else if (type == 2) {
@@ -222,6 +226,7 @@
             // 图片上传完毕
             handleImgUploaded (response) {
                 this.fetchParam.image = response.data.url
+                alert( response.data.url)
             },
             // 新建根节点
             addRootCategory () {
@@ -237,9 +242,10 @@
 
                     let p
                     if (this.activeTab === 'add')
-                        p = courseService.addCategory(this.fetchParam)
+                        // console.log(this.fetchParam)
+                        p = courseService.create_cate(this.fetchParam)
                     else
-                        p = courseService.updateCategory(this.fetchParam)
+                        p = courseService.update_cate(this.fetchParam)
 
                     p.then((ret) => {
                         xmview.showTip('success', '操作成功!')
@@ -328,11 +334,13 @@
     function getFetchParam () {
         return {
             pid: void 0, //父级id
-            type: void '',
+            category_type: void '',
             name: void 0,
             image: void 0,
             sort: void 0,
-            id: 0
+            id: 0,
+            ended: void 0,
         }
     }
+
 </script>

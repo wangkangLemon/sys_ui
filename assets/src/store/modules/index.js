@@ -19,6 +19,7 @@ const Auth = {
         clearFetchParam: false, // 是否清空筛选条件
         secMenu:[],
         secPid:0,
+        // courseCate:{},
 
     },
 
@@ -42,6 +43,9 @@ const Auth = {
         [INDEX_SET__SETSECPID] (state, need) {        
             state.secPid = need
         },
+        // [INDEX_SET__SETSAVECOURSECATE] (state, need) {        
+        //     state.courseCate = need
+        // },
 
     }
 }
