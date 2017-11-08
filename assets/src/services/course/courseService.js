@@ -7,6 +7,43 @@ class CourseService {
 
     // ============================================= 栏目 开始 ======================================================
 
+
+    // // 获取上传栏目图片的url
+    // getUploadCategoryImgUrl({ govid } = {}) {
+    //     govid = govid || authUtils.getUserInfo().company_id
+    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category/image`
+    //     return finalUrl
+    // }
+
+    // // 添加栏目
+    // addCategory({ govid, parent_id, type, name, image, sort }) {
+    //     alert('addCategory')
+    //     govid = govid || authUtils.getUserInfo().company_id
+    //     let reqParam = { parent_id, type, name, image, sort }
+    //     if (parent_id === 0) delete reqParam['parent_id']
+
+    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category`
+    //     return api.post(finalUrl, reqParam)
+    // }
+
+    // // 修改栏目
+    // updateCategory({ govid, type, name, image, sort, id }) {
+    //     govid = govid || authUtils.getUserInfo().company_id
+    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
+    //     return api.post(finalUrl, { type, name, image, sort })
+    // }
+
+    // // 删除栏目
+    // deleteCategory({ govid, id }) {
+    //     govid = govid || authUtils.getUserInfo().company_id
+    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
+    //     return api.del(finalUrl, {})
+    // }
+
+
+
+
+    //========================种类数据请求===================================
     getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1 }) {
         let finalUrl = urlPre + '/category/lists'
         // alert('进入getData')
@@ -16,53 +53,6 @@ class CourseService {
         })
     }
 
-    // 获取上传栏目图片的url
-    getUploadCategoryImgUrl({ govid } = {}) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/image`
-        return finalUrl
-    }
-
-    // 添加栏目
-    addCategory({ govid, parent_id, type, name, image, sort }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let reqParam = { parent_id, type, name, image, sort }
-        if (parent_id === 0) delete reqParam['parent_id']
-
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category`
-        return api.post(finalUrl, reqParam)
-    }
-
-    // 修改栏目
-    updateCategory({ govid, type, name, image, sort, id }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-        return api.post(finalUrl, { type, name, image, sort })
-    }
-
-    // 删除栏目
-    deleteCategory({ govid, id }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-        return api.del(finalUrl, {})
-    }
-
-    // 移动栏目
-    moveCategory({ govid, id, to }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}/move`
-        return api.post(finalUrl, { to })
-    }
-
-    // 移动栏目下内容
-    moveCategoryContent({ govid, id, to }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}/move/content`
-        return api.post(finalUrl, { to })
-    }
-
-
-    //========================种类数据请求===================================
     // 搜索
     search_cate({ id, name, category_type, pid, level, ended, disabled, page, pagesize}) {
         let url = urlPre + '/category/lists'
@@ -76,9 +66,12 @@ class CourseService {
         })
     }
     // 创建
-    create_cate({ name, remark, sort, category_type, pid, ended, disabled }) {
+    create_cate({ name, sort, category_type, pid, ended, image }) {
+        alert('create_cate')
+        let reqParam = { name, sort, category_type, pid, ended, image }
+        if (pid === 0) delete reqParam['pid']
         let url = urlPre + '/category/create'
-        return api.post(url, { name, remark, sort, category_type, pid, ended, disabled }).then(ret => {
+        return api.post(url, reqParam).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data
@@ -88,15 +81,26 @@ class CourseService {
             }
         })
     }
+
      // 更新
-    update_cate({ id, name, remark, sort, category_type, pid, ended, disabled, course_defid }) {
+    update_cate({ id, name, image, category_type, sort, ended, disabled }) {
+        alert('update_cate')
         let url = `${urlPre}/category/edit/${id}`
-        return api.post(url, { name, remark, sort, category_type, pid, ended, disabled, course_defid }).then(ret => {
+        return api.post(url, { name, image, category_type, sort, ended, disabled }).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }
         })
     }
+
+        // 修改栏目
+    updateCategory({ govid, type, name, image, sort, id }) {
+        alert('updateCategory')
+        govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
+        return api.post(finalUrl, { type, name, image, sort })
+    }
+
     //     // 获取上传栏目图片的url
     // getUploadCategoryImgUrl({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
     //     // govid = govid || authUtils.getUserInfo().company_id
@@ -106,6 +110,20 @@ class CourseService {
     //         return ret.data
     //     })
     // }
+        // 移动栏目
+    moveCategory({ id, to }) {
+        // govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/course/category/${id}/move`
+        return api.post(finalUrl, { to })
+    }
+        // 移动栏目下内容
+    moveCategoryContent({ id, to }) {
+        // govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/course/category/${id}/move/content`
+        return api.post(finalUrl, { to })
+    }
+
+
     getUploadCategoryImgUrl() { 
         return `${config.apiHost}/common/upload/file`
     }

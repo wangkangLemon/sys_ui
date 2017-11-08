@@ -56,10 +56,10 @@
         <section class="right-container">
             <div v-show="fetchParam.pid != 0">
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改栏目</el-button>
-                <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子栏目</el-button>
+                <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'" >添加子栏目</el-button>
 
-                <el-button @click="moveSubCategory">移动栏目</el-button>
-                <el-button @click="moveSubCategoryContent">移动栏目下内容</el-button>
+                <el-button @click="moveSubCategory" disabled>移动栏目</el-button>
+                <el-button @click="moveSubCategoryContent" disabled>移动栏目下内容</el-button>
                 <el-button type="danger" @click="deleteCategory">删除栏目</el-button>
             </div>
 
@@ -205,9 +205,8 @@
             },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
-                // console.log('===========treeNodeClick    this.nodeSelected   node==========  ')
-                // console.log(this.nodeSelected ) //选中的节点对象
-                console.log(node)
+                // console.log('===========   node.data.data==========  ')
+                // console.log(node.data)
                 if (type == 1) {
                     if (this.nodeSelected && this.nodeSelected.value === data.value) return
                     this.nodeParentSelected = node.parent// 记录父节点
@@ -216,7 +215,7 @@
                     // this.fetchParam.name=node.data.data.name
                     // this.fetchParam.id=node.data.data.id
                     // this.fetchParam.ended=node.data.data.ended
-                    this.fetchParam=node.data.data
+                    this.fetchParam=node.data.data   
                     this.fetchParam.pid = data.value // 重新指向当前的id
                     this.activeTab = 'edit'
                 } else if (type == 2) {
@@ -241,17 +240,25 @@
                     if (!ret) return
 
                     let p
-                    if (this.activeTab === 'add')
-                        // console.log(this.fetchParam)
+                    if (this.activeTab === 'add'){
                         p = courseService.create_cate(this.fetchParam)
-                    else
+                        
+                    }
+                    else{
+                        // console.log('=============this.fetchParam-------')
+                        // console.log(this.fetchParam)
+                        // console.log('=============this.nodeSelected.item-------')
+                        // console.log( this.nodeSelected.item)
                         p = courseService.update_cate(this.fetchParam)
+                        //提交的pid = id  所以它就变成主栏
+                    }
 
                     p.then((ret) => {
                         xmview.showTip('success', '操作成功!')
                         if (this.activeTab === 'edit') {
-                            this.nodeSelected.label = this.fetchParam.name
-                            this.nodeSelected.item = this.fetchParam
+                            this.nodeSelected.label = this.fetchParam.name  
+                            node.data.data=this.fetchParam
+                            // this.nodeSelected.item = this.fetchParam
                             this.$forceUpdate()
                         } else {
                             this.fetchParam.id = ret.data.id
@@ -342,5 +349,7 @@
             ended: void 0,
         }
     }
+
+
 
 </script>

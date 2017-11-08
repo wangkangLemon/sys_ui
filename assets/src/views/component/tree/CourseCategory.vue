@@ -20,20 +20,21 @@
             }
         },
         watch: {
-            'value' (val) {
-                if (val.length != this.data.length) {
-                    this.setCurrVal(val)
-                }
-            },
-            'data' (val) {
-                this.$emit('input', val)
-            }
+
+            // 'value' (val) {   不是注销了吗
+            //     if (val.length != this.data.length) {
+            //         this.setCurrVal(val)
+            //     }
+            // },
+            // 'data' (val) {
+            //     this.$emit('input', val)
+            // }
         },
         methods: {
             handleNodeClick ({data, node, store}) {
                 this.onNodeClick && this.onNodeClick(data, node, store)
+                                console.log(node)
                 // console.log('===========onNodeClick    data==========  ')
-                // console.log(data)
             },
             removeItem (item, parent) {
                 this.$refs.tree.removeItem(item, parent)
