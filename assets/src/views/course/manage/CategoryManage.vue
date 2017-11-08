@@ -54,17 +54,13 @@
         </section>
 
         <section class="right-container">
-            <div v-show="fetchParam.pid != 0">
+            <div >
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改栏目</el-button>
                 <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'" >添加子栏目</el-button>
-
                 <el-button @click="moveSubCategory" disabled>移动栏目</el-button>
                 <el-button @click="moveSubCategoryContent" disabled>移动栏目下内容</el-button>
                 <el-button type="danger" @click="deleteCategory">删除栏目</el-button>
-            </div>
-
-            <div v-show="fetchParam.pid === 0">
-                <el-button type="primary">添加根节点</el-button>
+                <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">添加根节点</el-button>
             </div>
 
             <el-card class="edit-content">
@@ -109,7 +105,6 @@
                 <el-button type="primary" @click="dialogConfirm.confirmClick">确 定</el-button>
             </span>
         </el-dialog>
-
         <!--移动子栏目的弹出框-->
         <div class="el-dialog__wrapper" v-if="dialogTree.isShow">
             <article class="el-dialog el-dialog--tiny">
@@ -172,7 +167,7 @@
         },
         watch: {
             'activeTab'(val) {
-                if (val === 'add') {
+                if (val === 'add'||val === 'root') {
                     this.resetForm()
                 }
             },
@@ -185,15 +180,15 @@
             // 删除栏目
             deleteCategory (){
                 let node = this.nodeSelected
+                // console.log( node.value)
                 if (node && node.children) {
                     xmview.showTip('warning', '该栏目下还有子栏目,不能被删除')
                     return
                 }
-
                 this.dialogConfirm.isShow = true
                 this.dialogConfirm.msg = `是否确认删除栏目 <i style="color:red">${node.label}</i> 吗？`
                 this.dialogConfirm.confirmClick = () => {
-                    courseService.delete_cate({id: node.value}).then(() => {
+                    courseService.delete_cate( node.value).then(() => {
                         xmview.showTip('success', '操作成功!')
                         this.$refs.courseCategory.removeItem(node, this.nodeParentSelected)
                         node = null
@@ -206,17 +201,13 @@
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
                 // console.log('===========   node.data.data==========  ')
-                // console.log(node.data)
-                if (type == 1) {
-                    if (this.nodeSelected && this.nodeSelected.value === data.value) return
+                // console.log(node)
+                if (type == 1) { 
+                    // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
                     this.nodeParentSelected = node.parent// 记录父节点
-                    this.nodeSelected = data // 记录当前节点
+                    this.nodeSelected = node // 记录当前节点
                     this.$refs.uploadImg.clearFiles()
-                    // this.fetchParam.name=node.data.data.name
-                    // this.fetchParam.id=node.data.data.id
-                    // this.fetchParam.ended=node.data.data.ended
-                    this.fetchParam=node.data.data   
-                    this.fetchParam.pid = data.value // 重新指向当前的id
+                    this.fetchParam = Object.assign({},node.data)  //解决左右数据
                     this.activeTab = 'edit'
                 } else if (type == 2) {
                     this.moveToNode = node
@@ -229,10 +220,14 @@
             },
             // 新建根节点
             addRootCategory () {
-                this.activeTab = 'add'
+                this.activeTab = 'root'
                 // 清空选中项
                 this.$refs.courseCategory.clearSelected()
                 this.fetchParam.pid = 0
+            },
+            // 清空选中项
+            clearSelected () {
+                this.selectable = false
             },
             // 提交表单
             submitForm () {
@@ -241,16 +236,12 @@
 
                     let p
                     if (this.activeTab === 'add'){
+                        this.fetchParam.pid =this.fetchParam.id  
                         p = courseService.create_cate(this.fetchParam)
                         
                     }
                     else{
-                        // console.log('=============this.fetchParam-------')
-                        // console.log(this.fetchParam)
-                        // console.log('=============this.nodeSelected.item-------')
-                        // console.log( this.nodeSelected.item)
                         p = courseService.update_cate(this.fetchParam)
-                        //提交的pid = id  所以它就变成主栏
                     }
 
                     p.then((ret) => {
@@ -349,7 +340,6 @@
             ended: void 0,
         }
     }
-
 
 
 </script>

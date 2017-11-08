@@ -115,7 +115,10 @@
                 // if (data.value == 0) return
                 // this.selectable = true
             },
-
+            // 清空选中项
+            clearSelected () {
+                this.selectable = false
+            },
 
 
             // removeItem (item, parent) {
@@ -176,10 +179,7 @@
             //         this.$forceUpdate()
             //     })
             // },
-            // 清空选中项
-            clearSelected () {
-                this.selectable = false
-            },
+    
         },
         components: {}
     }

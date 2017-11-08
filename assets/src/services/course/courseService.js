@@ -83,10 +83,10 @@ class CourseService {
     }
 
      // 更新
-    update_cate({ id, name, image, category_type, sort, ended, disabled }) {
+    update_cate({ id, name, image, category_type, sort, ended, disabled, pid }) {
         alert('update_cate')
         let url = `${urlPre}/category/edit/${id}`
-        return api.post(url, { name, image, category_type, sort, ended, disabled }).then(ret => {
+        return api.post(url, { name, image, category_type, sort, ended, disabled, pid }).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }
@@ -129,7 +129,8 @@ class CourseService {
     }
     // 删除
     delete_cate(id) {
-        let url = `${urlPre}/category/delete/${id}/`
+        let url = `${urlPre}/category/delete/${id}`
+        console.log(url)
         return api.get(url, {}).then(ret => {
             if (ret.code == 0) {
                 xmview.showTip('success',ret.message)
