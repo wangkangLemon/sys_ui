@@ -56,6 +56,7 @@
                         model:v.model,
                         path:v.path,
                         level:v.level,
+                        image:v.image,
                         children: []
                     })
                 }
@@ -71,6 +72,7 @@
                                 model:v.model,
                                 path:v.path,
                                 level:v.level,
+                                image:v.image,
                                 children: []
                             })
                         }

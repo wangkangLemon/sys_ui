@@ -102,7 +102,7 @@
         watch: {
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
- 
+                console.log(this.$store.state.index.secMenu)
             }
         },
         activated() {
