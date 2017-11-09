@@ -12,7 +12,7 @@ class CompanyService {
         category = 'agent', // 类型： self 我是工业，agent 我是代理
         status = -1,   // 状态：-1 全部，0 关联中，1 待确认，2 已拒绝，3 已解除，4 已放弃
         page = 1,
-        page_size = 10,
+        pagesize = 10,
     }) {
         let finalUrl = `${urlPre}/search/`
         return api.get(finalUrl, {
@@ -21,7 +21,7 @@ class CompanyService {
             category,
             status,
             page,
-            page_size,
+            pagesize,
         }, false).then((ret) => {
             return ret.data
         })

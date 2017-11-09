@@ -33,7 +33,7 @@
                 </el-table-column>
             </el-table>
     
-            <el-pagination class="pagin" @size-change="val => fetchParam.page_size=val" @current-change="val => fetchParam.page = val" :current-page="fetchParam.page" :page-size="fetchParam.page_size" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+            <el-pagination class="pagin" @size-change="val => fetchParam.pagesize=val" @current-change="val => fetchParam.page = val" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
             </el-pagination>
     
         </main>
@@ -57,7 +57,7 @@ export default {
                 file_name: void 0,
                 status: 0,
                 page: 1,
-                page_size: 15,
+                pagesize: 15,
             }
         }
     },
@@ -65,7 +65,7 @@ export default {
         'fetchParam.page'() {
             this.fetchData()
         },
-        'fetchParam.page_size'() {
+        'fetchParam.pagesize'() {
             this.fetchData()
         },
         'value'(val) {

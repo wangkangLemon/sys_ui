@@ -88,7 +88,7 @@
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
         </div>
 
-        <el-pagination class="pagin" @size-change="val => fetchParam.page_size = val " @current-change="val => fetchParam.page = val" :current-page="fetchParam.page" :page-size="fetchParam.page_size" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total"></el-pagination>
+        <el-pagination class="pagin" @size-change="val => fetchParam.pagesize = val " @current-change="val => fetchParam.page = val" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total"></el-pagination>
 
         <!--视频编辑 弹窗-->
         <el-dialog :title="dialogEdit.title" v-model="dialogEdit.isShow">
@@ -140,7 +140,7 @@ function getFetchParam() {
         status: void 0,
         keyword: void 0,
         page: 1,
-        page_size: 15,
+        pagesize: 15,
         time_start: '',
         time_end: ''
     }
@@ -168,7 +168,7 @@ export default {
         }
     },
     watch: {
-        'fetchParam.page_size'() {
+        'fetchParam.pagesize'() {
             this.fetchData()
         },
         'fetchParam.page'() {

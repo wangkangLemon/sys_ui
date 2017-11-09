@@ -45,7 +45,6 @@ class cateService {
     // 更新
     edit({ id, pid, name, image, model, path, sort }) {
         let url = `${urlPre}/edit/${id}`
-        console.log('edit======================')
         return api.post(url, { pid, name, image, model, path,sort }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)

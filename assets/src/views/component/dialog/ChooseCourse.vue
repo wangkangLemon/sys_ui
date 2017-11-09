@@ -32,11 +32,11 @@
             </el-table>
             <div class="block">
                 <el-pagination
-                        @size-change="val => {page_size = val; getCourse()}"
+                        @size-change="val => {pagesize = val; getCourse()}"
                         @current-change="val => {page = val; getCourse()}"
                         :total="total"
                         :current-page="page"
-                        :page-size="page_size"
+                        :page-size="pagesize"
                         :page-sizes="[15, 30, 60, 100]"
                         layout="total, sizes, prev, pager, next">
                 </el-pagination>
@@ -84,7 +84,7 @@
                 },
                 data: [],
                 page: 1,
-                page_size: 10,
+                pagesize: 10,
                 total: 0
             }
         },
@@ -112,7 +112,7 @@
                 //     sender_type: 'system',
                 //     status: 0,
                 //     page: this.page,
-                //     page_size: this.page_size
+                //     pagesize: this.pagesize
                 // }).then((ret) => {
                 //     this.data = ret.data
                 //     this.total = ret.total

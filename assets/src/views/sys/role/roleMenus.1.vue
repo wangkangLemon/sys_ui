@@ -76,7 +76,7 @@
             </el-table-column>
         </el-table>
 
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.page_size" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -96,7 +96,7 @@ function getFetchParam() {
     return {
         status: void 0, //  1-禁用 0-正常
         page: 1,
-        page_size: 15,
+        pagesize: 15,
     }
 }
 
@@ -141,7 +141,7 @@ export default {
             }
         },
         handleSizeChange(val) {
-            this.fetchParam.page_size = val
+            this.fetchParam.pagesize = val
             this.fetchData()
         },
         fetchData(val) {

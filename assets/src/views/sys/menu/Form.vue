@@ -32,9 +32,14 @@
             <el-form-item label="菜单标识" prop="menu_node">
                 <el-input v-model.mobile="fetchParam.menu_node"></el-input>
             </el-form-item>
-            <el-form-item label="父级菜单id"  prop="pid">
-                <el-input v-model.email="fetchParam.pid" type="number" ></el-input>
+            <el-form-item label="父级名称" prop="pid" :fetch-suggestions="querySearch">
+                <el-select v-model="fetchParam.pid" placeholder="请输入父级名称">
+                    <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.menu_name" :value="item.id"></el-option>
+                </el-select>
             </el-form-item>
+            <!--<el-form-item label="父级菜单" prop="pid">
+                <MenuFatherCategory type="course" :placeholder="fetchParam.menu_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.pid"></MenuFatherCategory>
+            </el-form-item>-->
             <el-form-item label="菜单层级" prop="level">
                 <el-input v-model.password="fetchParam.level" type="number"></el-input>
             </el-form-item>
@@ -54,10 +59,12 @@
 </template>
 
 <script>
-    import sysService from '../../../services/sys/menuService.js'
+    import menuService from '../../../services/sys/menuService.js'
     import config from '../../../utils/config'
+    // import MenuFatherCategory from '../../component/select/MenuFatherCategory.vue'
     export default {
         name: 'sys-form',
+        // components: { MenuFatherCategory },
         data() {
             return {
                 imgUrl: '',
@@ -69,27 +76,34 @@
                 },
                 fetchParam: getOriginData(),
                 resultData: [],
-                role_list:[],
+                drop_list:[],
             }
         },
         created() {
             xmview.setContentLoading(false);
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
-                    sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
+                    menuService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
-                        // console.log(ret)
-                        // this.fetchParam.role_id = ret.course.role_id
                     })
                 }    
             this.loadingData=false;
+            this.getDropval()
         },
         methods: {
+            //获取父级菜下拉列表
+            getDropval(){
+                menuService.fetchData().then((ret)=>{
+                console.log(ret.data)
+                 this.drop_list=ret.data;
+                })
+            },
+
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
-                    let req = sysService.create
+                    let req = menuService.create
                     console.log(this.$route.params.sys_id)
-                    if (this.$route.params.sys_id) req = sysService.update
+                    if (this.$route.params.sys_id) req = menuService.update
                     req(this.fetchParam).then((ret) => {
                         console.log(ret)
                         // 重置当前数据
@@ -107,6 +121,13 @@
                     })
                 })
             },
+              //拿到父级菜单
+            querySearch(queryString, cb) {
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据返回建议列表的数据
+                cb(results);
+            },
         }
     }
 
@@ -117,7 +138,7 @@
             menu_node:'',
             remark:'',
             sort: 0,
-            pid: 0,
+            pid: null,
             level: 0,
         }
     }

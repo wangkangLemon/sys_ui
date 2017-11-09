@@ -10,7 +10,7 @@ class CompanyService {
     // category - 0-企业 1-工业 2-连锁
     getIndrustrySelectList ({
                                 category = '',
-                                page_size = '',
+                                pagesize = '',
                                 page = '',
                                 province = '',
                                 city = '',
@@ -23,7 +23,7 @@ class CompanyService {
         return api.get(finalUrl, {
             category,
             page,
-            page_size,
+            pagesize,
             province,
             city,
             area,
@@ -131,9 +131,9 @@ class CompanyService {
     }
 
     // 企业管理员查询接口
-    companyAdmin ({keyword, company_id, page, page_size}) {
+    companyAdmin ({keyword, company_id, page, pagesize}) {
         let finalUrl = `${urlPre}/${company_id}/admin/search`
-        return api.get(finalUrl, {keyword, page, page_size}).then((ret) => {
+        return api.get(finalUrl, {keyword, page, pagesize}).then((ret) => {
             return ret.data
         })
     }
@@ -151,14 +151,14 @@ class CompanyService {
     // 获取公告列表
     getAnnounceList ({
                          page = '',
-                         page_size = '',
+                         pagesize = '',
                          company_id = '',
                          keyword = '',
                          status = '',
                          type = ''
                      }) {
         let finalUrl = `${urlPre}/announce/search`
-        return api.get(finalUrl, {page, page_size, company_id, keyword, status, type}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, company_id, keyword, status, type}).then((ret) => {
             return ret.data
         })
     }
@@ -166,10 +166,10 @@ class CompanyService {
     // 拿药练习
     getMedicineList ({
                          page = '',
-                         page_size = ''
+                         pagesize = ''
                      }) {
         let finalUrl = config.apiHost + '/sys/medicine/company/search'
-        return api.get(finalUrl, {page, page_size}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize}).then((ret) => {
             return ret.data
         })
     }
@@ -177,10 +177,10 @@ class CompanyService {
     // 课程任务
     getCourseTaskList ({
                            page = '',
-                           page_size = ''
+                           pagesize = ''
                        }) {
         let finalUrl = config.apiHost + '/sys/coursetask/company/search'
-        return api.get(finalUrl, {page, page_size}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize}).then((ret) => {
             return ret.data
         })
     }
@@ -198,10 +198,10 @@ class CompanyService {
                                    category_id = '',
                                    title = '',
                                    page = '',
-                                   page_size = ''
+                                   pagesize = ''
                                }) {
         let finalUrl = config.apiHost + '/sys/coursetask/template/search'
-        return api.get(finalUrl, {category_id, title, page, page_size}).then((ret) => {
+        return api.get(finalUrl, {category_id, title, page, pagesize}).then((ret) => {
             return ret.data
         })
     }
@@ -313,10 +313,10 @@ class CompanyService {
     // 统计列表
     getStatList ({
                      page = '',
-                     page_size = ''
+                     pagesize = ''
                  }) {
         let finalUrl = `${urlPre}/analytics/grow/search`
-        return api.get(finalUrl, {page, page_size}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize}).then((ret) => {
             return ret.data
         })
     }
@@ -330,14 +330,14 @@ class CompanyService {
     // 审计列表
     getAuditList ({
                       page = '',
-                      page_size = '',
+                      pagesize = '',
                       keyword = '',
                       status = '',
                       time_start = '',
                       time_end = ''
                   }) {
         let finalUrl = `${urlPre}/audit/search`
-        return api.get(finalUrl, {page, page_size, keyword, status, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, keyword, status, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }
@@ -367,7 +367,7 @@ class CompanyService {
     // 获取企业签约信息接口
     getCompanySignList ({
                             page,
-                            page_size,
+                            pagesize,
                             keyword = '',
                             isdepartment = '',
                             isuser = '',
@@ -381,7 +381,7 @@ class CompanyService {
         let finalUrl = `${urlPre}/sign/search`
         return api.get(finalUrl, {
             page,
-            page_size,
+            pagesize,
             keyword,
             isdepartment,
             isuser,
@@ -457,7 +457,7 @@ class CompanyService {
     // 管理员活跃情况
     getCompanyManage({
                          page,
-                         page_size,
+                         pagesize,
                          name = '',
                          user_name = '',
                          company_id,
@@ -466,7 +466,7 @@ class CompanyService {
                          time_end = '',
                      }) {
         let finalUrl = `${urlPre}/login/search`
-        return api.get(finalUrl, {page, page_size, name, user_name, company_id, role, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, name, user_name, company_id, role, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }
@@ -481,12 +481,12 @@ class CompanyService {
     // 企业活跃情况
     getCompanyStat ({
                       page,
-                      page_size,
+                      pagesize,
                       store_id,
                       stat_date,
                   }) {
         let finalUrl = `${urlPre}/stat/search`
-        return api.get(finalUrl, {page, page_size, store_id, stat_date}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, store_id, stat_date}).then((ret) => {
             return ret.data
         })
     }
@@ -494,13 +494,13 @@ class CompanyService {
     // 企业活跃情况 详细内容
     getCompanyStatView ({
                         page,
-                        page_size,
+                        pagesize,
                         store_id,
                         start_date,
                         end_date,
                     }) {
         let finalUrl = `${urlPre}/stat/search/company`
-        return api.get(finalUrl, {page, page_size, store_id, start_date, end_date}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, store_id, start_date, end_date}).then((ret) => {
             return ret.data
         })
     }
@@ -551,7 +551,7 @@ class CompanyService {
     // 获取公告统计列表
     getCompanyAnnounce({
                          page,
-                         page_size,
+                         pagesize,
                          company_id,
                          department_id,
                          type,
@@ -559,7 +559,7 @@ class CompanyService {
                          time_end = '',
                      }) {
         let finalUrl = `${urlPre}/app/announce/search`
-        return api.get(finalUrl, {page, page_size, company_id, department_id, type, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, company_id, department_id, type, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }
@@ -587,14 +587,14 @@ class CompanyService {
     // 获取课程任务统计列表
     getCompanyCourseTask({
                            page,
-                           page_size,
+                           pagesize,
                            company_id,
                            department_id,
                            time_start = '',
                            time_end = '',
                        }) {
         let finalUrl = `${urlPre}/app/coursetask/search`
-        return api.get(finalUrl, {page, page_size, company_id, department_id, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, company_id, department_id, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }
@@ -620,14 +620,14 @@ class CompanyService {
     // 获取拿药练习统计列表
     getCompanyMedicineTask({
                              page,
-                             page_size,
+                             pagesize,
                              company_id,
                              department_id,
                              time_start = '',
                              time_end = '',
                          }) {
         let finalUrl = `${urlPre}/app/medicinetask/search`
-        return api.get(finalUrl, {page, page_size, company_id, department_id, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, company_id, department_id, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }
@@ -635,13 +635,13 @@ class CompanyService {
     // 获取启动图统计列表
     getCompanyStartLogo({
                                page,
-                               page_size,
+                               pagesize,
                                company_id,
                                time_start = '',
                                time_end = '',
                            }) {
         let finalUrl = `${urlPre}/app/startlogo/search`
-        return api.get(finalUrl, {page, page_size, company_id, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, company_id, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }
@@ -649,13 +649,13 @@ class CompanyService {
     // 获取资讯统计列表
     getCompanyArticle({
                             page,
-                            page_size,
+                            pagesize,
                             company_id,
                             time_start = '',
                             time_end = '',
                         }) {
         let finalUrl = `${urlPre}/app/article/search`
-        return api.get(finalUrl, {page, page_size, company_id, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, company_id, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }
@@ -671,13 +671,13 @@ class CompanyService {
     // 获取小应用统计列表
     getCompanyAppList({
                           page,
-                          page_size,
+                          pagesize,
                           company_id,
                           time_start = '',
                           time_end = '',
                       }) {
         let finalUrl = `${urlPre}/app/companyapp/search`
-        return api.get(finalUrl, {page, page_size, company_id, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, company_id, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }

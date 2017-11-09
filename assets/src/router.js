@@ -231,7 +231,7 @@ function clearObj(obj) {
         for (let i = 0; i < obj.length; i++) clearObj(obj[i])
     } else {
         for (let k in obj) {
-            if (k !== 'page' && k !== 'page_size') obj[k] = void 0
+            if (k !== 'page' && k !== 'pagesize') obj[k] = void 0
         }
     }
 }

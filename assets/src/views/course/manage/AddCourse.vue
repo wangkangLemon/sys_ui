@@ -70,18 +70,25 @@
             <el-tab-pane label="课程信息" name="first">
                 <el-form label-width="120px" ref="formFirst" :rules="rulesFirst" :model="fetchParam">
                     <el-form-item label="所属栏目" prop="category_id">
-                        <!--<CourseCategorySelect type="course" :placeholder="fetchParam.name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>-->
                         <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
                     </el-form-item>
                     <el-form-item label="课程名称" prop="course_name">
                         <el-input v-model="fetchParam.course_name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="课程类别">
+                        <el-select v-model="fetchParam.type" placeholder="请选择">
+                            <el-option label="私有课程" value="private"></el-option>
+                            <el-option label="公开课程" value="public"></el-option>
+                            <el-option label="工业课程" value="industry"></el-option>
+                            <el-option label="政府课程" value="gov"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="课程封面图" prop="image">
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
                         <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
                     </el-form-item>
                     <el-form-item label="课程类型">
-                        <el-select v-model="fetchParam.material_type" @change="typeChange" placeholder="请选择" :clearable="true">
+                        <el-select v-model="fetchParam.material_type" @change="typeChange" placeholder="请选择" >
                             <el-option label="视频" value="video"></el-option>
                             <el-option label="WORD" value="doc"></el-option>
                             <el-option label="PPT" value="ppt"></el-option>
@@ -245,10 +252,14 @@ export default {
         }
     },
  
-    activated() {
+    created() {
         this.uploadDocUrl = courseService.getCourseDocUploadUrl()
         this.uploadImgUrl = courseService.commonUploadImage()
+    
+        //编辑页面 
         if (this.$route.params.courseInfo) {
+            alert(this.$route.params.courseInfo)
+            this.activeTab= 'first'
             this.fetchParam = this.$route.params.courseInfo
             console.log(this.$route.params.courseInfo)
             
@@ -257,6 +268,8 @@ export default {
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')
         } else if (this.$route.query.contentid) {
+            alert(this.$route.params.courseInfo)
+            this.activeTab= 'first'
             courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
                 this.fetchParam = ret.course
                 this.fetchParam.course_name= this.$route.params.courseInfo.course_name
@@ -266,10 +279,12 @@ export default {
                 xmview.showTip('error', ret.message)
             })
         }
+ 
         this.$route.params.tab && (this.activeTab = this.$route.params.tab)
         this.readonly = this.$route.params.readonly
         xmview.setContentLoading(false)
     },
+
     watch: {
         'fetchParam.need_testing'(val) {
             if (val == 1) { // 需要考试
@@ -281,17 +296,19 @@ export default {
             }
         },
         'activeTab'(val) {
-            if (val === 'second' && this.fetchTesting.length < 1 && this.fetchParam.contentid) {
+            console.log(this.fetchTesting)
+            // if (val === 'second' && this.fetchTesting.length < 1 && this.fetchParam.contentid) {
+            if (val === 'second'  && this.fetchParam.contentid) {
                 xmview.setContentLoading(true)
                 courseService.getTestingInfo({ course_id: this.fetchParam.contentid }).then((data) => {
                     this.fetchTesting = data
-                    // this.fetchTesting.forEach((item) => {
-                    //     if (item.category == 1) {
-                    //         item.options.forEach((optionItem, index) => {
-                    //             if (optionItem.correct == 1) item.correct = index
-                    //         })
-                    //     }
-                    // })
+                    this.fetchTesting.forEach((item) => {
+                        if (item.category == 1) {
+                            item.options.forEach((optionItem, index) => {
+                                if (optionItem.correct == 1) item.correct = index
+                            })
+                        }
+                    })
                     xmview.setContentLoading(false)
                 })
             }
@@ -342,7 +359,7 @@ export default {
         },
         // 图片裁切成功回调
         cropperImgSucc(imgData) {
-            courseService.commonUploadImageBase({ image: imgData }).then((ret) => {
+            courseService.commonUploadImageBase({ image: imgData ,extpath:''}).then((ret) => {
                 this.fetchParam.image = ret.url
             })
         },
@@ -437,7 +454,9 @@ function getOrignData() {
         name: void 0, //栏目名称	
         image: void 0,
         tags: void 0,
-        material_type: void 0,
+        gov:void 0, 
+        type: void 0, // 课程类别 private,public,industry,gov
+        material_type: void 0, //教材类型	video,doc,ppt,pdf
         material_id: void 0,
         material_name: '选择视频',
         albumid: void 0,

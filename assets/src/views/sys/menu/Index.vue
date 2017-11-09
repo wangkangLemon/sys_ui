@@ -70,12 +70,12 @@
                     <el-tag v-else>禁用</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column min-width="200" prop="pid" label="父级菜单id">
+            <!--<el-table-column min-width="200" prop="pid" label="父级菜单id">
+            </el-table-column>-->
+            <el-table-column min-width="100" prop="level" label="菜单层级">
             </el-table-column>
-            <el-table-column min-width="200" prop="level" label="菜单层级">
-            </el-table-column>
-            <el-table-column min-width="200" prop="remark" label="标记">
-            </el-table-column>
+            <!--<el-table-column min-width="200" prop="remark" label="标记">
+            </el-table-column>-->
             <el-table-column fixed="right" width="207" label="操作">
                 <template scope="scope">
                     <!--<el-button @click="preview(scope.$index, scope.row)" type="text" size="small">预览</el-button>-->
@@ -97,7 +97,7 @@
             </el-table-column>
         </el-table>
 
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.page_size" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -116,7 +116,7 @@ function getFetchParam() {
     return {
         status: void 0, //  1-禁用 0-正常
         page: 1,
-        page_size: 15,
+        pagesize: 15,
     }
 }
 
@@ -161,7 +161,7 @@ export default {
             }
         },
         handleSizeChange(val) {
-            this.fetchParam.page_size = val
+            this.fetchParam.pagesize = val
             this.fetchData()
         },
         fetchData(val) {

@@ -4,10 +4,11 @@ const urlPre = config.apiHost + '/section/data'
 
 class dataService {
     //拿到区块列表
-    fetchData (data) {
+    fetchData () {
         let url = urlPre + '/lists'
-        return api.post(url,data).then(ret => {
+        return api.post(url,).then(ret => {
             if (ret.code == 0) {
+                console.log(ret)
                 return ret
             } else {
                 return Promise.reject(ret)

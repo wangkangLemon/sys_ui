@@ -27,7 +27,7 @@
                 return adminService.adminList({
                     keyword: val,
                     page: parseInt(length / this.pageSize) + 1,
-                    page_size: this.pageSize
+                    pagesize: this.pageSize
                 })
             },
             handleChange(val) {

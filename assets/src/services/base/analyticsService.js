@@ -6,13 +6,13 @@ class AnalyticsService {
     // 导出查询
     getExportList ({
         page,
-        page_size,
+        pagesize,
         status = '',
         time_start = '',
         time_end = ''
     }) {
         let finalUrl = `${urlPre}/export/search`
-        return api.get(finalUrl, {page, page_size, status, time_start, time_end}).then((ret) => {
+        return api.get(finalUrl, {page, pagesize, status, time_start, time_end}).then((ret) => {
             return ret.data
         })
     }

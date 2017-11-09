@@ -119,10 +119,10 @@
         </div>
 
         <el-pagination class="pagin"
-                       @size-change="val => fetchParam.page_size = val "
+                       @size-change="val => fetchParam.pagesize = val "
                        @current-change="val => fetchParam.page = val"
                        :current-page="fetchParam.page"
-                       :page-size="fetchParam.page_size"
+                       :page-size="fetchParam.pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">
@@ -194,7 +194,7 @@
                 selectedIds: [],
                 fetchParam: {
                     page: 1,
-                    page_size: 15,
+                    pagesize: 15,
                     keyword: void 0,
                     time_start: void 0,
                     time_end: void 0
@@ -205,7 +205,7 @@
                     total: 0,
                     data: [],
                     page: 1,
-                    page_size: 15,
+                    pagesize: 15,
                     keyword: void 0,
                     loading: false,
                     data4Selected: [],
@@ -216,7 +216,7 @@
             }
         },
         watch: {
-            'fetchParam.page_size'() {
+            'fetchParam.pagesize'() {
                 this.fetchData()
             },
             'fetchParam.page'() {
@@ -325,7 +325,7 @@
                 courseService.getPublicCourselist({
                     album_id: 0,
                     page: this.dialogAdd.page,
-                    page_size: this.dialogAdd.page_size,
+                    pagesize: this.dialogAdd.pagesize,
                     keyword: this.dialogAdd.keyword
                 }).then((ret) => {
                     if (isFirst)

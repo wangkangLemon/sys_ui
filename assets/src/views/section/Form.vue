@@ -31,9 +31,11 @@
                 </el-form-item>
                 <el-form-item v-else >
                 </el-form-item>
-                <el-form-item label="栏目id" prop="category_id">
-                    <el-input v-model.name="fetchParam.category_id" type="number"></el-input>
-                </el-form-item>
+                <el-form-item label="栏目菜单" prop="name" :fetch-suggestions="querySearch">
+                <el-select v-model="fetchParam.name" placeholder="请输入栏目菜单">
+                    <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.category_name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
                 <el-form-item label="引用类型" prop="ref_type">
                     <el-input v-model.mobile="fetchParam.ref_type"></el-input>
                 </el-form-item>
@@ -58,9 +60,9 @@
                         </label>
                     </div>
                 </div>
-                <el-form-item label="引用id"  prop="ref_id">
-                    <el-input v-model.email="fetchParam.ref_id" type="number" ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="引用id"  prop="ref_id">
+                    <el-input v-model.email="fetchParam.ref_id" disabled></el-input>
+                </el-form-item>-->
                 <el-form-item label="标题" prop="title">
                     <el-input v-model.title="fetchParam.title"></el-input>
                 </el-form-item>
@@ -73,12 +75,9 @@
                 <el-form-item label="描述" prop="desc">
                     <el-input v-model.desc="fetchParam.desc"></el-input>
                 </el-form-item>
-                <el-form-item label="日期字符串" prop="date">
+                <el-form-item label="日期" prop="date">
                     <el-input v-model.date="fetchParam.date" type="date"></el-input>
                 </el-form-item>
-                <!--<el-form-item label="标签" prop="tags">
-                    <el-input v-model.address="fetchParam.tags"></el-input>
-                </el-form-item>-->
                 <el-form-item label="标签">
                     <vTags v-model.tags="courseTags"></vTags>
                 </el-form-item>
@@ -117,9 +116,12 @@
                 },
                 fetchParam: getOriginData(),
                 resultData: [],
-                role_list:[],
+                drop_list:[],
                 courseTags: [],
             }
+        },
+        created () {
+            this.getDropval()
         },
         activated () {
             xmview.setContentLoading(false);
@@ -127,15 +129,34 @@
                     console.log('进入了编辑')
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
+                        this.fetchParam.name=ret.category_name
                         this.courseTags = ret.tags.split(',')
                     })
                 }else{
                     this.fetchParam = getOriginData()
                 }    
             this.loadingData=false;
-            // console.log('this.$route.params.sys_id='+ this.$route.params.sys_id )
+            setTimeout(v=>{
+            this.getDropval()
+
+            })
+            
         },
         methods: {
+            //获取栏目菜单下拉列表
+            getDropval(){
+                sysService.fetchData().then((ret)=>{
+                console.log(ret.data)
+                 this.drop_list=ret.data;
+                })
+            },
+            //拿到栏目菜单
+            querySearch(queryString, cb) {
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据返回建议列表的数据
+                cb(results);
+            },
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
@@ -147,8 +168,8 @@
                         console.log(this.fetchParam)
 
                     req(this.fetchParam).then((ret) => {
-                        console.log(111111111111)
-                        console.log(this.fetchParam)
+                        // console.log(111111111111)
+                        // console.log(this.fetchParam)
                         // 重置当前数据
                         xmview.showTip('success', '数据提交成功')
                         this.$refs['form'].resetFields();
@@ -180,7 +201,8 @@
             tags:'', 
             tags_color:'', 
             sort:0,
-            courseTags:[]
+            courseTags:[],
+            name:''
         }
     }
 

@@ -45,7 +45,7 @@
             fetchData (val, length) {
                 let keyword = val
                 let page = parseInt(length / this.pageSize) + 1
-                return courseService.getAlbumList({keyword, page, page_size: this.pageSize})
+                return courseService.getAlbumList({keyword, page, pagesize: this.pageSize})
             }
         }
     }

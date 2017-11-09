@@ -186,7 +186,7 @@
                        @size-change="handlePageSizeChange"
                        @current-change="handlePageChange"
                        :current-page="fetchParams[currTab].page"
-                       :page-size="fetchParams[currTab].page_size"
+                       :page-size="fetchParams[currTab].pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">
@@ -202,7 +202,7 @@
     function getFetchParam (category) {
         return {
             page: 1,
-            page_size: 15,
+            pagesize: 15,
             time_start: void 0,
             time_end: void 0,
             keyword: void 0,
@@ -255,7 +255,7 @@
                 this.fetchData()
             },
             handlePageSizeChange (val) {
-                this.fetchParams[this.currTab].page_size = val
+                this.fetchParams[this.currTab].pagesize = val
                 this.fetchData()
             },
             handlePageChange (val) {

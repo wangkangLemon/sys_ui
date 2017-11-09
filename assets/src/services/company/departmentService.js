@@ -12,7 +12,7 @@ class DepartmentService {
         city = 0,
         area = 0,
         page = 1,
-        page_size = 10,
+        pagesize = 10,
     }) {
         let finalUrl = `${urlPre}/search/`
         return api.get(finalUrl, {
@@ -23,7 +23,7 @@ class DepartmentService {
             city,
             area,
             page,
-            page_size,
+            pagesize,
         }, false).then((ret) => {
             return ret.data
         })

@@ -4,9 +4,9 @@ import config from '../../utils/config'
 const urlPre = config.apiHost + '/course/doc'
 
 class DocService {
-    getDocList({ page, page_size, keyword, file_type, time_start, time_end }) {
+    getDocList({ page, pagesize, keyword, file_type, time_start, time_end }) {
         let url = `${urlPre}/search`
-        return api.get(url, { page, page_size, keyword, file_type, time_start, time_end }).then((ret) => {
+        return api.get(url, { page, pagesize, keyword, file_type, time_start, time_end }).then((ret) => {
             return ret.data
         })
     }

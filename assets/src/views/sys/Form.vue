@@ -154,11 +154,14 @@
                     xmview.showTip('error', ret.message)
                 })
             },
+            
+            //获取角色组下拉列表
             getrole(val){
                 role_mService.fetchData().then((ret)=>{
                  this.role_list=ret.data;
                 })
             },
+
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return

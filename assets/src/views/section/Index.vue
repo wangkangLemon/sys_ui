@@ -76,7 +76,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.page_size" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import sysService from '../../services/section/dataService.js'
+import dataService from '../../services/section/dataService.js'
 import DateRange from '../component/form/DateRangePicker.vue'
 import cateService from '../../services/section/cateService.js'
 
@@ -96,7 +96,7 @@ function getFetchParam() {
     return {
         // status: void 0, //  1-禁用 0-正常
         page: 1,
-        page_size: 15,
+        pagesize: 15,
     }
 }
 
@@ -160,11 +160,11 @@ export default {
             }
         },
         handleSizeChange(val) {
-            this.fetchParam.page_size = val
+            this.fetchParam.pagesize = val
             this.fetchData()
         },
         fetchData(val) {
-            return sysService.fetchData(this.fetchParam).then((ret) => {
+            return dataService.fetchData(this.fetchParam).then((ret) => {
                 // console.log(ret.data)
                 this.dataCache = ret.data
                 this.loadingData = false
@@ -172,7 +172,7 @@ export default {
             })
         },
         search(val){
-               return sysService.search(this.fetchParam).then((ret) => {
+               return dataService.search(this.fetchParam).then((ret) => {
                 alert('success')
             })
         },      
@@ -188,7 +188,7 @@ export default {
         // 单条删除
         del(index, row) {
             xmview.showDialog(`你将要删除第 <span style="color:red">${row.id}</span> 条数据,  此操作不可恢复确认吗?`, () => {
-                sysService.delete(row.id).then(() => {
+                dataService.delete(row.id).then(() => {
                     this.dataCache.splice(index, 1)//删除选中项
                     row.deleted = 1
                     xmview.showTip('success', '操作成功')
@@ -198,7 +198,7 @@ export default {
         // 批量删除
         delMulti() {
             xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
-                sysService.deleteMulty(this.selectedIds.join(',')).then(() => {
+                dataService.deleteMulty(this.selectedIds.join(',')).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.dialogTree.isShow = false
                     setTimeout(() => {

@@ -108,7 +108,7 @@
         </el-table>
 
         <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
-            :page-size="fetchParam.page_size" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -129,7 +129,7 @@
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
             category: void 0, // 3- 供应商
             page: 1,
-            page_size: 15,
+            pagesize: 15,
             time_start: void 0,
             time_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
@@ -167,7 +167,7 @@
                 this.fetchData()
             },
             handleSizeChange(val) {
-                this.fetchParam.page_size = val
+                this.fetchParam.pagesize = val
                 this.fetchData()
             },
             fetchData(val) {

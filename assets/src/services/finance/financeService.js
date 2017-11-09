@@ -9,7 +9,7 @@ class FinanceService {
         keyword = '',
         category = '',
         page = 1,
-        page_size = 10,
+        pagesize = 10,
     }) {
         let finalUrl = `${urlPre}/search/`
         return api.get(finalUrl, {
@@ -17,7 +17,7 @@ class FinanceService {
             keyword,
             category,
             page,
-            page_size,
+            pagesize,
         }, false).then((ret) => {
             return ret.data
         })

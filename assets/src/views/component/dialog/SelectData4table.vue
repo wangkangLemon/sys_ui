@@ -89,7 +89,7 @@
                 currSelectedList: this.selectedList,
                 fetchParam: {
                     page: 1,
-                    page_size: 15,
+                    pagesize: 15,
                 },
                 total: 0,
                 data: [],

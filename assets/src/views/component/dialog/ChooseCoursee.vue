@@ -45,7 +45,7 @@
                         @current-change="coursePageChange"
                         :total="total"
                         :current-page="page"
-                        :page-size="page_size"
+                        :page-size="pagesize"
                         :page-sizes="[15, 30, 60, 100]"
                         layout="total, sizes, prev, pager, next">
                 </el-pagination>
@@ -71,7 +71,7 @@
                 },
                 data: [],
                 page: 1,
-                page_size: 10,
+                pagesize: 10,
                 total: 0,
                 material_type: {
                     video: '视频',
@@ -101,7 +101,7 @@
             },
             // 课程分页
             courseSizeChange (val) {
-                this.page_size = val
+                this.pagesize = val
                 this.getCourse()
             },
             courseConfirm (item) {
@@ -114,7 +114,7 @@
                     keyword: this.search.keyword,
                     category_id: this.search.category_id,
                     page: this.page,
-                    page_size: this.page_size
+                    pagesize: this.pagesize
                 }).then((ret) => {
                     this.data = ret.data
                     this.total = ret.total

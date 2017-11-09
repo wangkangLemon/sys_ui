@@ -66,10 +66,10 @@ class VideoService {
 
     //------------------------
     // 获取视频
-    //{ gov_id, material_id, title, page, page_size, create_start, create_end, status }
-    getVideo( gov_id, material_id, title, page, page_size, create_start, create_end, status ) {
+    //{ gov_id, material_id, title, page, pagesize, create_start, create_end, status }
+    getVideo( gov_id, material_id, title, page, pagesize, create_start, create_end, status ) {
         let url = `${urlPre}/lists`
-        return api.get(url, gov_id, material_id, title, page, page_size, create_start, create_end, status ).then((ret) => {
+        return api.get(url, gov_id, material_id, title, page, pagesize, create_start, create_end, status ).then((ret) => {
             console.log(ret)
             return ret.data
         })
@@ -85,7 +85,7 @@ class VideoService {
     updateVideo({ file_name, gov_id, tags, cover, duration, material_id }) {
         gov_id = gov_id || authUtils.getUserInfo().gov_id
         alert(2)
-        let url = `${urlPre}/${material_id}`
+        let url = `${urlPre}/edit/${material_id}`
         return api.post(url, { file_name, gov_id: gov_id, tags, cover, duration })
     }
 

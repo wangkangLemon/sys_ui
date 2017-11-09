@@ -67,7 +67,6 @@ class CourseService {
     }
     // 创建
     create_cate({ name, sort, category_type, pid, ended, image }) {
-        alert('create_cate')
         let reqParam = { name, sort, category_type, pid, ended, image }
         if (pid === 0) delete reqParam['pid']
         let url = urlPre + '/category/create'
@@ -84,7 +83,6 @@ class CourseService {
 
      // 更新
     update_cate({ id, name, image, category_type, sort, ended, disabled, pid }) {
-        alert('update_cate')
         let url = `${urlPre}/category/edit/${id}`
         return api.post(url, { name, image, category_type, sort, ended, disabled, pid }).then(ret => {
             if (ret.code) {
@@ -95,7 +93,6 @@ class CourseService {
 
         // 修改栏目
     updateCategory({ govid, type, name, image, sort, id }) {
-        alert('updateCategory')
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
         return api.post(finalUrl, { type, name, image, sort })
@@ -110,6 +107,8 @@ class CourseService {
     //         return ret.data
     //     })
     // }
+
+    
         // 移动栏目
     moveCategory({ id, to }) {
         // govid = govid || authUtils.getUserInfo().company_id
@@ -147,15 +146,15 @@ class CourseService {
     // 获取课程下拉列表
     courseList(keyword, page, pageSize) {
         let url = `${urlPre}/search/name`
-        return api.get(url, { keyword, page, page_size: pageSize }).then(ret => {
+        return api.get(url, { keyword, page, pagesize: pageSize }).then(ret => {
             return ret.data
         })
     }
 
-    // 获取公开课列表 { course_name = '', status, category_id , time_start, time_end, page, page_size }
-    getPublicCourselist({ course_name = '', status, category_id , time_start, time_end}) {
+    // 获取公开课列表 { course_name = '', status, category_id , time_start, time_end, page, pagesize }
+    getPublicCourselist({ course_name = '', status, category_id , time_start, time_end, page, pagesize}) {
         let url = urlPre + '/lists'
-        return api.get(url, { course_name, status, category_id, time_start, time_end }, false).then(ret => {
+        return api.get(url, { course_name, status, category_id, time_start, time_end, page, pagesize }, false).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -187,10 +186,10 @@ class CourseService {
         })
     }
     // 修改课程
-    editCourse({ govid, contentid, category_id, course_name, image, tags, material_type, material_id, description, need_testing, status, limit_time, limit_repeat, score_pass }) {
+    editCourse({ govid, contentid, category_id, course_name, image, tags, type, material_type, material_id, description, need_testing, status, limit_time, limit_repeat, score_pass }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/edit/${contentid}`
-        return api.post(finalUrl, { category_id, course_name, image, tags, material_type, material_id, description, need_testing, limit_time, status, limit_repeat, score_pass }).then((ret) => {
+        return api.post(finalUrl, { category_id, course_name, image, tags, type, material_type, material_id, description, need_testing, limit_time, status, limit_repeat, score_pass }).then((ret) => {
             return ret.data
         })
     }
@@ -210,7 +209,7 @@ class CourseService {
     // }
     // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)  =====直接传图
     commonUploadImage() { 
-        return `${config.apiHost}/com/course/image`
+        return `${config.apiHost}/common/upload/file`
     }
 
 
@@ -218,12 +217,25 @@ class CourseService {
     // 公共添加编辑课程上传图片  ---传base64
     commonUploadImageBase({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
         
-        let url = `${config.apiHost}/common/upload/file`
+        let url = `${config.apiHost}/common/upload/base64`
         return api.post(url, {image, alias, biz, extpath}).then((ret) => {
             xmview.showTip('success',ret.message)
             return ret.data
         })
     }
+
+
+
+    // // 公共添加编辑课程上传图片  ---传base64
+    // commonUploadImageBase({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
+        
+    //     let url = `${config.apiHost}/common/upload/file`
+    //     return api.post(url, {image, alias, biz, extpath}).then((ret) => {
+    //         xmview.showTip('success',ret.message)
+    //         return ret.data
+    //     })
+    // }
+
 
     // 添加编辑课程上传图片  ---传base64
     uploadCover4addCourse({ image, alias = Date.now() + '.jpg' }) {
@@ -265,10 +277,10 @@ class CourseService {
     }
 
     // // 弹出框请求的视频列表
-    // getVideo4Dialog({ govid, status, keyword, page, page_size }) {
+    // getVideo4Dialog({ govid, status, keyword, page, pagesize }) {
     //     govid = govid || authUtils.getUserInfo().company_id
     //     let finalUrl = `${config.apiHost}/com/${govid}/course/video/search`
-    //     return api.get(finalUrl, { keyword, status, page, page_size })
+    //     return api.get(finalUrl, { keyword, status, page, pagesize })
     // }
 
     // 获取文档上传url
@@ -283,8 +295,6 @@ class CourseService {
     getTestingInfo({ course_id }) {
         // govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/subject/listoptions`
-        
-        alert(1)
         return api.get(finalUrl,{ course_id }).then((ret) => {
             // console.log(ret)
             return ret.data
@@ -309,10 +319,10 @@ class CourseService {
     // ============================================= 专辑 开始 ======================================================
     
     // 获取专辑
-    getAlbumList({ govid, page, page_size, keyword, time_start, time_end }) {
+    getAlbumList({ govid, page, pagesize, keyword, time_start, time_end }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/com/${govid}/course/album/search`
-        return api.get(finalUrl, { page, page_size, keyword, time_start, time_end }).then((ret) => {
+        return api.get(finalUrl, { page, pagesize, keyword, time_start, time_end }).then((ret) => {
             return ret.data
         })
     }

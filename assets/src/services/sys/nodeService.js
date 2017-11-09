@@ -9,8 +9,6 @@ class sysService {
         return api.post(url,{
         }).then(ret => {
             if (ret.code == 0) {
-                // console.log(11111111111111111111111111)
-                // console(ret)
                 return ret
             } else {
                 return Promise.reject(ret)

@@ -163,7 +163,7 @@
                        @size-change="handleSizeChange"
                        @current-change="handleCurrentChange"
                        :current-page="fetchParam.page"
-                       :page-size="fetchParam.page_size"
+                       :page-size="fetchParam.pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">
@@ -210,8 +210,9 @@
             category_id: void 0, // 栏目id
             course_name:'',
             type:'',
-            page: 1,
-            page_size: 15,
+            page:  1,
+            pagesize: 15,
+            level: void 0,
             time_start: void 0,
             time_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
@@ -233,11 +234,9 @@
                 }
             }
         },
-        created () {
-//            this.fetchData()
-        },
         activated () {
             this.fetchData()
+            xmview.setContentLoading(false)
         },
         methods: {
             initFetchParam() {
@@ -248,7 +247,7 @@
                 this.fetchData()
             },
             handleSizeChange (val) {
-                this.fetchParam.page_size = val
+                this.fetchParam.pagesize = val
                 this.fetchData()
             },
             fetchData (val) {

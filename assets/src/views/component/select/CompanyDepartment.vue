@@ -30,7 +30,7 @@
                 return departmentService.getDepartment({
                     keyword: val,
                     company_id: this.type,
-                    page_size: this.pageSize,
+                    pagesize: this.pageSize,
                     page: parseInt(length / this.pageSize) + 1
                 })
             },

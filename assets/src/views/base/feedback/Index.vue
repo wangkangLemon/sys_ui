@@ -68,7 +68,7 @@
                        @size-change="handleSizeChange"
                        @current-change="handleCurrentChange"
                        :current-page="fetchParam.page"
-                       :page-size="fetchParam.page_size"
+                       :page-size="fetchParam.pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">
@@ -94,7 +94,7 @@
                     status: void '',
                     category_id: void 0,
                     page: 1,
-                    page_size: 15,
+                    pagesize: 15,
                     time_start: void '',
                     time_end: void ''
                 }
@@ -115,7 +115,7 @@
                 this.fetchData()
             },
             handleSizeChange (val) {
-                this.fetchParam.page_size = val
+                this.fetchParam.pagesize = val
                 this.fetchData()
             },
             fetchData (val) {

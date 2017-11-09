@@ -24,7 +24,7 @@
     //         fetchData (val, length) {
     //             return providerService.getSelectList({
     //                 keyword: val,
-    //                 page_size: this.pageSize,
+    //                 pagesize: this.pageSize,
     //                 page: parseInt(length / this.pageSize) + 1
     //             })
     //         },
