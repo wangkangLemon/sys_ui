@@ -46,9 +46,9 @@
         <section class="manage-container">
             <el-button type="primary" icon="plus" @click="$router.push({ name:'course-manage-addCourse'})"><i>添加课程</i>
             </el-button>
-            <el-button type="warning" icon="menu" @click="$router.push({name:'course-manage-course-category-manage'})">
+            <!--<el-button type="warning" icon="menu" @click="$router.push({name:'course-manage-course-category-manage'})">
                 <i>管理栏目</i>
-            </el-button>
+            </el-button>-->
         </section>
 
         <article class="search">

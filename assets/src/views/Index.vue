@@ -202,7 +202,8 @@
                 </el-dropdown>
                 <el-dropdown trigger="click" @command="handleNickname">
                       <span class="el-dropdown-link nickname">
-                        <img :src="{url: userInfo.avatar, sex: userInfo.sex} | defaultAvatar"> {{userInfo.name}} <i
+                        <!--<img :src="{url: userInfo.avatar, sex: userInfo.sex} | defaultAvatar"> {{userInfo.name}} <i-->
+                        <img :src="{url: userInfo.avatar, sex: userInfo.sex} | defaultAvatar"> {{userInfo}} <i
                               class="el-icon-caret-bottom el-icon--right"></i>
                       </span>
                     <el-dropdown-menu slot="dropdown" class="nickname-dropdown">
