@@ -111,13 +111,11 @@ class sysService {
 
     //菜单
     //拿到数据 
-    fetchDataM ( id ) {
+    fetchDataM ( {id, pagesize}) {
         let url = urlPre_menu + '/lists'
-        console.log()
-        return api.get(url,{ role_id : id
+        return api.get(url,{ role_id : id, pagesize
         }).then(ret => {
             if (ret.code == 0) {
-                console.log( ret)
                 return ret
             } else {
                 return Promise.reject(ret)

@@ -37,6 +37,15 @@
 import sysService from '../../../services/sys/menuService.js'
 import roleService from '../../../services/sys/roleService.js'
 
+function getFetchParam() {
+    return {
+        status: void 0, //  1-禁用 0-正常
+        pagesize: -1,
+        level:-1,
+        pid:-1
+    }
+}
+
 export default {
 
     data() {
@@ -48,6 +57,9 @@ export default {
             selectedIds: [],  // 被选中的数据id集合
             checkAll: false,
             checkedMenus: [],
+            fetchParam: getFetchParam(),
+            // fetchParam: getFetchParam(),
+
             }
     },
     activated () {
@@ -69,26 +81,26 @@ export default {
         //总的数据     
         fetchData(val) {
             return sysService.fetchData(this.fetchParam).then((ret) => {
-                console.log('全部的菜单======')
-                console.log(ret.data)
+                // console.log('全部的菜单======')
+                // console.log(ret.data)
                 this.dataCache = ret.data 
                 this.loadingData = false
                 this.checkAll = this.checkedMenus.length === this.dataCache.length;
                 xmview.setContentLoading(false)     
             })
         },
-        //授权部分开始
+        //此角色已授权的菜单 - 授权部分开始
         fetchDataM(){
             console.log(this.$route.params.role_id)
-            return roleService.fetchDataM(this.$route.params.role_id).then((ret) => {
+            return roleService.fetchDataM({id:this.$route.params.role_id, pagesize :-1}).then((ret) => {
                 this.dataImp = ret.data
                 var arr = []
                 ret.data.forEach(v=>{
                     arr.push(v.menu_id)
                 })
                 this.checkedMenus = arr    
-                console.log('此角色已授权的菜单有======')
-                console.log(ret.data)
+                // console.log('此角色已授权的菜单有======')
+                // console.log(ret.data)
                 this.checkAll = this.checkedMenus.length === this.dataCache.length;
                 this.loadingData = false
                 xmview.setContentLoading(false)     
@@ -96,8 +108,6 @@ export default {
         },
         createM(){
             let ids=this.checkedMenus.join(',')
-            console.log(111111111111111)
-            console.log(ids)
             roleService.createM(this.$route.params.role_id,ids).then((ret) => {
                 this.fetchParamImp = ret
                 console.log(ret)

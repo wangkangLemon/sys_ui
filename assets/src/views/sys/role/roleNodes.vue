@@ -37,6 +37,15 @@
 import sysService from '../../../services/sys/menuService.js'
 import roleService from '../../../services/sys/roleService.js'
 
+function getFetchParam() {
+    return {
+        status: void 0, //  1-禁用 0-正常
+        pagesize: -1,
+        level:-1,
+        pid:-1
+    }
+}
+
 export default {
 
     data() {
@@ -48,11 +57,14 @@ export default {
             selectedIds: [],  // 被选中的数据id集合
             checkAll: false,
             checkedMenus: [],
+            fetchParam: getFetchParam(),
+            // fetchParam: getFetchParam(),
+
             }
     },
     activated () {
         this.fetchData()
-        this.fetchDataN()
+        this.fetchDataM()
     },
     methods: {
         //全选反选按钮
@@ -80,7 +92,7 @@ export default {
         //授权部分开始
         fetchDataN(){
             console.log(this.$route.params.role_id)
-            return roleService.fetchDataN(this.$route.params.role_id).then((ret) => {
+            return roleService.fetchDataN({id:this.$route.params.role_id, pagesize :-1}).then((ret) => {
                 this.dataImp = ret.data
                 var arr = []
                 ret.data.forEach(v=>{
