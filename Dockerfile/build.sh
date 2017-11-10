@@ -50,7 +50,7 @@ function run_docker_push(){
 
 
 # 执行
-cp -rf ${PRJ_ROOT}/../public ${PRJ_ROOT}/dist
+cp -rf ${PRJ_ROOT}/../public ${PRJ_ROOT}/
 cp -rf ${PRJ_ROOT}/../version.txt ${PRJ_ROOT}/
 
 run_docker_build
