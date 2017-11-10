@@ -151,7 +151,8 @@
             email: '',
             password: '',
             address: '',
-            id: 0
+            id: 0,
+
         }
     }
 

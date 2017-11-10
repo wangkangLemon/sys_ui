@@ -102,12 +102,12 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    width="190"
+                    width="150"
                     prop="create_time_name"
                     label="创建时间">
             </el-table-column>
             <el-table-column
-                    width="150"
+                    width="180"
                     label="操作">
                 <template scope="scope">
                     <el-button @click="preview(scope.$index, scope.row)" type="text" size="small"

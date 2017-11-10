@@ -74,7 +74,6 @@ class cateService {
     // // 公共添加编辑课程上传图片  ---传base64
     commonUploadImageBase(image,  biz='section', extpath='category') {
         let url = `${config.apiHost}/common/upload/file`
-        alert(url)
         return api.post(url, image,  biz, extpath).then((ret) => {
             xmview.showTip('success',ret.message)
             return ret.data

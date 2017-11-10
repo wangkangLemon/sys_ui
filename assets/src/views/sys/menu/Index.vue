@@ -117,6 +117,7 @@ function getFetchParam() {
         status: void 0, //  1-禁用 0-正常
         page: 1,
         pagesize: 15,
+        
     }
 }
 
@@ -176,7 +177,6 @@ export default {
         },
         search(val){
                return sysService.search(this.fetchParam).then((ret) => {
-                alert('success')
             })
         },      
         // 单行被选中

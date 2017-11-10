@@ -173,7 +173,6 @@ export default {
         },
         search(val){
                return dataService.search(this.fetchParam).then((ret) => {
-                alert('success')
             })
         },      
         // 单行被选中

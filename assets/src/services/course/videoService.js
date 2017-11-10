@@ -84,7 +84,6 @@ class VideoService {
     // 修改视频
     updateVideo({ file_name, gov_id, tags, cover, duration, material_id }) {
         gov_id = gov_id || authUtils.getUserInfo().gov_id
-        alert(2)
         let url = `${urlPre}/edit/${material_id}`
         return api.post(url, { file_name, gov_id: gov_id, tags, cover, duration })
     }

@@ -216,7 +216,6 @@
             // 图片上传完毕
             handleImgUploaded (response) {
                 this.fetchParam.image = response.data.url
-                alert( response.data.url)
             },
             // 新建根节点
             addRootCategory () {

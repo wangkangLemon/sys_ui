@@ -62,6 +62,9 @@
                     <span v-else-if="scope.row.role_id==2">系统管理员</span>
                     <span v-else-if="scope.row.role_id==3">编辑人员</span>
                     <span v-else-if="scope.row.role_id==4">实习生</span>
+                    <span v-else-if="scope.row.role_id==6">普通管理员</span>
+                    <span v-else-if="scope.row.role_id==7">设计师</span>
+                    <span v-else-if="scope.row.role_id==8">高级设计师</span>
                 </template>
             </el-table-column>
             <el-table-column min-width="200" prop="mobile" label="手机">
@@ -117,7 +120,7 @@ function getFetchParam() {
     return {
         status: void 0, //  1-禁用 0-正常
         page: 1,
-        pagesize: 3,
+        pagesize: 15,
         disabled:0,
     }
 }
@@ -179,7 +182,6 @@ export default {
         },
         search(val){
                return sysService.search(this.fetchParam).then((ret) => {
-                alert('success')
             })
         },      
         // 单行被选中

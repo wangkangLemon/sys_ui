@@ -31,16 +31,27 @@
                 </el-form-item>
                 <el-form-item v-else >
                 </el-form-item>
-                <el-form-item label="栏目菜单" prop="name" :fetch-suggestions="querySearch">
-                <el-select v-model="fetchParam.name" placeholder="请输入栏目菜单">
-                    <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.category_name" :value="item.id"></el-option>
+                <el-form-item label="栏目菜单" prop="category_id" :fetch-suggestions="querySearch">
+                <el-select v-model="fetchParam.category_id" placeholder="请输入栏目菜单">
+                    <el-option  v-for="item in drop_list" :key="item.id" :label="item.category_id + item.category_name" :value="item.id"></el-option>
                 </el-select>
-            </el-form-item>
-                <el-form-item label="引用类型" prop="ref_type">
-                    <el-input v-model.mobile="fetchParam.ref_type"></el-input>
                 </el-form-item>
-         
-                <div class="el-form-item">
+                <!--<el-form-item label="引用类型" prop="ref_type">
+                    <el-input v-model.mobile="fetchParam.ref_type"></el-input>
+                </el-form-item>-->
+                <el-form-item label="引用类型">
+                        <el-select v-model="fetchParam.ref_type" placeholder="请选择">
+                            <el-option label="课程类型" value="course"></el-option>
+                            <el-option label="引用类型" value="link"></el-option>
+                        </el-select>
+                    </el-form-item>
+                <el-form-item label="是否与引用同步" prop="ref_sync">
+                        <el-radio-group v-model="fetchParam.ref_sync">
+                            <el-radio :label="1">同步</el-radio>
+                            <el-radio :label="0">不同步</el-radio>
+                        </el-radio-group>
+                </el-form-item>
+                <!--<div class="el-form-item">
                     <label for="ref_sync" class="el-form-item__label" style="width: 120px;">
                         是否与引用同步
                     </label>
@@ -59,7 +70,7 @@
                             <span class="el-radio__label">不同步</span>
                         </label>
                     </div>
-                </div>
+                </div>-->
                 <!--<el-form-item label="引用id"  prop="ref_id">
                     <el-input v-model.email="fetchParam.ref_id" disabled></el-input>
                 </el-form-item>-->
@@ -67,7 +78,7 @@
                     <el-input v-model.title="fetchParam.title"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" prop="image">
-                    <el-input v-model.image="fetchParam.image"></el-input>
+                    <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl"  :onSuccess="handleImgUploaded"></UploadImg>
                 </el-form-item>
                 <el-form-item label="链接" prop="url">
                     <el-input v-model.url="fetchParam.url"></el-input>
@@ -100,10 +111,12 @@
     import sysService from '../../services/section/dataService.js'
     import config from '../../utils/config'
     import vTags from '../component/form/Tags.vue'
+    import UploadImg from '../component/upload/UploadImg.vue'
+    import courseService from '../../services/course/courseService.js'
     export default {
         name: 'sys-form',
         components: {
-            vTags,
+            vTags, UploadImg
         },
         data() {
             return {
@@ -118,6 +131,7 @@
                 resultData: [],
                 drop_list:[],
                 courseTags: [],
+                uploadImgUrl: '',
             }
         },
         created () {
@@ -139,13 +153,19 @@
             setTimeout(v=>{
             this.getDropval()
 
-            })
+        })
+        this.uploadImgUrl = courseService.getUploadCategoryImgUrl()
             
         },
         methods: {
+            // 图片上传完毕
+            handleImgUploaded (response) {
+                this.fetchParam.image = response.data.url
+                alert( response.data.url)
+            },
             //获取栏目菜单下拉列表
             getDropval(){
-                sysService.fetchData().then((ret)=>{
+                sysService.fetchData({pagesize:-1}).then((ret)=>{
                 console.log(ret.data)
                  this.drop_list=ret.data;
                 })
@@ -202,7 +222,7 @@
             tags_color:'', 
             sort:0,
             courseTags:[],
-            name:''
+            name:void 0,
         }
     }
 

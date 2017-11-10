@@ -258,7 +258,6 @@ export default {
     
         //编辑页面 
         if (this.$route.params.courseInfo) {
-            alert(this.$route.params.courseInfo)
             this.activeTab= 'first'
             this.fetchParam = this.$route.params.courseInfo
             console.log(this.$route.params.courseInfo)
@@ -268,7 +267,6 @@ export default {
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')
         } else if (this.$route.query.contentid) {
-            alert(this.$route.params.courseInfo)
             this.activeTab= 'first'
             courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
                 this.fetchParam = ret.course

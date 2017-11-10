@@ -168,7 +168,6 @@ export default {
         },
         search(val){
                return sysService.search(this.fetchParam).then((ret) => {
-                alert('success')
             })
         },      
         // 单行被选中

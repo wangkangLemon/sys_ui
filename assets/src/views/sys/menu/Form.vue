@@ -92,7 +92,7 @@
         methods: {
             //获取父级菜下拉列表
             getDropval(){
-                menuService.fetchData().then((ret)=>{
+                menuService.fetchData({pagesize:-1}).then((ret)=>{
                 console.log(ret.data)
                  this.drop_list=ret.data;
                 })

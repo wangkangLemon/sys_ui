@@ -48,26 +48,12 @@
             <el-form-item label="姓名" prop="name">
                 <el-input v-model.name="fetchParam.name"></el-input>
             </el-form-item>
-            <div class="el-form-item">
-                <label for="sex" class="el-form-item__label" style="width: 120px;">
-                    性别
-                </label>
-                <div class="el-form-item__content" style="margin-left: 120px;">
-                    <label class="el-radio radio">
-                    <span :class="{'el-radio__input':true,'is-checked':fetchParam.sex==1}">
-                        <span class="el-radio__inner"></span>
-                        <input type="radio" class="el-radio__original" value="1" name="sex" v-model="fetchParam.sex">
-                    </span>
-                    <span class="el-radio__label">男</span></label> 
-                    <label class="el-radio radio">
-                        <span :class="{'el-radio__input':true,'is-checked':fetchParam.sex==2}">
-                            <span class="el-radio__inner"></span>
-                            <input type="radio" class="el-radio__original" value="2" name="sex" v-model="fetchParam.sex">
-                        </span>
-                        <span class="el-radio__label">女</span>
-                    </label>
-                </div>
-            </div>
+            <el-form-item label="性别" prop="sex">
+                <el-radio-group v-model="fetchParam.sex">
+                    <el-radio :label="1">男</el-radio>
+                    <el-radio :label="2">女</el-radio>
+                </el-radio-group>
+            </el-form-item>
             <el-form-item label="手机号" prop="mobile">
                 <el-input v-model.mobile="fetchParam.mobile"></el-input>
             </el-form-item>
@@ -75,7 +61,7 @@
                 <el-input v-model.email="fetchParam.email"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-                <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""></el-input>
+                <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="price">
                 <el-input v-model.address="fetchParam.address"></el-input>

@@ -4,10 +4,9 @@ const urlPre = config.apiHost + '/menu'
 
 class sysService {
     //拿到数据 
-    fetchData () {
+    fetchData ({pagesize, page}) {
         let url = urlPre + '/lists'
-        return api.post(url,{
-        }).then(ret => {
+        return api.post(url,{pagesize, page}).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -42,9 +41,9 @@ class sysService {
     }
 
     // 更新
-    update({ id, menu_name, menu_node, remark, sort, pid, level }) {
+    update({ id, menu_name, menu_node, remark, sort, pid, level, disabled}) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, { menu_name, menu_node, remark, sort, pid, level }).then(ret => {
+        return api.post(url, { menu_name, menu_node, remark, sort, pid, level,disabled }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
