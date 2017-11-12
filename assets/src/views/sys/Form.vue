@@ -66,7 +66,7 @@
             <el-form-item label="地址" prop="price">
                 <el-input v-model.address="fetchParam.address"></el-input>
             </el-form-item>
-            <el-form-item label="">
+            <el-form-item label="" v-if="this.$route.params.sys_type">
                 <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
                 <el-button type="primary" @click="btnNextClick">确认</el-button>
             </el-form-item>
@@ -101,6 +101,8 @@
                 fetchParam: getOriginData(),
                 rules: {
                     role_id: { required: true, message: '请输入角色'},
+                    name: { required: true, message: '请输入姓名'},
+                    sex: { required: true },
                     mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
                     email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
                     password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入包含数字和字母且大于6位的密码', trigger: 'blur' },
@@ -168,6 +170,7 @@
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
+                        this.$router.push({'name': 'sys-index'})
                     })
                 })
             },
@@ -178,27 +181,7 @@
                 // 调用 callback 返回建议列表的数据返回建议列表的数据
                 cb(results);
             },
- 
-            // // 保存章节
-            // submitChapter() {
-            //     if (!this.chapter.value) return
-            //     if (this.resultData === null) this.resultData = []
-            //     this.resultData.push({
-            //         id: 0,
-            //         name: this.chapter.value,
-            //         sort: 0,
-            //         deleted: false,
-            //         status: 0,
-            //         lessons: [{
-            //             id: -1
-            //         }]
-            //     })
-            //     this.chapter.editStatus = false
-            // },
-            saveItemChapter(pitem, pindex) {
-                this.resultData[pindex].status = 0
-                this.$forceUpdate()
-            },
+      
             saveResult() {
                 let result = [{
                     id: 0,

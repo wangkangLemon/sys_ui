@@ -112,6 +112,7 @@
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
+                        this.$router.push({'name': 'role-index'})
                     })
                 })
             },

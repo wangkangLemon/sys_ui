@@ -112,6 +112,7 @@ function getFetchParam() {
         status: void 0, //  1-禁用 0-正常
         page: 1,
         pagesize: 15,
+        disabled: void 0, //以下几行代码不给disablied传参的话可不写
     }
 }
 
@@ -186,20 +187,29 @@ export default {
         // 禁用
         offline(index, row) {
             xmview.showDialog(`你将要禁用角色组 <span style="color:red">${row.role_name}</span> 确认吗?`, () => {
-                sysService.offline(row.id).then((ret) => {
-                    row.disabled = 1
+                row.disabled = 1
+                sysService.offline(row.role_name,row.id,row.disabled).then((ret) => {
                 })
             })
         },
         // 启用
         online(index, row) {
+            row.disabled = 0
             xmview.showDialog(`你将要启用角色组<span style="color:red">${row.role_name}</span> 确认吗?`, () => {
-                sysService.online(row.id).then((ret) => {
-                    row.disabled = 0
+                sysService.online(row.role_name,row.id,row.disabled).then((ret) => {
                 })
             })
         },
-        // 单条删除
+        // 
+        // // 启用
+        // online(index, row) {
+        //     xmview.showDialog(`你将要启用角色组<span style="color:red">${row.role_name}</span> 确认吗?`, () => {
+        //         sysService.online(row.id).then((ret) => {
+        //             row.disabled = 0
+        //         })
+        //     })
+        // },
+        // // 单条删除
         del(index, row) {
             xmview.showDialog(`你将要删除角色组 <span style="color:red">${row.role_name}</span>  此操作不可恢复确认吗?`, () => {
                 sysService.delete(row.id).then(() => {

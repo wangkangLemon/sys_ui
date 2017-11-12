@@ -48,8 +48,8 @@
             </el-form-item>
             <el-form-item label="备注" prop="remark">
                 <el-input v-model.address="fetchParam.remark"></el-input>
-            </el-form-item>
-            <el-form-item label="">
+            </el-form-item> 
+            <el-form-item label=""  v-if="this.$route.params.sys_type">
                 <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
                 <el-button type="primary" @click="btnNextClick">确认</el-button>
             </el-form-item>
@@ -118,6 +118,7 @@
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
+                        this.$router.push({'name': 'menu-index'})
                     })
                 })
             },
