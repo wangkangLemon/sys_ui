@@ -195,24 +195,22 @@ class CourseService {
     }
 
     // 上下线课程
-    offlineCourse({ govid, course_id, disabled }) {
+    offlineCourse({ govid, course_id, status }) {
         govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/sys/course/${course_id}/disable`
+        let finalUrl = `${config.apiHost}/course/edit/${course_id}`
         // console.log(finalUrl)
-        return api.post(finalUrl, { disabled })
+        return api.post(finalUrl, { status })
     }
 
     // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个 )
-    // getManageImgUploadUrl({ companyid } = {}) {   //=======commonUploadImageBase 
-    //     companyid = companyid || authUtils.getUserInfo().company_id
-    //     return `${config.apiHost}/com/${companyid}/course/image`
-    // }
-    // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)  =====直接传图
+        // getManageImgUploadUrl({ companyid } = {}) {   //=======commonUploadImageBase 
+        //     companyid = companyid || authUtils.getUserInfo().company_id
+        //     return `${config.apiHost}/com/${companyid}/course/image`
+        // }
+        // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)  =====直接传图
     commonUploadImage() { 
         return `${config.apiHost}/common/upload/file`
     }
-
-
 
     // 公共添加编辑课程上传图片  ---传base64
     commonUploadImageBase({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
@@ -224,17 +222,14 @@ class CourseService {
         })
     }
 
-
-
     // // 公共添加编辑课程上传图片  ---传base64
-    // commonUploadImageBase({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
-        
-    //     let url = `${config.apiHost}/common/upload/file`
-    //     return api.post(url, {image, alias, biz, extpath}).then((ret) => {
-    //         xmview.showTip('success',ret.message)
-    //         return ret.data
-    //     })
-    // }
+        // commonUploadImageBase({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
+        //     let url = `${config.apiHost}/common/upload/file`
+        //     return api.post(url, {image, alias, biz, extpath}).then((ret) => {
+        //         xmview.showTip('success',ret.message)
+        //         return ret.data
+        //     })
+        // }
 
 
     // 添加编辑课程上传图片  ---传base64
@@ -245,14 +240,10 @@ class CourseService {
         })
     }
 
-
-
-
-
     // 删除课程
     deleteCourse({ govid, course_id }) {
         govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/com/${govid}/course/${course_id}`
+        let finalUrl = `${config.apiHost}/course/delete/${course_id}`
         return api.del(finalUrl, {})
     }
 

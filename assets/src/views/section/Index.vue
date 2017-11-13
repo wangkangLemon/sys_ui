@@ -38,6 +38,7 @@
 <template>
     <article id="sys-index-container">
         <section class="manage-container">
+            
             <el-button type="primary" icon="plus" @click="$router.push({ name:'section-add', params:{sys_type:'add'}})">
                 <i>添加数据</i>
             </el-button>

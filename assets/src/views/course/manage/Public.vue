@@ -61,8 +61,9 @@
                 <i>状态</i>
                 <el-select v-model="fetchParam.status" placeholder="未选择"
                            @change="fetchData" :clearable="true">
+                    <el-option label="全部" value="-1"></el-option>
                     <el-option label="正常" value="0"></el-option>
-                    <el-option label="下线" value="1"></el-option>
+                    <el-option label="禁用 " value="1"></el-option>
                     <el-option label="视频转码中" value="2"></el-option>
                 </el-select>
             </section>
@@ -129,7 +130,7 @@
                 <template scope="scope">
                     <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
                     <el-tag v-else-if="scope.row.status == 2" type="primary">转码中</el-tag>
-                    <el-tag v-else>已下线</el-tag>
+                    <el-tag v-else>已禁用 </el-tag>
                 </template>
             </el-table-column>
             <el-table-column
@@ -148,7 +149,7 @@
                             type="text" size="small">编辑 <!--a-->
                     </el-button>
                     <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
-                        <i>{{ scope.row.status == 1 ? '上线' : '下线' }}</i>
+                        <i>{{ scope.row.status == 1 ? '正常 ' : '禁用 ' }}</i>
                     </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                     <el-button v-if="scope.row.subject_num > 0"
@@ -185,7 +186,6 @@
                     <CourseCategoryTree node-key="id"
                                         :onNodeClick="(data) => dialogTree.selectedId=data.value"></CourseCategoryTree>
                 </section>
-
                 <section class="el-dialog__footer">
                     <span class="dialog-footer">
                           <el-button @click="dialogTree.isShow = false">取 消</el-button>
@@ -216,7 +216,7 @@
             time_start: void 0,
             time_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
-            status: void 0, // 2- 视屏转码中 1-下线 0-正常
+            status: -1, // 2- 视屏转码中 1-下线 0-正常
         }
     }
     export default{
@@ -257,7 +257,9 @@
                     this.total = ret.total
                     this.loadingData = false
                     xmview.setContentLoading(false)
+                    // this.fetchParam.status = void -1;
                 })
+                
             },
             // 单行被选中
             selectRow (selection) {
@@ -272,7 +274,7 @@
                 let txt = row.status == 0 ? '下线' : '上线'
                 let finalStatus = row.status == 0 ? 1 : 0
                 xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
-                    courseService.offlineCourse({course_id: row.id, disabled: finalStatus}).then((ret) => {
+                    courseService.offlineCourse({course_id: row.contentid, status: finalStatus}).then((ret) => {
                         row.status = finalStatus
                     })
                 })
@@ -280,7 +282,7 @@
             // 单条删除
             del (index, row) {
                 xmview.showDialog(`你将要删除课程 <span style="color:red">${row.course_name}</span> 操作不可恢复确认吗?`, () => {
-                    courseService.deleteCourse({course_id: row.id}).then(() => {
+                    courseService.deleteCourse({course_id: row.contentid}).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.data.splice(index, 1)
                     })
