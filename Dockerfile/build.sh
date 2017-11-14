@@ -50,6 +50,9 @@ function run_docker_push(){
 
 
 # 执行
+if [ ! -d "${PRJ_ROOT}/public" ];then
+    rm -rf ${PRJ_ROOT}/public
+fi
 cp -rf ${PRJ_ROOT}/../public ${PRJ_ROOT}/
 cp -rf ${PRJ_ROOT}/../version.txt ${PRJ_ROOT}/
 
