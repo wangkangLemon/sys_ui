@@ -3,3 +3,4 @@ ERROR:root:version updated : [0.0.0.1] ---> [0.0.0.2]
 ERROR:root:version updated : [0.0.0.2] ---> [0.0.0.3]
 ERROR:root:shell execute have error! code: 256  cmd:
 GIT_POOL=`git remote -v  | grep push | awk '{print $2}' ` ; CUR_BRANCH=`git branch | grep \* | awk '{print $2}'`; git pull $GIT_POOL $CUR_BRANCH ; git push $GIT_POOL $CUR_BRANCH ; 
+ERROR:root:version updated : [0.0.0.3] ---> [0.0.0.4]
