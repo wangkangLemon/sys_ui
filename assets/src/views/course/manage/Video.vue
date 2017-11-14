@@ -128,7 +128,7 @@
                        @size-change="val => fetchParam.pagesize = val "
                        @current-change="val => fetchParam.page = val"
                        :current-page="fetchParam.page"
-                       :page-size="fetchParam.pagesize"
+                       :pagesize="fetchParam.pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">
@@ -174,13 +174,13 @@
     import UploadImg from '../../component/upload/UploadImg.vue'
 
     import config from '../../../utils/config.js'
-    import courseService from '../../../services/course/videoService.js'
+    import videoService from '../../../services/course/videoService.js'
 
     function getVideoModel () {
         return {
             material_id: void 0,
             file_name: '',
-            gov_id: void 0,
+            gov_id: 0,
             cover: void 0,
             duration: void 0,
             tags: [],
@@ -245,7 +245,7 @@
             }
         },
         created () {
-            this.uploadImgUrl = courseService.getUploadCoverUrl()
+            this.uploadImgUrl = videoService.getUploadCoverUrl()
         },
         activated () {
             this.fetchData().then(() => {
@@ -259,7 +259,7 @@
             },
             fetchData () {
                 this.loadingData = true
-                return courseService.getVideo().then((ret) => {
+                return videoService.getVideo(this.fetchParam).then((ret) => {
                     console.log(ret)
                     this.data = ret
                     this.total = ret.total
@@ -284,7 +284,7 @@
 
                 this.dialogAdd.confirmFn = () => {
                     console.log(this.videoModel)
-                    courseService.updateVideo(this.videoModel).then(() => {
+                    videoService.updateVideo(this.videoModel).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.fetchData()
                         this.dialogAdd.isShow = false
@@ -294,7 +294,7 @@
             del (index, row) {
                 xmview.showDialog(`你将要删除视频 <span style="color:red">${row.name}</span> 操作不可恢复确认吗?`, () => {
                     this.loadingData = true
-                    courseService.deleteVideo({id: row.id}).then(() => {
+                    videoService.deleteVideo({id: row.id}).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.data.splice(index, 1)
                         this.loadingData = false
@@ -306,7 +306,7 @@
             delMulti () {
                 xmview.showDialog(`你将要删除选中的视频，操作不可恢复确认吗?`, () => {
                     this.loadingData = true
-                    courseService.deleteVideoMulty({id: this.selectedIds.join(',')}).then(() => {
+                    videoService.deleteVideoMulty({id: this.selectedIds.join(',')}).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.fetchData() // 重新刷新数据
                     })
@@ -315,7 +315,7 @@
             // 预览视频
             preview (index, row) {
                 // 拿到播放地址
-                courseService.getVideoPreviewUrl(row.material_id).then((ret) => {
+                videoService.getVideoPreviewUrl(row.material_id).then((ret) => {
                     this.videoUrl = ret.video
                     this.row = row
                     this.$refs.videoPreview.show(row.file_name)
@@ -327,7 +327,7 @@
             },
             // 刷新视频状态
             refreshStatus (index, row) {
-                courseService.refreshVideoStatus({id: row.material_id}).then((ret) => {
+                videoService.refreshVideoStatus({id: row.material_id}).then((ret) => {
                     row.status = 0
                 })
             }

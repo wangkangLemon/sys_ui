@@ -26,13 +26,13 @@
 
                 <section>
                     <i>栏目分类</i>
-                    <Course-category-select :onchange="fetchData" ></Course-category-select>
+                    <Course-category-select :onchange="fetchData" v-model="fetchParam.category_id"></Course-category-select>
                 </section>
 
             </section>
             <el-table v-loading="loadingData" border :data="data" :highlight-current-row="true">
-                <el-table-column prop="category_name" label="课程"></el-table-column>
-                <el-table-column prop="gov_name" label="政府名称" width="200"></el-table-column>
+                <el-table-column prop="course_name" label="课程"></el-table-column>
+                <el-table-column prop="gov_name" label="企业" width="200"></el-table-column>
                 <el-table-column prop="material_type" label="类型" width="150">
                     <template scope="scope">
                         {{material_type[scope.row.material_type]}}
@@ -51,9 +51,9 @@
                         @size-change="courseSizeChange"
                         @current-change="coursePageChange"
                         :total="total"
-                        :current-page="page"
-                        :page-size="pagesize"
-                        :page-sizes="[15, 30, 60, 100]"
+                        :current-page="fetchParam.page"
+                        :page-size="fetchParam.pagesize"
+                        :page-sizes="[10, 20, 40, 100]"
                         layout="total, sizes, prev, pager, next">
                 </el-pagination>
             </div>
@@ -146,9 +146,9 @@
                 this.loadingData = true
                 // 获取课程数据
                 return courseService.getPublicCourselist({
-                    // keyword: this.search.keyword,
-                    page: this.page,
-                    pagesize: this.pagesize
+                    category_id: this.fetchParam.category_id,
+                    page: this.fetchParam.page,
+                    pagesize: this.fetchParam.pagesize
                 }).then((ret) => {
                     this.data = ret
                     this.total = ret.total

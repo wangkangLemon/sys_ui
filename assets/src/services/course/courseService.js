@@ -58,7 +58,7 @@ class CourseService {
         let url = urlPre + '/category/lists'
         return api.get(url, { id, name, category_type, pid, level, ended, disabled, page, pagesize }, false).then(ret => {
             if (ret.code == 0) {
-                console.log(ret)
+                // console.log(ret)
                 return ret.data
             } else {
                 return Promise.reject(ret)
@@ -129,7 +129,7 @@ class CourseService {
     // 删除
     delete_cate(id) {
         let url = `${urlPre}/category/delete/${id}`
-        console.log(url)
+        // console.log(url)
         return api.get(url, {}).then(ret => {
             if (ret.code == 0) {
                 xmview.showTip('success',ret.message)

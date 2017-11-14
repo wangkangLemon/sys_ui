@@ -223,7 +223,9 @@
                             // authUtils.setNavMenu(treeUtils.data.auth_menu) // 保存菜单
                             authUtils.setOperation(ret.auth_ops) // 保存权限信息
                             authUtils.setAuthToken(ret._exts.token) // 保存token
-                            authUtils.setUserInfo(ret.data.name) // 保存用户信息
+                            authUtils.setUserInfo(ret.data) // 保存用户信息
+                            // console.log('=========================')
+                            // console.log(ret.data)
                             xmview.showTip('success', '登录成功, 正在跳转...', 1e9)
                             setTimeout(() => {
                                 // 如果需要二次登录

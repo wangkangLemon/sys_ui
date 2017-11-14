@@ -51,9 +51,9 @@
                             <el-radio :label="0">不同步</el-radio>
                         </el-radio-group>
                 </el-form-item>
-                <el-form-item label="引用id"  prop="ref_id">
+                <!--<el-form-item label="引用id"  prop="ref_id">
                     <el-input v-model.email="fetchParam.ref_id" disabled></el-input>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item label="标题" prop="title">
                     <el-input v-model.title="fetchParam.title"></el-input>
                 </el-form-item>
@@ -66,12 +66,12 @@
                 <el-form-item label="描述" prop="desc">
                     <el-input v-model.desc="fetchParam.desc"></el-input>
                 </el-form-item>
-                <!--<el-form-item label="日期" prop="date">
+                <el-form-item label="日期" prop="date">
                     <el-input v-model.date="fetchParam.date" type="date"></el-input>
-                </el-form-item>-->
-                <el-form-item prop="date" label="日期">
-                    <el-date-picker v-model="fetchParam.date" type="date"/>
                 </el-form-item>
+                <!--<el-form-item prop="date" label="日期">
+                    <el-date-picker v-model="fetchParam.date" type="date"/>
+                </el-form-item>-->
                 <el-form-item label="标签">
                     <vTags v-model.tags="courseTags"></vTags>
                 </el-form-item>
@@ -169,7 +169,6 @@
                     // alert(req)
                     // console.log(this.$route.params.sys_id)
                         console.log(this.fetchParam)
-                        debugger
                     req(this.fetchParam).then((ret) => {
                         // console.log(111111111111)
                         // console.log(this.fetchParam)

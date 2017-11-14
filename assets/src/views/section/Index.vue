@@ -128,18 +128,33 @@
                 <i>添加数据</i>
             </el-button>
         </section>
-        <!--添加/编辑课程-->
+         <!--选取内容-->
+        <ChooseContent v-model="content.isShow" v-on:result="contentConfirm"></ChooseContent>
+
+        <!--添加/编辑内容课程-->
         <el-dialog v-model="addForm" :title="formTitle">
             <section v-if="form.ref_id">
                 <div class="keep" v-if="form.ref_sync"></div>
                 <div class="synchronize">
-
                     {{catArr[category]}}：{{category == 'course' ? form.content.course_name : form.content.title}}
                     <el-button @click="form.ref_sync = 0" v-if="form.ref_sync">关闭同步</el-button>
                     <el-button @click="keepSync" v-if="!form.ref_sync">开启同步</el-button>
                 </div>
             </section>
+
+<!--1 这是区块选取的栏目 -->   
+            <el-form  label-position="top" :rules="rules" >
+                <el-form-item label="栏目菜单"  :fetch-suggestions="querySearch">
+                    <el-select v-model="dialog.category_id" placeholder="请输入栏目菜单"> 
+                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            
+<!--2 这是课程类表选取的数据 -->
+
             <el-form label-position="top" class="addForm" :model="form" :rules="rules" ref="form">
+               
                 <el-form-item prop="course_name" label="标题" :label-width="formLabelWidth">
                     <el-input v-model="form.course_name" auto-complete="off"></el-input>
                 </el-form-item>
@@ -163,8 +178,8 @@
                 <el-form-item class="tag" label="标签" :label-width="formLabelWidth">
                     <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                 </el-form-item>
-                <el-form-item prop="date" label="日期" :label-width="formLabelWidth">
-                    <el-date-picker v-model="form.date" type="date" />
+                <el-form-item prop="adddate" label="日期" :label-width="formLabelWidth">
+                    <el-adddate-picker v-model="form.adddate" type="adddate" />
                 </el-form-item>
                 <el-form-item prop="sort" label="排序" :label-width="formLabelWidth">
                     <el-input v-model="form.sort" auto-complete="off" placeholder="排序越大越靠前，留空则自动设为最靠前的排序"></el-input>
@@ -175,8 +190,7 @@
                 <el-button type="primary" @click="submit('form')">确 定</el-button>
             </div>
         </el-dialog>
-        <!--选取-->
-        <ChooseContent v-model="content.isShow" v-on:result="contentConfirm"></ChooseContent>
+       
 
         <article class="search">
             <section>
@@ -192,9 +206,9 @@
             <el-table-column type="selection"></el-table-column>
             <el-table-column min-width="100" prop="id" label="区块id" v-if="data">
             </el-table-column>
-            <el-table-column min-width="100" prop="formdateName" label="栏目名称">
+            <el-table-column min-width="100" prop="formdateName" label="栏目名称"> 
             </el-table-column>
-            <el-table-column min-width="100" prop="ref_id" label="引用id">
+            <el-table-column min-width="100" prop="ref_sync"  :formatter="format" label="是否引用">  
             </el-table-column>
             <el-table-column min-width="400" prop="title" label="标题">
             </el-table-column>
@@ -231,6 +245,8 @@
     import DateRange from '../component/form/DateRangePicker.vue'
     import cateService from '../../services/section/cateService.js'
     import ChooseContent from '../component/choose/ChooseContent'
+    import courseService from '../../services/course/courseService.js'
+    import {date2Str} from '../../utils/timeUtils.js'
 
     function getFetchParam() {
         return {
@@ -247,6 +263,10 @@
         },
         data() {
             return {
+                dialog:{
+                    category_id: null, //栏目id   
+                },
+                drop_list:[],
                 init: false,
                 loadingData: false,
                 data: [], // 表格数据
@@ -277,6 +297,7 @@
                 },
                 category: 'course',
                 form: { // 表单属性值
+                    id: 0,
                     title: '', // 标题
                     url: '', // 链接地址
                     ref_type: '', // 引用类型
@@ -284,9 +305,10 @@
                     ref_sync: 0, // 是否与引用同步
                     image: '', // 图片
                     description: '', // 描述
-                    date: '', // 日期
+                    adddate: '', // 日期
                     sort: '', // 排序
-                    tags: ''
+                    tags: '',
+                    category_id: 0, //栏目id
                 },
                 tags: [{
                         name: '无',
@@ -306,7 +328,7 @@
                     }
                 ],
                 rules: {
-                    title: [{
+                    course_name: [{
                         required: true,
                         message: '标题不能为空',
                         trigger: 'blur'
@@ -315,34 +337,71 @@
                         required: true,
                         message: '链接不能为空',
                         trigger: 'blur'
+                    }],
+                    category_id:[{
+                        required: true,
                     }]
                 }
             }
         },
         activated() {
-            this.fetchData()
-            this.fetchCate()
+            this.fetchData() //获取课程栏目数据名称
+            this.fetchCate() //获取区块列表数据
+            this.getDropval() //区块栏目
         },
         created(){
         },
         methods: {
+            format(row, column, cellValue){
+              return row.ref_sync==1?'是':'否' 
+            },
+             //拿到栏目菜单
+            querySearch(queryString, cb) {
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据返回建议列表的数据
+                cb(results);
+            },
+             //获取栏目菜单下拉列表
+            getDropval(){
+                cateService.fetchData({pagesize:-1}).then((ret)=>{
+                console.log(ret.data)
+                 this.drop_list=ret.data;
+                })
+            },
             submit(form) { // 表单提交
-                this.form.section_id = this.section.currentID
-                this.form.date = this.form.date ? date2Str(this.form.date) : ''
+                // this.form.section_id = this.section.currentID
+                this.form.adddate = this.form.adddate ? date2Str(this.form.adddate) : ''
                 this.form.ref_type = this.form.ref_id ? this.category : 'link'
                 this.$refs[form].validate((valid) => {
                     if (valid) {
-                        let reqFn = sectionService.createSectionData
+                        let reqFn = dataService.create
                         let msg = '添加成功'
                         if (this.form.id) {
-                            reqFn = sectionService.updateSectionData
+                            reqFn = dataService.edit
                             msg = '修改成功'
                         }
-                        reqFn(this.form).then(() => {
+                        this.form.category_id =this.dialog.category_id
+                        console.log(this.form)
+                        reqFn({
+                             id : this.form.id, 
+                             category_id :this.form.category_id, 
+                             ref_type : this.form.ref_type, 
+                             ref_id : this.form.ref_id,  
+                             ref_sync : this.form.ref_sync,  
+                             title : this.form.course_name,  
+                             image : this.form.image, 
+                             url : this.form.url,  
+                             desc : this.form.description,  
+                             adddate : this.form.adddate,  
+                             tags : this.form.tags, 
+                             tags_color : this.form.tags_color, 
+                             sort : this.form.sort,  
+                        }).then((ret) => {
                             xmview.showTip('success', msg)
                             this.addForm = false
                             this.content.isShow = false
-                            this.getSectionData(this.section.currentID)
+                            // this.getSectionData(this.section.currentID)
                         }).catch((ret) => {
                             xmview.showTip('error', ret.message)
                         })
@@ -350,6 +409,7 @@
                         return false
                     }
                 })
+
             },
             toggleTag(value) {
                 this.form.tags = value
@@ -357,26 +417,32 @@
             // 保持同步
             keepSync() {
                 this.form.ref_sync = 1
-                this.form.title = this.form.content.course_name
+                this.form.course_name = this.form.content.course_name
                 this.form.image = this.form.content.image
                 this.form.description = this.form.content.description
-                this.form.date = this.form.content.create_time_name
+                this.form.adddate = this.form.content.adddate
                 this.form.sort = ''
             },
+            // 图片上传完毕
             handleImgUploaded(data, ext) {
-                sectionService.uploadSectionImage({
-                    section_id: this.section.currentID,
+                courseService.getUploadCategoryImgUrl({
+                    // section_id: this.section.currentID,
                     alias: Date.now() + ext,
                     image: data
                 }).then((ret) => {
                     this.form.image = ret.url
                 })
             },
+            
+            // handleImgUploaded (response) {
+            //     this.fetchParam.image = response.data.url
+            // },
             addCourse(form) {
                 if (this.section.loading || this.result.loading) {
                     return
                 }
                 this.form = {
+                    id: 0,
                     title: '',
                     url: '',
                     ref_type: '',
@@ -384,7 +450,7 @@
                     ref_sync: 0,
                     image: '',
                     description: '',
-                    date: '',
+                    adddate: '',
                     sort: '',
                     tags: ''
                 }
@@ -411,9 +477,10 @@
                 this.addForm = true
             },
             //弹窗内容
-            contentConfirm(dataObj) { // 点击确定的时候，进行搜索结果
+            contentConfirm(dataObj) { 
                 console.log(dataObj)
                 this.form.content = dataObj
+                // this.form.category_id = dataObj.category_id  
                 this.form.ref_id = dataObj.contentid
                 this.form.ref_sync = 1
                 this.form.tags = ''
@@ -423,7 +490,8 @@
                 this.addForm = true
             },
 
-            //获取栏目名称    
+            //获取栏目名称   
+            
             getCategory_name(id) {
                 let i = null
                 this.SecCateName.forEach(v => {
@@ -477,7 +545,7 @@
                 selection.forEach((item) => {
                     ret.push(item.id)
                 })
-                this.selectedIds = ret
+                this.selectedIds = ret  
             },
 
             // 单条删除

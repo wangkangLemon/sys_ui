@@ -114,7 +114,7 @@
             handleItemChange(val) {
                 if (val.length < 1) return
                 // 递归找到该项
-                console.log(val)
+                // console.log(val)
                 let currItem = treeUtils.findItem(this.options, val, 'value') //拿到当前项 
 
                 //if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
@@ -123,7 +123,7 @@
                     pid: val[val.length - 1],
                     level: -1,
                 }).then((ret) => {
-                    console.log(ret)
+                    // console.log(ret)
                     // this.options.forEach(v => {
                     //     if (v.value == val[val.length-1]) {
                     //         ret.forEach(retItem => {
@@ -144,7 +144,7 @@
                         v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组
                         return v
                     })
-                    console.log(currItem)
+                    // console.log(currItem)
 
                     currItem.children = arr
 

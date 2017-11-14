@@ -155,8 +155,11 @@ export default {
                 // 开始上传
                 // 格式化名称
                 var now = new Date()
+                console.log("========================================")
+                console.log(this.user)
+                console.log("========================================")
                 var name = [
-                    'gov', this.user.gov_id,
+                    'yxt', this.user.id,
                     now.getFullYear(), now.getMonth() + 1, now.getDate(),
                     [now.getHours(), now.getMinutes(), now.getSeconds(), (Math.random() + 1).toString(36).substring(7)].join('')
                 ].join('/') + this.extname(item.file)
