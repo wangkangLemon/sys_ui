@@ -1,2 +1,3 @@
 ERROR:root:version updated : [0.0.0.0] ---> [0.0.0.1]
 ERROR:root:version updated : [0.0.0.1] ---> [0.0.0.2]
+ERROR:root:version updated : [0.0.0.2] ---> [0.0.0.3]
