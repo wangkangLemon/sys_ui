@@ -38,7 +38,7 @@
 <template>
     <article id="sys-index-container">
         <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'setting-add'})">
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'setting-add',params:{sys_type:'add'}})">
                 <i>添加设置</i>
             </el-button>
         </section>
@@ -72,13 +72,13 @@
                 <template scope="scope">
                     <el-button @click="$router.push({name: 'setting-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">详情
                     </el-button>
-                    <el-button @click="$router.push({name: 'setting-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">编辑
+                    <el-button @click="$router.push({name: 'setting-edit', params: {roleInfo: scope.row, sys_id: scope.row.id, sys_type:'edit'}})" type="text" size="small">编辑
                     </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :pagesize="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->

@@ -100,9 +100,8 @@
                 xmview.setContentLoading(false)
                 })
             },
-            handleNodeClick (data, node, store) {
-                //点击
-                console.log(node.data)
+            handleNodeClick (data, node, store) { //点击
+                // console.log(node.data)
                 // if (node.data.ended) return
                     //     let currItem = treeUtils.findItem(this.data, node.data, 'value')   //拿到当前项 
                     //     var arr = []
@@ -123,7 +122,6 @@
 
                  // this.$emit('onNodeClick', {data, node, store})
                 this.onNodeClick(1, data, node, store) 
-
 
                 // // // 根节点无法被选中 
                 if (data.value == 0) return

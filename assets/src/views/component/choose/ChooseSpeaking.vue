@@ -3,7 +3,7 @@
     .search {
         @extend %top-search-container;
     }
-    .choose-course {
+    .choose-speaking {
         .block {
             text-align: center !important;
             width: 50%;
@@ -14,35 +14,26 @@
 </style>
 <template>
     <article>
-        <el-dialog class="choose-course main-container" title="选取课程" :visible.sync="curValue">
+        <el-dialog class="choose-speaking main-container" title="选取药我说" :visible.sync="curValue">
             <section class="search">
                 <section>
-                    <i>名称</i>
-                    <el-input @change="getCourse" v-model="search.keyword"></el-input>
-                </section>
-                <section>
-                    <i>栏目分类</i>
-                    <CourseCategorySelect v-model="search.category_id" :onchange="getCourse"></CourseCategorySelect>
+                    <i>标题</i>
+                    <el-input @change="getSpeaking" v-model="search.keyword"></el-input>
                 </section>
             </section>
             <el-table v-loading="loading" border :data="data" :highlight-current-row="true">
-                <el-table-column prop="name" label="课程"></el-table-column>
-                <el-table-column prop="company" label="企业" width="200"></el-table-column>
-                <el-table-column prop="material_type" label="类型" width="150">
-                    <template scope="scope">
-                        {{material_type[scope.row.material_type]}}
-                    </template>
-                </el-table-column>
+                <el-table-column prop="title" label="标题"></el-table-column>
+                <el-table-column prop="create_time" label="创建时间" width="150"></el-table-column>
                 <el-table-column prop="operate" label="类型" width="100">
                     <template scope="scope">
-                        <el-button type="text" @click="courseConfirm(scope.row)">选取</el-button>
+                        <el-button type="text" @click="speakingConfirm(scope.row)">选取</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <div class="block">
                 <el-pagination
-                        @size-change="courseSizeChange"
-                        @current-change="coursePageChange"
+                        @size-change="val => {pagesize = val; getSpeaking()}"
+                        @current-change="val => {page = val; getSpeaking()}"
                         :total="total"
                         :current-page="page"
                         :pagesize="pagesize"
@@ -54,31 +45,20 @@
     </article>
 </template>
 <script>
-    import courseService from '../../../services/course/courseService.js'
-    import CourseCategorySelect from '../../component/select/CourseCategory.vue'
+    import speakingService from '../../../services/speaking/contentService'
     export default {
         props: ['value'],
-        components: {
-            CourseCategorySelect
-        },
         data () {
             return {
                 curValue: this.value,
                 loading: false,
                 search: {
-                    keyword: '',
-                    category_id: ''
+                    keyword: ''
                 },
                 data: [],
                 page: 1,
                 pagesize: 10,
-                total: 0,
-                material_type: {
-                    video: '视频',
-                    doc: 'word文档',
-                    ppt: '幻灯片',
-                    pdf: 'PDF文件'
-                }
+                total: 0
             }
         },
         watch: {
@@ -91,28 +71,19 @@
             }
         },
         created () {
-            this.getCourse()
+            this.getSpeaking()
         },
         methods: {
-            // 课程当前页
-            coursePageChange (val) {
-                this.page = val
-                this.getCourse()
+            speakingConfirm (item) {
+                this.$emit('speakingResult', item)
             },
-            // 课程分页
-            courseSizeChange (val) {
-                this.pagesize = val
-                this.getCourse()
-            },
-            courseConfirm (item) {
-                this.$emit('result', item)
-            },
-            getCourse () {
+            getSpeaking () {
                 this.loading = true
                 // 获取课程数据
-                return courseService.getPublicCourselist({
+                return speakingService.search({
                     keyword: this.search.keyword,
-                    category_id: this.search.category_id,
+                    sender_type: 'system',
+                    status: 0,
                     page: this.page,
                     pagesize: this.pagesize
                 }).then((ret) => {

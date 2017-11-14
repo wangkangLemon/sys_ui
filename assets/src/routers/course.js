@@ -9,7 +9,7 @@ export default {
         })
     },
     children: [{
-            path: 'category',//栏目主页
+            path: 'category',//栏目主页此栏目已废 -更新为manage/course-category-manage
             name: 'course-index',
             component: resolve => {
                 require.ensure([], () => {

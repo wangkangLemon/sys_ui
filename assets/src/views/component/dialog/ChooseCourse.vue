@@ -36,7 +36,7 @@
                         @current-change="val => {page = val; getCourse()}"
                         :total="total"
                         :current-page="page"
-                        :page-size="pagesize"
+                        :pagesize="pagesize"
                         :page-sizes="[15, 30, 60, 100]"
                         layout="total, sizes, prev, pager, next">
                 </el-pagination>

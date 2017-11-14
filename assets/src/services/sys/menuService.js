@@ -4,9 +4,9 @@ const urlPre = config.apiHost + '/menu'
 
 class sysService {
     //拿到数据 
-    fetchData ({pagesize, page}) {
+    fetchData ({pagesize, level, pid}) {
         let url = urlPre + '/lists'
-        return api.post(url,{pagesize, page}).then(ret => {
+        return api.post(url,{pagesize, level, pid}).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -86,17 +86,32 @@ class sysService {
         })
     }
 
+    // // 禁用管理员
+    // offline(id) {
+    //     let url = `${urlPre}/update/${id}`
+    //     console.log('进入offline(id)')
+    //     return api.post(url, {})
+    // }
+
+    // // 启用管理员
+    // online(id) {
+    //     let url = `${urlPre}/update/${id}`
+    //     return api.post(url, {})
+    // }
+
+    
     // 禁用管理员
-    offline(id) {
+    offline(id, menu_name, menu_node, remark, sort, pid, level, disabled) {
         let url = `${urlPre}/update/${id}`
         console.log('进入offline(id)')
-        return api.post(url, {})
+        return api.post(url, { menu_name, menu_node, remark, sort, pid, level, disabled})
     }
 
     // 启用管理员
-    online(id) {
+    online(id, menu_name, menu_node, remark, sort, pid, level, disabled) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, {})
+        console.log('进入offline(id)')
+        return api.post(url, { menu_name, menu_node, remark, sort, pid, level, disabled})
     }
 
     // 获取添加编辑课程上传图片的url

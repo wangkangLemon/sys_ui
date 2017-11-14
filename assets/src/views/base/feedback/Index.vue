@@ -68,7 +68,7 @@
                        @size-change="handleSizeChange"
                        @current-change="handleCurrentChange"
                        :current-page="fetchParam.page"
-                       :page-size="fetchParam.pagesize"
+                       :pagesize="fetchParam.pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">

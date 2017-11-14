@@ -186,7 +186,7 @@
                        @size-change="handlePageSizeChange"
                        @current-change="handlePageChange"
                        :current-page="fetchParams[currTab].page"
-                       :page-size="fetchParams[currTab].pagesize"
+                       :pagesize="fetchParams[currTab].pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">

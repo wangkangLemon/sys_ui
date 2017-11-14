@@ -38,7 +38,7 @@
 <template>
     <article id="sys-index-container">
         <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'menu-add'})">
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'menu-add', params:{sys_type:'add'}})">
                 <i>添加菜单</i>
             </el-button>
         </section>
@@ -82,7 +82,7 @@
                     <el-button @click="$router.push({name: 'menu-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">详情
                         <!--a-->
                     </el-button>
-                    <el-button @click="$router.push({name: 'menu-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text" size="small">编辑
+                    <el-button @click="$router.push({name: 'menu-edit', params: {roleInfo: scope.row, sys_id: scope.row.id, sys_type:'edit'}})" type="text" size="small">编辑
                         <!--a-->
                     </el-button>
                     <el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
@@ -97,7 +97,7 @@
             </el-table-column>
         </el-table>
 
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :pagesize="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -116,8 +116,14 @@ function getFetchParam() {
     return {
         status: void 0, //  1-禁用 0-正常
         page: 1,
-        pagesize: 15,
-        
+        pagesize: 15, 
+        menu_name:'', //以下几行代码不给disablied传参的话可不写
+        menu_node:'',
+        remark:'',
+        sort: void 0,
+        pid: void 0,
+        level: void 0,
+        disabled: void 0,
     }
 }
 
@@ -187,19 +193,42 @@ export default {
             })
             this.selectedIds = ret
         },
-        // 禁用
+        // // 禁用
+        // offline(index, row) {
+        //     xmview.showDialog(`你将要禁用菜单 <span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
+        //         sysService.offline(row.id).then((ret) => {
+        //             row.disabled = 1
+        //         })
+        //     })
+        // },
+        // // 启用
+        // online(index, row) {
+        //     xmview.showDialog(`你将要启用菜单<span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
+        //         sysService.online(row.id).then((ret) => {
+        //             row.disabled = 0
+        //         })
+        //     })
+        // },
+             // 禁用
+        //      menu_name:'', //以下几行代码不给disablied传参的话可不写
+        // menu_node:'',
+        // remark:'',
+        // sort: void 0,
+        // pid: void 0,
+        // level: void 0,
+        // disabled: void 0,
         offline(index, row) {
             xmview.showDialog(`你将要禁用菜单 <span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
-                sysService.offline(row.id).then((ret) => {
-                    row.disabled = 1
+                row.disabled = 1
+                sysService.offline(row.id, row.menu_name, row.menu_node, row.remark, row.sort, row.pid, row.level, row.disabled).then((ret) => {
                 })
             })
         },
         // 启用
         online(index, row) {
             xmview.showDialog(`你将要启用菜单<span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
-                sysService.online(row.id).then((ret) => {
-                    row.disabled = 0
+                row.disabled = 0
+                sysService.online(row.id, row.menu_name, row.menu_node, row.remark, row.sort, row.pid, row.level, row.disabled).then((ret) => {
                 })
             })
         },

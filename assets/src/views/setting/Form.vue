@@ -43,7 +43,7 @@
                 <el-form-item label="超长字段存储" prop="describe">
                     <el-input v-model.password="fetchParam.describe"></el-input>
                 </el-form-item>
-                <el-form-item label="">
+                <el-form-item label="" v-if="this.$route.params.sys_type">
                     <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
                     <el-button type="primary" @click="btnNextClick">确认</el-button>
                 </el-form-item>
@@ -71,19 +71,6 @@
                 role_list:[],
             }
         },
-        created() {
-
-            // xmview.setContentLoading(false);
-            // console.log('this.$route.params.sys_id='+this.$route.params.sys_id )
-            //     if (this.$route.params.sys_id != undefined) {    //路由id传递
-            //         alert(2) 
-            //         sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
-            //             this.fetchParam = ret
-            //             console.log(ret)
-            //         })
-            //     }    
-            // this.loadingData=false;
-        },
         activated () {
             xmview.setContentLoading(false);
             console.log('this.$route.params.sys_id='+this.$route.params.sys_id )
@@ -92,9 +79,13 @@
                         this.fetchParam = ret
                         console.log(ret)
                     })
+                }else{
+                    this.fetchParam=getOriginData()
+                    // this.$refs['form'].resetFields();
                 }    
             this.loadingData=false;
         },
+
         methods: {
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
@@ -116,6 +107,7 @@
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
+                        this.$router.push({'name': 'setting-list'})
                     })
                 })
             },
@@ -127,7 +119,7 @@
             category: '',
             field:'',
             val:'',
-            describe: 0,
+            describe: void 0,
         }
     }
 

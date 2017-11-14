@@ -186,7 +186,8 @@
                 <h1>医线通管理平台</h1>
             </el-col>
             <el-col :span="6">
-                <h2>{{ userInfo.company }}</h2>
+                <!--<h2>{{ userInfo.gov }}</h2>-->
+                <h2>医线通</h2>
             </el-col>
             <el-col :span="8" class="header-right">
                 <div><i class="iconfont icon-bell"></i> <em>消息</em></div>
@@ -201,6 +202,7 @@
                 </el-dropdown>
                 <el-dropdown trigger="click" @command="handleNickname">
                       <span class="el-dropdown-link nickname">
+                        <!--<img :src="{url: userInfo.avatar, sex: userInfo.sex} | defaultAvatar"> {{userInfo.name}} <i-->
                         <img :src="{url: userInfo.avatar, sex: userInfo.sex} | defaultAvatar"> {{userInfo.name}} <i
                               class="el-icon-caret-bottom el-icon--right"></i>
                       </span>

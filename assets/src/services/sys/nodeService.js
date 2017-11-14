@@ -87,18 +87,31 @@ class sysService {
         })
     }
 
+    // // 禁用管理员
+    // offline(id) {
+    //     let url = `${urlPre}/update/${id}`
+    //     console.log('进入offline(id)')
+    //     return api.post(url, {})
+    // }
+
+    // // 启用管理员
+    // online(id) {
+    //     let url = `${urlPre}/update/${id}`
+    //     return api.post(url, {})
+    // }
+    
     // 禁用管理员
-    offline(id) {
+    offline(id, node_name, node, remark, sort, pid, level, disabled) {
         let url = `${urlPre}/update/${id}`
-        console.log('进入offline(id)')
-        return api.post(url, {})
+        return api.post(url, {node_name, node, remark, sort, pid, level, disabled})
     }
 
     // 启用管理员
-    online(id) {
+    online(id, node_name, node, remark, sort, pid, level, disabled) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, {})
+        return api.post(url, {node_name, node, remark, sort, pid, level, disabled})
     }
+
 
     // 获取添加编辑课程上传图片的url
     getUploadUrl({image, alias}) {

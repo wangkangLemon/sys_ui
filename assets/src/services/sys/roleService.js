@@ -93,17 +93,29 @@ class sysService {
         })
     }
 
-    // 禁用管理员
-    offline(id) {
+    // // 禁用管理员
+    // offline(id) {
+    //     let url = `${urlPre}/update/${id}`
+    //     console.log('进入offline(id)')
+    //     return api.post(url, {})
+    // }
+
+    // // 启用管理员
+    // online(id) {
+    //     let url = `${urlPre}/update/${id}`
+    //     return api.post(url, {})
+    // }
+
+     // 禁用管理员
+    offline(role_name, id, disabled) {
         let url = `${urlPre}/update/${id}`
-        console.log('进入offline(id)')
-        return api.post(url, {})
+        return api.post(url, {role_name, disabled})
     }
 
     // 启用管理员
-    online(id) {
+    online(role_name, id, disabled) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, {})
+        return api.post(url, {role_name, disabled})
     }
 
 
@@ -111,13 +123,11 @@ class sysService {
 
     //菜单
     //拿到数据 
-    fetchDataM ( id ) {
+    fetchDataM ( {id, pagesize}) {
         let url = urlPre_menu + '/lists'
-        console.log()
-        return api.get(url,{ role_id : id
+        return api.get(url,{ role_id : id, pagesize
         }).then(ret => {
             if (ret.code == 0) {
-                console.log( ret)
                 return ret
             } else {
                 return Promise.reject(ret)

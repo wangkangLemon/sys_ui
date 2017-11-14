@@ -82,7 +82,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="block" @size-change="val=> {fetchParam.pagesize=val; fetchData()}" @current-change="val=> {fetchParam.page=val; fetchData()}" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+        <el-pagination class="block" @size-change="val=> {fetchParam.pagesize=val; fetchData()}" @current-change="val=> {fetchParam.page=val; fetchData()}" :current-page="fetchParam.page" :pagesize="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
         <!--详情-->
         <el-dialog title="订单详情" class="show-detail" v-model="showDetail">

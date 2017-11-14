@@ -62,7 +62,6 @@ export default function (ossOption, changeToken) {
 
     // 上传文件
     this.uploadFile = function (name, file, progress, success, error) {
-        debugger
         var checkpoint = getCheckPoint(file) || {};
         checkpoint.file = file;
         client.multipartUpload(name, file, {
