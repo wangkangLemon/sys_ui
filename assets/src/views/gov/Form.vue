@@ -1,7 +1,7 @@
 <!--课程表单：添加/修改-->
 <style lang="scss" rel="stylesheet/scss">
     @import "../../utils/mixins/common";
-    #sys-form {
+    #gov-form {
         @extend %content-container;
         display: flex;
   
@@ -31,7 +31,7 @@
     }
 </style>
 <template>
-    <main id="sys-form">
+    <main id="gov-form">
         <section class="upload-avatar">
             <div class="img-container">
                 <img :src="imgUrl" />
@@ -67,7 +67,7 @@
                 <el-input v-model.address="fetchParam.address"></el-input>
             </el-form-item>
             <el-form-item label="" v-if="this.$route.params.sys_type">
-                <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
+                <el-button @click="$router.push({ name:'gov-index'})">取消</el-button>
                 <el-button type="primary" @click="btnNextClick">确认</el-button>
             </el-form-item>
             </el-form>
@@ -76,14 +76,13 @@
 </template>
 
 <script>
-    import sysService from '../../services/sys/sysService.js'
+    import govService from '../../services/gov/govService.js'
     import mineService from '../../services/base/mineService'
-    import * as filterUtils from '../../utils/filterUtils'
-    import role_mService from '../../services/sys/role_mService.js'
+    // import role_mService from '../../services/gov/role_mService.js'
     import ImagEcropperInput from '../component/upload/ImagEcropperInput.vue'
     import clone from 'clone'
     export default {
-        name: 'sys-form',
+        name: 'gov-form',
         filterUtils,
         components: {
             ImagEcropperInput
@@ -118,7 +117,7 @@
         created() {
             xmview.setContentLoading(false);
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
-                    sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
+                    govService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
                         console.log(ret)
                         // this.fetchParam.role_id = ret.course.role_id
@@ -143,17 +142,17 @@
             },
             
             //获取角色组下拉列表
-            getrole(val){
-                role_mService.fetchData().then((ret)=>{
-                 this.role_list=ret.data;
-                })
-            },
+            // getrole(val){
+            //     role_mService.fetchData().then((ret)=>{
+            //      this.role_list=ret.data;
+            //     })
+            // },
 
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
-                    let req = sysService.create
-                    if (this.fetchParam.id) req = sysService.update
+                    let req = govService.create
+                    if (this.fetchParam.id) req = govService.update
                     console.log(this.fetchParam.id)
                     req(this.fetchParam).then((ret) => {
                         console.log(111111111111)
@@ -169,7 +168,7 @@
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
-                        this.$router.push({'name': 'sys-index'})
+                        this.$router.push({'name': 'gov-index'})
                     })
                 })
             },
