@@ -9,43 +9,43 @@ export default {
         })
     },
     children: [
-        //
+        //政府管理主页列表
         {
-            path: 'list',
-            name: 'medical-index',
+            path: 'index',
+            name: 'gov-index',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/Index.vue'))
+                    resolve(require('../views/gov/Gov.vue'))
                 })
             },
             meta: {
-                title: '医政',
+                title: '政府',
                 noback: true
             }
         },
         {
             path: 'gov/add',
-            name: 'medical-add',
+            name: 'gov-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/Form.vue'))
+                    resolve(require('../views/gov/CompanyOperate.vue'))
                 })
             },
             meta: {
-                title: '医政添加',
+                title: '政府添加',
                 noback: false
             }
         },
         {
             path: 'edit/:medical_id',
-            name: 'medical-edit',
+            name: 'gov-edit',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/Form.vue'))
+                    resolve(require('../views/gov/CompanyOperate.vue'))
                 })
             },
             meta: {
-                title: '医政更新',
+                title: '政府更新',
                 noback: false
             }
         },

@@ -2,11 +2,211 @@ import * as api from '../api'
 import config from '../../utils/config'
 const urlPre = config.apiHost + '/gov'
 
-class sysService {
+class govService {
+
+    // category - 0-企业 1-工业 2-连锁
+    getSelectList({
+        id = '',
+        name = '',
+        category = '',
+        pagesize = '',
+        page = '',
+        province_id = '',
+        city_id = '',
+        area_id = '',
+        town_id = '',
+        village_id = '',
+        deleted = '',
+    }) {
+        let finalUrl = urlPre + '/lists'
+        return api.get(finalUrl, {
+            id,
+            name,
+            category,
+            page,
+            pagesize,
+            province_id,
+            city_id,
+            area_id,
+            town_id,
+            village_id,
+            deleted,
+        }, false).then((ret) => {
+            return ret.data
+        })
+    }
+
+    // 获取详情接口
+    getGovInfo(val) {
+        let finalUrl = `${urlPre}/${val}`
+        return api.get(finalUrl).then((ret) => {
+            return ret.data
+        })
+    }
+
+    // 添加企业
+    addGov({
+        category,
+        pid,
+        province_id,
+        city_id,
+        area_id,
+        town_id,
+        village_id,
+        name,
+        concact,
+        mobile,
+        email,
+        mobile_title,
+        tel,
+        zip,
+        fax,
+        url,
+        address,
+        province,    
+        description,
+    }) {
+        return api.post(urlPre, {
+            category,
+            pid,
+            province_id,
+            city_id,
+            area_id,
+            town_id,
+            village_id,
+            name,
+            concact,
+            mobile,
+            email,
+            mobile_title,
+            tel,
+            zip,
+            fax,
+            url,
+            address,
+            province,    
+            description,
+        }).then((ret) => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+    // 修改企业信息
+    editGov(val) {
+        let finalUrl = `${urlPre}/${val}/edit`
+        return api.get(finalUrl).then((ret) => {
+            return ret.data
+        })
+    }
+
+    // 更新企业信息
+    updateGov({
+        category,
+        name,
+        concact,
+        mobile,
+        email,
+        tel,
+        fax,
+        province,
+        city,
+        area,
+        address,
+        zip,
+        url,
+        description,
+        department_number,
+        user_number,
+        signatory,
+        sign_time,
+        expire_time,
+        company_id
+    }) {
+        let finalUrl = `${urlPre}/${company_id}`
+        return api.put(finalUrl, {
+            category,
+            name,
+            concact,
+            mobile,
+            email,
+            tel,
+            fax,
+            province,
+            city,
+            area,
+            address,
+            zip,
+            url,
+            description,
+            department_number,
+            user_number,
+            signatory,
+            sign_time,
+            expire_time
+        }).then((ret) => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+    // 企业管理员查询接口
+    companyAdmin({
+        keyword,
+        company_id,
+        page,
+        page_size
+    }) {
+        let finalUrl = `${urlPre}/${company_id}/admin/search`
+        return api.get(finalUrl, {
+            keyword,
+            page,
+            page_size
+        }).then((ret) => {
+            return ret.data
+        })
+    }
+
+    // 新增管理员
+    addGovAdmin({
+        department_id,
+        name,
+        sex,
+        mobile,
+        passwd,
+        birthday,
+        address,
+        company_id
+    }) {
+        let finalUrl = `${urlPre}/${company_id}/admin`
+        return api.post(finalUrl, {
+            department_id,
+            name,
+            sex,
+            mobile,
+            passwd,
+            birthday,
+            address
+        }).then((ret) => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+
     //拿到数据 
-    fetchData ({pagesize, page}) {
+    a({
+        pagesize,
+        page
+    }) {
         let url = urlPre + '/lists'
-        return api.get(url,{pagesize, page}).then(ret => {
+        return api.get(url, {
+            pagesize,
+            page
+        }).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -15,11 +215,11 @@ class sysService {
         })
     }
 
-    
+
     // 搜索
     getAdminInfo(id) {
-        let url = `${urlPre}/view/${id}`         //传递的地址的id
-        return api.get(url,{},false).then(ret => {
+        let url = `${urlPre}/view/${id}` //传递的地址的id
+        return api.get(url, {}, false).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -29,21 +229,52 @@ class sysService {
     }
 
     // 创建
-    create({ role_id, name, mobile, email, password }) {
+    create({
+        role_id,
+        name,
+        mobile,
+        email,
+        password
+    }) {
         let url = urlPre + '/create'
-        return api.post(url, { role_id, name, mobile, email, password }).then(ret => {
+        return api.post(url, {
+            role_id,
+            name,
+            mobile,
+            email,
+            password
+        }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
-                xmview.showTip('error',ret.message)
+                xmview.showTip('error', ret.message)
                 return Promise.reject(ret)
             }
         })
     }
     // 更新
-    update({ id, role_id, name, mobile, email, password, sex, avatar, address }) {
+    update({
+        id,
+        role_id,
+        name,
+        mobile,
+        email,
+        password,
+        sex,
+        avatar,
+        address
+    }) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
+        return api.post(url, {
+            role_id,
+            name,
+            mobile,
+            email,
+            password,
+            sex,
+            avatar,
+            address
+        }).then(ret => {
             if (ret.code) {
                 console.log('update()')
                 return Promise.reject(ret)
@@ -65,17 +296,28 @@ class sysService {
     // 批量删除管理员
     deleteMulty(ids) {
         let url = `${urlPre}/batchdel`
-        return api.put(url, { ids })
+        return api.put(url, {
+            ids
+        })
     }
 
     // 批量移动管理员到指定分类
-    moveToCategoryMulty({ ids, category_id }) {
+    moveToCategoryMulty({
+        ids,
+        category_id
+    }) {
         let url = `${urlPre}/batchmove`
-        return api.put(url, { ids, category_id })
+        return api.put(url, {
+            ids,
+            category_id
+        })
     }
 
     // 设置管理员
-    setLesson({ id, data }) {
+    setLesson({
+        id,
+        data
+    }) {
         let url = `${urlPre}/${id}/setlesson`
         return api.put(url, data).then(ret => {
             if (ret.code) {
@@ -85,25 +327,54 @@ class sysService {
     }
 
     // 禁用管理员
-    offline({id, role_id, name, mobile, email, password, sex, avatar, address ,disabled}) {
+    offline({
+        id,
+        role_id,
+        name,
+        mobile,
+        email,
+        password,
+        sex,
+        avatar,
+        address,
+        disabled
+    }) {
         let url = `${urlPre}/update/${id}`
         console.log('进入offline(id)')
-        return api.post(url, { id, role_id, name, mobile, email, password, sex, avatar, address ,disabled})
+        return api.post(url, {
+            id,
+            role_id,
+            name,
+            mobile,
+            email,
+            password,
+            sex,
+            avatar,
+            address,
+            disabled
+        })
     }
 
     // 启用管理员
     online(id) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, { disabled: 0 })
-    }
-
-    // 获取添加编辑课程上传图片的url
-    getUploadUrl({image, alias}) {
-        let url = `${urlPre}/upload`
-        return api.post(url, {image, alias}).then((ret) => {
-            return ret.data
+        return api.post(url, {
+            disabled: 0
         })
     }
 
+    // 获取添加编辑课程上传图片的url
+    getUploadUrl({
+        image,
+        alias
+    }) {
+        let url = `${urlPre}/upload`
+        return api.post(url, {
+            image,
+            alias
+        }).then((ret) => {
+            return ret.data
+        })
+    }
 }
-export default new sysService()
+export default new govService()
