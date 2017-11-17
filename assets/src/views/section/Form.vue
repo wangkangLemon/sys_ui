@@ -32,9 +32,9 @@
                 <el-form-item v-else >
                 </el-form-item>
                 <el-form-item label="栏目菜单"  :fetch-suggestions="querySearch">
-                <el-select v-model="fetchParam.category_id" placeholder="请输入栏目菜单">
-                    <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
-                </el-select>
+                    <el-select v-model="fetchParam.category_id" placeholder="请输入栏目菜单">
+                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
+                    </el-select>
                 </el-form-item>
                 <!--<el-form-item label="栏目菜单" prop="category_id"> //需改进待后台返ended数据后做联动列表
                         <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>

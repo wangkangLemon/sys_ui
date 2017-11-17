@@ -38,7 +38,7 @@ class govService {
 
     // 获取详情接口
     getGovInfo(val) {
-        let finalUrl = `${urlPre}/${val}`
+        let finalUrl = `${urlPre}/get/${val}`
         return api.get(finalUrl).then((ret) => {
             return ret.data
         })
@@ -63,10 +63,10 @@ class govService {
         fax,
         url,
         address,
-        province,    
         description,
     }) {
-        return api.post(urlPre, {
+        let finalUrl = urlPre + '/create'
+        return api.post(finalUrl, {
             category,
             pid,
             province_id,
@@ -84,7 +84,6 @@ class govService {
             fax,
             url,
             address,
-            province,    
             description,
         }).then((ret) => {
             if (ret.code) {
@@ -95,7 +94,7 @@ class govService {
 
     // 修改企业信息
     editGov(val) {
-        let finalUrl = `${urlPre}/${val}/edit`
+        let finalUrl = `${urlPre}/edit/${val}`
         return api.get(finalUrl).then((ret) => {
             return ret.data
         })
@@ -103,48 +102,46 @@ class govService {
 
     // 更新企业信息
     updateGov({
+        gov_id,
         category,
+        pid,
+        province_id,
+        city_id,
+        area_id,
+        town_id,
+        village_id,
         name,
         concact,
         mobile,
         email,
+        mobile_title,
         tel,
-        fax,
-        province,
-        city,
-        area,
-        address,
         zip,
+        fax,
         url,
+        address,
         description,
-        department_number,
-        user_number,
-        signatory,
-        sign_time,
-        expire_time,
-        company_id
     }) {
-        let finalUrl = `${urlPre}/${company_id}`
-        return api.put(finalUrl, {
+        let finalUrl = `${urlPre}/edit/${gov_id}`
+        return api.post(finalUrl, {
             category,
+            pid,
+            province_id,
+            city_id,
+            area_id,
+            town_id,
+            village_id,
             name,
             concact,
             mobile,
             email,
+            mobile_title,
             tel,
-            fax,
-            province,
-            city,
-            area,
-            address,
             zip,
+            fax,
             url,
+            address,
             description,
-            department_number,
-            user_number,
-            signatory,
-            sign_time,
-            expire_time
         }).then((ret) => {
             if (ret.code) {
                 return Promise.reject(ret)
@@ -282,6 +279,20 @@ class govService {
         })
     }
 
+    // 删除 GOV部门
+    deleteGov(id) {
+        let url = `${urlPre}/delete/${id}`
+        // console.log(url)
+        return api.get(url, {}).then(ret => {
+            if (ret.code == 0) {
+                 xmview.showTip('success',ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error',ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
     // 删除
     delete(id) {
         let url = `${urlPre}/delete/${id}`

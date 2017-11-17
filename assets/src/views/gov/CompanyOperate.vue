@@ -27,6 +27,17 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+
+                <el-form-item label="地区" :label-width="formLabelWidth">
+                    <Region :province="form.province_id"
+                            :city="form.city_id"
+                            :area="form.area_id"
+                            title=""
+                            v-on:provinceChange="val => form.province_id = val"
+                            v-on:cityChange="val => form.city_id = val"
+                            v-on:areaChange="val => form.area_id = val">
+                    </Region>
+                </el-form-item>
                 <el-form-item prop="name" label="政府单位名称	" :label-width="formLabelWidth">
                     <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
@@ -44,16 +55,6 @@
                 </el-form-item>
                 <el-form-item prop="fax" label="传真" :label-width="formLabelWidth">
                     <el-input v-model="form.fax" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="地区" :label-width="formLabelWidth">
-                    <Region :province="form.province"
-                            :city="form.city"
-                            :area="form.area"
-                            title=""
-                            v-on:provinceChange="val => form.province = val"
-                            v-on:cityChange="val => form.city = val"
-                            v-on:areaChange="val => form.area = val">
-                    </Region>
                 </el-form-item>
                 <el-form-item prop="address" label="地址" :label-width="formLabelWidth">
                     <el-input v-model="form.address" auto-complete="off"></el-input>
@@ -101,49 +102,36 @@
                 govTypes: [ // 部门类型
                     {
                         name: '政府',
-                        id: 2
+                        id: 1
                     },
                     {
                         name: '系统',
-                        id: 1
+                        id: 0
                     }
                 ],
                 formLabelWidth: '120px',
                 form: {
+                    gov_id: void 0,
                     category: '', // 类型
+                    pid:'', //上级部门                     -----
+                    province_id : '', // 省
+                    city_id: '',  // 市
+                    area_id: '',  // 区
+                    town_id: '',  //乡镇                       -----
+                    village_id: '', // 街道                    -----
                     name: '', // 名称
                     concact: '', // 联系人
                     mobile: '', // 联系人手机
-                    tel: '', // 电话
                     email: '', // 联系人邮箱
-                    fax: '', // 传真
-                    province: '', // 省
-                    city: '', // 市
-                    area: '', // 区
-                    address: '', // 地址
+                    mobile_title: '', // 手机端客户端名称    ----
+                    tel: '', // 电话
                     zip: '', // 邮编
+                    fax: '', // 传真
                     url: '', // 企业网址
+                    address: '', // 地址
                     description: '', // 企业介绍
                 },
-                sign: {
-                    department_number: '', // 门店数量
-                    user_number: '', // 店员数量
-                    signatory: '', // 签约人
-                    sign_time: '', // 签约日期
-                    expire_time: '' // 合同到期日
-                },
-                pickerOptionsStart: {
-                    disabledDate(time) {
-                        return !_this.sign.sign_time ? null
-                            : time.getTime() > new Date(_this.sign.sign_time).getTime()
-                    }
-                },
-                pickerOptionsEnd: {
-                    disabledDate(time) {
-                        return !_this.sign.expire_time ? null
-                            : time.getTime() < new Date(_this.sign.expire_time).getTime()
-                    }
-                },
+  
                 rules: {
                     name: [
                         {required: true, message: '必填项', trigger: 'blur'}
@@ -159,7 +147,7 @@
                         {required: true, message: '必填项', trigger: 'blur'},
                         {validator: validateEmail, trigger: 'blur'}
                     ]
-                }
+                },
             }
         },
         computed: {
@@ -171,66 +159,64 @@
             _this = this
             xmview.setContentLoading(false)
             if (this.govID == undefined) {
-                this.sign = {
-                    department_number: '', // 门店数量
-                    user_number: '', // 店员数量
-                    signatory: '', // 签约人
-                    sign_time: '', // 签约日期
-                    expire_time: '' // 合同到期日
-                }
+
                 this.form = {
+                    gov_id: void 0,
                     category: '', // 类型
+                    pid:'', //上级部门                     -----
+                    province_id : '', // 省
+                    city_id: '',  // 市
+                    area_id: '',  // 区
+                    town_id: '',  //乡镇                       -----1
+                    village_id: '', // 街道                    -----
                     name: '', // 名称
                     concact: '', // 联系人
                     mobile: '', // 联系人手机
-                    tel: '', // 电话
                     email: '', // 联系人邮箱
-                    fax: '', // 传真
-                    province: '', // 省
-                    city: '', // 市
-                    area: '', // 区
-                    address: '', // 地址
+                    mobile_title: '', // 手机端客户端名称    ----
+                    tel: '', // 电话
                     zip: '', // 邮编
+                    fax: '', // 传真
                     url: '', // 企业网址
+                    address: '', // 地址
                     description: '', // 企业介绍
                 }
                 return false
             }
-            govService.editGov(this.govID).then((ret) => {
-                this.form = ret.data
-                this.sign = ret.sign
-                this.sign.sign_time = ret.sign.sign_time_str
-                this.sign.expire_time = ret.sign.expire_time_str
+            govService.getGovInfo(this.govID).then((ret) => {
+                this.form = ret
                 this.govID = this.govID
             })
         },
         methods: {
+ 
             submit (form) { // 表单提交
                 this.$refs[form].validate((valid) => {
                     if (valid) {
                         this.form = Object.assign(this.form, this.sign)
                         let reqFn = govService.addGov
                         let msg = '添加成功'
-                        if (this.form.sign_time) {
-                            this.form.sign_time = timeUtils.date2Str(this.form.sign_time)
+              
+                        if(this.form.province_id) {
+                            this.form.pid = this.form.province_id
+                            if(this.form.province_id && this.form.city_id){
+                                 this.form.pid = this.form.city_id
+                                 if(this.form.province_id && this.form.city_id && this.form.area_id){
+                                    this.form.pid = this.form.area_id
+                                    if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id){
+                                        this.form.pid = this.form.town_id
+                                        if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id && this.form.village_id){
+                                            this.form.pid = this.form.village_id
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        if (this.form.expire_time) {
-                            this.form.expire_time = timeUtils.date2Str(this.form.expire_time)
-                        }
+
                         if (this.govID) {
                             this.form.gov_id = this.govID
                             reqFn = govService.updateGov
                             msg = '修改成功'
-                        }
-                        // 如果没有签约人 清空其他签约选项
-                        if (!this.sign.signatory) {
-                            this.sign = {
-                                department_number: '', // 门店数量
-                                user_number: '', // 店员数量
-                                signatory: '', // 签约人
-                                sign_time: '', // 签约日期
-                                expire_time: '' // 合同到期日
-                            }
                         }
                         reqFn(this.form).then(() => {
                             xmview.showTip('success', msg)

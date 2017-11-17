@@ -35,8 +35,6 @@
                     {{details.name}}
                     <el-tag type="success">{{govType[details.category]}}</el-tag>
                 </h2>
-                <p><i class="title">门店数量：</i><span class="value">{{details.department_count || '无'}}</span></p>
-                <p><i class="title">店员数量：</i><span class="value">{{details.user_count || '无'}}</span></p>
                 <p><i class="title">联系人：</i><span class="value">{{details.concact || '无'}}</span></p>
                 <p><i class="title">联系人手机：</i><span class="value">{{details.mobile || '无'}}</span></p>
                 <p><i class="title">联系人邮箱：</i><span class="value">{{details.email || '无'}}</span></p>
@@ -93,14 +91,17 @@
             </el-table-column>
             <el-table-column prop="operate" label="操作" width="180">
                 <template scope="scope">
-                    <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
+                    <!--<el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
                         管理员
-                    </el-button>
+                    </el-button>-->
                     <el-button type="text" size="small" @click="showFn(scope.$index, scope.row)">
                         详情
                     </el-button>
-                    <el-button type="text" size="small" @click="editCompany(scope.$index, scope.row)">
+                    <el-button type="text" size="small" @click="editGov(scope.$index, scope.row)">
                         修改
+                    </el-button>
+                    <el-button type="text" size="small" @click="deleteGov(scope.$index, scope.row)">
+                        删除
                     </el-button>
                 </template>
             </el-table-column>
@@ -174,7 +175,7 @@
                 this.fetchParam = clearFn()
             },
             // 修改企业信息
-            editCompany(index, row) {
+            editGov(index, row) {
                 this.$router.push({
                     name: 'gov-edit',
                     params: {
@@ -184,9 +185,15 @@
             },
             // 显示详情
             showFn(index, row) {
-                govService.getCompanyInfo(row.id).then((ret) => {
-                    this.details = ret.data
+                govService.getGovInfo(row.id).then((ret) => {
+                    this.details = ret
                     this.showDetail = true
+                })
+            },
+            // 删除 GOV部门
+            deleteGov(index, row) {
+                govService.deleteGov(row.id).then((ret) => {
+                    this.govData.splice(index, 1) //删除选中项
                 })
             },
             adminPage(index, item) {
@@ -216,7 +223,6 @@
             },
             getData() {
                 this.loading = true
-                console.log()
                 return govService.getSelectList({
                     pagesize: this.pageSize,
                     page: this.currentPage,
