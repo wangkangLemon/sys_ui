@@ -84,7 +84,6 @@
                     })
 
                     // courseService.getCategoryTree({type: this.type, pid:0})
-
                     //     .then(ret => {
                     //         // 不显示未分类那一项
                     //         if (!this.showNotCat) {
@@ -123,21 +122,7 @@
                     pid: val[val.length - 1],
                     level: -1,
                 }).then((ret) => {
-                    // console.log(ret)
-                    // this.options.forEach(v => {
-                    //     if (v.value == val[val.length-1]) {
-                    //         ret.forEach(retItem => {
-                    //             console.log(retItem)
-                    //             arr.push({
-                    //                 data: retItem,
-                    //                 label: retItem.name,
-                    //                 value: retItem.id,
-                    //                 children: retItem.ended ? null : []
-                    //             })
-                    //         })
-                    //         v.children = arr
-                    //     }
-                    // })
+         
                     var arr = ret.map(v => {
                         v.label = v.name
                         v.value = v.id

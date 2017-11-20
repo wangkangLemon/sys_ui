@@ -15,38 +15,32 @@
 </style>
 
 <template>
-    <section class="region-container">
+    <section class="region-container" ref="container">
         <i>{{title}}</i>
         <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(0, provinceSelect)" v-model="provinceSelect">
-            <el-option v-for="(item, index) in provinces"
-                       :label="item.name"
-                       :value="item.id"
-                       :key="item.id">
+            <el-option v-for="(item, index) in provinces" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
         <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(1, citySelect)" v-model="citySelect">
-            <el-option v-for="(item, index) in citys"
-                       :label="item.name"
-                       :value="item.id"
-                       :key="item.id">
+            <el-option v-for="(item, index) in citys" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
         <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(2, areaSelect)" v-model="areaSelect">
-            <el-option v-for="(item, index) in areas"
-                       :label="item.name"
-                       :value="item.id"
-                       :key="item.id">
+            <el-option v-for="(item, index) in areas" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
     </section>
 </template>
 
 <script>
-    import cityData from '../../../assets/js/city'
+    // import cityData from '../../../assets/js/govCity.js'
     import treeUtils from '../../../utils/treeUtils'
-    export default{
+
+    import govService from '../../../services/gov/govService.js'
+
+    export default {
         props: ['change', 'title', 'province', 'city', 'area', 'disabled'],
-        data () {
+        data() {
             return {
                 provinces: [],
                 citys: [],
@@ -54,77 +48,162 @@
                 provinceSelect: '',
                 citySelect: '',
                 areaSelect: '',
-                curItem: []
+                curItem: [],
+                cityData: '',
+                options: [],
+                fetchParam: {
+                    pagesize: -1,
+                    pid: 0,
+                    province_id: null,
+                    city_id: null,
+                    area_id: null,
+                }
             }
         },
         watch: {
-            province (val) {
+            province(val) {
                 if (val) {
                     this.provinceSelect = val
                     // console.log('this.provinceSelect='+this.provinceSelect)
-                    this.setCurrVal(0, val)
+                    this.currentVal(0, val)
                 } else {
                     this.provinceSelect = ''
                 }
             },
-            city (val) {
+            city(val) {
                 if (this.province && val) {
                     this.citySelect = val
                     // console.log('this.citySelect='+this.citySelect)
-                    this.setCurrVal(1, val)
+                    this.currentVal(1, val)
                 } else {
                     this.citySelect = ''
                 }
             },
-            area (val) {
+            area(val) {
                 if (this.province && this.citySelect && val) {
                     this.areaSelect = val
+                    this.currentVal(2, val)
                     // console.log('this.areaSelect='+this.areaSelect)
                 } else {
                     this.areaSelect = ''
                 }
             },
-            disabled (val) {
+            disabled(val) {
                 if (val) {
                     this.provinceSelect = ''
                 }
             }
         },
-        created () {
-            // 获取数据
-            cityData.forEach((item) => {
-                this.provinces.push({
-                    name: item.name,
-                    id: item.id
-                })
-            })
+        created() {
+
+
+        },
+        mounted() {
+            console.log(this.$refs.container)
+            // 获取数据  按需加载 按需处理数据？  三个独立的选择器
+            // this.$refs.container.addEventListener('click', () => {
+            // if(this.cityData ){
+            //      this.options = this.lastData
+            // }else{
+
+            // }
+            this.getData(this.fetchParam.pid, 'provinces')
+
+            // this.cityData.forEach((item) => {
+            //     this.provinces.push({
+            //         name: item.name,
+            //         id: item.id
+            //     })
+            // })
+            // })
+
         },
         methods: {
-            setCurrVal (type, val) { //type  0 省 1 市 2 县
-                let emitArr = ['provinceChange', 'cityChange', 'areaChange']
-                this.$emit(emitArr[type], val)
-                this.change && this.change()
+            getData(pid, address) {
+                this.loading = true
+                govService.getSelectList({
+                    pagesize: -1,
+                    pid: pid,
+                    province_id: this.fetchParam.provinceSelect,
+                    city_id: this.fetchParam.citySelect,
+                    area_id: this.fetchParam.areaSelect
+                }).then((ret) => {
+                    this.cityData = ret
+                    let arr = []
+                    this.cityData.forEach(v => {
+                        arr.push({
+                            data: v,
+                            // children: v.pid ? null : [], //是否最终菜单？
+                            name: v.name,
+                            id: v.id
+                        })
+                    })
+                    console.log(arr)
+                    this[address] = arr
+                }).then(() => {
+                    this.loading = false
+                })
+            },
+            currentVal(type, val) {
                 let levelPath = []
+                let emitArr = ['provinceChange', 'cityChange', 'areaChange']
                 let typeArr = ['provinceSelect', 'citySelect', 'areaSelect']
+                let t = ['provinces', 'citys', 'areas']
+
                 if (!this[typeArr[type]]) return
                 levelPath = [this[typeArr[type]]]
-                // console.log(levelPath)
-                // console.log(type,val)
-                if (type == 0) {  //类型是省
-                    this.curItem = treeUtils.findItem(cityData, levelPath)
-                    console.log(cityData)
-                    // console.log(levelPath)
-                    // console.log('this.curItem='+this.curItem)
-
-                    // alert(treeUtils.findItem(cityData, levelPath))
-                    if (this.curItem.children && this.curItem.children.length > 0) {
-                        this.citys = this.curItem.children
-                    }
-                } else if (this.provinceSelect && type == 1) {  //类型是市
-                    if (this.citys && this.citys.length > 0) {
-                        this.areas = treeUtils.findItem(this.citys, levelPath).children
+                if (type < typeArr.length - 1) { //最后一级之前
+                    this.getData(val, t[type + 1]) //拿到下一级数据
+                    for (let i = type + 1; i < typeArr.length; i++) { // 从当前项开始初始化（清空）
+                        this[typeArr[i]] = null     
+                                                    //1 触发方法不能是三个 改成一个 这样来初始化 
+                                                    // 2 现在省触发3 市2 县1 
+                                                    // 3子组件调用父组件方法来回触发方法要解决的bug
                     }
                 }
+                 this.change && this.change()
+                 //
+            },
+            setCurrVal(type, val) { //type  0 省 1 市 2 县
+                let emitArr = ['provinceChange', 'cityChange', 'areaChange']
+                this.$emit(emitArr[type], val)
+                //this.change && this.change()
+
+                // let levelPath = []
+                // let typeArr = ['provinceSelect', 'citySelect', 'areaSelect']
+                // let t = ['provinces', 'citys', 'areas']
+
+                // if (!this[typeArr[type]]) return
+                // levelPath = [this[typeArr[type]]]
+                // console.log(levelPath)
+                // console.log(type,val)
+                // if (type == 0) {  //类型是省拿到子集市
+                //     // this.curItem = treeUtils.findItem(this.cityData, levelPath)
+                //     // console.log(this.curItem)
+                //     // if (this.curItem.children && this.curItem.children.length > 0) {
+                //     //     this.citys = this.curItem.children
+                //     // } else{
+                //         this.getData(val,t[type+1])
+                //         for(let i=type+1;i<typeArr.length;i++){
+                //              this[typeArr[i]] = null
+                //         }
+                //     // }
+                // } else if (this.provinceSelect && type == 1) {  //类型是市拿到子集区
+                //     // if (this.citys && this.citys.length > 0) {
+                //     //     this.areas = treeUtils.findItem(this.citys, levelPath).children
+                //     // }else{
+                //     //      this.getData(val,'areas')
+                //     // }
+                //     this.getData(val,'areas')
+                //     this.areaSelect = null
+                // }
+
+                // if (type < typeArr.length - 1) {  //最后一级之前
+                //     this.getData(val, t[type + 1])   //拿到下一级数据
+                //     for (let i = type + 1; i < typeArr.length; i++) {  // 从当前项开始初始化（清空）
+                //         this[typeArr[i]] = null
+                //     }
+                // }
             }
         }
     }
