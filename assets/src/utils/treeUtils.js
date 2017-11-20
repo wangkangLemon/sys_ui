@@ -64,9 +64,13 @@ class TreeUtils {
      * @param compareKey
      */
     findItem (arr, levelPath, compareKey = 'id') {
+        console.log('===========================')
+        console.log(compareKey)
         for (let i = 0; i < arr.length; i++) {
             let item = arr[i]
-            if (item[compareKey] == levelPath[0]) {
+        console.log(arr[i])
+            
+            if (item[compareKey] == levelPath[0]) {             
                 if (levelPath.length == 1) {
                     return item
                 }

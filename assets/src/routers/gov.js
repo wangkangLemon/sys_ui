@@ -28,7 +28,7 @@ export default {
             name: 'gov-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/CompanyOperate.vue'))
+                    resolve(require('../views/gov/GovOperate.vue'))
                 })
             },
             meta: {
@@ -41,12 +41,24 @@ export default {
             name: 'gov-edit',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/CompanyOperate.vue'))
+                    resolve(require('../views/gov/GovOperate.vue'))
                 })
             },
             meta: {
                 title: '政府更新',
                 noback: false
+            }
+        },
+        {
+            path: 'admin/:gov_id',
+            name: 'gov-admin',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/Admin.vue'))
+                })
+            },
+            meta: {
+                title: '管理员',
             }
         },
     ]

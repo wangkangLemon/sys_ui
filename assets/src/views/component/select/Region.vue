@@ -61,6 +61,7 @@
             province (val) {
                 if (val) {
                     this.provinceSelect = val
+                    // console.log('this.provinceSelect='+this.provinceSelect)
                     this.setCurrVal(0, val)
                 } else {
                     this.provinceSelect = ''
@@ -69,6 +70,7 @@
             city (val) {
                 if (this.province && val) {
                     this.citySelect = val
+                    // console.log('this.citySelect='+this.citySelect)
                     this.setCurrVal(1, val)
                 } else {
                     this.citySelect = ''
@@ -77,6 +79,7 @@
             area (val) {
                 if (this.province && this.citySelect && val) {
                     this.areaSelect = val
+                    // console.log('this.areaSelect='+this.areaSelect)
                 } else {
                     this.areaSelect = ''
                 }
@@ -97,7 +100,7 @@
             })
         },
         methods: {
-            setCurrVal (type, val) {
+            setCurrVal (type, val) { //type  0 省 1 市 2 县
                 let emitArr = ['provinceChange', 'cityChange', 'areaChange']
                 this.$emit(emitArr[type], val)
                 this.change && this.change()
@@ -105,12 +108,19 @@
                 let typeArr = ['provinceSelect', 'citySelect', 'areaSelect']
                 if (!this[typeArr[type]]) return
                 levelPath = [this[typeArr[type]]]
-                if (type == 0) {
+                // console.log(levelPath)
+                // console.log(type,val)
+                if (type == 0) {  //类型是省
                     this.curItem = treeUtils.findItem(cityData, levelPath)
+                    console.log(cityData)
+                    // console.log(levelPath)
+                    // console.log('this.curItem='+this.curItem)
+
+                    // alert(treeUtils.findItem(cityData, levelPath))
                     if (this.curItem.children && this.curItem.children.length > 0) {
                         this.citys = this.curItem.children
                     }
-                } else if (this.provinceSelect && type == 1) {
+                } else if (this.provinceSelect && type == 1) {  //类型是市
                     if (this.citys && this.citys.length > 0) {
                         this.areas = treeUtils.findItem(this.citys, levelPath).children
                     }

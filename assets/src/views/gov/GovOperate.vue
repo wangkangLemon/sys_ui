@@ -102,18 +102,18 @@
                 govTypes: [ // 部门类型
                     {
                         name: '政府',
-                        id: 1
+                        id: 2
                     },
                     {
                         name: '系统',
-                        id: 0
+                        id: 1
                     }
                 ],
                 formLabelWidth: '120px',
                 form: {
                     gov_id: void 0,
                     category: '', // 类型
-                    pid:'', //上级部门                     -----
+                    pid:'', //上级部门                    
                     province_id : '', // 省
                     city_id: '',  // 市
                     area_id: '',  // 区
@@ -123,7 +123,7 @@
                     concact: '', // 联系人
                     mobile: '', // 联系人手机
                     email: '', // 联系人邮箱
-                    mobile_title: '', // 手机端客户端名称    ----
+                    mobile_title: '', // 手机端客户端名称        ----
                     tel: '', // 电话
                     zip: '', // 邮编
                     fax: '', // 传真
@@ -163,17 +163,17 @@
                 this.form = {
                     gov_id: void 0,
                     category: '', // 类型
-                    pid:'', //上级部门                     -----
+                    pid:'', //上级部门                    
                     province_id : '', // 省
                     city_id: '',  // 市
                     area_id: '',  // 区
-                    town_id: '',  //乡镇                       -----1
+                    town_id: '',  //乡镇                       -----
                     village_id: '', // 街道                    -----
                     name: '', // 名称
                     concact: '', // 联系人
                     mobile: '', // 联系人手机
                     email: '', // 联系人邮箱
-                    mobile_title: '', // 手机端客户端名称    ----
+                    mobile_title: '', // 手机端客户端名称        ----
                     tel: '', // 电话
                     zip: '', // 邮编
                     fax: '', // 传真
@@ -199,10 +199,13 @@
               
                         if(this.form.province_id) {
                             this.form.pid = this.form.province_id
+                            console.log( 'this.form.province_id='+ this.form.province_id)
                             if(this.form.province_id && this.form.city_id){
                                  this.form.pid = this.form.city_id
+                                 console.log( 'this.form.city_id='+ this.form.city_id)
                                  if(this.form.province_id && this.form.city_id && this.form.area_id){
                                     this.form.pid = this.form.area_id
+                                    console.log( 'this.form.area_id='+ this.form.area_id)
                                     if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id){
                                         this.form.pid = this.form.town_id
                                         if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id && this.form.village_id){

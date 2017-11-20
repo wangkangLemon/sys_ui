@@ -150,13 +150,13 @@ class govService {
     }
 
     // 企业管理员查询接口
-    companyAdmin({
+    govAdmin({
         keyword,
-        company_id,
+        gov_id,
         page,
         page_size
     }) {
-        let finalUrl = `${urlPre}/${company_id}/admin/search`
+        let finalUrl = `/user/get/${gov_id}`
         return api.get(finalUrl, {
             keyword,
             page,
@@ -175,9 +175,9 @@ class govService {
         passwd,
         birthday,
         address,
-        company_id
+        gov_id
     }) {
-        let finalUrl = `${urlPre}/${company_id}/admin`
+        let finalUrl = `${urlPre}/${gov_id}/admin`
         return api.post(finalUrl, {
             department_id,
             name,

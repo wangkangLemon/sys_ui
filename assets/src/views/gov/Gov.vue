@@ -40,7 +40,7 @@
                 <p><i class="title">联系人邮箱：</i><span class="value">{{details.email || '无'}}</span></p>
                 <p><i class="title">企业电话：</i><span class="value">{{details.tel || '无'}}</span></p>
                 <p><i class="title">传真：</i><span class="value">{{details.fax || '无'}}</span></p>
-                <p><i class="title">地区：</i><span class="value">{{details.area_name || '无'}}</span></p>
+                <p><i class="title">上级部门：</i><span class="value">{{details.parent_name || '无'}}</span></p>
                 <p><i class="title">地址：</i><span class="value">{{details.address || '无'}}</span></p>
                 <p><i class="title">邮编：</i><span class="value">{{details.zip || '无'}}</span></p>
                 <p><i class="title">企业网址：</i><span class="value">{{details.url || '无'}}</span></p>
@@ -91,9 +91,9 @@
             </el-table-column>
             <el-table-column prop="operate" label="操作" width="180">
                 <template scope="scope">
-                    <!--<el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
+                    <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
                         管理员
-                    </el-button>-->
+                    </el-button>
                     <el-button type="text" size="small" @click="showFn(scope.$index, scope.row)">
                         详情
                     </el-button>
@@ -204,6 +204,7 @@
                     },
                     query: {
                         category: item.category
+                        
                     }
                 })
             },
