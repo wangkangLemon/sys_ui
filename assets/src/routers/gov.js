@@ -12,7 +12,7 @@ export default {
         //政府管理主页列表
         {
             path: 'index',
-            name: 'gov-index',
+            name: 'gov-index',  
             component: resolve => {
                 require.ensure([], () => {
                     resolve(require('../views/gov/Gov.vue'))

@@ -99,7 +99,6 @@
 
         },
         mounted() {
-            console.log(this.$refs.container)
             // 获取数据  按需加载 按需处理数据？  三个独立的选择器
             // this.$refs.container.addEventListener('click', () => {
             // if(this.cityData ){
@@ -138,8 +137,9 @@
                             id: v.id
                         })
                     })
-                    console.log(arr)
+                    // console.log(arr)
                     this[address] = arr
+
                 }).then(() => {
                     this.loading = false
                 })
@@ -154,17 +154,19 @@
                 levelPath = [this[typeArr[type]]]
                 if (type < typeArr.length - 1) { //最后一级之前
                     this.getData(val, t[type + 1]) //拿到下一级数据
-                    for (let i = type + 1; i < typeArr.length; i++) { // 从当前项开始初始化（清空）
-                        this[typeArr[i]] = null     
-                                                    //1 触发方法不能是三个 改成一个 这样来初始化 
-                                                    // 2 现在省触发3 市2 县1 
-                                                    // 3子组件调用父组件方法来回触发方法要解决的bug
-                    }
+                //     for (let i = type + 1; i < typeArr.length; i++) { // 从当前项开始初始化（清空）
+                //         this[typeArr[i]] = null 
+                //         // console.log(this[typeArr[i]])    
+                //                                     //1 触发方法不能是三个 改成一个 这样来初始化 （清空）
+                //                                     // 2 现在省触发3 市2 县1 
+                //                                     // 3子组件调用父组件方法来回触发方法要解决的bug
+                //     }
                 }
-                 this.change && this.change()
+                 this.change && this.change(val, t[type + 1])
                  //
             },
             setCurrVal(type, val) { //type  0 省 1 市 2 县
+
                 let emitArr = ['provinceChange', 'cityChange', 'areaChange']
                 this.$emit(emitArr[type], val)
                 //this.change && this.change()

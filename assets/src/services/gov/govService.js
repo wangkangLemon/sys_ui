@@ -4,7 +4,7 @@ const urlPre = config.apiHost + '/gov'
 
 class govService {
 
-    // category - 0-企业 1-工业 2-连锁
+    // category - 0-企业 1-工业 2-连锁 
     getSelectList({
         id = '',
         name = '',
@@ -21,6 +21,40 @@ class govService {
     }) {
         let finalUrl = urlPre + '/lists'
         return api.get(finalUrl, {
+            id,
+            name,
+            category,
+            page,
+            pagesize,
+            pid,
+            province_id,
+            city_id,
+            area_id,
+            town_id,
+            village_id,
+            deleted,
+        }, false).then((ret) => {
+            return ret.data
+        })
+    }
+
+    // category - 0-企业 1-工业 2-连锁 
+    postSelectList({
+        id = '',
+        name = '',
+        category = '',
+        pagesize = '',
+        page = '',
+        pid = '',
+        province_id = '',
+        city_id = '',
+        area_id = '',
+        town_id = '',
+        village_id = '',
+        deleted = '',
+    }) {
+        let finalUrl = urlPre + '/lists'
+        return api.post(finalUrl, {
             id,
             name,
             category,

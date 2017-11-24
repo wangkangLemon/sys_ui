@@ -68,8 +68,8 @@
                 <i>名称：</i>
                 <el-input @keyup.enter.native="getData" v-model="fetchParam.name" auto-complete="off"></el-input>
             </section>
-            <DateRange title="创建时间" :start="fetchParam.createTime" :end="fetchParam.endTime" v-on:changeStart="val=> fetchParam.createTime = val"
-                v-on:changeEnd="val=> fetchParam.endTime = val" :change="getData">
+            <DateRange title="创建时间" :start="fetchParam.adddate" :end="fetchParam.update" v-on:changeStart="val=> fetchParam.adddate = val"
+                v-on:changeEnd="val=> fetchParam.update = val" :change="getData">
             </DateRange>
         </section>
         <el-table v-loading="loading" border :data="govData" stripe style="width: 100%">
@@ -87,9 +87,9 @@
             </el-table-column>
             <el-table-column width="180" prop="email" label="邮箱">
             </el-table-column>
-            <el-table-column width="180" prop="create_time_name" label="创建时间">
+            <el-table-column width="180" prop="adddate" label="创建时间">
             </el-table-column>
-            <el-table-column prop="operate" label="操作" width="180">
+            <el-table-column prop="operate" label="操作" width="213">
                 <template scope="scope">
                     <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
                         管理员
@@ -134,7 +134,7 @@
         },
         data() {
             return {
-                isInit:false,
+                isInit: false,
                 govType: ['', '系统', '政府'],
                 types: [ // 部门类型
                     {
@@ -154,13 +154,14 @@
                 pageSize: 15,
                 govData: [],
                 fetchParam: {
-                    createTime: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
-                    endTime: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
+                    adddate: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
+                    update: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
                     typeSelect: '',
                     provinceSelect: '',
                     citySelect: '',
                     areaSelect: '',
-                    name: ''
+                    name: '',
+                    pid: void 0,
                 },
                 total: 0
             }
@@ -205,7 +206,7 @@
                     },
                     query: {
                         category: item.category
-                        
+
                     }
                 })
             },
@@ -220,7 +221,7 @@
                 this.getData()
             },
             handleCurrentChange(val) {
-                if(!this.isInit){
+                if (!this.isInit) {
                     this.isInit = true
                     return
                 }
@@ -228,16 +229,23 @@
                 this.getData()
             },
             getData() {
+                console.log(this.fetchParam)
+                if (this.fetchParam.provinceSelect) {
+                    this.fetchParam.pid = this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+                }
+  
+                console.log('this.fetchParam.pid=' + this.fetchParam.pid)
                 this.loading = true
-                return govService.getSelectList({
+                return govService.postSelectList({
                     pagesize: this.pageSize,
                     page: this.currentPage,
+                    pid: this.fetchParam.pid,
                     category: this.fetchParam.typeSelect,
                     name: this.fetchParam.name,
                     time_start: this.fetchParam.createTime,
                     time_end: this.fetchParam.endTime,
-                    province_id	: this.fetchParam.provinceSelect,
-                    city_id	: this.fetchParam.citySelect,
+                    province_id: this.fetchParam.provinceSelect,
+                    city_id: this.fetchParam.citySelect,
                     area_id: this.fetchParam.areaSelect
                 }).then((ret) => {
                     this.govData = ret
