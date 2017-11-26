@@ -28,7 +28,7 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="地区" :label-width="formLabelWidth">
+                <el-form-item label="部门" :label-width="formLabelWidth">
                     <Region :province="form.province_id"
                             :city="form.city_id"
                             :area="form.area_id"
@@ -62,13 +62,12 @@
                 <el-form-item prop="zip" label="邮编" :label-width="formLabelWidth">
                     <el-input v-model="form.zip" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="url" label="企业网址" :label-width="formLabelWidth">
+                <!--<el-form-item prop="url" label="企业网址" :label-width="formLabelWidth">
                     <el-input v-model="form.url" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="description" label="企业介绍" :label-width="formLabelWidth">
                     <el-input type="textarea" :rows="3" v-model="form.description" auto-complete="off"></el-input>
-                </el-form-item>
-               
+                </el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="submit('form')">提交</el-button>

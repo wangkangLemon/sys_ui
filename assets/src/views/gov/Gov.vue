@@ -61,8 +61,15 @@
                     </el-option>
                 </el-select>
             </section>
-            <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" title="地区" v-on:provinceChange="val => fetchParam.provinceSelect = val"
-                v-on:cityChange="val => fetchParam.citySelect = val" v-on:areaChange="val => fetchParam.areaSelect = val" :change="getData">
+            <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" 
+                    :town="fetchParam.townSelect" :village="fetchParam.villageSelect" 
+                    title="部门" 
+                    v-on:provinceChange="val => fetchParam.provinceSelect = val"
+                    v-on:cityChange="val => fetchParam.citySelect = val" 
+                    v-on:areaChange="val => fetchParam.areaSelect = val" 
+                    v-on:townChange="val => fetchParam.townSelect = val" 
+                    v-on:villageChange="val => fetchParam.villageSelect = val" 
+                    :change="getData">
             </Region>
             <section>
                 <i>名称：</i>
@@ -124,6 +131,8 @@
             provinceSelect: '',
             citySelect: '',
             areaSelect: '',
+            townSelect: '',
+            villageSelect: '',
             name: ''
         }
     }
@@ -160,6 +169,8 @@
                     provinceSelect: '',
                     citySelect: '',
                     areaSelect: '',
+                    townSelect: '',
+                    villageSelect: '',
                     name: '',
                     pid: void 0,
                 },
@@ -231,7 +242,7 @@
             getData() {
                 console.log(this.fetchParam)
                 if (this.fetchParam.provinceSelect) {
-                    this.fetchParam.pid = this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+                    this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
                 }
   
                 console.log('this.fetchParam.pid=' + this.fetchParam.pid)
@@ -246,7 +257,10 @@
                     time_end: this.fetchParam.endTime,
                     province_id: this.fetchParam.provinceSelect,
                     city_id: this.fetchParam.citySelect,
-                    area_id: this.fetchParam.areaSelect
+                    area_id: this.fetchParam.areaSelect,
+                    town_id: this.fetchParam.townSelect,
+                    village_id: this.fetchParam.villageSelect,
+
                 }).then((ret) => {
                     this.govData = ret
                     this.total = ret.total

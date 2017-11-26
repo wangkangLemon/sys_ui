@@ -29,6 +29,14 @@
             <el-option v-for="(item, index) in areas" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
+        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(3, townSelect)" v-model="townSelect">
+            <el-option v-for="(item, index) in towns" :label="item.name" :value="item.id" :key="item.id">
+            </el-option>
+        </el-select>
+        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(4, villageSelect)" v-model="villageSelect">
+            <el-option v-for="(item, index) in villages" :label="item.name" :value="item.id" :key="item.id">
+            </el-option>
+        </el-select>
     </section>
 </template>
 
@@ -39,15 +47,19 @@
     import govService from '../../../services/gov/govService.js'
 
     export default {
-        props: ['change', 'title', 'province', 'city', 'area', 'disabled'],
+        props: ['change', 'title', 'province', 'city', 'area',  'town',  'village', 'disabled'],
         data() {
             return {
                 provinces: [],
                 citys: [],
                 areas: [],
+                towns: [],
+                villages: [],
                 provinceSelect: '',
                 citySelect: '',
                 areaSelect: '',
+                townSelect: '',
+                villageSelect: '',
                 curItem: [],
                 cityData: '',
                 options: [],
@@ -57,6 +69,8 @@
                     province_id: null,
                     city_id: null,
                     area_id: null,
+                    town_id: null,
+                    village_id: null,
                 }
             }
         },
@@ -86,6 +100,24 @@
                     // console.log('this.areaSelect='+this.areaSelect)
                 } else {
                     this.areaSelect = ''
+                }
+            },
+            town(val) {
+                if (this.province && this.citySelect && val) {
+                    this.townSelect = val
+                    this.currentVal(2, val)
+                    // console.log('this.townSelect='+this.townSelect)
+                } else {
+                    this.townSelect = ''
+                }
+            },
+            village(val) {
+                if (this.province && this.citySelect && val) {
+                    this.villageSelect = val
+                    this.currentVal(2, val)
+                    // console.log('this.villageSelect='+this.villageSelect)
+                } else {
+                    this.villageSelect = ''
                 }
             },
             disabled(val) {
@@ -125,7 +157,10 @@
                     pid: pid,
                     province_id: this.fetchParam.provinceSelect,
                     city_id: this.fetchParam.citySelect,
-                    area_id: this.fetchParam.areaSelect
+                    area_id: this.fetchParam.areaSelect,
+                    town_id: this.fetchParam.townSelect,
+                    village_id: this.fetchParam.villageSelect,
+
                 }).then((ret) => {
                     this.cityData = ret
                     let arr = []
@@ -146,9 +181,9 @@
             },
             currentVal(type, val) {
                 let levelPath = []
-                let emitArr = ['provinceChange', 'cityChange', 'areaChange']
-                let typeArr = ['provinceSelect', 'citySelect', 'areaSelect']
-                let t = ['provinces', 'citys', 'areas']
+                let emitArr = ['provinceChange', 'cityChange', 'areaChange', 'townChange', 'villageChange']
+                let typeArr = ['provinceSelect', 'citySelect', 'areaSelect', 'townSelect', 'villageSelect']
+                let t = ['provinces', 'citys', 'areas', 'towns', 'villages']
 
                 if (!this[typeArr[type]]) return
                 levelPath = [this[typeArr[type]]]
@@ -167,7 +202,7 @@
             },
             setCurrVal(type, val) { //type  0 省 1 市 2 县
 
-                let emitArr = ['provinceChange', 'cityChange', 'areaChange']
+                let emitArr = ['provinceChange', 'cityChange', 'areaChange', 'townChange', 'villageChange']
                 this.$emit(emitArr[type], val)
                 //this.change && this.change()
 
