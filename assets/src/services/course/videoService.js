@@ -70,7 +70,6 @@ class VideoService {
     getVideo( gov_id, material_id, title, page, pagesize, create_start, create_end, status ) {
         let url = `${urlPre}/lists`
         return api.get(url, gov_id, material_id, title, page, pagesize, create_start, create_end, status ).then((ret) => {
-            console.log(ret)
             return ret.data
         })
     }
@@ -100,7 +99,9 @@ class VideoService {
     refreshVideoStatus({ companyid, id } = {}) {
         companyid = companyid || authUtils.getUserInfo().company_id
         let finalUrl = `${urlPre}/refresh/${id}`
-        return api.post(finalUrl, { id })
+        return api.post(finalUrl, { id }).then((ret) => {
+            return ret
+        })
     }
 
     // 获取上传封面的url
@@ -109,8 +110,8 @@ class VideoService {
     }
 
     deleteVideo({ id }) {
-        let url = `${urlPre}/video/${id}`
-        return api.del(url)
+        let url = `${urlPre}/delete/${id}`
+        return api.get(url)
     }
 
     // 获取视频预览地址

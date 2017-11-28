@@ -496,6 +496,7 @@
                 console.log(dataObj)
                 this.form.content = dataObj
                 // this.form.category_id = dataObj.category_id  
+                // this.form.ref_id = dataObj.contentid
                 this.form.ref_id = dataObj.contentid
                 this.form.ref_sync = 1
                 this.form.tags = ''

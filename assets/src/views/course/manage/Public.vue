@@ -48,7 +48,7 @@
         <article class="search">
             <section>
                 <i>课程名称</i>
-                <el-input v-model="fetchParam.keyword" @keyup.enter.native="fetchData"></el-input>
+                <el-input v-model="fetchParam.course_name" @keyup.enter.native="fetchData"></el-input>
             </section>
 
             <section>
