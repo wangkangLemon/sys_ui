@@ -32,7 +32,7 @@
              </template>
 
             <!--  没有参数的时候 也就是新增 只加一个名字    -->
-            <el-form-item label="姓名" prop="role_name" v-else>
+            <el-form-item label="角色名称" prop="role_name" v-else>
                 <el-input v-model.name="fetchParam.role_name"></el-input>
             </el-form-item>
 
@@ -48,7 +48,6 @@
     import sysService from '../../../services/sys/roleService.js'
     import role_mService from '../../../services/sys/role_mService.js'
     import vTags from '../../component/form/Tags.vue'
-    import config from '../../../utils/config.js'
     import clone from 'clone'
     export default {
         name: 'sys-form',

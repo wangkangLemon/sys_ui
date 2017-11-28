@@ -44,7 +44,7 @@
         <article class="search">
             <section>
                 <i>视频</i>
-                <el-input v-model="fetchParam.keyword" @keyup.enter.native="fetchData.setTime()"></el-input>
+                <el-input v-model="fetchParam.file_name" @keyup.enter.native="fetchData"></el-input>
             </section>
 
             <section>
@@ -128,7 +128,7 @@
                        @size-change="val => fetchParam.pagesize = val "
                        @current-change="val => fetchParam.page = val"
                        :current-page="fetchParam.page"
-                       :pagesize="fetchParam.pagesize"
+                       :page-size="fetchParam.pagesize"
                        :page-sizes="[15, 30, 60, 100]"
                        layout="sizes,total, prev, pager, next"
                        :total="total">
@@ -260,7 +260,6 @@
             fetchData () {
                 this.loadingData = true
                 return videoService.getVideo(this.fetchParam).then((ret) => {
-                    console.log(ret)
                     this.data = ret
                     this.total = ret.total
                     this.loadingData = false
@@ -292,9 +291,10 @@
                 }
             },
             del (index, row) {
-                xmview.showDialog(`你将要删除视频 <span style="color:red">${row.name}</span> 操作不可恢复确认吗?`, () => {
+                console.log(row)
+                xmview.showDialog(`你将要删除视频 <span style="color:red">${row.file_name}</span> 操作不可恢复确认吗?`, () => {
                     this.loadingData = true
-                    videoService.deleteVideo({id: row.id}).then(() => {
+                    videoService.deleteVideo({id: row.material_id}).then(() => {
                         xmview.showTip('success', '操作成功')
                         this.data.splice(index, 1)
                         this.loadingData = false
@@ -328,7 +328,11 @@
             // 刷新视频状态
             refreshStatus (index, row) {
                 videoService.refreshVideoStatus({id: row.material_id}).then((ret) => {
-                    row.status = 0
+                    if(ret.code === 1 ){
+                        row.status = 1
+                    } else{
+                        row.status = 0
+                    }
                 })
             }
         },

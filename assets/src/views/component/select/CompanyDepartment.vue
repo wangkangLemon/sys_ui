@@ -7,7 +7,7 @@
 
 <script>
     import SelectScroll from '../../component/form/SelectScroll.vue'
-    import departmentService from '../../../services/departmentService'
+    import departmentService from '../../../services/gov/departmentService.js'
     export default{
         props: ['value', 'type'],
         data () {

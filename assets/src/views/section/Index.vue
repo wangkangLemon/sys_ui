@@ -124,9 +124,9 @@
     <article id="sys-index-container">
         <section class="manage-container">
             <el-button type="primary" icon="plus" @click="content.isShow = true">选取内容</el-button>
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'section-add', params:{sys_type:'add'}})">
+            <!--<el-button type="primary" icon="plus" @click="$router.push({ name:'section-add', params:{sys_type:'add'}})">
                 <i>添加数据</i>
-            </el-button>
+            </el-button>-->
         </section>
          <!--选取内容-->
         <ChooseContent v-model="content.isShow" v-on:result="contentConfirm"></ChooseContent>
@@ -134,11 +134,11 @@
         <!--添加/编辑内容课程-->
         <el-dialog v-model="addForm" :title="formTitle">
             <section v-if="form.ref_id">
-                <div class="keep" v-if="form.ref_sync"></div>
+                <!--<div class="keep" v-if="form.ref_sync"></div>  同步遮罩-->
                 <div class="synchronize">
                     {{catArr[category]}}：{{category == 'course' ? form.content.course_name : form.content.title}}
-                    <el-button @click="form.ref_sync = 0" v-if="form.ref_sync">关闭同步</el-button>
-                    <el-button @click="keepSync" v-if="!form.ref_sync">开启同步</el-button>
+                    <!--<el-button @click="form.ref_sync = 0" v-if="form.ref_sync">关闭同步</el-button>
+                    <el-button @click="keepSync" v-if="!form.ref_sync">开启同步</el-button>-->
                 </div>
             </section>
 
@@ -193,9 +193,13 @@
        
 
         <article class="search">
-            <section>
+            <!--<section>
                 <i>数据名称</i>
                 <el-input v-model="keyWord" placeholder="请输入数据名称"></el-input>
+            </section>-->
+            <section>
+                <i>栏目名称</i>
+                <el-input v-model="fetchParam.name" placeholder="请输入栏目名称" @keyup.enter.native="fetchData" auto-complete="off"></el-input>
             </section>
 
         </article>
@@ -204,8 +208,8 @@
             v-if="SecCateName">
 
             <el-table-column type="selection"></el-table-column>
-            <el-table-column min-width="100" prop="id" label="区块id" v-if="data">
-            </el-table-column>
+            <!--<el-table-column min-width="100" prop="id" label="区块id" v-if="data">
+            </el-table-column>-->
             <el-table-column min-width="100" prop="formdateName" label="栏目名称"> 
             </el-table-column>
             <el-table-column min-width="100" prop="ref_sync"  :formatter="format" label="是否引用">  
@@ -231,7 +235,7 @@
         <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
             :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
-
+        <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput>
         <!--底部的批量删除和移动两个按钮-->
         <div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
@@ -247,10 +251,12 @@
     import ChooseContent from '../component/choose/ChooseContent'
     import courseService from '../../services/course/courseService.js'
     import {date2Str} from '../../utils/timeUtils.js'
+    import ImagEcropperInput from '../component/upload/ImagEcropperInput.vue'
 
     function getFetchParam() {
         return {
             // status: void 0, //  1-禁用 0-正常
+            name:'',
             page: 1,
             pagesize: 15,
         }
@@ -259,10 +265,12 @@
     export default {
         components: {
             DateRange,
-            ChooseContent
+            ChooseContent,
+            ImagEcropperInput
         },
         data() {
             return {
+                ratio: 0, // 裁剪的比例
                 dialog:{
                     category_id: null, //栏目id   
                 },
@@ -308,6 +316,7 @@
                     adddate: '', // 日期
                     sort: '', // 排序
                     tags: '',
+                    tags_color:'',
                     category_id: 0, //栏目id
                 },
                 tags: [{
@@ -382,13 +391,19 @@
                             msg = '修改成功'
                         }
                         this.form.category_id =this.dialog.category_id
+
+                        //我现在就写死了 
+                        if(this.form.tags === 'hot') this.form.tags_color ='#FFD220'
+                        if(this.form.tags === 'new') this.form.tags_color ='#FF4B20'
+                        if(this.form.tags === 'recommend') this.form.tags_color ='#3953C3'
                         console.log(this.form)
                         reqFn({
                              id : this.form.id, 
                              category_id :this.form.category_id, 
                              ref_type : this.form.ref_type, 
                              ref_id : this.form.ref_id,  
-                             ref_sync : this.form.ref_sync,  
+                            //  ref_sync : this.form.ref_sync,  
+                             ref_sync : 0,  
                              title : this.form.course_name,  
                              image : this.form.image, 
                              url : this.form.url,  
@@ -425,7 +440,7 @@
             },
             // 图片上传完毕
             handleImgUploaded(data, ext) {
-                courseService.getUploadCategoryImgUrl({
+                courseService.commonUploadImageBaseSection({
                     // section_id: this.section.currentID,
                     alias: Date.now() + ext,
                     image: data
@@ -435,7 +450,7 @@
             },
             
             // handleImgUploaded (response) {
-            //     this.fetchParam.image = response.data.url
+            //     this.fetchParam.image = response.url
             // },
             addCourse(form) {
                 if (this.section.loading || this.result.loading) {
@@ -481,6 +496,7 @@
                 console.log(dataObj)
                 this.form.content = dataObj
                 // this.form.category_id = dataObj.category_id  
+                // this.form.ref_id = dataObj.contentid
                 this.form.ref_id = dataObj.contentid
                 this.form.ref_sync = 1
                 this.form.tags = ''
@@ -529,6 +545,7 @@
                 this.fetchData()
             },
             fetchData(val) {
+                console.log(this.fetchParam)
                 return dataService.fetchData(this.fetchParam).then((ret) => {
                     // console.log(ret.data)
                     this.dataCache = ret.data

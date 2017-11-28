@@ -81,7 +81,6 @@
     import * as filterUtils from '../../utils/filterUtils'
     import role_mService from '../../services/sys/role_mService.js'
     import ImagEcropperInput from '../component/upload/ImagEcropperInput.vue'
-    import config from '../../utils/config'
     import clone from 'clone'
     export default {
         name: 'sys-form',

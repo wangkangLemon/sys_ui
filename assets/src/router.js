@@ -9,6 +9,7 @@ import company from './routers/company'        // 企业模块
 import sys from './routers/sys'                // 系统模块
 import section from './routers/section'        // 区块模块
 import setting from './routers/setting'        // 设置模块
+import gov from './routers/gov'                // 政府模块
 
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
@@ -66,24 +67,7 @@ const routes = [{
                     noback: true
                 },
             },
-            // {
-            //     path: '/section/lists',
-            //     name: '区块列表',
-            //     component: resolve => {
-            //         require.ensure([], () => {
-            //             resolve(require('./views/section/lists.vue'))
-            //         })
-            //     },
-            // },
-            // {
-            //     path: '/section/add',
-            //     name: '区块添加',
-            //     component: resolve => {
-            //         require.ensure([], () => {
-            //             resolve(require('./views/section/add.vue'))
-            //         })
-            //     },
-            // },
+
             // ============ 基础模块 ==================
             ...base,
             // ============ 培训模块 ==================
@@ -96,8 +80,11 @@ const routes = [{
             sys,
             // ============ 区块模块 ==================
             section,
-            // ============ 设置模块 ==================
+            // ============ 设置模块 ==================设置模块
             setting,
+            // ============ 设置模块 ==================
+            gov,
+
         ]
     },
     { // 登录
