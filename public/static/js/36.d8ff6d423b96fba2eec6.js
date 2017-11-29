@@ -1,0 +1,2 @@
+webpackJsonp([36],{166:function(e,t,r){var n=r(10)(r(279),r(429),null,null);e.exports=n.exports},279:function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={}},429:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("keep-alive",{attrs:{exclude:"sys-form, sys-video-add"}},[r("router-view")],1)},staticRenderFns:[]}}});
+//# sourceMappingURL=36.d8ff6d423b96fba2eec6.js.map
