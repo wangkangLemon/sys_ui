@@ -17,11 +17,11 @@
 <template>
     <section class="region-container" ref="container">
         <i>{{title}}</i>
-        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(0, provinceSelect)" v-model="provinceSelect">
+        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(0, provinceSelect)"  v-model="provinceSelect">
             <el-option v-for="(item, index) in provinces" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
-        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(1, citySelect)" v-model="citySelect">
+        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(1, citySelect)"  v-model="citySelect">
             <el-option v-for="(item, index) in citys" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
@@ -33,7 +33,7 @@
             <el-option v-for="(item, index) in towns" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
-        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(4, villageSelect)" v-model="villageSelect">
+        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(4, villageSelect)"v-model="villageSelect">
             <el-option v-for="(item, index) in villages" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
@@ -58,7 +58,7 @@
                 provinceSelect: '',
                 citySelect: '',
                 areaSelect: '',
-                townSelect: '',
+                townSelect: '', 
                 villageSelect: '',
                 curItem: [],
                 cityData: '',
@@ -151,6 +151,10 @@
         },
         methods: {
             getData(pid, address) {
+                console.log(this.fetchParam.provinceSelect)
+                if (this.fetchParam.provinceSelect!==undefined) {
+                    this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+                }
                 this.loading = true
                 govService.getSelectList({
                     pagesize: -1,
@@ -200,47 +204,11 @@
                  this.change && this.change(val, t[type + 1])
                  //
             },
+          
             setCurrVal(type, val) { //type  0 省 1 市 2 县
-
                 let emitArr = ['provinceChange', 'cityChange', 'areaChange', 'townChange', 'villageChange']
                 this.$emit(emitArr[type], val)
-                //this.change && this.change()
-
-                // let levelPath = []
-                // let typeArr = ['provinceSelect', 'citySelect', 'areaSelect']
-                // let t = ['provinces', 'citys', 'areas']
-
-                // if (!this[typeArr[type]]) return
-                // levelPath = [this[typeArr[type]]]
-                // console.log(levelPath)
-                // console.log(type,val)
-                // if (type == 0) {  //类型是省拿到子集市
-                //     // this.curItem = treeUtils.findItem(this.cityData, levelPath)
-                //     // console.log(this.curItem)
-                //     // if (this.curItem.children && this.curItem.children.length > 0) {
-                //     //     this.citys = this.curItem.children
-                //     // } else{
-                //         this.getData(val,t[type+1])
-                //         for(let i=type+1;i<typeArr.length;i++){
-                //              this[typeArr[i]] = null
-                //         }
-                //     // }
-                // } else if (this.provinceSelect && type == 1) {  //类型是市拿到子集区
-                //     // if (this.citys && this.citys.length > 0) {
-                //     //     this.areas = treeUtils.findItem(this.citys, levelPath).children
-                //     // }else{
-                //     //      this.getData(val,'areas')
-                //     // }
-                //     this.getData(val,'areas')
-                //     this.areaSelect = null
-                // }
-
-                // if (type < typeArr.length - 1) {  //最后一级之前
-                //     this.getData(val, t[type + 1])   //拿到下一级数据
-                //     for (let i = type + 1; i < typeArr.length; i++) {  // 从当前项开始初始化（清空）
-                //         this[typeArr[i]] = null
-                //     }
-                // }
+             
             }
         }
     }

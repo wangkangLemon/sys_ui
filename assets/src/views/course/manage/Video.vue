@@ -120,9 +120,9 @@
         </el-table>
 
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
 
         <el-pagination class="pagin"
                        @size-change="val => fetchParam.pagesize = val "
@@ -195,7 +195,7 @@
             pagesize: 15,
             create_start: '',
             create_end: '',
-            status:null,
+            status:'',
         }
     }
 

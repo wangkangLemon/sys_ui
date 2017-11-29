@@ -224,8 +224,9 @@
                             authUtils.setAuthToken(ret._exts.token) // 保存token
                             authUtils.setUserInfo(ret.data) // 保存用户信息
                             // console.log('=========================')
-                            // console.log(ret.data)
+                            // console.log(ret)
                             xmview.showTip('success', '登录成功, 正在跳转...', 1e9)
+                           
                             setTimeout(() => {
                                 // 如果需要二次登录
                                 if (ret.need_two_step) {

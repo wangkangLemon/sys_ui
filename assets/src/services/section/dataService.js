@@ -4,9 +4,9 @@ const urlPre = config.apiHost + '/section/data'
 
 class dataService {
     //拿到区块列表
-    fetchData ({pagesize, page, name}) {
+    fetchData ({pagesize, page, title}) {
         let url = urlPre + '/lists'
-        return api.post(url,{pagesize, page ,name}).then(ret => {
+        return api.post(url,{pagesize, page ,title}).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -29,9 +29,9 @@ class dataService {
     }
 
     // 创建
-    create({ id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, adddate, tags, tags_color, sort }) {
+    create({ id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, addate, tags, tags_color, sort }) {
         let url1 = urlPre + '/create'
-        return api.post(url1, { id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, adddate, tags, tags_color, sort }).then(ret => {
+        return api.post(url1, { id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, addate, tags, tags_color, sort }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data
@@ -42,9 +42,9 @@ class dataService {
         })
     }
     // 更新
-    edit({ id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, adddate, tags, tags_color, sort }) {
+    edit({ id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, addate, tags, tags_color, sort }) {
         let url1 = `${urlPre}/edit/${id}`
-        return api.post(url1, { id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, adddate, tags, tags_color, sort }).then(ret => {
+        return api.post(url1, { id, category_id, ref_type, ref_id, ref_sync, title, image, url, desc, addate, tags, tags_color, sort }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data

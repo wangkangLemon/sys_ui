@@ -104,7 +104,7 @@
                     <el-tag v-else>已禁用 </el-tag>
                 </template>
             </el-table-column>
-            <el-table-column width="190" prop="addtime" label="创建时间">
+            <el-table-column width="190" prop="addate" label="创建时间">
             </el-table-column>
             <el-table-column fixed="right" width="227" label="操作">
                 <template scope="scope">
@@ -130,10 +130,10 @@
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
 
         <!--移动子栏目的弹出框-->
         <div class="el-dialog__wrapper" v-show="dialogTree.isShow">

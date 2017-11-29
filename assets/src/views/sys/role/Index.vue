@@ -58,9 +58,9 @@
             </el-table-column>
             <el-table-column min-width="100" prop="role_name" label="角色名">
             </el-table-column>
-            <el-table-column min-width="100" prop="addtime" label="添加时间">
+            <el-table-column min-width="100" prop="addate" label="添加时间">
             </el-table-column>
-            <el-table-column min-width="100" prop="uptime" label="更新时间">
+            <el-table-column min-width="100" prop="update" label="更新时间">
             </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">
@@ -96,10 +96,10 @@
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
     </article>
 </template>
 

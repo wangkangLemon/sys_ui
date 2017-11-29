@@ -9,6 +9,7 @@ export function login (username, password) {
         if (ret.code == 0) {
             return ret
         } else {
+            xmview.showTip('error', ret.message)
             return Promise.reject(ret)
         }
     })

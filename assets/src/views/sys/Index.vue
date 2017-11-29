@@ -54,9 +54,9 @@
         <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <el-table-column type="selection"></el-table-column>
-            <el-table-column min-width="200" prop="name" label="姓名" v-if="data">
+            <el-table-column min-width="100" prop="name" label="姓名" v-if="data">
             </el-table-column>
-            <el-table-column min-width="200" prop="role_id" label="角色">
+            <el-table-column min-width="130" prop="role_id" label="角色">
                 <template scope="scope">
                     <span v-if="scope.row.role_id==1">超级管理员</span>
                     <span v-else-if="scope.row.role_id==2">系统管理员</span>
@@ -67,7 +67,7 @@
                     <span v-else-if="scope.row.role_id==8">高级设计师</span>
                 </template>
             </el-table-column>
-            <el-table-column min-width="200" prop="mobile" label="手机">
+            <el-table-column min-width="130" prop="mobile" label="手机">
             </el-table-column>
             <el-table-column min-width="200" prop="email" label="邮箱">
             </el-table-column>
@@ -77,6 +77,10 @@
                     <el-tag v-else-if="scope.row.deleted == 0&&scope.row.disabled == 0" type="success">正常</el-tag>
                     <el-tag v-else>禁用</el-tag>
                 </template>
+            </el-table-column>
+            <el-table-column min-width="200" prop="addate" label="添加时间">
+            </el-table-column>
+            <el-table-column min-width="200" prop="update" label="更新时间">
             </el-table-column>
             <el-table-column fixed="right" width="207" label="操作">
                 <template scope="scope">
@@ -104,10 +108,10 @@
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
 
     </article>
 </template>
