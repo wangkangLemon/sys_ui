@@ -124,11 +124,11 @@
     <article id="sys-index-container">
         <section class="manage-container">
             <el-button type="primary" icon="plus" @click="content.isShow = true">选取内容</el-button>
-            <!--<el-button type="primary" icon="plus" @click="$router.push({ name:'section-add', params:{sys_type:'add'}})">
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'section-add', params:{sys_type:'add'}})">
                 <i>添加数据</i>
-            </el-button>-->
+            </el-button>
         </section>
-         <!--选取内容-->
+        <!--选取内容-->
         <ChooseContent v-model="content.isShow" v-on:result="contentConfirm"></ChooseContent>
 
         <!--添加/编辑内容课程-->
@@ -142,19 +142,19 @@
                 </div>
             </section>
 
-<!--1 这是区块选取的栏目 -->   
-            <el-form  label-position="top" :rules="rules" >
-                <el-form-item label="栏目菜单"  :fetch-suggestions="querySearch">
-                    <el-select v-model="dialog.category_id" placeholder="请输入栏目菜单"> 
-                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <!--1 这是区块选取的栏目 -->
+            <el-form label-position="top" :rules="rules">
+                <el-form-item label="栏目菜单" :fetch-suggestions="querySearch">
+                    <el-select v-model="dialog.category_id" placeholder="请输入栏目菜单">
+                        <el-option v-for="item in drop_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
-            
-<!--2 这是课程类表选取的数据 -->
+
+            <!--2 这是课程类表选取的数据 -->
 
             <el-form label-position="top" class="addForm" :model="form" :rules="rules" ref="form">
-               
+
                 <el-form-item prop="course_name" label="标题" :label-width="formLabelWidth">
                     <el-input v-model="form.course_name" auto-complete="off"></el-input>
                 </el-form-item>
@@ -178,8 +178,8 @@
                 <el-form-item class="tag" label="标签" :label-width="formLabelWidth">
                     <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                 </el-form-item>
-                <el-form-item prop="adddate" label="日期" :label-width="formLabelWidth">
-                    <el-adddate-picker v-model="form.adddate" type="adddate" />
+                <el-form-item prop="addate" label="日期" :label-width="formLabelWidth">
+                    <el-addate-picker v-model="form.addate" type="addate" />
                 </el-form-item>
                 <el-form-item prop="sort" label="排序" :label-width="formLabelWidth">
                     <el-input v-model="form.sort" auto-complete="off" placeholder="排序越大越靠前，留空则自动设为最靠前的排序"></el-input>
@@ -190,16 +190,32 @@
                 <el-button type="primary" @click="submit('form')">确 定</el-button>
             </div>
         </el-dialog>
-       
+
 
         <article class="search">
-            <!--<section>
-                <i>数据名称</i>
-                <el-input v-model="keyWord" placeholder="请输入数据名称"></el-input>
-            </section>-->
+
             <section>
-                <i>栏目名称</i>
-                <el-input v-model="fetchParam.name" placeholder="请输入栏目名称" @keyup.enter.native="fetchData" auto-complete="off"></el-input>
+                <!--<el-form label-width="120px" ref="form" :model="fetchParam">
+                    <el-form-item label="区块栏目" :fetch-suggestions="querySearch">
+                        <el-select v-model="fetchParam.category_id" placeholder="请输入栏目菜单">
+                            <el-option v-for="item in drop_list" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>-->
+
+                 <i>栏目菜单</i>
+                    <el-select  v-model="fetchParam.category_id" placeholder="请输入栏目菜单" @change="fetchCate" clearable >                       
+                        <el-option  v-for="item in SecCateName" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
+                    </el-select>
+            </section>
+
+            <!--<el-form-item label="栏目菜单" prop="category_id"> //需改进待后台返ended数据后做联动列表
+                        <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
+            </el-form-item>-->
+
+            <section>
+                <i>标题</i>
+                <el-input v-model="fetchParam.title" placeholder="请输入标题" @keyup.enter.native="fetchData" auto-complete="off"></el-input>
             </section>
 
         </article>
@@ -210,13 +226,13 @@
             <el-table-column type="selection"></el-table-column>
             <!--<el-table-column min-width="100" prop="id" label="区块id" v-if="data">
             </el-table-column>-->
-            <el-table-column min-width="100" prop="formdateName" label="栏目名称"> 
+            <el-table-column min-width="100" prop="formdateName" label="栏目名称">
             </el-table-column>
-            <el-table-column min-width="100" prop="ref_sync"  :formatter="format" label="是否引用">  
+            <el-table-column min-width="100" prop="ref_sync" :formatter="format" label="是否引用">
             </el-table-column>
             <el-table-column min-width="400" prop="title" label="标题">
             </el-table-column>
-            <el-table-column min-width="100" prop="addtime" label="添加时间">
+            <el-table-column min-width="100" prop="addate" label="添加时间">
             </el-table-column>
             <el-table-column min-width="100" prop="tags" label="标签">
             </el-table-column>
@@ -237,10 +253,10 @@
         </el-pagination>
         <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput>
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
     </article>
 </template>
 
@@ -250,13 +266,17 @@
     import cateService from '../../services/section/cateService.js'
     import ChooseContent from '../component/choose/ChooseContent'
     import courseService from '../../services/course/courseService.js'
-    import {date2Str} from '../../utils/timeUtils.js'
+    import {
+        date2Str
+    } from '../../utils/timeUtils.js'
     import ImagEcropperInput from '../component/upload/ImagEcropperInput.vue'
 
     function getFetchParam() {
         return {
             // status: void 0, //  1-禁用 0-正常
-            name:'',
+            category_id: void 0,
+            title: '',
+            name: '',
             page: 1,
             pagesize: 15,
         }
@@ -271,10 +291,10 @@
         data() {
             return {
                 ratio: 0, // 裁剪的比例
-                dialog:{
+                dialog: {
                     category_id: null, //栏目id   
                 },
-                drop_list:[],
+                drop_list: [],
                 init: false,
                 loadingData: false,
                 data: [], // 表格数据
@@ -313,10 +333,10 @@
                     ref_sync: 0, // 是否与引用同步
                     image: '', // 图片
                     description: '', // 描述
-                    adddate: '', // 日期
+                    addate: '', // 日期
                     sort: '', // 排序
                     tags: '',
-                    tags_color:'',
+                    tags_color: '',
                     category_id: 0, //栏目id
                 },
                 tags: [{
@@ -347,7 +367,7 @@
                         message: '链接不能为空',
                         trigger: 'blur'
                     }],
-                    category_id:[{
+                    category_id: [{
                         required: true,
                     }]
                 }
@@ -356,31 +376,39 @@
         activated() {
             this.fetchData() //获取课程栏目数据名称
             this.fetchCate() //获取区块列表数据
-            this.getDropval() //区块栏目
+            // this.getDropval() //区块栏目
         },
-        created(){
+        watch: {
+            'fetchParam.category_id'(){
+                this.fetchData() 
+            }
         },
+        created() {},
         methods: {
-            format(row, column, cellValue){
-              return row.ref_sync==1?'是':'否' 
+            format(row, column, cellValue) {
+                return row.ref_sync == 1 ? '是' : '否'
             },
-             //拿到栏目菜单
+            //拿到栏目菜单
             querySearch(queryString, cb) {
+                alert(1111)
                 var restaurants = this.restaurants;
                 var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
                 // 调用 callback 返回建议列表的数据返回建议列表的数据
                 cb(results);
             },
-             //获取栏目菜单下拉列表
-            getDropval(){
-                cateService.fetchData({pagesize:-1}).then((ret)=>{
-                console.log(ret.data)
-                 this.drop_list=ret.data;
-                })
-            },
+        //     //获取栏目菜单下拉列表
+            // getDropval() {
+            //     alert(1)
+            //     cateService.fetchData({
+            //         pagesize: -1
+            //     }).then((ret) => {
+            //         console.log(ret.data)
+            //         this.drop_list = ret.data;
+            //     })
+            // },
             submit(form) { // 表单提交
                 // this.form.section_id = this.section.currentID
-                this.form.adddate = this.form.adddate ? date2Str(this.form.adddate) : ''
+                this.form.addate = this.form.addate ? date2Str(this.form.addate) : ''
                 this.form.ref_type = this.form.ref_id ? this.category : 'link'
                 this.$refs[form].validate((valid) => {
                     if (valid) {
@@ -390,28 +418,27 @@
                             reqFn = dataService.edit
                             msg = '修改成功'
                         }
-                        this.form.category_id =this.dialog.category_id
+                        this.form.category_id = this.dialog.category_id
 
-                        //我现在就写死了 
-                        if(this.form.tags === 'hot') this.form.tags_color ='#FFD220'
-                        if(this.form.tags === 'new') this.form.tags_color ='#FF4B20'
-                        if(this.form.tags === 'recommend') this.form.tags_color ='#3953C3'
+                        if (this.form.tags === 'hot') this.form.tags_color = '#FFD220'
+                        if (this.form.tags === 'new') this.form.tags_color = '#FF4B20'
+                        if (this.form.tags === 'recommend') this.form.tags_color = '#3953C3'
                         console.log(this.form)
                         reqFn({
-                             id : this.form.id, 
-                             category_id :this.form.category_id, 
-                             ref_type : this.form.ref_type, 
-                             ref_id : this.form.ref_id,  
+                            id: this.form.id,
+                            category_id: this.form.category_id,
+                            ref_type: this.form.ref_type,
+                            ref_id: this.form.ref_id,
                             //  ref_sync : this.form.ref_sync,  
-                             ref_sync : 0,  
-                             title : this.form.course_name,  
-                             image : this.form.image, 
-                             url : this.form.url,  
-                             desc : this.form.description,  
-                             adddate : this.form.adddate,  
-                             tags : this.form.tags, 
-                             tags_color : this.form.tags_color, 
-                             sort : this.form.sort,  
+                            ref_sync: 0,
+                            title: this.form.course_name,
+                            image: this.form.image,
+                            url: this.form.url,
+                            desc: this.form.description,
+                            addate: this.form.addate,
+                            tags: this.form.tags,
+                            tags_color: this.form.tags_color,
+                            sort: this.form.sort,
                         }).then((ret) => {
                             xmview.showTip('success', msg)
                             this.addForm = false
@@ -435,7 +462,7 @@
                 this.form.course_name = this.form.content.course_name
                 this.form.image = this.form.content.image
                 this.form.description = this.form.content.description
-                this.form.adddate = this.form.content.adddate
+                this.form.addate = this.form.content.addate
                 this.form.sort = ''
             },
             // 图片上传完毕
@@ -448,7 +475,7 @@
                     this.form.image = ret.url
                 })
             },
-            
+
             // handleImgUploaded (response) {
             //     this.fetchParam.image = response.url
             // },
@@ -465,7 +492,7 @@
                     ref_sync: 0,
                     image: '',
                     description: '',
-                    adddate: '',
+                    addate: '',
                     sort: '',
                     tags: ''
                 }
@@ -492,7 +519,7 @@
                 this.addForm = true
             },
             //弹窗内容
-            contentConfirm(dataObj) { 
+            contentConfirm(dataObj) {
                 console.log(dataObj)
                 this.form.content = dataObj
                 // this.form.category_id = dataObj.category_id  
@@ -507,7 +534,7 @@
             },
 
             //获取栏目名称   
-            
+
             getCategory_name(id) {
                 let i = null
                 this.SecCateName.forEach(v => {
@@ -519,6 +546,7 @@
             },
             //获取栏目名称
             fetchCate() {
+                console.log(this.fetchParam)
                 cateService.fetchData().then((ret) => {
                     // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                     this.SecCateName = ret.data
@@ -562,10 +590,10 @@
                 selection.forEach((item) => {
                     ret.push(item.id)
                 })
-                this.selectedIds = ret  
+                this.selectedIds = ret
             },
 
-            // 单条删除
+        //     // 单条删除
             del(index, row) {
                 xmview.showDialog(`你将要删除第 <span style="color:red">${row.id}</span> 条数据,  此操作不可恢复确认吗?`, () => {
                     dataService.delete(row.id).then(() => {

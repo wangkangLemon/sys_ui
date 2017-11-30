@@ -69,13 +69,13 @@
                     v-on:areaChange="val => fetchParam.areaSelect = val" 
                     v-on:townChange="val => fetchParam.townSelect = val" 
                     v-on:villageChange="val => fetchParam.villageSelect = val" 
-                    :change="getData">
+                    :change="getData" >
             </Region>
             <section>
                 <i>名称：</i>
-                <el-input @keyup.enter.native="getData" v-model="fetchParam.name" auto-complete="off"></el-input>
+                <el-input @keyup.enter.native="getData" v-model="fetchParam.name" @change="changeName" auto-complete="off"></el-input>
             </section>
-            <DateRange title="创建时间" :start="fetchParam.adddate" :end="fetchParam.update" v-on:changeStart="val=> fetchParam.adddate = val"
+            <DateRange title="创建时间" :start="fetchParam.addate" :end="fetchParam.update" v-on:changeStart="val=> fetchParam.addate = val"
                 v-on:changeEnd="val=> fetchParam.update = val" :change="getData">
             </DateRange>
         </section>
@@ -90,11 +90,11 @@
             </el-table-column>
             <el-table-column width="100" prop="concact" label="联系人">
             </el-table-column>
-            <el-table-column width="150" prop="tel" label="手机">
+            <el-table-column width="150" prop="mobile" label="手机">
             </el-table-column>
             <el-table-column width="180" prop="email" label="邮箱">
             </el-table-column>
-            <el-table-column width="180" prop="adddate" label="创建时间">
+            <el-table-column width="180" prop="addate" label="创建时间">
             </el-table-column>
             <el-table-column prop="operate" label="操作" width="213">
                 <template scope="scope">
@@ -163,7 +163,7 @@
                 pageSize: 15,
                 govData: [],
                 fetchParam: {
-                    adddate: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
+                    addate: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
                     update: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
                     typeSelect: '',
                     provinceSelect: '',
@@ -172,7 +172,7 @@
                     townSelect: '',
                     villageSelect: '',
                     name: '',
-                    pid: void 0,
+                    pid: void -1,
                 },
                 total: 0
             }
@@ -182,7 +182,17 @@
                 xmview.setContentLoading(false)
             })
         },
+        watch: {
+            'fetchParam.name':function(){
+                if(this.fetchParam.pid==undefined){
+                    this.fetchParam.pid = -1
+                }
+            }
+        },
         methods: {
+            changeName(){
+
+            },
             initFetchParam() {
                 this.currentPage = 1
                 this.fetchParam = clearFn()
@@ -240,21 +250,21 @@
                 this.getData()
             },
             getData() {
-                console.log(this.fetchParam)
-                if (this.fetchParam.provinceSelect) {
+                if (this.fetchParam.provinceSelect!=='') {
                     this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
                 }
-  
-                console.log('this.fetchParam.pid=' + this.fetchParam.pid)
+                if(!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !this.fetchParam.townSelect && !this.fetchParam.villageSelect){
+                    this.fetchParam.pid= -1
+                }
                 this.loading = true
-                return govService.postSelectList({
+                return govService.getSelectList({
                     pagesize: this.pageSize,
                     page: this.currentPage,
                     pid: this.fetchParam.pid,
                     category: this.fetchParam.typeSelect,
                     name: this.fetchParam.name,
-                    time_start: this.fetchParam.createTime,
-                    time_end: this.fetchParam.endTime,
+                    time_start: this.fetchParam.addate,
+                    time_end: this.fetchParam.update,
                     province_id: this.fetchParam.provinceSelect,
                     city_id: this.fetchParam.citySelect,
                     area_id: this.fetchParam.areaSelect,

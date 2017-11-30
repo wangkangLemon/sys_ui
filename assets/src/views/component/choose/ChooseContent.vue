@@ -20,8 +20,8 @@
         <el-dialog class="choose-course main-container" title="选取内容" :visible.sync="curValue">
             <section class="search">
                 <section>
-                    <i>名称</i>
-                    <el-input @keyup.enter.native="changeList" v-model="search.keyword"></el-input>
+                    <i>课程名称</i>
+                    <el-input @keyup.enter.native="fetchData" v-model="search.course_name"></el-input>
                 </section>
 
                 <section>
@@ -31,14 +31,14 @@
 
             </section>
             <el-table v-loading="loadingData" border :data="data" :highlight-current-row="true">
-                <el-table-column prop="course_name" label="课程"></el-table-column>
-                <el-table-column prop="gov_name" label="企业" width="200"></el-table-column>
-                <el-table-column prop="material_type" label="类型" width="150">
+                <el-table-column prop="course_name" label="课程名称"></el-table-column>
+                <el-table-column prop="gov_name" label="部门名称" width="200"></el-table-column>
+                <el-table-column prop="material_type" label="课程类别" width="150">
                     <template scope="scope">
                         {{material_type[scope.row.material_type]}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="operate" label="类型" width="100">
+                <el-table-column prop="operate" label="点击" width="100">
                     <template scope="scope">
                         <el-button type="text" @click="courseConfirm(scope.row)">选取</el-button>
                     </template>
@@ -90,7 +90,7 @@
                 curValue: this.value,
                 loadingData: false,
                 search: {
-                    keyword: '',
+                    course_name: '',
                 },
                 category: 'course',
                 data: [],
@@ -146,6 +146,7 @@
                 this.loadingData = true
                 // 获取课程数据
                 return courseService.getPublicCourselist({
+                    course_name: this.search.course_name,
                     category_id: this.fetchParam.category_id,
                     page: this.fetchParam.page,
                     pagesize: this.fetchParam.pagesize
@@ -158,6 +159,7 @@
                 })
             },
             getArticle () {
+                alert(2)
                 this.loadingData = true
                 return ArticleService.getArticleList({
                     title: this.search.keyword,
@@ -172,10 +174,12 @@
                 })
             },
             getSpeaking () {
+                alert(1)
                 this.loadingData = true
                 // 获取课程数据
-                return speakingService.search({
-                    keyword: this.search.keyword,
+                console.log(this.search.course_name)
+                return courseService.getPublicCourselist({
+                    course_name: this.search.course_name,
                     page: this.page,
                     pagesize: this.pagesize
                 }).then((ret) => {

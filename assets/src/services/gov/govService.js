@@ -18,6 +18,7 @@ class govService {
         town_id = '',
         village_id = '',
         deleted = '',
+
     }) {
         let finalUrl = urlPre + '/lists'
         return api.get(finalUrl, {
@@ -33,6 +34,7 @@ class govService {
             town_id,
             village_id,
             deleted,
+            
         }, false).then((ret) => {
             return ret.data
         })

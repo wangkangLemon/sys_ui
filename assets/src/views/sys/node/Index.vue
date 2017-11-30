@@ -60,17 +60,17 @@
             </el-table-column>
             <el-table-column min-width="200" prop="node" label="节点标识">
             </el-table-column>
-            <el-table-column min-width="200" prop="pid" label="父级菜单id">
+            <!--<el-table-column min-width="200" prop="pid" label="父级菜单id">
             </el-table-column>
             <el-table-column min-width="200" prop="level" label="菜单层级">
             </el-table-column>
             <el-table-column min-width="150" prop="pid" label="父级节点id">
             </el-table-column>
             <el-table-column min-width="200" prop="level" label="节点层级">
+            </el-table-column>-->
+            <el-table-column min-width="200" prop="addate" label="添加时间">
             </el-table-column>
-            <el-table-column min-width="200" prop="addtime" label="添加时间">
-            </el-table-column>
-            <el-table-column min-width="200" prop="uptime" label="更新时间">
+            <el-table-column min-width="200" prop="update" label="更新时间">
             </el-table-column>
             <el-table-column min-width="150" prop="remark" label="标记">
             </el-table-column>
@@ -105,10 +105,10 @@
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
     </article>
 </template>
 
