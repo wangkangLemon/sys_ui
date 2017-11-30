@@ -204,8 +204,8 @@
                 </el-form>-->
 
                  <i>栏目菜单</i>
-                    <el-select  v-model="fetchParam.category_id" placeholder="请输入栏目菜单"  >
-                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.id+ item.name" :value="item.id"></el-option>
+                    <el-select  v-model="fetchParam.category_id" placeholder="请输入栏目菜单" @change="fetchCate" clearable >                       
+                        <el-option  v-for="item in SecCateName" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
                     </el-select>
             </section>
 
@@ -274,6 +274,7 @@
     function getFetchParam() {
         return {
             // status: void 0, //  1-禁用 0-正常
+            category_id: void 0,
             title: '',
             name: '',
             page: 1,
@@ -375,9 +376,13 @@
         activated() {
             this.fetchData() //获取课程栏目数据名称
             this.fetchCate() //获取区块列表数据
-            this.getDropval() //区块栏目
+            // this.getDropval() //区块栏目
         },
-
+        watch: {
+            'fetchParam.category_id'(){
+                this.fetchData() 
+            }
+        },
         created() {},
         methods: {
             format(row, column, cellValue) {
@@ -391,15 +396,16 @@
                 // 调用 callback 返回建议列表的数据返回建议列表的数据
                 cb(results);
             },
-            //获取栏目菜单下拉列表
-            getDropval() {
-                cateService.fetchData({
-                    pagesize: -1
-                }).then((ret) => {
-                    console.log(ret.data)
-                    this.drop_list = ret.data;
-                })
-            },
+        //     //获取栏目菜单下拉列表
+            // getDropval() {
+            //     alert(1)
+            //     cateService.fetchData({
+            //         pagesize: -1
+            //     }).then((ret) => {
+            //         console.log(ret.data)
+            //         this.drop_list = ret.data;
+            //     })
+            // },
             submit(form) { // 表单提交
                 // this.form.section_id = this.section.currentID
                 this.form.addate = this.form.addate ? date2Str(this.form.addate) : ''
@@ -414,7 +420,6 @@
                         }
                         this.form.category_id = this.dialog.category_id
 
-                        //我现在就写死了 
                         if (this.form.tags === 'hot') this.form.tags_color = '#FFD220'
                         if (this.form.tags === 'new') this.form.tags_color = '#FF4B20'
                         if (this.form.tags === 'recommend') this.form.tags_color = '#3953C3'
@@ -541,6 +546,7 @@
             },
             //获取栏目名称
             fetchCate() {
+                console.log(this.fetchParam)
                 cateService.fetchData().then((ret) => {
                     // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                     this.SecCateName = ret.data
@@ -587,7 +593,7 @@
                 this.selectedIds = ret
             },
 
-            // 单条删除
+        //     // 单条删除
             del(index, row) {
                 xmview.showDialog(`你将要删除第 <span style="color:red">${row.id}</span> 条数据,  此操作不可恢复确认吗?`, () => {
                     dataService.delete(row.id).then(() => {
