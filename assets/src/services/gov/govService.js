@@ -189,14 +189,14 @@ class govService {
 
     // 企业管理员查询接口
     govAdmin({
-        keyword,
+        name,
         gov_id,
         page,
         page_size
     }) {
-        let finalUrl = `/user/get/${gov_id}`
+        let finalUrl = `${config.apiHost}/user/get/${gov_id}`
         return api.get(finalUrl, {
-            keyword,
+            name,
             page,
             page_size
         }).then((ret) => {
@@ -206,24 +206,29 @@ class govService {
 
     // 新增管理员
     addGovAdmin({
-        department_id,
         name,
         sex,
         mobile,
         passwd,
-        birthday,
-        address,
-        gov_id
+        // birthday,
+        // address,
+        gov_id,
+        role_id,
+        area_id,
+        nickname
     }) {
-        let finalUrl = `${urlPre}/${gov_id}/admin`
+        let finalUrl = `${urlPre}/user/create`
         return api.post(finalUrl, {
-            department_id,
             name,
             sex,
             mobile,
             passwd,
-            birthday,
-            address
+            // birthday,
+            // address,
+            gov_id,
+            role_id,
+            area_id,
+            nickname
         }).then((ret) => {
             if (ret.code) {
                 return Promise.reject(ret)

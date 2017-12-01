@@ -98,9 +98,9 @@
             </el-table-column>
             <el-table-column prop="operate" label="操作" width="213">
                 <template scope="scope">
-                    <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
+                    <!--<el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
                         管理员
-                    </el-button>
+                    </el-button>-->
                     <el-button type="text" size="small" @click="showFn(scope.$index, scope.row)">
                         详情
                     </el-button>

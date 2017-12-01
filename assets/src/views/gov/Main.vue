@@ -1,5 +1,5 @@
 <template>
-    <keep-alive exclude="sys-form, sys-video-add">
+    <keep-alive exclude="sys-form, gov-admin">
         <router-view></router-view>
     </keep-alive>
 </template>

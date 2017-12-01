@@ -104,7 +104,7 @@
                     sex: { required: true },
                     mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
                     email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入包含数字和字母且大于6位的密码', trigger: 'blur' },
+                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: !this.$route.params.sys_id, message: '请输入包含数字和字母且大于6位的密码', trigger: 'blur' },
             },
                 multi: {
                     data: [{
@@ -115,12 +115,16 @@
                 role_list:[],
             }
         },
+        activated () {
+            alert(this.$route.params.sys_id)
+            
+        },
         created() {
+            alert(this.$route.params.sys_id)
             xmview.setContentLoading(false);
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
-                        console.log(ret)
                         // this.fetchParam.role_id = ret.course.role_id
                     })
                 }    
@@ -154,10 +158,8 @@
                     if (!valid) return
                     let req = sysService.create
                     if (this.fetchParam.id) req = sysService.update
-                    console.log(this.fetchParam.id)
+                    // console.log(this.fetchParam.id)
                     req(this.fetchParam).then((ret) => {
-                        console.log(111111111111)
-                        console.log(ret)
                         // 重置当前数据
                         //this.$refs[fetchParam].resetFields();//自己加的方法
                         xmview.showTip('success', '数据提交成功')

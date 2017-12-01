@@ -49,29 +49,34 @@
         <!--添加/编辑表单-->
         <el-dialog v-model="addForm">
             <el-form :model="form" :rules="rules" ref="form">
-                <el-form-item v-if="category == 2" prop="department_id" label="门店" :label-width="formLabelWidth">
+                <!--<el-form-item v-if="category == 2" prop="department_id" label="部门" :label-width="formLabelWidth">
                     <departmentSelect :type="companyID" v-model="form.department_id"
                     v-on:change="val=>form.department_id = val">
                     </departmentSelect>
-                </el-form-item>
+                </el-form-item>-->
+                <!--<el-form-item prop="role_id" label="角色" :label-width="formLabelWidth">
+                    <departmentSelect :type="govID" v-model="form.role_id"
+                    v-on:change="val=>form.role_id = val">
+                    </departmentSelect>
+                </el-form-item>-->
                 <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" placeholder="店员姓名" auto-complete="off"></el-input>
+                    <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="sex" label="性别" :label-width="formLabelWidth">
+                <!--<el-form-item prop="sex" label="性别" :label-width="formLabelWidth">
                     <el-radio class="radio" v-model="form.sex" :label="1">男</el-radio>
                     <el-radio class="radio" v-model="form.sex" :label="0">女</el-radio>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item prop="mobile" label="手机号" :label-width="formLabelWidth">
                     <el-input v-model="form.mobile" type="number" placeholder="手机号" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="passwd" label="密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.passwd" placeholder="密码" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
+                <!--<el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
                     <el-date-picker type="date" v-model="form.birthday"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="地址" :label-width="formLabelWidth">
-                    <el-input v-model="form.address" placeholder="地址" auto-complete="off"></el-input>
+                </el-form-item>-->
+                <el-form-item label="昵称" :label-width="formLabelWidth">
+                    <el-input v-model="form.nickname" placeholder="昵称" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -147,7 +152,7 @@
     import companyUserService from '../../services/gov/companyUserService'
     import {defaultAvatar} from '../../utils/filterUtils'
     export default {
-        name: 'company-admin',
+        name: 'gov-admin',
         filters: {
             defaultAvatar
         },
@@ -175,7 +180,7 @@
                     create_time_name: ''
                 },
                 departmentData: [],
-//                companyID: this.$route.params.company_id,
+               companyID: this.$route.params.gov_id,
                 showDetail: false,     // 是否显示详情对话框
                 form: {                // 表单属性值
                     name: '',          // 姓名
@@ -220,29 +225,37 @@
                 return parseInt(this.$route.query.category)
             }
         },
-        created () {
+        activated () {
+             xmview.setContentLoading(false)
             this.getData().then(() => {
                 xmview.setContentLoading(false)
             })
         },
+        // created () {
+        //     xmview.setContentLoading(false)
+        //     this.getData().then(() => {
+        //         xmview.setContentLoading(false)
+        //     })
+        // },
         methods: {
             addAdmin () {
-                departmentService.getDepartment({
-                    company_id: this.companyID
-                }).then((ret) => {
-                    if (ret.data.length > 0) {
-                        this.departmentData = ret.data
-                    }
-                }).then(() => {
+                // this.loading = false
+                // departmentService.getDepartment({
+                //     company_id: this.companyID
+                // }).then((ret) => {
+                //     if (ret.data.length > 0) {
+                //         this.departmentData = ret.data
+                //     }
+                // }).then(() => {
                     this.addForm = true
-                })
+                // })
             },
             getData () {
-                this.loading = true
+                // this.loading = true
                 return govService.govAdmin({
                     page: this.currentPage,
                     page_size: this.pageSize,
-                    keyword: this.search.name,
+                    name: this.search.name,
                     gov_id: this.govID
                 }).then((ret) => {
                     this.adminData = ret.data

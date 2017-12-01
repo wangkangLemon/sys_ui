@@ -40,9 +40,9 @@
             <!--<el-form-item label="父级菜单" prop="pid">
                 <MenuFatherCategory type="course" :placeholder="fetchParam.menu_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.pid"></MenuFatherCategory>
             </el-form-item>-->
-            <el-form-item label="菜单层级" prop="level">
+            <!--<el-form-item label="菜单层级" prop="level">
                 <el-input v-model.password="fetchParam.level" type="number"></el-input>
-            </el-form-item>
+            </el-form-item>-->
             <el-form-item label="排序字段" prop="sort">
                 <el-input v-model.address="fetchParam.sort"></el-input>
             </el-form-item>
