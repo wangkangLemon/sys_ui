@@ -4,6 +4,10 @@ import config from '../../utils/config'
 const urlPre = config.apiHost + '/mine'
 class MineService {
     // 修改个人信息
+    // updateProfile({ name, address, sex }) {
+    //     let url = `${urlPre}/profile`
+    //     return api.put(url, { name, address, sex })
+    // }
     updateProfile({ name, address, sex }) {
         let url = `${urlPre}/profile`
         return api.put(url, { name, address, sex })

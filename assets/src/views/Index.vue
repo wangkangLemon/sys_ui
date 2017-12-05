@@ -190,7 +190,7 @@
                 <h2>医线通</h2>
             </el-col>
             <el-col :span="8" class="header-right">
-                <div><i class="iconfont icon-bell"></i> <em>消息</em></div>
+                <!--<div><i class="iconfont icon-bell"></i> <em>消息</em></div>
                 <el-dropdown trigger="click" @command="handleFeedback">
                     <span class="el-dropdown-link feedback">
                         <i class="iconfont icon-service"></i> <em>问题反馈</em> <i class="el-icon-caret-bottom el-icon--right"></i>
@@ -199,17 +199,16 @@
                         <el-dropdown-item command="index">我的反馈</el-dropdown-item>
                         <el-dropdown-item command="add">提交问题</el-dropdown-item>
                     </el-dropdown-menu>
-                </el-dropdown>
+                </el-dropdown>-->
                 <el-dropdown trigger="click" @command="handleNickname">
                       <span class="el-dropdown-link nickname">
-                        <!--<img :src="{url: userInfo.avatar, sex: userInfo.sex} | defaultAvatar"> {{userInfo.name}} <i-->
                         <img :src="{url: userInfo.avatar, sex: userInfo.sex} | defaultAvatar"> {{userInfo.name}} <i
                               class="el-icon-caret-bottom el-icon--right"></i>
                       </span>
                     <el-dropdown-menu slot="dropdown" class="nickname-dropdown">
                         <el-dropdown-item command="profile">个人信息</el-dropdown-item>
                         <el-dropdown-item command="password">修改密码</el-dropdown-item>
-                        <el-dropdown-item command="safeset">安全设置</el-dropdown-item>
+                        <!--<el-dropdown-item command="safeset">安全设置</el-dropdown-item>-->
                         <el-dropdown-item :divided="true"></el-dropdown-item>
                         <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>

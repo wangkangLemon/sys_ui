@@ -63,6 +63,14 @@
             <el-form-item label="密码" prop="password">
                 <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
             </el-form-item>
+
+             <!--<el-form-item label="密码" prop="password" v-if="this.$route.params.sys_id">
+                    <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password" v-else>
+                    <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""  ></el-input>
+            </el-form-item>-->
+
             <el-form-item label="地址" prop="price">
                 <el-input v-model.address="fetchParam.address"></el-input>
             </el-form-item>
@@ -104,7 +112,7 @@
                     sex: { required: true },
                     mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
                     email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: !this.$route.params.sys_id, message: '请输入包含数字和字母且大于6位的密码', trigger: 'blur' },
+                    password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: !this.$route.params.sys_id, message:  !this.$route.params.id?'请输入包含数字和字母且大于6位的密码':'密码、不修改请留空', trigger: 'blur' },
             },
                 multi: {
                     data: [{
@@ -116,11 +124,11 @@
             }
         },
         activated () {
-            alert(this.$route.params.sys_id)
+            // alert(this.$route.params.sys_id)
             
         },
         created() {
-            alert(this.$route.params.sys_id)
+            // alert(this.$route.params.sys_id)
             xmview.setContentLoading(false);
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {

@@ -44,7 +44,7 @@
                 timespan: [this.start, this.end],
                 pickerOptionsStart: {
                     disabledDate(time) {
-                        return !_this.timespan[1] ? null
+                        return !_this.timespan[1] ? null   //?????????
                             : (time.getTime() - 1000 * 60 * 60 * 4 >= new Date(_this.timespan[1]).getTime() && timeUtils.compareDate(time, new Date(_this.timespan[0])) !== 0)
                     }
                 },
@@ -77,8 +77,8 @@
         methods: {
             setCurrVal (type) {
                 const emitArr = ['changeStart', 'changeEnd']
-                let val = getTimeStr(this.timespan[type])
-                this.$emit(emitArr[type], getTimeStr(val))
+                let val = getTimeStr(this.timespan[type])   //this.timespan[type]  ?== this.timespan[0] == this.timespan[this.start]
+                this.$emit(emitArr[type], getTimeStr(val)) 
                 this.change && this.change()
             }
         }

@@ -136,14 +136,14 @@
                         {required: true, message: '必填项', trigger: 'blur'}
                     ],
                     concact: [
-                        {required: true, message: '必填项', trigger: 'blur'}
+                        {message: '必填项', trigger: 'blur'}
                     ],
                     mobile: [
-                        {required: true, message: '必填项', trigger: 'blur'},
+                        {message: '必填项', trigger: 'blur'},
                         {validator: validateMobile, trigger: 'blur'}
                     ],
                     email: [
-                        {required: true, message: '必填项', trigger: 'blur'},
+                        {message: '必填项', trigger: 'blur'},
                         {validator: validateEmail, trigger: 'blur'}
                     ]
                 },

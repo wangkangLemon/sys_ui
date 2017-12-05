@@ -80,20 +80,19 @@
             </DateRange>
         </section>
         <el-table v-loading="loading" border :data="govData" stripe style="width: 100%">
-            <el-table-column prop="name" label="名称" min-width="150">
+            <el-table-column prop="name" label="名称" min-width="230">
                 <template scope="scope">
                     <el-tag type="gray">{{govType[scope.row.category]}}</el-tag>
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column prop="parent_name" label="上级部门" width="180">
+            <el-table-column prop="parent_name" label="上级部门" width="200">
             </el-table-column>
             <el-table-column width="100" prop="concact" label="联系人">
             </el-table-column>
             <el-table-column width="150" prop="mobile" label="手机">
             </el-table-column>
-            <el-table-column width="180" prop="email" label="邮箱">
-            </el-table-column>
+
             <el-table-column width="180" prop="addate" label="创建时间">
             </el-table-column>
             <el-table-column prop="operate" label="操作" width="213">
