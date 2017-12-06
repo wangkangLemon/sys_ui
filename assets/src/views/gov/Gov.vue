@@ -80,13 +80,13 @@
             </DateRange>
         </section>
         <el-table v-loading="loading" border :data="govData" stripe style="width: 100%">
-            <el-table-column prop="name" label="名称" min-width="230">
+            <el-table-column prop="name" label="名称" min-width="250">
                 <template scope="scope">
                     <el-tag type="gray">{{govType[scope.row.category]}}</el-tag>
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column prop="parent_name" label="上级部门" width="200">
+            <el-table-column prop="parent_name" label="上级部门" width="220">
             </el-table-column>
             <el-table-column width="100" prop="concact" label="联系人">
             </el-table-column>
@@ -95,7 +95,7 @@
 
             <el-table-column width="180" prop="addate" label="创建时间">
             </el-table-column>
-            <el-table-column prop="operate" label="操作" width="213">
+            <el-table-column prop="operate" label="操作" width="160">
                 <template scope="scope">
                     <!--<el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
                         管理员
@@ -214,8 +214,11 @@
             },
             // 删除 GOV部门
             deleteGov(index, row) {
-                govService.deleteGov(row.id).then((ret) => {
-                    this.govData.splice(index, 1) //删除选中项
+                  xmview.showDialog(`你将要删除部门 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
+                    govService.deleteGov(row.id).then(() => {
+                        this.govData.splice(index, 1)//删除选中项
+                        row.deleted = 1
+                    })
                 })
             },
             adminPage(index, item) {
