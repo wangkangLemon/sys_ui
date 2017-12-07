@@ -123,7 +123,7 @@
                  // this.$emit('onNodeClick', {data, node, store})
                 this.onNodeClick(1, data, node, store) 
 
-                // // // 根节点无法被选中 
+                //  根节点无法被选中 
                 if (data.value == 0) return
                 this.selectable = true
             },

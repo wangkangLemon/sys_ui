@@ -13,7 +13,7 @@
             .subButton {
                 text-align: center;
             }
-    }
+        }
     }
 </style>
 <template>
@@ -33,27 +33,30 @@
                 </el-form-item>
                 <el-form-item label="区块栏目"  :fetch-suggestions="querySearch">
                     <el-select v-model="fetchParam.category_id" placeholder="请输入栏目菜单">
-                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
+                        <el-option  v-for="item in drop_list" :key="item.id" :label=" item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <!--<el-form-item label="栏目菜单" prop="category_id"> //需改进待后台返ended数据后做联动列表
                         <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
                 </el-form-item>-->
                 <el-form-item label="引用类型">
-                        <el-select v-model="fetchParam.ref_type" placeholder="请选择">
-                            <el-option label="课程类型" value="course"></el-option>
-                            <el-option label="引用类型" value="link"></el-option>
-                        </el-select>
-                    </el-form-item>
-                <el-form-item label="是否与引用同步" prop="ref_sync">
+                    <el-select v-model="fetchParam.ref_type" placeholder="请选择">
+                        <el-option label="课程类型" value="course"></el-option>
+                        <el-option label="引用类型" value="link"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <!--<el-form-item label="是否与引用同步" prop="ref_sync">
                         <el-radio-group v-model="fetchParam.ref_sync">
                             <el-radio :label="1">同步</el-radio>
                             <el-radio :label="0">不同步</el-radio>
                         </el-radio-group>
-                </el-form-item>
+                </el-form-item>-->
+
                 <!--<el-form-item label="引用id"  prop="ref_id">
                     <el-input v-model.email="fetchParam.ref_id" disabled></el-input>
                 </el-form-item>-->
+
                 <el-form-item label="标题" prop="title">
                     <el-input v-model.title="fetchParam.title"></el-input>
                 </el-form-item>

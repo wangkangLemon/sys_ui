@@ -80,7 +80,7 @@
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow"
             border>
-            <el-table-column type="selection"></el-table-column>
+            <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="200" prop="course_name" label="课程">
             </el-table-column>
             <el-table-column min-width="200" prop="category_name" label="所属栏目">

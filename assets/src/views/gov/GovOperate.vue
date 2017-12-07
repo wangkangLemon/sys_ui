@@ -78,7 +78,6 @@
 <script>
     import govService from '../../services/gov/govService.js'
     import Region from '../component/select/Region.vue'
-    import * as timeUtils from '../../utils/timeUtils'
     let _this
     export default {
         components: {
@@ -140,11 +139,11 @@
                     ],
                     mobile: [
                         {message: '必填项', trigger: 'blur'},
-                        {validator: validateMobile, trigger: 'blur'}
+                        // {validator: validateMobile, trigger: 'blur'}
                     ],
                     email: [
                         {message: '必填项', trigger: 'blur'},
-                        {validator: validateEmail, trigger: 'blur'}
+                        // {validator: validateEmail, trigger: 'blur'}
                     ]
                 },
             }

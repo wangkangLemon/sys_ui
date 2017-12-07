@@ -56,7 +56,7 @@
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
-            <el-table-column type="selection"></el-table-column>
+            <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="230" prop="name" label="视频标题">
             </el-table-column>
             <el-table-column width="80" prop="duration_name" label="时长">
@@ -84,9 +84,9 @@
         </el-table>
 
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
 
         <el-pagination class="pagin" @size-change="val => fetchParam.pagesize = val " @current-change="val => fetchParam.page = val" :current-page="fetchParam.page" :pagesize="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total"></el-pagination>
 

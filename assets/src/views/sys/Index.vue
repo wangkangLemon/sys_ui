@@ -53,7 +53,7 @@
 
         <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
-            <el-table-column type="selection"></el-table-column>
+            <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="100" prop="name" label="姓名" v-if="data">
             </el-table-column>
             <el-table-column min-width="130" prop="role_id" label="角色">

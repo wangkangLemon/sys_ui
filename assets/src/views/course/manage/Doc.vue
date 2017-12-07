@@ -83,7 +83,7 @@
                   @select="selectRow"
                   @select-all="selectRow"
                   border>
-            <el-table-column type="selection"></el-table-column>
+            <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column
                     min-width="230"
                     prop="file_name"
@@ -124,7 +124,7 @@
             </el-table-column>
             <el-table-column
                     width="170"
-                    prop="create_time_name"
+                    prop="addate"
                     label="创建时间">
             </el-table-column>
             <el-table-column
@@ -156,9 +156,10 @@
                        :total="total">
         </el-pagination>
 
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
+        
             <!-- 查看  -->
         <el-dialog title="查看" :visible.sync="docshow">
             <DocShow ref="docShow" :docurl="docurl" class="docshow"></DocShow>

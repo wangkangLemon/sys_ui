@@ -105,7 +105,7 @@
                 </p>
                 <p>
                     <i class="title">下单时间：</i>
-                    <span class="value">{{detail.create_time_name}}</span>
+                    <span class="value">{{detail.addate}}</span>
                 </p>
                 <p>
                     <i class="title">支付时间：</i>

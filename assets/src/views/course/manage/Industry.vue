@@ -162,7 +162,7 @@
             </el-table-column>
             <el-table-column
                     width="190"
-                    prop="create_time_name"
+                    prop="addate"
                     label="创建时间">
             </el-table-column>
             <el-table-column

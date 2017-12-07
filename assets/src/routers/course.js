@@ -8,19 +8,20 @@ export default {
             resolve(require('../views/course/Main.vue'))
         })
     },
-    children: [{
-            path: 'category',//栏目主页此栏目已废 -更新为manage/course-category-manage
-            name: 'course-index',
-            component: resolve => {
-                require.ensure([], () => {
-                    resolve(require('../views/course/category/Index.vue'))
-                })
-            },
-            meta: {
-                title: '课程种类',
-                noback: true
-            }
-        },
+    children: [
+        // {
+        //     path: 'category',//栏目主页此栏目已废 -更新为manage/course-category-manage
+        //     name: 'course-index',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/course/category/Index.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '课程种类',
+        //         noback: true
+        //     }
+        // },
         {
             path: 'cate-add',  //栏目添加
             name: 'cate-add',

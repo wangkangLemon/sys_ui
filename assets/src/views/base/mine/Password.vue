@@ -20,9 +20,9 @@
                 <el-form-item label="邮箱" :label-width="formLabelWidth">
                     {{form.email}}
                 </el-form-item>
-                <el-form-item prop="origin_password" label="原密码" :label-width="formLabelWidth">
+                <!--<el-form-item prop="origin_password" label="原密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.origin_password" placeholder="原密码" auto-complete="off"></el-input>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item prop="new_password" label="新密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.new_password" placeholder="新密码" auto-complete="off"></el-input>
                 </el-form-item>
@@ -68,6 +68,7 @@ export default {
     },
     created() {
         this.form = authUtils.getUserInfo()
+        console.log( this.form )
         this.form.mobile = this.form.mobile || '未设置'
         this.form.email = this.form.email || '未设置'
         xmview.setContentLoading(false)

@@ -56,11 +56,11 @@
                 </el-select>
             </section>
 
-            <section>
+            <!--<section>
                 <i>所属政府部门</i>
                 <IndustryCompanySelect v-model="fetchParam.gov_id"
                                        :change="fetchData"></IndustryCompanySelect>
-            </section>
+            </section>-->
 
             <DateRange title="创建时间" :start="fetchParam.time_start" :end="fetchParam.time_end"
                        @changeStart="val=> fetchParam.time_start=val "
@@ -74,23 +74,23 @@
                   @select="selectRow"
                   @select-all="selectRow"
                   border>
-            <el-table-column type="selection"></el-table-column>
+            <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column
-                    min-width="230"
+                    min-width="140"
                     prop="file_name"
                     label="视频名称">
             </el-table-column>
-            <el-table-column
+            <!--<el-table-column
                     min-width="200"
                     prop="company"
                     label="所属政府部门">
-            </el-table-column>
+            </el-table-column>-->
             <el-table-column
-                    width="80"
+                    width="130"
                     prop="duration"
                     label="时长">
             </el-table-column>
-            <el-table-column width="120" label="状态">
+            <el-table-column width="130" label="状态">
                 <template scope="scope">
                     <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
                     <el-tag v-else-if="scope.row.status == 1" type="primary">转码中</el-tag>
@@ -102,8 +102,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    width="150"
-                    prop="create_time_name"
+                    width="160"
+                    prop="addate"
                     label="创建时间">
             </el-table-column>
             <el-table-column
@@ -139,11 +139,11 @@
                 <el-form-item label="视频名称">
                     <el-input v-model="videoModel.file_name"></el-input>
                 </el-form-item>
-                <el-form-item label="所属政府部门">
+                <!--<el-form-item label="所属政府部门">
                     <IndustryCompanySelect :placeholder="videoModel.company"
                                            @change="val => videoModel.gov_id = val"
                                            v-if="dialogAdd.isShow"></IndustryCompanySelect>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item label="视频封面">
                     <UploadImg :defaultImg="videoModel.cover" :url="uploadImgUrl"
                                :onSuccess="handleOnUploaded"></UploadImg>

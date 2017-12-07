@@ -20,7 +20,7 @@
         </el-menu-item>
         </template>
     </el-submenu>-->
-    <el-tree v-else :data="data1" :props="defaultProps" @node-click="handleNodeClick">{{this.data}}</el-tree>
+    <el-tree v-else :data="data1" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="selectable">{{this.data}}</el-tree>
     <!--<el-menu-item :index="item.id" v-bind="{index}" v-for="item in data" :key="item.id" v-else>
         <template v-if="data"> 
         {{data.item.name}}
@@ -41,7 +41,8 @@
                 defaultProps: {
                     children: 'children',
                     label: 'name'
-                }
+                },
+                selectable: true, // 是否可选中
             }
         },
         props: ['data'],
@@ -107,8 +108,14 @@
                     this.$store.dispatch('savePid',a.id)
                 }
                 this.$store.dispatch('setSecMenu',a);
-       
-            }
+                //  根节点无法被选中 
+                // if ( a.level  == 0) return
+                this.selectable = true
+            },
+            // 清空选中项
+            clearSelected () {
+                this.selectable = false
+            },
         }
     }
 </script>

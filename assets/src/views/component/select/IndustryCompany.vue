@@ -13,7 +13,7 @@
 
 <script>
     import SelectScroll from '../../component/form/SelectScroll.vue'
-    import companyService from '../../../services/company/companyService.js'
+    import govService from '../../../services/gov/govService.js'
     export default{
         props: {
             value: [String, Number],
@@ -40,7 +40,7 @@
         },
         methods: {
             fetchData (val, length) {
-                return companyService.getIndrustrySelectList({
+                return govService.getSelectList({
                     keyword: val,
                     category: this.type,
                     pagesize: this.pageSize,

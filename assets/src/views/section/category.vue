@@ -43,7 +43,7 @@
             <section class="manage-container"><button type="button" icon="plus" class="el-button el-button--primary"  @click="create"><span>新建分类</span></button></section>
             <section class="left-container">
                 
-                <MenuTree :data="SecMenu" v-if="SecMenu.length"></MenuTree>
+                <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="secCategory"></MenuTree>
                 
             </section>
             <section class="right-container">
@@ -54,8 +54,6 @@
                     <button type="button" class="el-button" :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" ><span>移动分类下内容</span></button> 
                     <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button>
                 </div>
-                
-      
                 <SecCard @handleSave="handle" :data="selectData" :type="type"></SecCard>
             </section>
             <!--{{secMenu}}-->
@@ -111,6 +109,10 @@
             this.fetchData()
         },
         methods: {
+            // 清空选中项
+            clearSelected () {
+                this.selectable = false
+            },
             initFetchParam() {
                 this.fetchParam = getFetchParam()
             },
@@ -137,6 +139,7 @@
                         }, 300)
                     })
             },
+ 
             //处理保存的数据
             handle( message ) {
                 // if(){
@@ -147,6 +150,7 @@
                if( this.type == 'P'|| this.type == 'S' ){
                     if(this.type == 'P'){
                         message.pid=0
+                        
                     } else if( this.type == 'S'){
                         message.pid=this.$store.state.index.secPid
                     }
@@ -187,6 +191,10 @@
                 this.type = type
                 if(type!="update"){
                     this.$store.dispatch('setSecMenu',null);
+                }
+                if(type = 'p'){
+                    console.log(this.$refs.secCategory)
+                    this.$refs.secCategory.clearSelected()
                 }
             },
             // 单条删除

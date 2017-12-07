@@ -87,14 +87,14 @@
                   @select="selectRow"
                   @select-all="selectRow"
                   border>
-            <el-table-column type="selection"></el-table-column>
+            <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column
                     prop="name"
                     label="专辑名称">
             </el-table-column>
             <el-table-column
                     width="190"
-                    prop="create_time_name"
+                    prop="addate"
                     label="创建时间">
             </el-table-column>
             <el-table-column
@@ -114,9 +114,9 @@
         </el-table>
 
         <!--底部的批量删除和移动两个按钮-->
-        <div class="bottom-manage">
+        <!--<div class="bottom-manage">
             <el-button type="danger" :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>
+        </div>-->
 
         <el-pagination class="pagin"
                        @size-change="val => fetchParam.pagesize = val "
