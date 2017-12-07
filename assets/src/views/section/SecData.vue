@@ -1,10 +1,17 @@
-<!--数据管理-->
-<style lang='scss' rel='stylesheet/scss'>
-    @import "../../utils/mixins/common";
-    @import "../../utils/mixins/topSearch";
+<!--内容维护-->
+<style lang='scss' rel="stylesheet/scss">
+    @import "../../utils/mixins/mixins";
 
-    #sys-index-container {
-        @extend %content-container;
+    .client-content-manage {
+        .cell {
+            overflow: visible !important;
+        }
+        .el-input {
+            .el-input__icon {
+                text-align: center;
+                text-align-last: center;
+            }
+        }
         /*上传图片的样式*/
         .avatar-uploader {
             .el-upload {
@@ -31,7 +38,8 @@
             width: 150px;
             height: 150px;
             display: block;
-        } // 同步时候的遮罩层
+        }
+        // 同步时候的遮罩层
         .keep {
             position: absolute;
             width: 100%;
@@ -91,72 +99,122 @@
             float: right;
             margin-bottom: 30px;
         }
-        .manage-container {
-            @extend %right-top-btnContainer;
-            >* {
-                color: #fff;
-                border-radius: 5px;
-            } // 添加课程
-            .add {
-                background: rgb(0, 204, 255);
-            } // 管理栏目
-            .catmange {
-                background: rgb(153, 102, 204);
+        @extend %justify;
+        .main-container {
+            background: transparent;
+
+            .search {
+                position: relative;
+                padding-top: 0;
+                .categorySubTree {
+                    position: absolute;
+                    z-index: 9;
+                    width: 20%;
+                }
             }
         }
+        .left-content {
+            display: inline-block;
+            vertical-align: top;
+            width: 25%;
 
-        .search {
-            @extend %top-search-container;
-        } // 底部的管理按钮
-        .bottom-manage {
-            margin-top: 15px;
+            .title {
+                padding: 10px 20px;
+                background: #f0f3f5;
+                position: relative;
+            }
+            .left-list {
+                background: #fff;
+                padding: 20px;
+
+                .list {
+                    margin-bottom: 10px;
+                    .name {
+                        font-size: 16px;
+                        padding-top: 10px;
+                    }
+                    .class {
+                        color: #ddd;
+                        font-size: 12px;
+                        padding-bottom: 10px;
+                    }
+                }
+            }
         }
+        .right-content {
+            width: 74%;
+            display: inline-block;
+            vertical-align: top;
+            background: #fff;
 
-        .el-dialog__wrapper {
-            padding-top: 15px;
-            background: rgba(0, 0, 0, .5);
-            z-index: 1000;
+            .title {
+                padding: 10px 20px;
+                background: #f0f3f5;
+                text-align: left;
+                line-height: 35px;
+                span {
+                    float: right;
+                    display: block;
+                }
+            }
+            .right-list {
+                padding: 20px;
+                padding-bottom: 60px;
+                .el-table {
+                    overflow: visible !important;
+                    .el-table__body-wrapper {
+                        overflow: visible !important;
+                    }
+                    .cell {
+                        i.tag {
+                            padding: 5px;
+                            background: cornflowerblue;
+                            color: #fff;
+                            border-radius: 5px;
+                        }
+                        i.el-icon-picture {
+                            position: relative;
+                            .img-wrap {
+                                display: none;
+                                padding: 5px;
+                                background: #fff;
+                                width: 213px;
+                                height: 123px;
+                                position: absolute;
+                                bottom: -123px;
+                                right: -213px;
+                                z-index: 999 !important;
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .el-pagination {
+                float: right;
+                margin-top: 10px;
+            }
         }
     }
 </style>
-
 <template>
-    <article id="sys-index-container">
-        <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="content.isShow = true">选取内容</el-button>
-            <!--<el-button type="primary" icon="plus" @click="$router.push({ name:'section-add', params:{sys_type:'add'}})">
-                <i>添加数据</i>
-            </el-button>-->
-        </section>
-        <!--选取内容-->
-        <ChooseContent v-model="content.isShow" v-on:result="contentConfirm"></ChooseContent>
-
-        <!--添加/编辑内容课程-->
+    <article class="client-content-manage">
+        <!--添加/编辑课程-->
         <el-dialog v-model="addForm" :title="formTitle">
             <section v-if="form.ref_id">
-                <!--<div class="keep" v-if="form.ref_sync"></div>  同步遮罩-->
+                <div class="keep" v-if="form.ref_sync"></div>
                 <div class="synchronize">
-                    {{catArr[category]}}：{{category == 'course' ? form.content.course_name : form.content.title}}
-                    <!--<el-button @click="form.ref_sync = 0" v-if="form.ref_sync">关闭同步</el-button>
-                    <el-button @click="keepSync" v-if="!form.ref_sync">开启同步</el-button>-->
+                    {{catArr[category]}}：{{category == 'course' ? form.content.name : form.content.title}}
+                    <el-button @click="form.ref_sync = 0" v-if="form.ref_sync">关闭同步</el-button>
+                    <el-button @click="keepSync" v-if="!form.ref_sync">开启同步</el-button>
                 </div>
             </section>
-
-            <!--1 这是区块选取的栏目 -->
-            <el-form label-position="top" :rules="rules">
-                <el-form-item label="栏目菜单" :fetch-suggestions="querySearch">
-                    <el-select v-model="dialog.category_id" placeholder="请输入栏目菜单">
-                        <el-option v-for="item in drop_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-
-            <!--2 这是课程类表选取的数据 -->
-
             <el-form label-position="top" class="addForm" :model="form" :rules="rules" ref="form">
-
-                <el-form-item prop="course_name" label="标题" :label-width="formLabelWidth">
-                    <el-input v-model="form.course_name" auto-complete="off"></el-input>
+                <el-form-item prop="title" label="标题" :label-width="formLabelWidth">
+                    <el-input v-model="form.title" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="!form.ref_id" prop="url" label="链接" :label-width="formLabelWidth">
                     <el-input v-model="form.url" auto-complete="off"></el-input>
@@ -165,21 +223,22 @@
                     <!--图片上传-->
                     <div class="img-wrap">
                         <div v-if="form.image" class="image">
-                            <img :src="form.image | fillImgPath" alt="" />
+                            <img :src="form.image | fillImgPath" alt=""/>
                         </div>
                         <div class="button-wrap">
                             <el-button type="primary" @click="() => {$refs.imgcropper.chooseImg()}">上传</el-button>
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item prop="description" label="描述" :label-width="formLabelWidth">
-                    <el-input type="textarea" :rows="3" v-model="form.description" auto-complete="off"></el-input>
+                <el-form-item prop="desc" label="描述" :label-width="formLabelWidth">
+                    <el-input type="textarea" :rows="3" v-model="form.desc" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item class="tag" label="标签" :label-width="formLabelWidth">
-                    <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
+                    <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}"
+                          v-for="(item, index) in tags">{{item.name}}</span>
                 </el-form-item>
-                <el-form-item prop="addate" label="日期" :label-width="formLabelWidth">
-                    <el-addate-picker v-model="form.addate" type="addate" />
+                <el-form-item prop="date" label="日期" :label-width="formLabelWidth">
+                    <el-date-picker v-model="form.date" type="date"/>
                 </el-form-item>
                 <el-form-item prop="sort" label="排序" :label-width="formLabelWidth">
                     <el-input v-model="form.sort" auto-complete="off" placeholder="排序越大越靠前，留空则自动设为最靠前的排序"></el-input>
@@ -190,125 +249,147 @@
                 <el-button type="primary" @click="submit('form')">确 定</el-button>
             </div>
         </el-dialog>
-
-
-        <article class="search">
-
-            <section>
-                <!--<el-form label-width="120px" ref="form" :model="fetchParam">
-                    <el-form-item label="区块栏目" :fetch-suggestions="querySearch">
-                        <el-select v-model="fetchParam.category_id" placeholder="请输入栏目菜单">
-                            <el-option v-for="item in drop_list" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>-->
-
-                 <i>栏目菜单</i>
-                    <el-select  v-model="fetchParam.category_id" placeholder="请输入栏目菜单" @change="fetchCate" clearable >                       
-                        <el-option  v-for="item in SecCateName" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-            </section>
-
-            <!--<el-form-item label="栏目菜单" prop="category_id"> //需改进待后台返ended数据后做联动列表
-                        <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
-            </el-form-item>-->
-
-            <section>
-                <i>标题</i>
-                <el-input v-model="fetchParam.title" placeholder="请输入标题" @keyup.enter.native="fetchData" auto-complete="off"></el-input>
-            </section>
-
-        </article>
-
-        <el-table class="data-table" v-loading="loadingData" :data="id" :fit="true" @select="selectRow" @select-all="selectRow" border
-            v-if="SecCateName">
-
-            <!--<el-table-column type="selection"></el-table-column>-->
-            <!--<el-table-column min-width="100" prop="id" label="区块id" v-if="data">
-            </el-table-column>-->
-            <el-table-column min-width="100" prop="formdateName" label="栏目名称">
-            </el-table-column>
-            <el-table-column min-width="100" prop="ref_sync" :formatter="format" label="是否引用">
-            </el-table-column>
-            <el-table-column min-width="400" prop="title" label="标题">
-            </el-table-column>
-            <el-table-column min-width="100" prop="addate" label="添加时间">
-            </el-table-column>
-            <el-table-column min-width="100" prop="tags" label="标签">
-            </el-table-column>
-            <el-table-column fixed="right" width="170" label="操作">
-                <template scope="scope">
-                    <el-button @click="$router.push({name: 'section-edit', params: {roleInfo: scope.row, sys_id: scope.row.id}})" type="text"
-                        size="small">详情
-                    </el-button>
-                    <el-button @click="$router.push({name: 'section-edit', params: {roleInfo: scope.row, sys_id: scope.row.id, sys_type:'edit'}})"
-                        type="text" size="small">编辑
-                    </el-button>
-                    <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
-            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
-        </el-pagination>
+        <!--选取-->
+        <ChooseContent v-model="content.isShow" v-on:result="contentConfirm"></ChooseContent>
+        <section class="left-content">
+            <div class="classify title">
+                <SectionCategorySelect :onchange="getLeftCategoryData" v-model="section.category_id"></SectionCategorySelect>
+            </div>
+            <div class="left-list">
+                <div class="list">
+                    <el-table v-loading="section.loading" @row-click="sectionChange" :show-header="false" :highlight-current-row="true" :data="section.classifyData" border>
+                        <el-table-column>
+                            <template scope="scope">
+                                <h2 class="name">{{scope.row.name}}</h2>
+                                <p class="class">{{scope.row.categorys}}</p>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <el-pagination
+                        @current-change="sectionPageChange"
+                        :current-page="section.page"
+                        :page-size="section.page_size"
+                        small
+                        layout="prev, pager, next"
+                        :total="section.total">
+                </el-pagination>
+            </div>
+        </section>
+        <section class="right-content">
+            <div class="title">
+                {{result.title.name}}-内容列表<i v-if="result.title.category">(绑定公开课栏目:{{result.title.category}})</i>
+                <span>
+                    <el-button @click="content.isShow = true">选取内容</el-button>
+                    <el-button @click="addCourse('form')">添加内容</el-button>
+                </span>
+            </div>
+            <!--列表-->
+            <div class="right-list">
+                <el-table v-loading="result.loading" border :data="result.data">
+                    <el-table-column
+                            label="序号"
+                            type="index"
+                            width="80">
+                    </el-table-column>
+                    <el-table-column
+                            class="course-column"
+                            label="标题">
+                        <template scope="scope">
+                            <el-tag type="primary" class="tag" v-if="scope.row.ref_type == 'course'">课程</el-tag>
+                            <el-tag type="success" class="tag" v-if="scope.row.ref_type == 'speaking'">药我说</el-tag>
+                            <el-tag type="warning" class="tag" v-if="scope.row.ref_type == 'article'">资讯</el-tag>
+                            <el-tag type="gray" class="tag" v-if="scope.row.ref_type == 'link'">链接</el-tag>
+                            {{scope.row.title}}
+                            <i class="el-icon-picture" v-if="scope.row.image" @mouseover="showImg" @mouseout="hideImg">
+                                <div class="img-wrap">
+                                    <img :src="scope.row.image | fillImgPath"/>
+                                </div>
+                            </i>
+                            <el-tooltip v-if="scope.row.ref_sync" class="item" effect="dark" content="与引用内容保持同步" placement="top">
+                                <i class="iconfont icon-refresh"></i>
+                            </el-tooltip>
+                            <el-tag type="gray" v-if="scope.row.tags">{{scope.row.tags | filterArray}}</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="sort"
+                            label="排序"
+                            width="100">
+                    </el-table-column>
+                    <el-table-column
+                            prop="date"
+                            label="日期"
+                            width="120">
+                        <template scope="scope">
+                            {{scope.row.create_time_name && scope.row.create_time_name.slice(0, 10)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="operate" label="操作" width="100">
+                        <template scope="scope">
+                            <el-button type="text" size="small" @click="updateCourse(scope.$index, scope.row)">
+                                编辑
+                            </el-button>
+                            <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">
+                                删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                        @current-change="resultPageChange"
+                        :current-page="result.page"
+                        :page-size="result.page_size"
+                        small
+                        layout="prev, pager, next"
+                        :total="result.total">
+                </el-pagination>
+            </div>
+        </section>
         <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput>
-        <!--底部的批量删除和移动两个按钮-->
-        <!--<div class="bottom-manage">
-            <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
-            <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>-->
     </article>
 </template>
-
 <script>
-    import dataService from '../../services/section/dataService.js'
-    import DateRange from '../component/form/DateRangePicker.vue'
-    import cateService from '../../services/section/cateService.js'
-    import ChooseContent from '../component/choose/ChooseContent'
-    import courseService from '../../services/course/courseService.js'
-    import {
-        date2Str
-    } from '../../utils/timeUtils.js'
+    import ChooseContent from '../component/choose/ChooseContent.vue'
+    import SectionCategorySelect from '../component/select/SectionCategory.vue'
+    // import dataService from '../component/choose/ChooseContent'
     import ImagEcropperInput from '../component/upload/ImagEcropperInput.vue'
-
-    function getFetchParam() {
-        return {
-            // status: void 0, //  1-禁用 0-正常
-            category_id: void 0,
-            title: '',
-            name: '',
-            page: 1,
-            pagesize: 15,
-        }
-    }
-
+    import {date2Str} from '../../utils/timeUtils'
+    import dataService from '../../services/section/dataService.js'
+    import cateService from '../../services/section/cateService.js'
+    import courseService from '../../services/course/courseService.js'
+    let _this
     export default {
         components: {
-            DateRange,
             ChooseContent,
+            SectionCategorySelect,
             ImagEcropperInput
         },
-        data() {
+        data () {
             return {
                 ratio: 0, // 裁剪的比例
-                dialog: {
-                    category_id: null, //栏目id   
+                // 左侧分类
+                section: {
+                    loading: false,
+                    category_id: '',
+                    classifyData: [],  // 左侧显示的列表数据
+                    total: 0,
+                    page: 1,
+                    page_size: 10,
+                    currentID: '' // 当前选中的区块ID
                 },
-                drop_list: [],
-                init: false,
-                loadingData: false,
-                data: [], // 表格数据
-                dataCache: [],
-                total: 0,
-                keyWord: '',
-                dialogVisible: false,
-                selectedIds: [], // 被选中的数据id集合
-                fetchParam: getFetchParam(),
-                dialogTree: {
-                    isShow: false,
-                    selectedId: void 0,
+                // 右侧结果
+                result: {
+                    loading: false,
+                    title: {
+                        name: '',
+                        category: ''
+                    },
+                    data: [],
+                    page: 1,
+                    page_size: 15,
+                    total: 0
                 },
-                SecCateName: null,
                 // 选取
                 content: {
                     isShow: false
@@ -317,29 +398,22 @@
                 formTitle: '添加内容',
                 addForm: false, // 表单弹窗是否显示
                 formLabelWidth: '50px', // 表单label的宽度
-                catArr: {
-                    'course': '课程',
-                    'article': '资讯',
-                    'speaking': '药我说',
-                    'link': '链接'
-                },
-                category: 'course',
-                form: { // 表单属性值
-                    id: 0,
-                    title: '', // 标题
+                catArr: {'course': '课程', 'article': '资讯', 'speaking': '药我说', 'link': '链接'},
+                category: '',
+                form: {                // 表单属性值
+                    title: '',          // 标题
                     url: '', // 链接地址
-                    ref_type: '', // 引用类型
-                    ref_id: '', // 引用ID
-                    ref_sync: 0, // 是否与引用同步
-                    image: '', // 图片
-                    description: '', // 描述
-                    addate: '', // 日期
-                    sort: '', // 排序
-                    tags: '',
-                    tags_color: '',
-                    category_id: 0, //栏目id
+                    ref_type: '',       // 引用类型
+                    ref_id: '',       // 引用ID
+                    ref_sync: 0,       // 是否与引用同步
+                    image: '',        // 图片
+                    desc: '',         // 描述
+                    date: '',       // 日期
+                    sort: '',            // 排序
+                    tags: ''
                 },
-                tags: [{
+                tags: [
+                    {
                         name: '无',
                         value: ''
                     },
@@ -357,93 +431,161 @@
                     }
                 ],
                 rules: {
-                    course_name: [{
-                        required: true,
-                        message: '标题不能为空',
-                        trigger: 'blur'
-                    }],
-                    url: [{
-                        required: true,
-                        message: '链接不能为空',
-                        trigger: 'blur'
-                    }],
-                    category_id: [{
-                        required: true,
-                    }]
+                    title: [
+                        {
+                            required: true,
+                            message: '标题不能为空',
+                            trigger: 'blur'
+                        }
+                    ],
+                    url: [
+                        {
+                            required: true,
+                            message: '链接不能为空',
+                            trigger: 'blur'
+                        }
+                    ]
                 }
             }
         },
-        activated() {
-            this.fetchData() //获取课程栏目数据名称
-            this.fetchCate() //获取区块列表数据
-            // this.getDropval() //区块栏目
-        },
-        watch: {
-            'fetchParam.category_id'(){
-                this.fetchData() 
+        filters: {
+            // 过滤标签名
+            filterArray (value) {
+                let newVal = ''
+                _this.tags.forEach((item) => {
+                    if (item['value'] == value) {
+                        newVal = item['name']
+                    }
+                })
+                return newVal
             }
         },
-        created() {},
+        activated () {
+            _this = this
+            this.getLeftCategoryData().then((ret) => {
+                this.sectionChange(ret.data[0])
+            }).then(() => {
+                xmview.setContentLoading(false)
+            })
+        },
         methods: {
-            format(row, column, cellValue) {
-                return row.ref_sync == 1 ? '是' : '否'
+            showImg (e) {
+                e.target.firstChild.style.display = 'block'
             },
-            //拿到栏目菜单
-            querySearch(queryString, cb) {
-                alert(1111)
-                var restaurants = this.restaurants;
-                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-                // 调用 callback 返回建议列表的数据返回建议列表的数据
-                cb(results);
+            hideImg (e) {
+                e.target.firstChild.style.display = 'none'
             },
-        //     //获取栏目菜单下拉列表
-            // getDropval() {
-            //     alert(1)
-            //     cateService.fetchData({
-            //         pagesize: -1
-            //     }).then((ret) => {
-            //         console.log(ret.data)
-            //         this.drop_list = ret.data;
-            //     })
-            // },
-            submit(form) { // 表单提交
-                // this.form.section_id = this.section.currentID
-                this.form.addate = this.form.addate ? date2Str(this.form.addate) : ''
+            // 保持同步
+            keepSync () {
+                this.form.ref_sync = 1
+                if (this.category == 'course') {
+                    this.form.title = this.form.content.name
+                    this.form.image = this.form.content.image
+                    this.form.des = this.form.content.description
+                    this.form.date = this.form.content.create_time_name
+                } else if (this.category == 'speaking') {
+                    this.form.title = this.form.content.title
+                    this.form.image = this.form.content.image
+                    this.form.des = this.form.content.content
+                    this.form.date = this.form.content.create_time
+                } else if (this.category == 'article') {
+                    this.form.title = this.form.content.title
+                    this.form.image = this.form.content.cover
+                    this.form.date = this.form.content.create_time_name
+                }
+                this.form.sort = ''
+            },
+            // 区块当前页
+            sectionPageChange (val) {
+                this.section.page = val
+                this.getLeftCategoryData()
+            },
+            // 结果当前页
+            resultPageChange (val) {
+                this.result.page = val
+                this.getSectionData(this.section.currentID)
+            },
+            // 点击分类获取列表
+            sectionChange (row) {
+                this.result.title = {
+                    name: row.name,
+                    category: row.course_category_name
+                }
+                this.section.currentID = row.id
+                if (this.section.currentID == 1 || this.section.currentID == 10) this.ratio = 2.2
+                else this.ratio = 0
+                this.getSectionData(row.id)
+            },
+            // 结果列表
+            getSectionData (sectionID) {
+                this.result.loading = true
+                dataService.getSectionDataList({
+                    page: this.result.page,
+                    page_size: this.result.page_size,
+                    section_id: sectionID
+                }).then((ret) => {
+                    this.result.data = ret.data
+                    this.result.total = ret.total
+                    this.result.loading = false
+                }).catch((ret) => {
+                    xmview.showTip('error', ret.message)
+                })
+            },
+            // 获取左侧分类列表
+            getLeftCategoryData () {
+                this.section.loading = true
+                return dataService.getSectionList({
+                    category_id: this.section.category_id,
+                    page: this.section.page
+                }).then((ret) => {
+                    this.section.classifyData = ret.data
+                    this.section.total = ret.total
+                    this.section.loading = false
+                    return ret
+                }).catch((ret) => {
+                    xmview.showTip('error', ret.message)
+                })
+            },
+            contentConfirm (dataObj) { // 点击确定的时候，进行搜索结果
+                this.form.content = dataObj.data
+                this.form.ref_id = dataObj.data.id
+                this.form.ref_sync = 1
+                this.form.tags = ''
+                this.category = dataObj.category
+                if (this.form.id) delete this.form.id
+                this.keepSync()
+                this.addForm = true
+            },
+            handleDelete (index, row) {
+                xmview.showDialog(`你确定要将内容 【<i style="color:red">${row.title}</i>】 从区块中删除吗？`, () => {
+                    dataService.delSectionData({
+                        id: row.id,
+                        section_id: this.section.currentID
+                    }).then(() => {
+                        xmview.showTip('success', '删除成功')
+                        this.getSectionData(this.section.currentID)
+                    }).catch((ret) => {
+                        xmview.showTip('error', ret.message)
+                    })
+                })
+            },
+            submit (form) { // 表单提交
+                this.form.section_id = this.section.currentID
+                this.form.date = this.form.date ? date2Str(this.form.date) : ''
                 this.form.ref_type = this.form.ref_id ? this.category : 'link'
                 this.$refs[form].validate((valid) => {
                     if (valid) {
-                        let reqFn = dataService.create
+                        let reqFn = dataService.createSectionData
                         let msg = '添加成功'
                         if (this.form.id) {
-                            reqFn = dataService.edit
+                            reqFn = dataService.updateSectionData
                             msg = '修改成功'
                         }
-                        this.form.category_id = this.dialog.category_id
-
-                        if (this.form.tags === 'hot') this.form.tags_color = '#FFD220'
-                        if (this.form.tags === 'new') this.form.tags_color = '#FF4B20'
-                        if (this.form.tags === 'recommend') this.form.tags_color = '#3953C3'
-                        console.log(this.form)
-                        reqFn({
-                            id: this.form.id,
-                            category_id: this.form.category_id,
-                            ref_type: this.form.ref_type,
-                            ref_id: this.form.ref_id,
-                            //  ref_sync : this.form.ref_sync,  
-                            ref_sync: 0,
-                            title: this.form.course_name,
-                            image: this.form.image,
-                            url: this.form.url,
-                            desc: this.form.description,
-                            addate: this.form.addate,
-                            tags: this.form.tags,
-                            tags_color: this.form.tags_color,
-                            sort: this.form.sort,
-                        }).then((ret) => {
+                        reqFn(this.form).then(() => {
                             xmview.showTip('success', msg)
                             this.addForm = false
                             this.content.isShow = false
-                            // this.getSectionData(this.section.currentID)
+                            this.getSectionData(this.section.currentID)
                         }).catch((ret) => {
                             xmview.showTip('error', ret.message)
                         })
@@ -451,185 +593,55 @@
                         return false
                     }
                 })
-
             },
-            toggleTag(value) {
+            toggleTag (value) {
                 this.form.tags = value
             },
-            // 保持同步
-            keepSync() {
-                this.form.ref_sync = 1
-                this.form.course_name = this.form.content.course_name
-                this.form.image = this.form.content.image
-                this.form.description = this.form.content.description
-                this.form.addate = this.form.content.addate
-                this.form.sort = ''
-            },
-            // 图片上传完毕
-            handleImgUploaded(data, ext) {
-                courseService.commonUploadImageBaseSection({
-                    // section_id: this.section.currentID,
-                    alias: Date.now() + ext,
-                    image: data
-                }).then((ret) => {
-                    this.form.image = ret.url
-                })
-            },
-
-            // handleImgUploaded (response) {
-            //     this.fetchParam.image = response.url
-            // },
-            addCourse(form) {
-                if (this.section.loading || this.result.loading) {
-                    return
-                }
-                this.form = {
-                    id: 0,
-                    title: '',
-                    url: '',
-                    ref_type: '',
-                    ref_id: '',
-                    ref_sync: 0,
-                    image: '',
-                    description: '',
-                    addate: '',
-                    sort: '',
-                    tags: ''
-                }
-                this.addForm = true
-                this.formTitle = '添加内容'
-            },
-            //更新课程
-            updateCourse(index, item) {
+            updateCourse (index, item) {
                 this.formTitle = `编辑${this.catArr[item.ref_type]}`
                 this.form = item
                 if (item.ref_type != 'link') {
                     this.category = item.ref_type
                     if (item.ref_type == 'course') {
                         this.form.content = item.course
-                        this.form.title = item.course.course_name
-                        this.form.description = item.description
+                        this.form.title = item.course.name
+                        this.form.des = item.description
                     } else if (item.ref_type == 'speaking') {
                         this.form.content = item.speaking
-                        this.form.description = item.content
+                        this.form.des = item.content
                     } else if (item.ref_type == 'article') {
                         this.form.content = item.article
                     }
                 }
                 this.addForm = true
             },
-            //弹窗内容
-            contentConfirm(dataObj) {
-                console.log(dataObj)
-                this.form.content = dataObj
-                // this.form.category_id = dataObj.category_id  
-                // this.form.ref_id = dataObj.contentid
-                this.form.ref_id = dataObj.contentid
-                this.form.ref_sync = 1
-                this.form.tags = ''
-                // this.category = dataObj.category
-                if (this.form.id) delete this.form.id
-                this.keepSync()
+            addCourse (form) {
+                if (this.section.loading || this.result.loading) {
+                    return
+                }
+                this.form = {
+                    title: '',
+                    url: '',
+                    ref_type: '',
+                    ref_id: '',
+                    ref_sync: 0,
+                    image: '',
+                    desc: '',
+                    date: '',
+                    sort: '',
+                    tags: ''
+                }
                 this.addForm = true
+                this.formTitle = '添加内容'
             },
-
-            //获取栏目名称   
-
-            getCategory_name(id) {
-                let i = null
-                this.SecCateName.forEach(v => {
-                    if (v.id == id) {
-                        i = v.name
-                    }
+            handleImgUploaded (data, ext) {
+                dataService.uploadSectionImage({
+                    section_id: this.section.currentID,
+                    alias: Date.now() + ext,
+                    image: data
+                }).then((ret) => {
+                    this.form.image = ret.url
                 })
-                return i
-            },
-            //获取栏目名称
-            fetchCate() {
-                console.log(this.fetchParam)
-                cateService.fetchData().then((ret) => {
-                    // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
-                    this.SecCateName = ret.data
-                    xmview.setContentLoading(false)
-                })
-            },
-            userInfo() {
-                return authUtils.getUserInfo()
-            },
-            initFetchParam() {
-                this.fetchParam = getFetchParam()
-            },
-            handleCurrentChange(val) {
-                if (this.init) { //init是true进来 限制fetchData初始化不请求
-                    this.fetchParam.page = val
-                    this.fetchData()
-                } else {
-                    this.init = true
-
-                }
-            },
-            handleSizeChange(val) {
-                this.fetchParam.pagesize = val
-                this.fetchData()
-            },
-            fetchData(val) {
-                // console.log(this.fetchParam)
-                return dataService.fetchData(this.fetchParam).then((ret) => {
-                    // console.log(ret.data)
-                    this.dataCache = ret.data
-                    this.loadingData = false
-                    xmview.setContentLoading(false)
-                })
-            },
-            search(val) {
-                return dataService.search(this.fetchParam).then((ret) => {})
-            },
-            // 单行被选中
-            selectRow(selection) {
-                let ret = []
-                selection.forEach((item) => {
-                    ret.push(item.id)
-                })
-                this.selectedIds = ret
-            },
-
-        //     // 单条删除
-            del(index, row) {
-                xmview.showDialog(`你将要删除第 <span style="color:red">${row.id}</span> 条数据,  此操作不可恢复确认吗?`, () => {
-                    dataService.delete(row.id).then(() => {
-                        this.dataCache.splice(index, 1) //删除选中项
-                        row.deleted = 1
-                        xmview.showTip('success', '操作成功')
-                    })
-                })
-            },
-            // 批量删除
-            delMulti() {
-                xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
-                    dataService.deleteMulty(this.selectedIds.join(',')).then(() => {
-                        xmview.showTip('success', '操作成功')
-                        this.dialogTree.isShow = false
-                        setTimeout(() => {
-                            this.fetchData() // 重新刷新数据
-                        }, 300)
-                    })
-                })
-            },
-        },
-        computed: {
-            tableData() {
-                var arr = this.dataCache.filter(v => {
-                    return v.title.indexOf(this.keyWord) >= 0
-                })
-                return arr
-            },
-            id() {
-                if (this.dataCache.length > 0 && this.SecCateName) {
-                    this.dataCache.forEach(v => {
-                        v.formdateName = this.getCategory_name(v.category_id)
-                    })
-                }
-                return this.dataCache
             }
         }
     }

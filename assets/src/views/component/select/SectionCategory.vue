@@ -17,7 +17,7 @@
 
 <script>
     import treeUtils from '../../../utils/treeUtils'
-    import sectionService from '../../../services/content/sectionService'
+    import dataService from '../../../services/section/dataService.js'
     export default{
         props: {
             value: [String, Number],
@@ -39,7 +39,7 @@
             }
         },
         created () {
-            sectionService.getSectionCategoryTree({}).then((ret) => {
+            dataService.getSectionCategoryTree({}).then((ret) => {
                 ret.map((item) => {
                     item.children = item.has_children ? [{label: '加载中...'}] : null
                 })
@@ -61,7 +61,7 @@
                 // 递归找到该项
                 let currItem = treeUtils.findItem(this.options, val, 'value')
                 if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
-                sectionService.getSectionCategoryTree({
+                dataService.getSectionCategoryTree({
                     id: val[val.length - 1]
                 }).then((ret) => {
                     // 重新组合数据
