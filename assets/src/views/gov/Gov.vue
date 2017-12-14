@@ -86,7 +86,7 @@
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column prop="parent_name" label="上级部门" width="220">
+            <el-table-column prop="parent_name" label="上级部门" width="180">
             </el-table-column>
             <el-table-column width="100" prop="concact" label="联系人">
             </el-table-column>
@@ -95,11 +95,16 @@
 
             <el-table-column width="180" prop="addate" label="创建时间">
             </el-table-column>
-            <el-table-column prop="operate" label="操作" width="160">
+            <el-table-column prop="operate" label="操作" width="185">
                 <template scope="scope">
-                    <!--<el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
+                    <!--<router-link :to="{path: '/medical/user/'+ scope.row.id }">
+                        <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
+                            管理员 &nbsp;&nbsp;
+                        </el-button>
+                    </router-link>-->
+                    <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
                         管理员
-                    </el-button>-->
+                    </el-button>
                     <el-button type="text" size="small" @click="showFn(scope.$index, scope.row)">
                         详情
                     </el-button>
@@ -228,7 +233,7 @@
                         gov_id: item.id || 1
                     },
                     query: {
-                        category: item.category
+                        // category: item.category
 
                     }
                 })

@@ -23,27 +23,13 @@ export default {
                 noback: true
             }
         },
-        // //数据管理
-        // {
-        //     path: 'data',
-        //     name: 'section-data',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/section/Index.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '区块',
-        //         noback: true
-        //     }
-        // },
-         //数据管理
+        //数据管理
         {
             path: 'data',
             name: 'section-data',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/section/SecData.vue'))
+                    resolve(require('../views/section/Index.vue'))
                 })
             },
             meta: {
@@ -51,6 +37,20 @@ export default {
                 noback: true
             }
         },
+         //数据管理
+        // {
+        //     path: 'data',
+        //     name: 'section-data',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/section/SecData.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '区块-数据',
+        //         noback: true
+        //     }
+        // },
         {
             path: 'add',
             name: 'section-add',

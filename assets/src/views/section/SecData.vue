@@ -519,7 +519,7 @@
             // 结果列表
             getSectionData (sectionID) {
                 this.result.loading = true
-                dataService.getSectionDataList({
+                dataService.fetchData({
                     page: this.result.page,
                     page_size: this.result.page_size,
                     section_id: sectionID
@@ -534,7 +534,7 @@
             // 获取左侧分类列表
             getLeftCategoryData () {
                 this.section.loading = true
-                return dataService.getSectionList({
+                return cateService.fetchData({
                     category_id: this.section.category_id,
                     page: this.section.page
                 }).then((ret) => {

@@ -194,7 +194,7 @@
                         this.form = Object.assign(this.form, this.sign)
                         let reqFn = govService.addGov
                         let msg = '添加成功'
-              
+                        
                         if(this.form.province_id) {
                             this.form.pid = this.form.province_id
                             console.log( 'this.form.province_id='+ this.form.province_id)

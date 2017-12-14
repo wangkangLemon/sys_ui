@@ -430,5 +430,84 @@ class govService {
             return ret.data
         })
     }
+//----------------------------------------------gov登录日志---------------------------------------------------------------------------------
+
+    // 管理员综合统计情况
+    getCompanyManageStat() {
+        let finalUrl = `${urlPre}/user/loginlog/lists`
+        return api.get(finalUrl).then((ret) => {
+            return ret.data
+        })
+    }
+    // 管理员活跃情况
+    getCompanyManage({
+        page,
+        pagesize,
+        name = '',
+        user_name = '',
+        gov_id,
+        role_id = '',
+        date_start = '',
+        date_end = '',
+    }) {
+        let finalUrl = `${urlPre}/user/loginlog/lists`
+        return api.get(finalUrl, {
+            page,
+            pagesize,
+            name,
+            user_name,
+            gov_id,
+            role_id,
+            date_start,
+            date_end
+        }).then((ret) => {
+            return ret.data
+        })
+    }    
+//------------------------------------------------课程观看日志---------------------------------------------------------------------------
+
+    // 课程观看情况 详细内容
+    getCourseHistory({
+        page,
+        pagesize,
+        user_id,
+        gov_id,
+        category_id,
+        course_id,
+        date_start,
+        date_end,
+    }) {
+        let finalUrl = `${urlPre}/course/history/lists`
+        return api.get(finalUrl, {
+            page,
+            pagesize,
+            user_id,
+            gov_id,
+            category_id,
+            course_id,
+            date_start,
+            date_end,
+        }).then((ret) => {
+            return ret.data
+        })
+    }
+
+    // 企业活跃情况 图表信息
+    getCompanyStatChart({
+        gov_id,
+        date_start,
+        date_end,
+    }) {
+        let finalUrl = `${urlPre}/stat/chart`
+        return api.get(finalUrl, {
+            gov_id,
+            date_start,
+            date_end
+        }).then((ret) => {
+            return ret.data
+        })
+    }
+
+
 }
 export default new govService()
