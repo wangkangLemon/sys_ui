@@ -55,6 +55,7 @@
                 areas: [],
                 towns: [],
                 villages: [],
+                // provinceSelect: this.$store.state.index.navMenu,
                 provinceSelect: '',
                 citySelect: '',
                 areaSelect: '',

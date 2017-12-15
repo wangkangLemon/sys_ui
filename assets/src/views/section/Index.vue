@@ -146,7 +146,7 @@
             <el-form label-position="top" :rules="rules">
                 <el-form-item label="栏目菜单" :fetch-suggestions="querySearch">
                     <el-select v-model="dialog.category_id" placeholder="请输入栏目菜单">
-                        <el-option v-for="item in drop_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        <el-option v-for="item in SecCateName" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -179,8 +179,9 @@
                     <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                 </el-form-item>
                 <el-form-item prop="addate" label="日期" :label-width="formLabelWidth">
-                    <el-addate-picker v-model="form.addate" type="addate" />
+                    <el-date-picker v-model="form.addate" type="date" />
                 </el-form-item>
+          
                 <el-form-item prop="sort" label="排序" :label-width="formLabelWidth">
                     <el-input v-model="form.sort" auto-complete="off" placeholder="排序越大越靠前，留空则自动设为最靠前的排序"></el-input>
                 </el-form-item>
@@ -345,15 +346,15 @@
                     },
                     {
                         name: '热门',
-                        value: 'hot'
+                        value: '热门'
                     },
                     {
                         name: '最新',
-                        value: 'new'
+                        value: '最新'
                     },
                     {
                         name: '推荐',
-                        value: 'recommend'
+                        value: '推荐'
                     }
                 ],
                 rules: {
@@ -390,7 +391,6 @@
             },
             //拿到栏目菜单
             querySearch(queryString, cb) {
-                alert(1111)
                 var restaurants = this.restaurants;
                 var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
                 // 调用 callback 返回建议列表的数据返回建议列表的数据
@@ -420,9 +420,9 @@
                         }
                         this.form.category_id = this.dialog.category_id
 
-                        if (this.form.tags === 'hot') this.form.tags_color = '#FFD220'
-                        if (this.form.tags === 'new') this.form.tags_color = '#FF4B20'
-                        if (this.form.tags === 'recommend') this.form.tags_color = '#3953C3'
+                        if (this.form.tags === '热门') this.form.tags_color = '#FFD220'
+                        if (this.form.tags === '最新') this.form.tags_color = '#FF4B20'
+                        if (this.form.tags === '推荐') this.form.tags_color = '#3953C3'
                         console.log(this.form)
                         reqFn({
                             id: this.form.id,
@@ -537,6 +537,7 @@
 
             getCategory_name(id) {
                 let i = null
+                console.log( this.SecCateName)
                 this.SecCateName.forEach(v => {
                     if (v.id == id) {
                         i = v.name

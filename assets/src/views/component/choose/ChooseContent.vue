@@ -159,7 +159,6 @@
                 })
             },
             getArticle () {
-                alert(2)
                 this.loadingData = true
                 return ArticleService.getArticleList({
                     title: this.search.keyword,
@@ -174,7 +173,6 @@
                 })
             },
             getSpeaking () {
-                alert(1)
                 this.loadingData = true
                 // 获取课程数据
                 console.log(this.search.course_name)

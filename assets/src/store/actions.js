@@ -28,7 +28,6 @@ const actions = {
 
     //区块列表存储Pid
     saveGovRank(store, need){
-        alert(1111)
         store.commit(types.INDEX_SET__SAVEGOVRANK, need)
     },
 

@@ -46,7 +46,6 @@ const Auth = {
             state.secPid = need
         },
         [INDEX_SET__SAVEGOVRANK] (state, need) {        //保存部门层级关系的数据
-            alert(2222)
             state.govRank= need
         },
         // [INDEX_SET__SETSAVECOURSECATE] (state, need) {        

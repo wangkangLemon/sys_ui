@@ -149,7 +149,7 @@
             }
         },
         computed: {
-            govID () {
+            govID () {  //传过来的govid
                 return this.$route.params.id
             }
         },
@@ -159,7 +159,7 @@
             if (this.govID == undefined) {
 
                 this.form = {
-                    gov_id: void 0,
+                    gov_id: void 0, //初始化govid
                     category: '', // 类型
                     pid:'', //上级部门                    
                     province_id : '', // 省
