@@ -120,12 +120,12 @@
                     <label>账号</label>
                     <el-input class="name" @change="getData" v-model="search.name"></el-input>
                 </section>-->
-                <section>
+                <!--<section>
                     <i>部门</i>
                     <CompanySelect  :change="getData" v-model="search.gov_id"
                                     v-on:change="val=>search.gov_id=val">
                     </CompanySelect>
-                </section>
+                </section>-->
 
                 <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" 
                     :town="fetchParam.townSelect" :village="fetchParam.villageSelect" 
@@ -270,6 +270,7 @@
             // })
         },
         activated () {
+            xmview.setContentLoading(false)               //关闭遮罩
             this.getData().then(() => {
                 xmview.setContentLoading(false)
             })

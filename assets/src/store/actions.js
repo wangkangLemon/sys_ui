@@ -25,6 +25,13 @@ const actions = {
     savePid(store, need){
         store.commit(types.INDEX_SET__SETSECPID, need)
     },
+
+    //区块列表存储Pid
+    saveGovRank(store, need){
+        alert(1111)
+        store.commit(types.INDEX_SET__SAVEGOVRANK, need)
+    },
+
     //课程分类存储id name
     // saveCourseCate(store, need){
     //     store.commit(types.INDEX_SET__SETSAVECOURSECATE, need)

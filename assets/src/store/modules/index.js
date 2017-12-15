@@ -7,7 +7,8 @@ import {
     INDEX_SET__MENU_ACTIVE,
     INDEX_SET__CLEARFETCHPARAM,
     INDEX_SET__SETSECMENU,
-    INDEX_SET__SETSECPID
+    INDEX_SET__SETSECPID,
+    INDEX_SET__SAVEGOVRANK
 } from '../mutations'
 
 const Auth = {
@@ -19,6 +20,7 @@ const Auth = {
         clearFetchParam: false, // 是否清空筛选条件
         secMenu:[],
         secPid:0,
+        govRank :[]
         // courseCate:{},
 
     },
@@ -42,6 +44,10 @@ const Auth = {
         },
         [INDEX_SET__SETSECPID] (state, need) {        
             state.secPid = need
+        },
+        [INDEX_SET__SAVEGOVRANK] (state, need) {        //保存部门层级关系的数据
+            alert(2222)
+            state.govRank= need
         },
         // [INDEX_SET__SETSAVECOURSECATE] (state, need) {        
         //     state.courseCate = need

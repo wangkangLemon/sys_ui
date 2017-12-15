@@ -204,10 +204,14 @@
                  this.change && this.change(val, t[type + 1])
                  //
             },
-          
+
+          //在添加的时候 部门级别选择的时候 先存进vuex 获取的默认是vuex的值 选择后在触发change事件
+
             setCurrVal(type, val) { //type  0 省 1 市 2 县
                 let emitArr = ['provinceChange', 'cityChange', 'areaChange', 'townChange', 'villageChange']
                 this.$emit(emitArr[type], val)
+                this.$store.dispatch('saveGovRank',{'emitArr[type]':val})
+                console.log( this.$emit(emitArr[type], val))
              
             }
         }
