@@ -300,7 +300,7 @@
 
 
                 this.loading = true
-                return govService.getCompanyManage({
+                return govService.getGovManage({
                     page: this.currentPage,
                     pagesize: this.pageSize,
                     name: this.search.name,

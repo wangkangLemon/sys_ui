@@ -212,7 +212,8 @@
                 let emitArr = ['provinceChange', 'cityChange', 'areaChange', 'townChange', 'villageChange']
                 this.$emit(emitArr[type], val)
                 this.$store.dispatch('saveGovRank',{'emitArr[type]':val})
-                console.log( this.$emit(emitArr[type], val))
+                console.log(this.$store.state.index.saveGovRank)
+                console.log( emitArr[type], val)
              
             }
         }

@@ -440,7 +440,7 @@ class govService {
         })
     }
     // 管理员活跃情况
-    getCompanyManage({
+    getGovManage({
         page,
         pagesize,
         name = '',
@@ -450,7 +450,7 @@ class govService {
         date_start = '',
         date_end = '',
     }) {
-        let finalUrl = `${urlPre}/user/loginlog/lists`
+        let finalUrl = `${config.apiHost}/report/userlogin/lists`
         return api.get(finalUrl, {
             page,
             pagesize,
