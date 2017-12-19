@@ -61,15 +61,11 @@
                     </el-option>
                 </el-select>
             </section>
-            <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" 
-                    :town="fetchParam.townSelect" :village="fetchParam.villageSelect" 
-                    title="部门" 
-                    v-on:provinceChange="val => fetchParam.provinceSelect = val"
-                    v-on:cityChange="val => fetchParam.citySelect = val" 
-                    v-on:areaChange="val => fetchParam.areaSelect = val" 
-                    v-on:townChange="val => fetchParam.townSelect = val" 
-                    v-on:villageChange="val => fetchParam.villageSelect = val" 
-                    :change="getData" >
+            <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" :town="fetchParam.townSelect"
+                :village="fetchParam.villageSelect" title="部门" v-on:provinceChange="val => {fetchParam.provinceSelect = val;finallyVal = val}"
+                v-on:cityChange="val => {fetchParam.citySelect = val;finallyVal = val}" v-on:areaChange="val => {fetchParam.areaSelect = val;finallyVal = val}"
+                v-on:townChange="val => {fetchParam.townSelect = val;finallyVal = val}" v-on:villageChange="val => {fetchParam.villageSelect = val;finallyVal = val}"
+                :change="getData">
             </Region>
             <section>
                 <i>名称：</i>
@@ -137,7 +133,8 @@
             areaSelect: '',
             townSelect: '',
             villageSelect: '',
-            name: ''
+            name: '',
+            finallyVal: ''
         }
     }
     export default {
@@ -176,7 +173,7 @@
                     townSelect: '',
                     villageSelect: '',
                     name: '',
-                    pid: void -1,
+                    pid: void - 1,
                 },
                 total: 0
             }
@@ -187,14 +184,14 @@
             })
         },
         watch: {
-            'fetchParam.name':function(){
-                if(this.fetchParam.pid==undefined){
+            'fetchParam.name': function () {
+                if (this.fetchParam.pid == undefined) {
                     this.fetchParam.pid = -1
                 }
             }
         },
         methods: {
-            changeName(){
+            changeName() {
 
             },
             initFetchParam() {
@@ -219,9 +216,9 @@
             },
             // 删除 GOV部门
             deleteGov(index, row) {
-                  xmview.showDialog(`你将要删除部门 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
+                xmview.showDialog(`你将要删除部门 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
                     govService.deleteGov(row.id).then(() => {
-                        this.govData.splice(index, 1)//删除选中项
+                        this.govData.splice(index, 1) //删除选中项
                         row.deleted = 1
                     })
                 })
@@ -256,12 +253,38 @@
                 this.currentPage = val
                 this.getData()
             },
-            getData() {
-                if (this.fetchParam.provinceSelect!=='') {
-                    this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+            getData(type) {
+                // if (this.fetchParam.provinceSelect!=='') {
+                //     this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+                // }
+                let flag = false
+                let index
+                let arr = ['provinceSelect', 'citySelect', 'areaSelect', 'townSelect', 'villageSelect']
+                arr.forEach((v,i) => {
+                    if (flag) {
+                        this.fetchParam[v] = null
+                    }
+                    if (this.fetchParam[v] == this.finallyVal) {
+                        flag = true
+                        index = i
+                    }
+                })
+                
+                if(index>0){
+                    if(type){
+                        this.fetchParam.pid = this.fetchParam[arr[index-1]];
+                    }else{
+                        this.fetchParam.pid = this.fetchParam[arr[index]];
+                    }
+                    
+                }else{
+                    this.fetchParam.pid = this.finallyVal
                 }
-                if(!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !this.fetchParam.townSelect && !this.fetchParam.villageSelect){
-                    this.fetchParam.pid= -1
+               
+
+                if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
+                    this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
+                    this.fetchParam.pid = -1
                 }
                 this.loading = true
                 return govService.getSelectList({

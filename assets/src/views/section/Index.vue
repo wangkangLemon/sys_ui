@@ -537,7 +537,7 @@
 
             getCategory_name(id) {
                 let i = null
-                console.log( this.SecCateName)
+                // console.log( this.SecCateName)
                 this.SecCateName.forEach(v => {
                     if (v.id == id) {
                         i = v.name

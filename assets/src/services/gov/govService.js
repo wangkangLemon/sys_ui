@@ -439,7 +439,32 @@ class govService {
             return ret.data
         })
     }
-    // 管理员活跃情况
+    // gov登录日志
+    getUserLoginlog({
+        page,
+        pagesize,
+        name = '',
+        user_name = '',
+        gov_id,
+        role_id = '',
+        date_start = '',
+        date_end = '',
+    }) {
+        let finalUrl = `${config.apiHost}/user/loginlog/lists`
+        return api.get(finalUrl, {
+            page,
+            pagesize,
+            name,
+            user_name,
+            gov_id,
+            role_id,
+            date_start,
+            date_end,
+        }).then((ret) => {
+            return ret.data
+        })
+    }    
+    // 注册登陆统计
     getGovManage({
         page,
         pagesize,
@@ -449,6 +474,7 @@ class govService {
         role_id = '',
         date_start = '',
         date_end = '',
+        level,
     }) {
         let finalUrl = `${config.apiHost}/report/userlogin/lists`
         return api.get(finalUrl, {
@@ -459,7 +485,8 @@ class govService {
             gov_id,
             role_id,
             date_start,
-            date_end
+            date_end,
+            level,
         }).then((ret) => {
             return ret.data
         })

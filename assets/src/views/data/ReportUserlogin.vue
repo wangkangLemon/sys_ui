@@ -259,6 +259,7 @@
                     villageSelect: '',
                     name: '',
                     pid: void -1,
+                    level:void 0,
                 },
             }
         },
@@ -289,15 +290,28 @@
                 this.getData()
             },
             getData () {
-
+                console.log(this.fetchParam)
                 //先拿到省市区id 再请求这个id的详细信息
                  if (this.fetchParam.provinceSelect!=='') {
-                    this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+                    this.fetchParam.level= 0
+                    if (this.fetchParam.citySelect!==''){
+                        this.fetchParam.level= 1
+                        if (this.fetchParam.areaSelect!==''){
+                            this.fetchParam.level= 2
+                            if (this.fetchParam.townSelect!==''){
+                                this.fetchParam.level= 3
+                                if (this.fetchParam.villageSelect!==''){
+                                    this.fetchParam.level= 4
+                                }
+                            }
+                        }
+                    }
+                    this.fetchParam.pid = this.fetchParam.gov_id=this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+
                 }
                 if(!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !this.fetchParam.townSelect && !this.fetchParam.villageSelect){
                     this.fetchParam.pid= -1
                 }
-
 
                 this.loading = true
                 return govService.getGovManage({
@@ -305,10 +319,11 @@
                     pagesize: this.pageSize,
                     name: this.search.name,
                     user_name: this.search.user_name,
-                    gov_id: this.search.gov_id,
+                    gov_id: this.fetchParam.pid,
                     role_id: this.search.role_id,
                     date_start: this.search.createTime,
                     date_end: this.search.endTime,
+                    level:this.fetchParam.level,
                 }).then((ret) => {
                     this.total = ret.total
                     this.manageData = ret
