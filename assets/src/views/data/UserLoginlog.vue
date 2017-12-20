@@ -138,13 +138,13 @@
                     :change="getData" >
                 </Region>
 
-                <section>
+                <!--<section>
                     <i>角色</i>
                     <el-select clearable v-model="search.role_id" @change="getData">
                         <el-option label="管理员" value="1"></el-option>
                         <el-option label="部门人员" value="0"></el-option>
                     </el-select>
-                </section>
+                </section>-->
                 <DateRange title="登录时间" :start="search.createTime" :end="search.endTime"
                            v-on:changeStart="val=> search.createTime=val"
                            v-on:changeEnd="val=> search.endTime=val"

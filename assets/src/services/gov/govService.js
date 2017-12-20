@@ -465,7 +465,7 @@ class govService {
         })
     }    
     // 注册登陆统计
-    getGovManage({
+    getReportUserlogin({
         page,
         pagesize,
         name = '',
