@@ -6,7 +6,7 @@ class cateService {
     //拿到区块列表
     fetchData () {
         let url = urlPre + '/lists'
-        return api.post(url,{
+        return api.post(url,{pagesize:-1
         }).then(ret => {
             if (ret.code == 0) {
                 return ret
@@ -30,9 +30,9 @@ class cateService {
     }
 
     // 创建
-    create({ pid, name, image, model, path,sort }) {
+    create({ pid, name, rkey, image, model, path, sort }) {
         let url = urlPre + '/create'
-        return api.post(url, { pid, name, image, model, path,sort }).then(ret => {
+        return api.post(url, { pid, name, rkey, image, model, path, sort }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data
@@ -43,9 +43,9 @@ class cateService {
         })
     }
     // 更新
-    edit({ id, pid, name, image, model, path, sort }) {
+    edit({ id, pid, name, rkey, image, model, path, sort }) {
         let url = `${urlPre}/edit/${id}`
-        return api.post(url, { pid, name, image, model, path,sort }).then(ret => {
+        return api.post(url, { pid, name, rkey, image, model, path,sort }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data

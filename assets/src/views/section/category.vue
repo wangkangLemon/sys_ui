@@ -100,7 +100,7 @@
         watch: {
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
-                console.log(this.$store.state.index.secMenu)
+                // console.log(this.$store.state.index.secMenu)
             }
         },
         activated() {
@@ -127,6 +127,7 @@
             fetchData() {
                 cateService.fetchData().then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
+                        console.log(ret)
                         this.SecMenu=ret.data
                         xmview.setContentLoading(false)     
                     })
@@ -162,7 +163,7 @@
                }else {
                     cateService.edit( message ).then(( ret ) => {
                         setTimeout(() => {
-                            this.fetchData() // 重新刷新数据
+                            this.fetchData() // 重新刷新数据 
                         }, 300)
                     })
                }
@@ -192,7 +193,7 @@
                 if(type!="update"){
                     this.$store.dispatch('setSecMenu',null);
                 }
-                if(type = 'p'){
+                if(type == 'p'){
                     console.log(this.$refs.secCategory)
                     this.$refs.secCategory.clearSelected()
                 }

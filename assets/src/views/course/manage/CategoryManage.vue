@@ -71,7 +71,8 @@
                     <el-form-item label="栏目logo" prop="image">
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl"
                                    :disabled="fetchParam.pid == null"
-                                   :onSuccess="handleImgUploaded"></UploadImg>
+                                   :onSuccess="handleImgUploaded">
+                        </UploadImg>
                     </el-form-item>
                     <el-form-item label="课程类型" prop="category_type">
                         <el-radio-group v-model="fetchParam.category_type">

@@ -29,9 +29,9 @@ class setService {
     }
 
     // 创建
-    create({ category, field, val, describe }) {
+    create({ category, field, usage, ftype, val, describe }) {
         let url = urlPre + '/create'
-        return api.post(url, {  category, field, val, describe }).then(ret => {
+        return api.post(url, {  category, field, usage, ftype, val, describe }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data
@@ -42,10 +42,9 @@ class setService {
         })
     }
     // 更新
-    edit({ id, category, field, val, describe }) {
+    edit({ id, category, field, usage, ftype, val, describe }) {
         let url = `${urlPre}/edit/${id}`
-        console.log('edit======================')
-        return api.post(url, { category, field, val, describe }).then(ret => {
+        return api.post(url, { category, field, usage, ftype, val, describe }).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data

@@ -27,16 +27,32 @@
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :model="fetchParam">
                 <el-form-item  v-if="$route.params.sys_id" label="ID" prop="category">
-                    <el-input v-model.name="fetchParam.id" disabled></el-input>
+                    <el-input v-model="fetchParam.id" disabled></el-input>
                 </el-form-item>
                  <el-form-item v-else >
                 </el-form-item>
                 <el-form-item label="设置" prop="category">
-                    <el-input v-model.name="fetchParam.category"></el-input>
+                    <el-input v-model="fetchParam.category"></el-input>
                 </el-form-item>
                 <el-form-item label="字段名" prop="field">
-                    <el-input v-model.mobile="fetchParam.field"></el-input>
+                    <el-input v-model="fetchParam.field"></el-input>
                 </el-form-item>
+                <el-form-item label="功能说明" prop="usage">
+                    <el-input v-model="fetchParam.usage"></el-input>
+                </el-form-item>
+                <el-form-item label="字段类型" prop="ftype">
+                    <el-select v-model="fetchParam.ftype" placeholder="请选择">
+                        <el-option label="数据类型" value="int"></el-option>
+                        <el-option label="字符串类型" value="string"></el-option>
+                    </el-select>
+                </el-form-item>
+                <!--<el-form-item label="模型标识">
+                    <el-select v-model="selectData.model" placeholder="请选择">
+                        <el-option label="混合开发" value="hybrid"></el-option>
+                        <el-option label="原生开发" value="native"></el-option>
+                        <el-option label="引用类型" value="link"></el-option>
+                    </el-select>
+                </el-form-item>-->
                 <el-form-item label="字段值"  prop="val">
                     <el-input v-model.email="fetchParam.val"></el-input>
                 </el-form-item>
@@ -44,7 +60,7 @@
                     <el-input v-model.password="fetchParam.describe"></el-input>
                 </el-form-item>
                 <el-form-item label="" v-if="this.$route.params.sys_type">
-                    <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
+                    <el-button @click="$router.push({ name:'setting-list'})">取消</el-button>
                     <el-button type="primary" @click="btnNextClick">确认</el-button>
                 </el-form-item>
             </el-form>
@@ -53,7 +69,7 @@
 </template>
 
 <script>
-    import sysService from '../../services/setting/setService.js'
+    import setService from '../../services/setting/setService.js'
     import config from '../../utils/config'
     export default {
         name: 'sys-form',
@@ -72,10 +88,11 @@
             }
         },
         activated () {
+              console.log(this.$route.params.sys_id)
             xmview.setContentLoading(false);
             console.log('this.$route.params.sys_id='+this.$route.params.sys_id )
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
-                    sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
+                    setService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
                         console.log(ret)
                     })
@@ -88,15 +105,14 @@
 
         methods: {
             btnNextClick() {
+                alert(11)
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
-                    let req = sysService.create
-                    if (this.$route.params.sys_id) req = sysService.edit
-                    console.log(req)
-                    // console.log(this.$route.params.sys_id)
+                    let req = setService.create
+                    if (this.$route.params.sys_id) req = setService.edit
+                    console.log(this.fetchParam)
+                    console.log(this.$route.params.sys_id)
                     req(this.fetchParam).then((ret) => {
-                        console.log(111111111111)
-                        console.log(ret)
                         // 重置当前数据
                         xmview.showTip('success', '数据提交成功')
                         // this.fetchParam=getOriginData(),
@@ -118,6 +134,8 @@
         return {
             category: '',
             field:'',
+            usage: '',
+            ftype: '',
             val:'',
             describe: void 0,
         }

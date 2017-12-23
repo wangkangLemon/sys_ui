@@ -221,21 +221,25 @@
 
         </article>
 
-        <el-table class="data-table" v-loading="loadingData" :data="id" :fit="true" @select="selectRow" @select-all="selectRow" border
+        <el-table class="data-table" v-loading="loadingData" :data="dataCache" :fit="true" @select="selectRow" @select-all="selectRow" border
             v-if="SecCateName">
 
             <!--<el-table-column type="selection"></el-table-column>-->
             <!--<el-table-column min-width="100" prop="id" label="区块id" v-if="data">
             </el-table-column>-->
-            <el-table-column min-width="100" prop="formdateName" label="栏目名称">
+
+            <!--<el-table-column min-width="100" prop="formdateName" label="栏目名称">-->
+            <el-table-column min-width="100" prop="category_name" label="栏目名称">
             </el-table-column>
             <el-table-column min-width="100" prop="ref_sync" :formatter="format" label="是否引用">
             </el-table-column>
-            <el-table-column min-width="400" prop="title" label="标题">
+            <el-table-column min-width="300" prop="title" label="标题">
             </el-table-column>
             <el-table-column min-width="100" prop="addate" label="添加时间">
             </el-table-column>
             <el-table-column min-width="100" prop="tags" label="标签">
+            </el-table-column>
+            <el-table-column min-width="100" prop="category_rkey" label="栏目标识">
             </el-table-column>
             <el-table-column fixed="right" width="170" label="操作">
                 <template scope="scope">
@@ -423,7 +427,7 @@
                         if (this.form.tags === '热门') this.form.tags_color = '#FFD220'
                         if (this.form.tags === '最新') this.form.tags_color = '#FF4B20'
                         if (this.form.tags === '推荐') this.form.tags_color = '#3953C3'
-                        console.log(this.form)
+                        // console.log(this.form)
                         reqFn({
                             id: this.form.id,
                             category_id: this.form.category_id,
@@ -520,7 +524,6 @@
             },
             //弹窗内容
             contentConfirm(dataObj) {
-                console.log(dataObj)
                 this.form.content = dataObj
                 // this.form.category_id = dataObj.category_id  
                 // this.form.ref_id = dataObj.contentid
@@ -547,7 +550,6 @@
             },
             //获取栏目名称
             fetchCate() {
-                console.log(this.fetchParam)
                 cateService.fetchData().then((ret) => {
                     // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                     this.SecCateName = ret.data
@@ -574,10 +576,10 @@
                 this.fetchData()
             },
             fetchData(val) {
-                // console.log(this.fetchParam)
                 return dataService.fetchData(this.fetchParam).then((ret) => {
-                    // console.log(ret.data)
                     this.dataCache = ret.data
+                    console.log(this.dataCache)
+                    
                     this.loadingData = false
                     xmview.setContentLoading(false)
                 })
@@ -624,13 +626,13 @@
                 })
                 return arr
             },
-            id() {
+            dataCache01() {
                 if (this.dataCache.length > 0 && this.SecCateName) {
                     this.dataCache.forEach(v => {
                         v.formdateName = this.getCategory_name(v.category_id)
                     })
                 }
-                return this.dataCache
+                return this.dataCache    // :data="dataCache01"
             }
         }
     }

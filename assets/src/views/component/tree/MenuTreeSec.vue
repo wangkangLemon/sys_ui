@@ -58,6 +58,7 @@
                         path:v.path,
                         level:v.level,
                         image:v.image,
+                        rkey:v.rkey,
                         children: []
                     })
                 }
@@ -74,6 +75,7 @@
                                 path:v.path,
                                 level:v.level,
                                 image:v.image,
+                                rkey:v.rkey,
                                 children: []
                             })
                         }
