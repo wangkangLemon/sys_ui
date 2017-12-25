@@ -58,6 +58,8 @@
             </el-table-column>
             <el-table-column min-width="100" prop="category" label="设置">
             </el-table-column>
+            <el-table-column min-width="100" prop="usage" label="功能说明">
+            </el-table-column>
             <el-table-column min-width="100" prop="field" label="字段名">
             </el-table-column>
             <el-table-column min-width="180" prop="val" label="字段值">

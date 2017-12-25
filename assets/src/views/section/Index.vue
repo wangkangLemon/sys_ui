@@ -254,7 +254,7 @@
             </el-table-column>
         </el-table>
         <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
-            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="40">
         </el-pagination>
         <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput>
         <!--底部的批量删除和移动两个按钮-->
@@ -626,6 +626,7 @@
                 })
                 return arr
             },
+  
             dataCache01() {
                 if (this.dataCache.length > 0 && this.SecCateName) {
                     this.dataCache.forEach(v => {

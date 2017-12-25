@@ -13,6 +13,23 @@
             .subButton {
                 text-align: center;
             }
+            .tag {
+                span {
+                    padding: 10px;
+                    border: 1px solid #e2e7eb;
+                    background: #fff;
+                    border-right: none;
+                    &:last-of-type {
+                        border-right: 1px solid #e2e7eb;
+                    }
+                    &:hover {
+                        background: #e2e7eb;
+                    }
+                    &.active {
+                        background: #e2e7eb;
+                    }
+                }
+            }
         }
     }
 </style>
@@ -75,8 +92,11 @@
                 <!--<el-form-item prop="date" label="日期">
                     <el-date-picker v-model="fetchParam.date" type="date"/>
                 </el-form-item>-->
-                <el-form-item label="标签">
+                <!--<el-form-item label="标签">
                     <vTags v-model.tags="courseTags"></vTags>
+                </el-form-item>-->
+                <el-form-item class="tag" label="标签">
+                    <span @click="toggleTag(item.value)" :class="{'active': item.value == fetchParam.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                 </el-form-item>
                 <el-form-item label="颜色值" prop="tags_color">
                     <el-input v-model.color="fetchParam.tags_color"></el-input>
@@ -119,6 +139,24 @@
                 drop_list:[],
                 courseTags: [],
                 uploadImgUrl: '',
+                tags: [{
+                        name: '无',
+                        value: '无'
+                    },
+                    {
+                        name: '热门',
+                        value: '热门'
+                    },
+                    {
+                        name: '最新',
+                        value: '最新'
+                    },
+                    {
+                        name: '推荐',
+                        value: '推荐'
+                    }
+                ],
+                formLabelWidth: '50px', // 表单label的宽度
             }
         },
         created () {
@@ -144,7 +182,18 @@
         this.uploadImgUrl = courseService.getUploadCategoryImgUrl()
             
         },
+        watch: {
+            'fetchParam.tags'(){
+                if (this.fetchParam.tags === '无') this.fetchParam.tags_color = ''
+                if (this.fetchParam.tags === '热门') this.fetchParam.tags_color = '#FFD220'
+                if (this.fetchParam.tags === '最新') this.fetchParam.tags_color = '#FF4B20'
+                if (this.fetchParam.tags === '推荐') this.fetchParam.tags_color = '#3953C3'
+            }
+        },
         methods: {
+            toggleTag(value) {
+                this.fetchParam.tags = value
+            },
             // 图片上传完毕
             handleImgUploaded (response) {
                 this.fetchParam.image = response.data.url
@@ -166,7 +215,7 @@
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
-                    this.fetchParam.tags = this.courseTags.join(',')
+                    // this.fetchParam.tags = this.courseTags.join(',')
                     let req = dataService.create
                     if (this.$route.params.sys_id) req = dataService.edit
                     // alert(req)
