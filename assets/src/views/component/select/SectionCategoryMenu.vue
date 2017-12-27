@@ -15,7 +15,7 @@
 
 <script>
     import treeUtils from '../../../utils/treeUtils'
-    import courseService from '../../../services/course/courseService.js'
+    import cateService from '../../../services/section/cateService.js'
     export default {
         props: {
             value: [String, Number, Array],
@@ -67,7 +67,7 @@
 
                     this.loading = true
                     //获取数据的方法
-                    courseService.search_cate({
+                    cateService.fetchData({
                         pid: 0,
                         level: -1,
                     }).then((ret) => {
@@ -79,11 +79,12 @@
                                 children: v.ended ? null : [] //是否最终菜单？
                             })
                         })
+                        console.log(this.options)
                         this.loading = false
                         xmview.setContentLoading(false)
                     })
 
-                    // courseService.getCategoryTree({type: this.type, pid:0})
+                    // cateService.getCategoryTree({type: this.type, pid:0})
                     //     .then(ret => {
                     //         // 不显示未分类那一项
                     //         if (!this.showNotCat) {
@@ -118,7 +119,7 @@
 
                 //if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
                 var arr = []
-                courseService.search_cate({
+                cateService.fetchData({
                     pid: val[val.length - 1],
                     level: -1,
                 }).then((ret) => {
@@ -141,8 +142,8 @@
 
 
 
-                // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
-                // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
+                // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
+                // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
                 //     .then(ret => {
                 //         // 重新组合数据
                 //         ret.map((item) => {

@@ -4,12 +4,12 @@ const urlPre = config.apiHost + '/section/category'
 
 class cateService {
     //拿到区块列表
-    fetchData () {
+    fetchData (pid, level, pagesize) {
         let url = urlPre + '/lists'
-        return api.post(url,{pagesize:-1
-        }).then(ret => {
+        return api.post(url,pid, level, pagesize=-1
+        ).then(ret => {
             if (ret.code == 0) {
-                return ret
+                return ret.data
             } else {
                 return Promise.reject(ret)
             }

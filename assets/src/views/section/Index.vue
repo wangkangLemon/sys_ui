@@ -194,21 +194,20 @@
 
 
         <article class="search">
-
+            <!--1 选择下拉没有层级-->
             <section>
-                <!--<el-form label-width="120px" ref="form" :model="fetchParam">
-                    <el-form-item label="区块栏目" :fetch-suggestions="querySearch">
-                        <el-select v-model="fetchParam.category_id" placeholder="请输入栏目菜单">
-                            <el-option v-for="item in drop_list" :key="item.id" :label="item.id + item.name" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>-->
-
                  <i>栏目菜单</i>
                     <el-select  v-model="fetchParam.category_id" placeholder="请输入栏目菜单" @change="fetchCate" clearable >                       
                         <el-option  v-for="item in SecCateName" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
             </section>
+
+
+            <!--2 选择联动表-->
+            <!--<section>
+                    <i>栏目菜单</i>
+                    <Section-category-menu :onchange="fetchCate" v-model="fetchParam.category_id"></Section-category-menu>
+            </section>-->
 
             <!--<el-form-item label="栏目菜单" prop="category_id"> //需改进待后台返ended数据后做联动列表
                         <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
@@ -271,6 +270,7 @@
     import cateService from '../../services/section/cateService.js'
     import ChooseContent from '../component/choose/ChooseContent'
     import courseService from '../../services/course/courseService.js'
+    import SectionCategoryMenu from '../component/select/SectionCategoryMenu.vue'
     import {
         date2Str
     } from '../../utils/timeUtils.js'
@@ -291,7 +291,8 @@
         components: {
             DateRange,
             ChooseContent,
-            ImagEcropperInput
+            ImagEcropperInput,
+            SectionCategoryMenu
         },
         data() {
             return {
@@ -552,7 +553,7 @@
             fetchCate() {
                 cateService.fetchData().then((ret) => {
                     // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
-                    this.SecCateName = ret.data
+                    this.SecCateName = ret
                     xmview.setContentLoading(false)
                 })
             },
