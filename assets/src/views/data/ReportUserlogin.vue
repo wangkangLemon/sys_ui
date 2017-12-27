@@ -16,6 +16,13 @@
                 text-align: right;
                 margin-top: 15px;
             }
+            a {
+                display: block;
+                color: #20a0ff;
+                font-size: 14px;
+                margin-right: 10px;
+                text-decoration: none;
+            }
         }
         .course-analytics {
             @extend %justify;
@@ -164,16 +171,35 @@
                             <span>{{scope.row.gov_name? scope.row.gov_name: "暂无部门"}}</span>
                         </template>
                 </el-table-column>
-                
                 <el-table-column
-                        prop="user_cnt"
                         min-width="180"
                         label="注册人数">
+                        <template scope="scope">
+                            <router-link tag="a"  :to="{name: 'data-report-user-user', params: {gov_id: scope.row.gov_id,active:-1}}">
+                            {{scope.row.user_cnt}}
+                            <!--占坑-->
+                            </router-link>
+                        </template>
                 </el-table-column>
                 <el-table-column
-                        prop="logined_cnt"
                         min-width="180"
-                        label="登录人数">
+                        label="已登录人数">
+                        <template scope="scope">
+                            <!--<span @click="loginDetail(scope.$index, scope.row)">{{scope.row.logined_cnt}}</span>-->
+                            <router-link tag="a"  :to="{name: 'data-report-userlogin-user', params: {gov_id: scope.row.gov_id,active:1}}">
+                            {{scope.row.logined_cnt}}
+                            </router-link>
+                        </template>
+                </el-table-column>
+                <el-table-column
+                        min-width="180"
+                        label="未登录人数">
+                        <template scope="scope">
+                            <!--<span @click="nologinDetail(scope.$index, scope.row)">{{scope.row.nologin_cnt}}</span>-->
+                            <router-link tag="a"  :to="{name: 'data-report-nouserlogin-user', params: {gov_id: scope.row.gov_id,active:0}}">
+                            {{scope.row.nologin_cnt}}
+                            </router-link>
+                        </template>
                 </el-table-column>
             </el-table>
             <div class="block">
@@ -264,6 +290,33 @@
             })
         },
         methods: {
+            userDetail(index, item){
+                this.$router.push({
+                    name: 'data-report-user-user',
+                    params: {
+                        gov_id: item.gov_id || 1,
+                        active:-1
+                    }
+                })
+            },
+            loginDetail(index, item){
+                this.$router.push({
+                    name: 'data-report-userlogin-user',
+                    params: {
+                        gov_id: item.gov_id || 1,
+                        active:1
+                    }
+                })
+            },
+            nologinDetail(index, item){
+                this.$router.push({
+                    name: 'data-report-nouserlogin-user',
+                    params: {
+                        gov_id: item.gov_id || 1,
+                        active:0
+                    }
+                })
+            },
             initFetchParam() {
                 this.currentPage = 1
                 this.search = clearFn()

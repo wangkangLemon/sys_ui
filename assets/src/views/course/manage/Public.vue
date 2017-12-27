@@ -126,7 +126,7 @@
         </el-table>
 
         <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
-            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100, 130, 160, 200]"  layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -217,7 +217,8 @@
                 }
                 return courseService.getPublicCourselist(obj).then((ret) => {
                     this.data = ret
-                    this.total = ret.total
+                    // this.total = ret.total
+                    this.total = 2400
                     this.loadingData = false
                     xmview.setContentLoading(false)
                     // this.fetchParam.status = '';

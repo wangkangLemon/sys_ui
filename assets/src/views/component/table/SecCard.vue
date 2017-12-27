@@ -86,13 +86,13 @@
         },
         methods: {
             initData() {
-                this.selectData = {
+                this.selectData  = {
                     name: '',
-                    model: '',
+                    model: null,
                     path: '',
-                    rkey:'',
+                    rkey :'',
                     sort: void 0,
-                    image: void 0,
+                    image: null,
                 }
             },
             save() {
@@ -112,5 +112,16 @@
 
 
         }
+    }
+
+    function setSelectData(){
+        return {
+                    name: '',
+                    model: null,
+                    path: '',
+                    rkey :'',
+                    sort: void 0,
+                    image: null,
+                }
     }
 </script>

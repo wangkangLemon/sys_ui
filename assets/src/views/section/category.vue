@@ -191,7 +191,14 @@
             changeType(type){
                 this.type = type
                 if(type!="update"){
-                    this.$store.dispatch('setSecMenu',null);
+                    this.$store.dispatch('setSecMenu', {
+                    name: '',
+                    model: null,
+                    path: '',
+                    rkey :'',
+                    sort: void 0,
+                    image: null,
+                });
                 }
                 if(type == 'p'){
                     console.log(this.$refs.secCategory)

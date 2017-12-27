@@ -132,5 +132,43 @@ export default {
                 noback: true
             }
         },
+        //注册页详情
+        {
+            path: 'report-userlogin/:gov_id',
+            name: 'data-report-user-user',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/Admin.vue'))
+                })
+            },
+            meta: {
+                title: '注册人数',
+            }
+        },
+        
+        {
+            path: 'report-userlogin/:gov_id',
+            name: 'data-report-userlogin-user',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/Admin.vue'))
+                })
+            },
+            meta: {
+                title: '已登录人数',
+            }
+        },
+        {
+            path: 'report-nouserlogin/:gov_id',
+            name: 'data-report-nouserlogin-user',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/Admin.vue'))
+                })
+            },
+            meta: {
+                title: '未登录人数',
+            }
+        },
     ]
 }

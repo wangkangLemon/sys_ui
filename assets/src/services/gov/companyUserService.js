@@ -1,20 +1,20 @@
 /**
  * Created by zhaoyicheng on 2017/11/20
  */
-// 店员
+// 管理员
 import * as api from '../api'
 import config from '../../utils/config'
-const urlPre = config.apiHost + '/sys/user'
+const urlPre = config.apiHost + '/user'
 class CompanyUserService {
-    // 查看店员详情
+    // 查看管理员详情
     userDetail (userID) {
-        let finalUrl = `${urlPre}/${userID}`
+        let finalUrl = `${urlPre}/get/${userID}`
         return api.get(finalUrl).then((ret) => {
             return ret.data
         })
     }
 
-    // 获取店员列表
+    // 获取管理员列表
     getUserList ({
         page = '',
         page_size = '',

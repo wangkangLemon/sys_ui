@@ -58,7 +58,78 @@ export default {
                 })
             },
             meta: {
-                title: '管理员',
+                title: '部门人员',
+            }
+        },
+
+         // // 部门人员查询
+        {
+            path: 'user',
+            name: 'user-index',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/user/Index.vue'))
+                })
+            },
+            meta: {
+                title: '医政 - 人员',
+                noback: true
+            }
+        },
+        // {
+        //     path: 'user/add',
+        //     name: 'user-add',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/gov/user/Form.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '角色组添加',
+        //         noback: false
+        //     }
+        // },
+        
+        //编辑管理员
+        {
+            path: 'user/edit/:user_id',
+            name: 'user-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/user/Form.vue'))
+                })
+            },
+            meta: {
+                title: '管理员修改',
+                noback: false
+            }
+        },
+         //新建人员
+        {
+            path: 'person/edit/:user_id',
+            name: 'person-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/user/personForm.vue'))
+                })
+            },
+            meta: {
+                title: '人员新建',
+                noback: false
+            }
+        },
+        //编辑人员
+        {
+            path: 'person/edit/:user_id',
+            name: 'person-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/user/personForm.vue'))
+                })
+            },
+            meta: {
+                title: '人员修改',
+                noback: false
             }
         },
     ]

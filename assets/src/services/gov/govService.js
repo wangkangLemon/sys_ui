@@ -188,17 +188,40 @@ class govService {
     }
 
     // 企业管理员查询接口
+    govAdminList({
+        name,
+        gov_id,
+        page,
+        pagesize,
+        role_id,
+        mobile,
+        active,
+    }) {
+        let finalUrl = `${config.apiHost}/user/lists`
+        return api.get(finalUrl, {
+            name,
+            gov_id,
+            page,
+            pagesize,
+            role_id,
+            mobile,
+            active
+        }).then((ret) => {
+            return ret.data
+        })
+    }
+     // 企业管理员查询接口
     govAdmin({
         name,
         gov_id,
         page,
-        page_size
+        pagesize
     }) {
         let finalUrl = `${config.apiHost}/user/get/${gov_id}`
         return api.get(finalUrl, {
             name,
             page,
-            page_size
+            pagesize
         }).then((ret) => {
             return ret.data
         })
@@ -207,27 +230,27 @@ class govService {
     // 新增管理员
     addGovAdmin({
         name,
-        sex,
+        // sex,
         mobile,
         passwd,
         // birthday,
         // address,
         gov_id,
         role_id,
-        area_id,
+        // area_id,
         nickname
     }) {
-        let finalUrl = `${urlPre}/user/create`
+        let finalUrl = `${config.apiHost}/user/create`
         return api.post(finalUrl, {
             name,
-            sex,
+            // sex,
             mobile,
             passwd,
             // birthday,
             // address,
             gov_id,
             role_id,
-            area_id,
+            // area_id,
             nickname
         }).then((ret) => {
             if (ret.code) {
@@ -235,7 +258,13 @@ class govService {
             }
         })
     }
-
+     // 删除管理员接口
+    delAdmin({
+        id
+    }) {
+        let finalUrl = `${config.apiHost}/user/delete/${id}`
+        return api.get(finalUrl)
+    }
 
     //拿到数据 
     a({

@@ -30,9 +30,10 @@
             </div>
             <div class="info">
                 <h2>{{clerkDetail.name}}({{clerkDetail.company}})</h2>
-                <p><i class="title">所属门店：</i><span class="value">{{clerkDetail.dep_name}}</span></p>
-                <p><i class="title">Mobile：</i> <span class="value">{{clerkDetail.mobile}}</span></p>
-                <p><i class="title">Email：</i> <span class="value">{{clerkDetail.email}}</span></p>
+                <p><i class="title">所属部门：</i> <span class="value">{{clerkDetail.gov_name}}</span></p>
+                <p><i class="title">手机：</i> <span class="value">{{clerkDetail.mobile}}</span></p>
+                <p><i class="title">昵称：</i> <span class="value">{{clerkDetail.nickname}}</span></p>
+                <p><i class="title">邮箱：</i> <span class="value">{{clerkDetail.email}}</span></p>
                 <p>
                     <i class="title">状态：</i>
                     <span class="value">
@@ -40,10 +41,10 @@
                         <el-tag type="danger" v-else="clerkDetail.disabled">异常</el-tag>
                     </span>
                 </p>
-                <p><i class="title">性别：</i> <span class="value">{{clerkDetail.sex ? '男' : '女'}}</span></p>
+                <!--<p><i class="title">性别：</i> <span class="value">{{clerkDetail.sex ? '男' : '女'}}</span></p>-->
                 <p><i class="title">生日：</i> <span class="value">{{clerkDetail.birthday}}</span></p>
                 <p><i class="title">地址：</i> <span class="value">{{clerkDetail.address}}</span></p>
-                <p><i class="title">注册时间：</i><span class="value">{{clerkDetail.create_time_name}}</span></p>
+                <p><i class="title">注册时间：</i><span class="value">{{clerkDetail.addate}}</span></p>
             </div>
         </el-dialog>
         <!--添加/编辑表单-->
@@ -54,11 +55,15 @@
                     v-on:change="val=>form.department_id = val">
                     </departmentSelect>
                 </el-form-item>-->
-                <!--<el-form-item prop="role_id" label="角色" :label-width="formLabelWidth">
-                    <departmentSelect :type="govID" v-model="form.role_id"
+                <el-form-item prop="role_id" label="角色" :label-width="formLabelWidth">
+                    <!--<departmentSelect :type="govID" v-model="form.role_id"
                     v-on:change="val=>form.role_id = val">
-                    </departmentSelect>
-                </el-form-item>-->
+                    </departmentSelect>-->
+                    <el-select clearable v-model="form.role_id" placeholder="未选择">
+                    <el-option v-for="(item, index) in roleTypes" :label="item.name" :value="item.role_id" :key="item.role_id">
+                    </el-option>
+                </el-select>
+                </el-form-item>
                 <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
                     <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
                 </el-form-item>
@@ -93,37 +98,66 @@
                     <i>姓名</i>
                     <el-input @change="getData" class="name" v-model="search.name" placeholder="请输入姓名"></el-input>
                 </section>
+                <section>
+                    <i>角色</i>
+                    <el-select v-model="search.role_id" placeholder="未选择" @change="getData">
+                        <el-option label="全部" :value="-1"></el-option>
+                        <el-option label="管理员" value="1"></el-option>
+                        <el-option label="部门人员" value="0"></el-option>
+                    </el-select>
+                </section>
+                <section>
+                <i>手机号</i>
+                <el-input v-model="search.mobile" placeholder="请输入手机号"   @keyup.enter.native="getData" ></el-input>
             </section>
-            <el-table border v-loading="loading" :data="adminData">
+            </section>
+            
+            <el-table border v-loading="loading" :data="adminData" style="width: 100%">
                 <el-table-column
                         prop="name"
                         label="姓名"
-                        width="100%">
+                        min-width="100">
                 </el-table-column>
                 <el-table-column
                         prop="mobile"
                         label="手机"
-                        width="200">
+                        min-width="150">
                 </el-table-column>
                 <el-table-column
                         prop="email"
                         label="邮箱"
-                        width="200">
+                        min-width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="last_login_time_name"
+                        prop="addate"
                         label="上次登录时间"
-                        width="200">
+                        min-width="200">
                 </el-table-column>
                 <el-table-column
                         prop="last_login_ip"
                         label="上次登录IP"
-                        width="200">
+                        min-width="150">
                 </el-table-column>
-                <el-table-column prop="operate" label="操作">
+                <el-table-column min-width="80" label="状态">
+                <template scope="scope">
+                    <el-tag v-if="scope.row.deleted == 1">已删除</el-tag>
+                    <el-tag v-else-if="scope.row.deleted == 0&&scope.row.disabled == 0" type="success">正常</el-tag>
+                    <el-tag v-else>禁用</el-tag>
+                </template>
+            </el-table-column>
+                <el-table-column prop="operate" width="200" label="操作">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="checkClerkDetail(scope.$index, scope.row)">
                             详情
+                        </el-button>
+                        <el-button type="text" size="small" @click="editUser(scope.$index, scope.row)">
+                            修改
+                        </el-button>
+                        <el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
+                            禁用
+                        </el-button>
+                        <el-button v-else @click="online(scope.$index, scope.row)" type="text" size="small">
+                            启用
                         </el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">
                             删除
@@ -135,17 +169,19 @@
                 <el-pagination
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage"
-                        :page-sizes="[15, 30, 60, 100]"
+                        :current-page="page"
+                        :page-sizes="[20, 30, 60, 100]"
                         :page-size="pageSize"
                         layout="total, sizes, ->, prev, pager, next, jumper"
-                        :total="total">
+                        :total=200>
                 </el-pagination>
             </section>
         </div>
     </article>
 </template>
 <script>
+    
+    import userService from '../../services/gov/userService.js'
     import govService from '../../services/gov/govService.js'
     import departmentService from '../../services/gov/departmentService.js'
     import departmentSelect from '../component/select/CompanyDepartment.vue'
@@ -168,6 +204,16 @@
                 callback()
             }
             return {
+                roleTypes: [ // 管理员类型
+                    {
+                        name: '管理员',
+                        role_id: 1
+                    },
+                    {
+                        name: '部门人员',
+                        role_id: 0
+                    }
+                ],
                 loading: false,
                 // 查看店员详情
                 clerkDetail: {
@@ -181,16 +227,19 @@
                     create_time_name: ''
                 },
                 departmentData: [],
-               companyID: this.$route.params.gov_id,
+                companyID: this.$route.params.gov_id,
                 showDetail: false,     // 是否显示详情对话框
                 form: {                // 表单属性值
+                    role_id: void 0,        //角色 无管理权限0 
+                    // area_id:0,         //地区id
+                    gov_id: void 0,    //部门id
                     name: '',          // 姓名
-                    department_id: '',       // 门店
                     mobile: '',        // 手机
-                    passwd: '',          // 密码
-                    address: '',       // 地址
-                    sex: 0,            // 性别
-                    birthday: ''          // 生日
+                    passwd: '',        // 密码qu
+                    nickname: '',
+                    // address: '',       // 地址
+                    // sex: 0,            // 性别
+                    // birthday: ''       // 生日
                 },
                 rules: {
                     department_id: [
@@ -209,17 +258,20 @@
                 },
                 formLabelWidth: '120px', // 表单label的宽度
                 addForm: false, // 表单弹窗是否显示
-                currentPage: 1, // 分页当前显示的页数
-                total: 0,
+                page: 1, // 分页当前显示的页数
+                // total: 0,
                 pageSize: 15,
                 search: { // 搜索的姓名
-                    name: ''
+                    name: '',
+                    role_id: null,
+                    mobile :void 0,
                 },
                 adminData: []
             }
         },
         computed: {
             govID () { 
+                console.log( 'this.$route.params.gov_id===='+1)
                 return this.$route.params.gov_id
             },
             category () {  //1 系统 2 政府
@@ -238,7 +290,44 @@
         //         xmview.setContentLoading(false)
         //     })
         // },
+        watch:{
+
+        },
         methods: {
+                // 禁用
+            offline(index, row) {
+                if(row.deleted == 0){
+                    xmview.showDialog(`你将要禁用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+                        row.disabled = 1
+                        userService.offline(row).then((ret) => {
+                        })
+                    })
+                }else{
+                    xmview.showDialog(`管理员 <span style="color:red">${row.name}</span> 已删除，无法禁用！`)
+                }
+            },
+            // 启用
+            online(index, row) {
+                if(row.deleted == 0){
+                    xmview.showDialog(`你将要启用管理员<span style="color:red">${row.name}</span> 确认吗?`, () => {
+                        row.disabled = 0
+                        userService.online(row).then((ret) => {
+                        })
+                    })
+                }else{
+                    xmview.showDialog(`管理员 <span style="color:red">${row.name}</span> 已删除，无法启用！`)
+                }
+                
+            },
+             // 修改人员信息
+            editUser(index, row) {
+                this.$router.push({
+                    name: 'person-edit',
+                    params: {
+                        id: row.id
+                    }
+                })
+            },
             addAdmin () {
                 // this.loading = false
                 // departmentService.getDepartment({
@@ -253,14 +342,20 @@
             },
             getData () {
                 // this.loading = true
-                return govService.govAdmin({
-                    page: this.currentPage,
-                    page_size: this.pageSize,
+                if(this.search.role_id == null){
+                    this.search.role_id = -1
+                }
+                return govService.govAdminList({
+                    page: this.page,
+                    pagesize: this.pageSize,
                     name: this.search.name,
-                    gov_id: this.govID
+                    role_id:this.search.role_id,
+                    mobile :this.search.mobile,
+                    gov_id: this.govID,
+                    active: this.$route.params.active
                 }).then((ret) => {
-                    this.adminData = ret.data
-                    this.total = ret.total
+                    this.adminData = ret
+                    // this.total = ret.total
                     this.loading = false
                 })
             },
@@ -268,7 +363,7 @@
             checkClerkDetail (index, row) {
                 this.showDetail = true
                 companyUserService.userDetail(row.id).then((ret) => {
-                    this.clerkDetail = ret.data
+                    this.clerkDetail = ret
                 })
             },
             handleDelete (index, row) {
@@ -281,17 +376,18 @@
                     })
                 })
             },
+            //添加人员提交
             submit (form) {
                 this.$refs[form].validate((valid) => {
                     if (valid) {
-                        this.form.company_id = this.companyID
+                        this.form.gov_id = this.companyID
                         this.form.birthday = timeUtils.date2Str(this.form.birthday)
-                        govService.addCompanyAdmin(this.form).then((ret) => {
+                        govService.addGovAdmin(this.form).then((ret) => {
                             xmview.showTip('success', '添加成功')
                         }).then(() => {
                             this.addForm = false
                             this.getData()
-                            this.currentPage = 1
+                            this.page = 1
                         }).catch((ret) => {
                             xmview.showTip('error', ret.message)
                         })
@@ -305,7 +401,7 @@
                 this.getData()
             },
             handleCurrentChange (val) {
-                this.currentPage = val
+                this.page = val
                 this.getData()
             },
             goBack () {

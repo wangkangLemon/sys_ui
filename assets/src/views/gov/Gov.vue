@@ -29,7 +29,7 @@
 <template>
     <article class="gov-index">
         <!--详情-->
-        <el-dialog size="small" v-if="details != null" class="show-detail" v-model="showDetail" title="企业信息">
+        <el-dialog size="small" v-if="details != null" class="show-detail" v-model="showDetail" title="部门信息">
             <div class="info">
                 <h2>
                     {{details.name}}
@@ -38,13 +38,9 @@
                 <p><i class="title">联系人：</i><span class="value">{{details.concact || '无'}}</span></p>
                 <p><i class="title">联系人手机：</i><span class="value">{{details.mobile || '无'}}</span></p>
                 <p><i class="title">联系人邮箱：</i><span class="value">{{details.email || '无'}}</span></p>
-                <p><i class="title">企业电话：</i><span class="value">{{details.tel || '无'}}</span></p>
-                <p><i class="title">传真：</i><span class="value">{{details.fax || '无'}}</span></p>
                 <p><i class="title">上级部门：</i><span class="value">{{details.parent_name || '无'}}</span></p>
                 <p><i class="title">地址：</i><span class="value">{{details.address || '无'}}</span></p>
                 <p><i class="title">邮编：</i><span class="value">{{details.zip || '无'}}</span></p>
-                <p><i class="title">企业网址：</i><span class="value">{{details.url || '无'}}</span></p>
-                <p><i class="title">企业介绍：</i><span class="value">{{details.description || '无'}}</span></p>
             </div>
             <!--<div slot="footer" class="dialog-footer">-->
             <!--<el-button type="primary" @click="showDetail = false">关 闭</el-button>-->
@@ -76,7 +72,7 @@
             </DateRange>
         </section>
         <el-table v-loading="loading" border :data="govData" stripe style="width: 100%">
-            <el-table-column prop="name" label="名称" min-width="250">
+            <el-table-column prop="name" label="名称" min-width="200">
                 <template scope="scope">
                     <el-tag type="gray">{{govType[scope.row.category]}}</el-tag>
                     {{scope.row.name}}
@@ -89,9 +85,9 @@
             <el-table-column width="150" prop="mobile" label="手机">
             </el-table-column>
 
-            <el-table-column width="180" prop="addate" label="创建时间">
+            <el-table-column width="170" prop="addate" label="创建时间">
             </el-table-column>
-            <el-table-column prop="operate" label="操作" width="185">
+            <el-table-column prop="operate" label="操作" width="200">
                 <template scope="scope">
                     <!--<router-link :to="{path: '/medical/user/'+ scope.row.id }">
                         <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
@@ -99,7 +95,7 @@
                         </el-button>
                     </router-link>-->
                     <el-button type="text" size="small" @click="adminPage(scope.$index, scope.row)">
-                        管理员
+                        部门人员
                     </el-button>
                     <el-button type="text" size="small" @click="showFn(scope.$index, scope.row)">
                         详情
@@ -173,7 +169,7 @@
                     townSelect: '',
                     villageSelect: '',
                     name: '',
-                    pid: void - 1,
+                    pid: void -1,
                 },
                 total: 0
             }
@@ -185,7 +181,7 @@
         },
         watch: {
             'fetchParam.name': function () {
-                if (this.fetchParam.pid == undefined) {
+                if (this.fetchParam.pid == undefined) {0
                     this.fetchParam.pid = -1
                 }
             }
@@ -284,7 +280,7 @@
 
                 if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
                     this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
-                    this.fetchParam.pid = -1
+                    this.fetchParam.pid = 27
                 }
                 this.loading = true
                 return govService.getSelectList({
