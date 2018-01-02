@@ -122,6 +122,35 @@ export default {
                 title: '课程题目分析',
             }
         },
+
+        {
+            path: 'manage/experts', //  专家管理
+            name: 'course-manage-experts',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/experts/Experts.vue'))
+                })
+            },
+            meta: {
+                title: '专家管理',
+                noback: true
+            }
+        },
+        {
+            path: 'manage/experts/:user_id', //专家管理表单 -修改
+            name: 'course-manage-experts-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/experts/ExpertsForm.vue'))
+                })
+            },
+            meta: {
+                title: '信息修改-专家',
+                noback: false
+            }
+        },
+
+
       
     ]
 }

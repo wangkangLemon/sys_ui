@@ -68,13 +68,6 @@
                     v-on:change="val=>form.department_id = val">
                     </departmentSelect>
                 </el-form-item>-->
-
-                <el-form-item prop="gov_name" label="所属部门" :label-width="formLabelWidth">
-                    <el-input v-model="form.gov_name" ></el-input>
-                </el-form-item>
-                <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
-                </el-form-item>
                 <el-form-item prop="role_id" label="角色" :label-width="formLabelWidth">
                     <!--<departmentSelect :type="govID" v-model="form.role_id"
                     v-on:change="val=>form.role_id = val">
@@ -196,7 +189,6 @@
 
 <script>
 import userService from '../../../services/gov/userService.js'
-import govService from '../../../services/gov/govService.js'
 import DateRange from '../../component/form/DateRangePicker.vue'
 import companyUserService from '../../../services/gov/companyUserService.js'
 import Region from '../../component/select/Region.vue'
@@ -274,7 +266,6 @@ export default {
                     mobile: '',        // 手机
                     passwd: '',        // 密码qu
                     nickname: '',
-                    gov_name:'',
                     // address: '',       // 地址
                     // sex: 0,            // 性别
                     // birthday: ''       // 生日
@@ -303,7 +294,6 @@ export default {
         this.fetchData()
     },
     methods: {
-
         //添加人员
         addAdmin () {
                 // this.loading = false
@@ -316,13 +306,8 @@ export default {
                 // }).then(() => {
                     this.addForm = true
                     this.form.gov_id = this.fetchParam.gov_id
-                    // alert('this.form.gov_id='+this.form.gov_id)
+                    alert('this.form.gov_id='+this.form.gov_id)
                 // })
-                // 显示政府名称
-                govService.getGovInfo(this.form.gov_id).then((ret) => {
-                    this.form.gov_name = ret.name
-                })
-
             },
         //添加人员提交
         submit (form) {

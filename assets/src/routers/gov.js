@@ -9,9 +9,8 @@ export default {
         })
     },
     children: [
-        //政府管理主页列表
         {
-            path: 'index',
+            path: 'index',  //政府管理主页列表
             name: 'gov-index',  
             component: resolve => {
                 require.ensure([], () => {
@@ -62,9 +61,8 @@ export default {
             }
         },
 
-         // // 部门人员查询
         {
-            path: 'user',
+            path: 'user',  // // 部门人员查询
             name: 'user-index',
             component: resolve => {
                 require.ensure([], () => {
@@ -76,51 +74,36 @@ export default {
                 noback: true
             }
         },
+        // //编辑管理员
         // {
-        //     path: 'user/add',
-        //     name: 'user-add',
+        //     path: 'user/edit/:user_id',
+        //     name: 'user-edit',
         //     component: resolve => {
         //         require.ensure([], () => {
         //             resolve(require('../views/gov/user/Form.vue'))
         //         })
         //     },
         //     meta: {
-        //         title: '角色组添加',
+        //         title: '管理员修改',
         //         noback: false
         //     }
         // },
-        
-        //编辑管理员
+        //  //新建人员
+        // {
+        //     path: 'person/edit/:user_id',
+        //     name: 'person-add',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/gov/user/personForm.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '人员新建',
+        //         noback: false
+        //     }
+        // },
         {
-            path: 'user/edit/:user_id',
-            name: 'user-edit',
-            component: resolve => {
-                require.ensure([], () => {
-                    resolve(require('../views/gov/user/Form.vue'))
-                })
-            },
-            meta: {
-                title: '管理员修改',
-                noback: false
-            }
-        },
-         //新建人员
-        {
-            path: 'person/edit/:user_id',
-            name: 'person-add',
-            component: resolve => {
-                require.ensure([], () => {
-                    resolve(require('../views/gov/user/personForm.vue'))
-                })
-            },
-            meta: {
-                title: '人员新建',
-                noback: false
-            }
-        },
-        //编辑人员
-        {
-            path: 'person/edit/:user_id',
+            path: 'person/edit/:user_id',//编辑人员
             name: 'person-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -132,5 +115,6 @@ export default {
                 noback: false
             }
         },
+
     ]
 }
