@@ -54,7 +54,7 @@
                     <el-input v-model.name="fetchParam.name"></el-input>
                 </el-form-item>
                 <el-form-item label="昵称" prop="price">
-                    <el-input v-model.nickname="fetchParam.nickname"></el-input>
+                    <el-input v-model.address="fetchParam.nickname"></el-input>
                 </el-form-item>
                 <!--<el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="fetchParam.sex">

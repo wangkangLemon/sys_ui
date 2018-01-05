@@ -23,58 +23,60 @@
                 <!--<el-form-item prop="origin_password" label="原密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.origin_password" placeholder="原密码" auto-complete="off"></el-input>
                 </el-form-item>-->
-                <el-form-item prop="new_password" label="新密码" :label-width="formLabelWidth">
-                    <el-input type="password" v-model="form.new_password" placeholder="新密码" auto-complete="off"></el-input>
+                <el-form-item prop="passwd" label="修改密码" :label-width="formLabelWidth">
+                    <el-input type="password" v-model="form.passwd" placeholder="新密码" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="re_password" label="确认密码" :label-width="formLabelWidth">
+                <!--<el-form-item prop="re_password" label="确认密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.re_password" placeholder="确认密码" auto-complete="off"></el-input>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item class="subButton">
                     <el-button type="primary" @click="submit('form')">提交修改</el-button>
                 </el-form-item>
             </el-form>
         </section>
-    </article>
+    </article> 
 </template>
 <script>
 import mineService from '../../../services/base/mineService'
 import authUtils from '../../../utils/authUtils'
 export default {
     data() {
-        let validateRepass = (rule, value, callback) => {
-            if (value !== this.form.new_password) {
-                callback(new Error('两次输入密码不一致!'))
-            } else {
-                callback()
-            }
-        }
+
+        // let validateRepass = (rule, value, callback) => {
+        //     if (value !== this.form.new_password) {
+        //         callback(new Error('两次输入密码不一致!'))
+        //     } else {
+        //         callback()
+        //     }
+        // }
         return {
             imgUrl: '',
             form: {
-                origin_password: '',
-                new_password: '',
-                re_password: ''
+                passwd: '',
+                // origin_password: '',
+                // new_password: '',
+                // re_password: ''
             },
             formLabelWidth: '120px', // 表单label的宽度
             rules: {
-                origin_password: { required: true, message: '必须填写', trigger: 'blur' },
-                new_password: { required: true, message: '必须填写', trigger: 'blur' },
+                // origin_password: { required: true, message: '必须填写', trigger: 'blur' }, //原密码
+                passwd: { required: true, message: '必须填写', trigger: 'blur' },
                 re_password: [
-                    { required: true, message: '必须填写', trigger: 'blur' },
-                    { validator: validateRepass, trigger: 'blur' }
+                    { required: true, message: '必须填写', trigger: 'blur' },  //确认密码
+                    // { validator: validateRepass, trigger: 'blur' }
                 ],
             }
         }
     },
     created() {
         this.form = authUtils.getUserInfo()
-        console.log( this.form )
         this.form.mobile = this.form.mobile || '未设置'
         this.form.email = this.form.email || '未设置'
         xmview.setContentLoading(false)
     },
     methods: {
         submit(form) {
+            console.log(this.form )
             this.$refs[form].validate((valid) => {
                 if (valid) {
                     mineService.modifyPassword(this.form).then(() => {

@@ -274,7 +274,7 @@
     import {
         date2Str
     } from '../../utils/timeUtils.js'
-    import ImagEcropperInput from '../component/upload/ImagEcropperInput.vue'
+    import ImagEcropperInput from '../component/upload/ImagEcropperInputSec.vue'
 
     function getFetchParam() {
         return {

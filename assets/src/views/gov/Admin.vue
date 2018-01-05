@@ -173,7 +173,7 @@
                         :page-sizes="[20, 30, 60, 100]"
                         :page-size="pageSize"
                         layout="total, sizes, ->, prev, pager, next, jumper"
-                        :total=200>
+                        :total='total'>
                 </el-pagination>
             </section>
         </div>
@@ -259,7 +259,7 @@
                 formLabelWidth: '120px', // 表单label的宽度
                 addForm: false, // 表单弹窗是否显示
                 page: 1, // 分页当前显示的页数
-                // total: 0,
+                total: 0,
                 pageSize: 15,
                 search: { // 搜索的姓名
                     name: '',
@@ -279,6 +279,7 @@
             }
         },
         activated () {
+             this.total=null   
              xmview.setContentLoading(false)
             this.getData().then(() => {
                 xmview.setContentLoading(false)
@@ -355,8 +356,15 @@
                     active: this.$route.params.active
                 }).then((ret) => {
                     this.adminData = ret
-                    // this.total = ret.total
                     this.loading = false
+                    console.log( typeof(ret))  // object
+                    console.log( 'ret.length='+ret.length) 
+                    if(ret.length== 0){
+                        return
+                    }
+                        this.total = 200
+                    
+                    
                 })
             },
             // 查看店员详情

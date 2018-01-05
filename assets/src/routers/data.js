@@ -63,20 +63,20 @@ export default {
                 noback: false
             }
         },
-        //gov登录日志
-         {
-            path: 'user-loginlog',
-            name: 'data-user-loginlog',
-            component: resolve => {
-                require.ensure([], () => {
-                    resolve(require('../views/data/UserLoginlog.vue'))
-                })
-            },
-            meta: {
-                title: '数据分析 - 登录日志 ',
-                noback: true
-            }
-        },
+        // //gov登录日志
+        //  {
+        //     path: 'user-loginlog',
+        //     name: 'data-user-loginlog',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/data/UserLoginlog.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '数据分析 - 登录日志 ',
+        //         noback: true
+        //     }
+        // },
         //课程观看日志
         {
             path: 'course-history',

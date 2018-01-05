@@ -122,7 +122,7 @@ export default {
                 title: '课程题目分析',
             }
         },
-
+      
         {
             path: 'manage/experts', //  专家管理
             name: 'course-manage-experts',
@@ -137,7 +137,20 @@ export default {
             }
         },
         {
-            path: 'manage/experts/:user_id', //专家管理表单 -修改
+            path: 'manage/experts/add', //专家管理表单 -修改
+            name: 'course-manage-experts-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/experts/ExpertsForm.vue'))
+                })
+            },
+            meta: {
+                title: '信息新建-专家',
+                noback: false
+            }
+        },
+        {
+            path: 'manage/experts/edit/:id', //专家管理表单 -修改
             name: 'course-manage-experts-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -146,6 +159,32 @@ export default {
             },
             meta: {
                 title: '信息修改-专家',
+                noback: false
+            }
+        },
+        {
+            path: 'manage/experts-hospital', //  医院管理
+            name: 'course-manage-experts-hospital',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/experts/ExpertsHospital.vue'))
+                })
+            },
+            meta: {
+                title: ' 资料管理',
+                noback: true
+            }
+        },
+        {
+            path: 'manage/experts-hospital/:id', //医院管理表单 -修改
+            name: 'course-manage-experts-hospital-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/experts/ExpertsHospitalForm.vue'))
+                })
+            },
+            meta: {
+                title: '信息修改-医院',
                 noback: false
             }
         },

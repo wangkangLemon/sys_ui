@@ -39,14 +39,12 @@
 <template>
     <article id="medical-index-container">
         <!--详情-->
-        <el-dialog class="show-detail" title="查看专家" v-model="showDetail">
+        <el-dialog class="show-detail" title="查看医院" v-model="showDetail">
             <div class="avatar">
-                <img :src="{url:clerkDetail.avatar, sex: clerkDetail.sex} | defaultAvatar" />
+                <!--<img :src="{url:clerkDetail.avatar, sex: clerkDetail.sex} | defaultAvatar" />-->
             </div>
             <div class="info">
                 <h2>{{clerkDetail.name}}</h2>
-                <p><i class="title">所属医院：</i><span class="value">{{clerkDetail.hospital_name }}</span></p>
-                <p><i class="title">手机号：</i> <span class="value">{{clerkDetail.professor}}</span></p>
                 <p>
                     <i class="title">状态：</i>
                     <span class="value">
@@ -55,46 +53,17 @@
                     </span>
                 </p>
                 <!--<p><i class="title">性别：</i> <span class="value">{{clerkDetail.sex ? '男' : '女'}}</span></p>-->
-                <p><i class="title">生日：</i> <span class="value">{{clerkDetail.birthday}}</span></p>
-                <p><i class="title">地址：</i> <span class="value">{{clerkDetail.address}}</span></p>
                 <p><i class="title">注册时间：</i><span class="value">{{clerkDetail.addate}}</span></p>
             </div>
         </el-dialog>
          <!--添加/编辑表单-->
         <el-dialog v-model="addForm">
             <el-form :model="form" :rules="rules" ref="form">
-                <!--<el-form-item v-if="category == 2" prop="department_id" label="部门" :label-width="formLabelWidth">
-                    <departmentSelect :type="companyID" v-model="form.department_id"
-                    v-on:change="val=>form.department_id = val">
-                    </departmentSelect>
-                </el-form-item>-->
-                
-                <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
+    
+                <el-form-item prop="name" label="医院名称" :label-width="formLabelWidth">
                     <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
                 </el-form-item>
-   
-                <el-form-item prop="professor" label="职称" :label-width="formLabelWidth">
-                    <el-input v-model="form.professor"  auto-complete="off"></el-input>
-                </el-form-item>
-                
-                <el-form-item prop="hospital_id" label="所属医院" :label-width="formLabelWidth">
-                    <!--<departmentSelect :type="govID" v-model="form.hospital_id"
-                    v-on:change="val=>form.hospital_id = val">
-                    </departmentSelect>-->
-                    <el-select clearable v-model="form.hospital_id" placeholder="未选择">
-                    <el-option v-for="(item, index) in hospital_list" :label="item.name" :value="item.id" :key="item.id">
-                    </el-option>
-                </el-select>
-                </el-form-item>
-                <el-form-item prop="department" label="科室" :label-width="formLabelWidth">
-                    <el-input  v-model="form.department" placeholder="科室" auto-complete="off"></el-input>
-                </el-form-item>
-                <!--<el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
-                    <el-date-picker type="date" v-model="form.birthday"></el-date-picker>
-                </el-form-item>-->
-                <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input v-model="form.introduce" placeholder="介绍" auto-complete="off"></el-input>
-                </el-form-item>
+              
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addForm = false">取 消</el-button>
@@ -110,45 +79,24 @@
 
         <article class="search">
             <section>
-                <i>专家姓名</i>
-                <el-input v-model="fetchParam.name" placeholder="请输入专家姓名"   @keyup.enter.native="fetchData" ></el-input>
+                <i>医院名称</i>
+                <el-input v-model="fetchParam.name" placeholder="请输入医院名称"   @keyup.enter.native="fetchData" ></el-input>
             </section>
-            <!--<section>
-                <i>所属医院</i>
-                <el-input v-model="fetchParam.hospital_id" placeholder="请输入所属医院"   @keyup.enter.native="fetchData" ></el-input>
-            </section>-->
-            <!--<section>
-                <i>医院</i>
-                <el-select clearable v-model="fetchParam.hospital_id" @change="fetchData">
-                    <el-option label="全部" :value="-1"></el-option>
-                    <el-option label="专家" value="1"></el-option>
-                    <el-option label="部门人员" value="0"></el-option>
-                </el-select>
-            </section>-->
-     
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <!--<el-table-column type="selection"></el-table-column> 左侧选择按钮-->
 
-            <el-table-column min-width="150" prop="name" label="姓名" v-if="data">
+            <el-table-column min-width="520" prop="name" label="医院名称" v-if="data">
             </el-table-column>
-            <el-table-column min-width="200" prop="hospital_name" label="所属医院">
+            <!--<el-table-column min-width="200" prop="gov_name" label="部门">
             </el-table-column>
-            <el-table-column min-width="170" prop="professor" label="职称">
-            </el-table-column>
-            <el-table-column min-width="170" prop="department" label="科室">
-            </el-table-column>
+            <el-table-column min-width="170" prop="mobile" label="手机">
+            </el-table-column>-->
             <el-table-column min-width="170" :formatter="Time" label="创建时间">
             </el-table-column>
-            <!--<el-table-column width="100" label="状态">
-                <template scope="scope">
-                    <el-tag v-if="scope.row.deleted == 1">已删除</el-tag>
-                    <el-tag v-else-if="scope.row.deleted == 0&&scope.row.disabled == 0" type="success">正常</el-tag>
-                    <el-tag v-else>禁用</el-tag>
-                </template>
-            </el-table-column>-->
+           
             <el-table-column fixed="right" width="207" label="操作">
                 <template scope="scope">
                     <!--<el-button @click="showFn(scope.$index, scope.row)" type="text" size="small">详情
@@ -159,19 +107,14 @@
                     <el-button type="text" size="small" @click="editUser(scope.$index, scope.row)">
                             修改
                     </el-button>
-                    <!--<el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
-                        <i>禁用</i>
-                    </el-button>
-                    <el-button v-else @click="online(scope.$index, scope.row)" type="text" size="small">
-                        <i>启用</i>
-                    </el-button>-->
+              
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
 
         <!--底部的page -->
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="100">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -203,9 +146,23 @@ export default {
         Region
     },
     data() {
-
+        let validateMobile = (rule, value, callback) => {
+                if (!(value || '').match(/^1[34578]\d{9}$/)) {
+                    callback(new Error('请填写正确的手机号'))
+                }
+                callback()
+            }
         return {
-        
+            roleTypes: [ // 管理员类型
+                    {
+                        name: '医院',
+                        role_id: 1
+                    },
+                    {
+                        name: '部门人员',
+                        role_id: 0
+                    }
+                ],
             init:false,
             loadingData: false,
             data: [], // 表格数据
@@ -221,58 +178,31 @@ export default {
             showDetail: false,     // 是否显示详情对话框
             // 查看管理员详情
             clerkDetail: {
-                name: '',          // 姓名
-                professor: '',        // 职称
-                pass: '',          // 科室
+                name: '',          // 医院名称
+                mobile: '',        // 手机
+                pass: '',          // 密码
                 address: '',       // 地址
                 sex: 0,            // 性别
                 birthday: '',          // 生日
                 addate: ''
             },
             form: {                // 添加表单属性值
-                    hospital_id: void 0,        //医院 无管理权限0 
-                    // area_id:0,         //地区id
-                    gov_id: void 0,    //部门id
-                    name: '',          // 姓名
-                    professor: '',        // 职称
-                    department: '',        // 密码qu
-                    introduce: '',
-                    // address: '',       // 地址
-                    // sex: 0,            // 性别
-                    // birthday: ''       // 生日
+                    name: '',          // 医院名称
                 },
                 rules: {
-                    department_id: [
-                        {type: 'number', required: true, message: '必须填写', trigger: 'blur'}
-                    ],
                     name: [
                         {required: true, message: '必须填写', trigger: 'blur'}
                     ],
-                    professor: [
-                        {required: true, message: '必须填写', trigger: 'blur'},
-                    ],
-                    department: [
-                        {required: true, message: '必须填写', trigger: 'blur'}
-                    ]
                 },
                 addForm: false, // 表单弹窗是否显示
                 formLabelWidth: '120px', // 表单label的宽度
-                hospital_list:[]
 
         }
     },
     activated () {
         this.fetchData()
-        this.getHospitalList()
     },
     methods: {
-        //获取医院下拉列表
-            getHospitalList(val){
-                expertsService.fetchHospitalData({pagesize:-1}).then((ret)=>{
-                    console.log(ret)
-                 this.hospital_list=ret;
-                })
-            },
         //添加人员
         addAdmin () {
                 // this.loading = false
@@ -283,10 +213,7 @@ export default {
                 //         this.departmentData = ret.data
                 //     }
                 // }).then(() => {
-                    // this.addForm = true
-                    this.$router.push({
-                        name: 'course-manage-experts-add',
-                    })
+                    this.addForm = true
                 // })
             },
         //添加人员提交
@@ -294,7 +221,7 @@ export default {
             this.$refs[form].validate((valid) => {
                 if (valid) {
                     // this.form.birthday = timeUtils.date2Str(this.form.birthday)
-                    expertsService.createExperts(this.form).then((ret) => {
+                    expertsService.createHospital(this.form).then((ret) => {
                         xmview.showTip('success', '添加成功')
                     }).then(() => {
                         this.addForm = false
@@ -311,8 +238,9 @@ export default {
 
      // 修改人员信息
         editUser(index, row) {
+            console.log(row)
             this.$router.push({
-                name: 'course-manage-experts-edit',
+                name: 'course-manage-experts-hospital-edit',
                 params: {
                     id: row.id
                 }
@@ -321,7 +249,7 @@ export default {
        // 查看管理员详情
         checkClerkDetail (index, row) {
             this.showDetail = true
-            expertsService.getExpertsInfo(row.id).then((ret) => {
+            expertsService.getHospitalInfo(row.id).then((ret) => {
                 this.clerkDetail = ret
             })
         },
@@ -376,15 +304,12 @@ export default {
                 // this.loadingData = true
 
                 // //初始化角色提交-1
-                // if(this.fetchParam.hospital_id == null){
-                //         this.fetchParam.hospital_id = -1
+                // if(this.fetchParam.role_id == null){
+                //         this.fetchParam.role_id = -1
                 //     }
-            return expertsService.fetchExpertsData(this.fetchParam).then((ret) => {
+            return expertsService.fetchHospitalData(this.fetchParam).then((ret) => {
                 this.data = ret
-                // this.total = ret.total
-                if(ret.length!==0){
-                    this.total = 100
-                }
+                this.total = ret.total
                 this.loadingData = false
                 xmview.setContentLoading(false)     
             })
@@ -407,7 +332,7 @@ export default {
                     })
                 })
             }else{
-                 xmview.showDialog(`专家 <span style="color:red">${row.name}</span> 已删除，无法禁用！`)
+                 xmview.showDialog(`医院 <span style="color:red">${row.name}</span> 已删除，无法禁用！`)
             }
         },
         // 启用
@@ -419,14 +344,14 @@ export default {
                     })
                 })
             }else{
-                 xmview.showDialog(`专家 <span style="color:red">${row.name}</span> 已删除，无法启用！`)
+                 xmview.showDialog(`医院 <span style="color:red">${row.name}</span> 已删除，无法启用！`)
             }
             
         },
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除专家 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
-                expertsService.deleteExperts(row.id).then(() => {
+            xmview.showDialog(`你将要删除医院 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
+                expertsService.deleteHospital(row.id).then(() => {
                     this.data.splice(index, 1)//删除选中项
                     row.deleted = 1
                     xmview.showTip('success', '操作成功')

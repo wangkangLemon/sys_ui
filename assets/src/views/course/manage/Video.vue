@@ -56,6 +56,14 @@
                 </el-select>
             </section>
 
+            <section>
+                <i>是否关联</i>
+                <el-select :clearable="true" v-model="fetchParam.used" placeholder="请选择" @change="fetchData">
+                    <el-option label="已关联" :value="1"></el-option>
+                    <el-option label="未关联" :value="0"></el-option>
+                </el-select>
+            </section>
+
             <!--<section>
                 <i>所属政府部门</i>
                 <IndustryCompanySelect v-model="fetchParam.gov_id"
@@ -99,6 +107,12 @@
                     <el-tag v-else-if="scope.row.status == 4" type="primary">审核失败</el-tag>-->
                     <el-tag v-else>正常</el-tag>
                     <el-button type="text" v-if="scope.row.status == 1" size="small" @click="refreshStatus(scope.$index, scope.row)">刷新</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column width="130" label="是否关联">
+                <template scope="scope">
+                    <el-tag v-if="scope.row.used == 0" type="primary">未关联</el-tag>
+                    <el-tag v-else-if="scope.row.used == 1" type="success">已关联</el-tag>
                 </template>
             </el-table-column>
             <el-table-column
@@ -150,7 +164,17 @@
                 </el-form-item>
                 <el-form-item label="视频时长">
                     <el-input v-model="videoModel.duration"></el-input>
-                </el-form-item>>
+                </el-form-item>
+                <el-form-item label="是否关联">
+                    <el-input v-model="videoModel.used">
+                    </el-input>
+                </el-form-item>
+                 <el-form-item label="是否关联">
+                        <template v-model="videoModel">
+                            {{videoModel.used==1?'已关联':'未关联'}}
+                        </template>
+                </el-form-item>
+
                 <el-form-item label="视频标签">
                     <vTags v-model="videoModel.tags"></vTags>
                 </el-form-item>
@@ -196,6 +220,7 @@
             create_start: '',
             create_end: '',
             status:'',
+            used:'', //是否已关联课程
         }
     }
 
@@ -261,7 +286,7 @@
                 this.loadingData = true
                 return videoService.getVideo(this.fetchParam).then((ret) => {
                     this.data = ret
-                    this.total = ret.total
+                    this.total = 3600
                     this.loadingData = false
                 })
             },
@@ -316,7 +341,9 @@
             preview (index, row) {
                 // 拿到播放地址
                 videoService.getVideoPreviewUrl(row.material_id).then((ret) => {
+
                     this.videoUrl = ret.video
+                    console.log(this.videoUrl)
                     this.row = row
                     this.$refs.videoPreview.show(row.file_name)
                 })

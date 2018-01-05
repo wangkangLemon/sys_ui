@@ -82,8 +82,8 @@
                 <i>{{uploading ? '正在上传' : '开始上传'}}</i>
             </el-button>
         </div>
-
-        <input style="display: none" type="file" ref="file" multiple="multiple" @change="fileChange($event)" accept="">
+        <input style="display: none" type="file" ref="file" multiple="multiple" @change="fileChange($event)" 
+               accept="audio/mp4, video/mp4,video/mpeg,video/mpg">
     </article>
 </template>
 

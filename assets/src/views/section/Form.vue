@@ -165,7 +165,7 @@
         activated () {
             xmview.setContentLoading(false);
              if (this.$route.params.sys_id != undefined) {    //路由id传递
-                    console.log('进入了编辑')
+                    // console.log('进入了编辑')
                     dataService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
                         this.fetchParam.name=ret.category_name
@@ -201,14 +201,18 @@
             //获取栏目菜单下拉列表
             getDropval(){
                 cateService.fetchData({pagesize:-1}).then((ret)=>{
-                console.log(ret.data)
-                 this.drop_list=ret.data;
+                console.log(ret)
+                 this.drop_list=ret;
                 })
             },
             //拿到栏目菜单
             querySearch(queryString, cb) {
+                alert(1111)
+                console.log(1111)
+                console.log(queryString, cb)
                 var restaurants = this.restaurants;
                 var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                console.log(querySearch)
                 // 调用 callback 返回建议列表的数据返回建议列表的数据
                 cb(results);
             },
