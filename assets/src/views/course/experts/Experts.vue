@@ -149,7 +149,7 @@
                     <el-tag v-else>禁用</el-tag>
                 </template>
             </el-table-column>-->
-            <el-table-column fixed="right" width="207" label="操作">
+            <el-table-column fixed="right" width="180" label="操作">
                 <template scope="scope">
                     <!--<el-button @click="showFn(scope.$index, scope.row)" type="text" size="small">详情
                     </el-button>-->

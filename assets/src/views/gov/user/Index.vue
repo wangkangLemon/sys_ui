@@ -216,7 +216,12 @@ function getFetchParam() {
         areaSelect: '',
         townSelect: '',
         villageSelect: '',
-}
+        province_id: '',
+        city_id: '',
+        area_id: '',
+        town_id: '',
+        village_id: '',
+    }
 }
 
 export default {
@@ -417,6 +422,12 @@ export default {
             if(this.fetchParam.role_id == null){
                     this.fetchParam.role_id = -1
                 }
+            this.fetchParam.province_id = this.fetchParam.provinceSelect,
+            this.fetchParam.city_id = this.fetchParam.citySelect,
+            this.fetchParam.area_id = this.fetchParam.areaSelect,
+            this.fetchParam.town_id = this.fetchParam.townSelect,
+            this.fetchParam.village_id = this.fetchParam.villageSelect,    
+            console.log(this.fetchParam)
             return userService.fetchData(this.fetchParam).then((ret) => {
                 this.dataCache = ret.data
                 this.total = ret.total

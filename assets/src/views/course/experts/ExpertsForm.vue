@@ -12,7 +12,8 @@
             margin: 20px auto;
             width: 170px;
             height: 170px;
-            border: none;
+            border: 1px solid #ccc;
+            border-radius:50%;
                 >img {
                     width: 100%;
                     height: 100%;
@@ -54,12 +55,6 @@
                 <el-form-item label="职称" prop="professor">
                     <el-input v-model.professor="fetchParam.professor"></el-input>
                 </el-form-item>
-            
-                <!--<el-form-item label="所属医院" prop="role_id" :fetch-suggestions="querySearch">
-                    <el-select class="select" v-model="fetchParam.role_id" placeholder="请输入角色">
-                        <el-option  v-for="item in  role_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>-->
 
                 <el-form-item  label="所属医院" :label-width="formLabelWidth" :fetch-suggestions="querySearch">
                     <el-select clearable v-model="fetchParam.hospital_id" placeholder="未选择">
@@ -75,7 +70,8 @@
                     <el-input v-model.department="fetchParam.department"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" prop="introduce">
-                    <el-input v-model.introduce="fetchParam.introduce"></el-input>
+                    <el-input v-model="fetchParam.introduce" type="textarea" :autosize="{ minRows: 4, maxRows: 7}" placeholder="请输入内容">
+                    </el-input>
                 </el-form-item>
                 <el-form-item label="" >
                     <!--<el-button @click="$router.push({ name:'medical-index'})">取消</el-button>-->
@@ -93,7 +89,7 @@
     import commonService from '../../../services/commonService.js'
     import mineService from '../../../services/base/mineService'
     import govService from '../../../services/gov/govService.js'
-    import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
+    import ImagEcropperInput from '../../component/upload/ImagEcropperInputExperts.vue'
     import Hospitals from '../../component/select/Hospitals.vue'
     // import {fillImgPath} from '../../../utils/filterUtils.js'
 

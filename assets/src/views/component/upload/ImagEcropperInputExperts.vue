@@ -41,7 +41,7 @@
     export default{
         props: {
             confirmFn: Function, // 点击确认后的回调 参数: imgData-base64的数据
-            aspectRatio: { // 长宽比例 16/9   {需求调整为前端不控制裁剪比例 由运营去把控比例 故暂时把比例限制功能注销掉}
+            aspectRatio: { // 长宽比例 16/9
                 type: Number,
                 default: 16 / 9
             },
@@ -129,7 +129,7 @@
                 let image = this.$refs.container.querySelector('.image-preview')
                 let _this = this
                 this.cropper = new Cropper(image, {
-                    // aspectRatio: this.finalRatio,
+                    aspectRatio: this.finalRatio,
                     scalable: false,
                     zoomable: false,
                     viewMode: 1,

@@ -83,6 +83,16 @@
                             <el-option label="政府课程" value="gov"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item  label="关联专家"  :fetch-suggestions="querySearch">
+                        <el-select clearable v-model="fetchParam.experts_id" placeholder="未选择">
+                            <el-option v-for="(item, index) in experts_list" :label="item.name" :value="item.id" :key="item.id">
+                            </el-option>
+                        </el-select>
+                        <!--<i>所属医院</i>
+                        <Hospitals v-model="fetchParam.experts_id" :placeholder="fetchParam.experts_id"
+                                            v-on:change="val=>fetchParam.experts_id=val" :change="getHospitalList">
+                        </Hospitals>-->
+                    </el-form-item>
                     <el-form-item label="课程封面图" prop="image">
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
                         <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
@@ -228,6 +238,7 @@
 <script>
 import courseService from '../../../services/course/courseService.js'
 import videoService from '../../../services/course/videoService.js'
+import expertsService from '../../../services/course/expertsService.js'
 import UploadImg from '../../component/upload/UploadImg.vue'
 import CropperImg from '../../component/upload/ImagEcropperInput.vue'
 import DialogVideo from '../component/DialogVideo.vue'
@@ -261,8 +272,8 @@ export default {
             // 考试设置部分
             fetchTesting: [],
             readonly: false, // 只读模式
-
             videoUrl: '', // 预览的视频url
+            experts_list:[],
         }
     },
  
@@ -279,6 +290,7 @@ export default {
                  this.fetchParam[i]=this.$route.params.courseInfo[i]
             }
             console.log(this.$route.params.courseInfo)
+            console.log(this.fetchParam)
             // console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
             // this.fetchParam.name= this.$route.params.courseInfo.name
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
@@ -300,6 +312,7 @@ export default {
         this.readonly = this.$route.params.readonly
         xmview.setContentLoading(false)
         this.getVideoName()
+        this.getExpertsList()
 
     },
 
@@ -339,6 +352,19 @@ export default {
         }
     },
     methods: {
+        //获取医院下拉列表
+        getExpertsList(val){
+            expertsService.fetchExpertsData({pagesize:-1}).then((ret)=>{
+                this.experts_list=ret;
+            })
+        },
+        //拿到医院列表输入建议
+            querySearch(queryString, cb) {
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据返回建议列表的数据
+                cb(results);
+            },
         fetchVideoData () {
                 this.loadingData = true
                 return videoService.getVideo(this.fetchParam).then((ret) => {
@@ -517,6 +543,7 @@ function getOrignData() {
         price_enabled: void 0,
         price: void 0,
         price_floa: void 0,
+        experts_id: void 0,
     }
 
     return orignData
