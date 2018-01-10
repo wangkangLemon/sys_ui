@@ -70,7 +70,7 @@ class VideoService {
     getVideo( gov_id, material_id, title, page, pagesize, create_start, create_end, status,used ) {
         let url = `${urlPre}/lists`
         return api.get(url, gov_id, material_id, title, page, pagesize, create_start, create_end, status,used ).then((ret) => {
-            return ret.data
+            return ret
         })
     }
 

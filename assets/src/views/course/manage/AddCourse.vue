@@ -368,7 +368,7 @@ export default {
         fetchVideoData () {
                 this.loadingData = true
                 return videoService.getVideo(this.fetchParam).then((ret) => {
-                    this.data = ret
+                    this.data = ret.data
                     this.total = ret.total
                     this.loadingData = false
                 })

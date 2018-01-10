@@ -203,13 +203,14 @@
             </section>
 
 
-            <!--2 选择联动表-->
+            <!--2 选择联动表--> <!--//需改进待后台返ended数据后做联动列表-->
             <!--<section>
                     <i>栏目菜单</i>
                     <Section-category-menu :onchange="fetchCate" v-model="fetchParam.category_id"></Section-category-menu>
             </section>-->
 
-            <!--<el-form-item label="栏目菜单" prop="category_id"> //需改进待后台返ended数据后做联动列表
+            <!--没用-->
+            <!--<el-form-item label="栏目菜单" prop="category_id"> 
                         <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
             </el-form-item>-->
 

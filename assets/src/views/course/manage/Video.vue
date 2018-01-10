@@ -50,6 +50,7 @@
             <section>
                 <i>状态</i>
                 <el-select :clearable="true" v-model="fetchParam.status" placeholder="请选择" @change="fetchData">
+                    <el-option label="全部" :value="-1"></el-option>
                     <el-option label="转码中" :value="1"></el-option>
                     <el-option label="转码失败" :value="2"></el-option>
                     <el-option label="正常" :value="0"></el-option>
@@ -212,14 +213,14 @@
     }
     function getFetchParam() { //定义视频列表的参数
         return {
-            gov_id: null,
+            gov_id: 0,
             material_id: null,
             title:'',
             page: 1,
             pagesize: 15,
             create_start: '',
             create_end: '',
-            status:'',
+            status:-1,
             used:'', //是否已关联课程
         }
     }
@@ -284,9 +285,13 @@
             },
             fetchData () {
                 this.loadingData = true
+                if(this.fetchParam.file_name){
+                    this.fetchParam.page=1
+                }
+                console.log(this.fetchParam)
                 return videoService.getVideo(this.fetchParam).then((ret) => {
-                    this.data = ret
-                    this.total = 3600
+                    this.data = ret.data
+                    this.total = ret._exts.total
                     this.loadingData = false
                 })
             },
