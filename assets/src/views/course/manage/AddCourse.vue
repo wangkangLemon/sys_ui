@@ -84,14 +84,14 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item  label="关联专家"  :fetch-suggestions="querySearch">
-                        <el-select clearable v-model="fetchParam.experts_id" placeholder="未选择">
+                        <!--<el-select clearable v-model="fetchParam.experts_id" placeholder="未选择">
                             <el-option v-for="(item, index) in experts_list" :label="item.name" :value="item.id" :key="item.id">
                             </el-option>
-                        </el-select>
-                        <!--<i>所属医院</i>
-                        <Hospitals v-model="fetchParam.experts_id" :placeholder="fetchParam.experts_id"
-                                            v-on:change="val=>fetchParam.experts_id=val" :change="getHospitalList">
-                        </Hospitals>-->
+                        </el-select>-->
+                        <!--<i>关联专家</i>-->
+                        <Experts v-model="fetchParam.experts_id" :placeholder="fetchParam.name"
+                                            v-on:change="val=>fetchParam.experts_id=val" :change="getExpertsList" :list="changelist">
+                        </Experts>
                     </el-form-item>
                     <el-form-item label="课程封面图" prop="image">
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
@@ -250,6 +250,7 @@ import formUtils from '../../../utils/formUtils'
 import vTags from '../../component/form/Tags.vue'
 
 import VideoPreview from '../../component/dialog/VideoPreview.vue'
+import Experts from '../../component/select/Experts'
 
 export default {
     name: 'course-manage-addcourse',
@@ -274,6 +275,7 @@ export default {
             readonly: false, // 只读模式
             videoUrl: '', // 预览的视频url
             experts_list:[],
+            changelist:{}
         }
     },
  
@@ -289,8 +291,6 @@ export default {
             for(let i in this.$route.params.courseInfo){
                  this.fetchParam[i]=this.$route.params.courseInfo[i]
             }
-            console.log(this.$route.params.courseInfo)
-            console.log(this.fetchParam)
             // console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
             // this.fetchParam.name= this.$route.params.courseInfo.name
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
@@ -298,7 +298,6 @@ export default {
         } else if (this.$route.query.contentid) {
             this.activeTab= 'first'
             courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
-                console.log(ret.course)
                 this.fetchParam = ret.course                  // 没拿到信息 获取信息
                 this.fetchParam.course_name= this.$route.params.courseInfo.course_name
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
@@ -353,11 +352,25 @@ export default {
     },
     methods: {
         //获取医院下拉列表
-        getExpertsList(val){
-            expertsService.fetchExpertsData({pagesize:-1}).then((ret)=>{
-                this.experts_list=ret.data
-            })
-        },
+        // getExpertsList(val){
+        //     expertsService.fetchExpertsData({pagesize:-1}).then((ret)=>{
+        //         console.log(ret)
+        //         xmview.setContentLoading(false)
+        //         this.experts_list=ret.data
+        //     })
+        // },
+        getExpertsList (val, length) {
+                return expertsService.fetchExpertsData({
+                    name: val,
+                    // category: this.type,
+                    pagesize: this.pageSize,
+                    page: parseInt(length / this.pageSize) + 1
+                }).then((ret) => {
+                    this.$emit('changelist', ret)
+                    this.changelist = ret;
+                    return ret
+                })
+            },
         //拿到医院列表输入建议
             querySearch(queryString, cb) {
                 var restaurants = this.restaurants;
@@ -377,7 +390,6 @@ export default {
             preview (index) {
                 // 拿到播放地址
                 videoService.getVideoPreviewUrl(index).then((ret) => {
-                    console.log(ret)
                     this.videoUrl = ret.video
                     // this.row = row 
                     this.$refs.videoPreview.show(this.fetchParam.material_name) //返回视频的数据后显示弹窗
@@ -386,11 +398,8 @@ export default {
         
         // 拿到视频名称
         getVideoName(){
-            console.log('this.fetchParam.material_id='+this.fetchParam.material_id)
             return videoService.getVideoPreviewUrl(this.fetchParam.material_id).then((ret) => {
-                    console.log(ret)
                     this.fetchParam.material_name = ret.file_name
-                    console.log('this.fetchParam.material_name ='+this.fetchParam.material_name )
                     // this.videoUrl = ret.video
                     // this.row = row
                     // this.$refs.videoPreview.show(row.file_name)
@@ -471,7 +480,6 @@ export default {
             for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
                 // 处理单选题的正确答案选中
                 if (item.category == 1 && typeof item.correct == 'number') {
-                    // console.log(item)
                     if(item.options){
                         item.options.map((itemOptions) => {
                             delete itemOptions.correct
@@ -516,7 +524,7 @@ export default {
             }
         }
     },
-    components: { CropperImg, UploadFile, CourseCategorySelect, CourseAlbumSelect, DialogVideo, UploadImg, vTags ,VideoPreview}
+    components: { CropperImg, UploadFile, CourseCategorySelect, CourseAlbumSelect, DialogVideo, UploadImg, vTags ,VideoPreview,Experts}
 }
 
 function getOrignData() {

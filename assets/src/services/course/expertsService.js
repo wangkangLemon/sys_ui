@@ -4,9 +4,9 @@ const urlPre = config.apiHost + '/experts'
 
 class sysService {
     //拿到数据 
-    fetchExpertsData ({id, name, hospital_id}) {
+    fetchExpertsData ({id, name, hospital_id, page, pagesize}) {
         let url = urlPre + '/lists'
-        return api.get(url,{id, name, hospital_id }).then(ret => {
+        return api.get(url,{id, name, hospital_id, page, pagesize }).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -14,9 +14,9 @@ class sysService {
             }
         })
     }
-    fetchHospitalData({id, name, hospital_id}) {
+    fetchHospitalData({id, name, hospital_id, page, pagesize}) {
         let url = urlPre + '/hospital/lists'
-        return api.get(url,{id, name, hospital_id }).then(ret => {
+        return api.get(url,{id, name, hospital_id, page, pagesize }).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
