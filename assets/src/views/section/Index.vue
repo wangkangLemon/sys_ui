@@ -144,13 +144,16 @@
 
             <!--1 这是区块选取的栏目 -->
             <el-form label-position="top" :rules="rules">
-                <el-form-item label="栏目菜单" :fetch-suggestions="querySearch">
+                <!--<el-form-item label="区块栏目" :fetch-suggestions="querySearch">
                     <el-select v-model="dialog.category_id" placeholder="请输入栏目菜单">
                         <el-option v-for="item in SecCateName" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
+                </el-form-item>-->
+                <el-form-item  label="区块栏目">
+                    <Section-category-menu :placeholder="fetchParam.name" :autoClear="true" v-model="fetchParam.category_id"></Section-category-menu>
                 </el-form-item>
             </el-form>
-
+            
             <!--2 这是课程类表选取的数据 -->
 
             <el-form label-position="top" class="addForm" :model="form" :rules="rules" ref="form">
@@ -195,22 +198,22 @@
 
         <article class="search">
             <!--1 选择下拉没有层级-->
-            <section>
-                 <i>栏目菜单</i>
+            <!--<section>
+                 <i>区块栏目</i>
                     <el-select  v-model="fetchParam.category_id" placeholder="请输入栏目菜单" @change="fetchCate" clearable >                       
                         <el-option  v-for="item in SecCateName" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
-            </section>
+            </section>-->
 
 
             <!--2 选择联动表--> <!--//需改进待后台返ended数据后做联动列表-->
-            <!--<section>
-                    <i>栏目菜单</i>
+            <section>
+                    <i>区块栏目</i>
                     <Section-category-menu :onchange="fetchCate" v-model="fetchParam.category_id"></Section-category-menu>
-            </section>-->
+            </section>
 
             <!--没用-->
-            <!--<el-form-item label="栏目菜单" prop="category_id"> 
+            <!--<el-form-item label="区块栏目" prop="category_id"> 
                         <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
             </el-form-item>-->
 
@@ -254,7 +257,7 @@
             </el-table-column>
         </el-table>
         <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
-            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="40">
+            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
         <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput>
         <!--底部的批量删除和移动两个按钮-->
@@ -424,7 +427,7 @@
                             reqFn = dataService.edit
                             msg = '修改成功'
                         }
-                        this.form.category_id = this.dialog.category_id
+                        this.form.category_id = this.fetchParam.category_id
 
                         if (this.form.tags === '热门') this.form.tags_color = '#FFD220'
                         if (this.form.tags === '最新') this.form.tags_color = '#FF4B20'
@@ -573,15 +576,15 @@
 
                 }
             },
-            handleSizeChange(val) {
+            handleSizeChange(val) {dataService.fetchData
                 this.fetchParam.pagesize = val
                 this.fetchData()
             },
             fetchData(val) {
                 return dataService.fetchData(this.fetchParam).then((ret) => {
                     this.dataCache = ret.data
-                    console.log(this.dataCache)
-                    
+                    // console.log(this.dataCache)
+                    this.total=ret._exts.total
                     this.loadingData = false
                     xmview.setContentLoading(false)
                 })

@@ -179,7 +179,7 @@
             //获取部门组下拉列表
             // getrole(val){
             //     govService.getSelectList({pagesize:-1}).then((ret)=>{
-            //      this.gov_list=ret;
+            //      this.gov_list=ret.data;
             //     })
             // },
 

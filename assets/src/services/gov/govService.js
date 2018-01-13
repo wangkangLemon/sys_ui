@@ -36,7 +36,7 @@ class govService {
             deleted,
             
         }, false).then((ret) => {
-            return ret.data
+            return ret
         })
     }
 

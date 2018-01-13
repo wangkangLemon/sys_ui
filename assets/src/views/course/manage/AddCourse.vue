@@ -355,7 +355,7 @@ export default {
         //获取医院下拉列表
         getExpertsList(val){
             expertsService.fetchExpertsData({pagesize:-1}).then((ret)=>{
-                this.experts_list=ret;
+                this.experts_list=ret.data
             })
         },
         //拿到医院列表输入建议

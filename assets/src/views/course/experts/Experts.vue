@@ -41,12 +41,12 @@
         <!--详情-->
         <el-dialog class="show-detail" title="查看专家" v-model="showDetail">
             <div class="avatar">
-                <img :src="{url:clerkDetail.avatar, sex: clerkDetail.sex} | defaultAvatar" />
+                <img :src="{url:clerkDetail.image, sex: clerkDetail.sex} | defaultAvatar" />
             </div>
             <div class="info">
                 <h2>{{clerkDetail.name}}</h2>
                 <p><i class="title">所属医院：</i><span class="value">{{clerkDetail.hospital_name }}</span></p>
-                <p><i class="title">手机号：</i> <span class="value">{{clerkDetail.professor}}</span></p>
+                <p><i class="title">职称：</i> <span class="value">{{clerkDetail.professor}}</span></p>
                 <p>
                     <i class="title">状态：</i>
                     <span class="value">
@@ -54,57 +54,18 @@
                         <el-tag type="danger" v-else="clerkDetail.disabled">异常</el-tag>
                     </span>
                 </p>
-                <!--<p><i class="title">性别：</i> <span class="value">{{clerkDetail.sex ? '男' : '女'}}</span></p>-->
-                <p><i class="title">生日：</i> <span class="value">{{clerkDetail.birthday}}</span></p>
-                <p><i class="title">地址：</i> <span class="value">{{clerkDetail.address}}</span></p>
+                <p><i class="title">性别：</i> <span class="value">{{clerkDetail.sex==1 ? '男' : '女'}}</span></p>
+                <p><i class="title">科室：</i> <span class="value">{{clerkDetail.department}}</span></p>
+                <p><i class="title">介绍：</i> <span class="value">{{clerkDetail.introduce}}</span></p>
+                <p><i class="title">擅长领域：</i> <span class="value">{{clerkDetail.goodat}}</span></p>
+                <p><i class="title">荣誉：</i> <span class="value">{{clerkDetail.honor}}</span></p>
                 <p><i class="title">注册时间：</i><span class="value">{{clerkDetail.addate}}</span></p>
-            </div>
-        </el-dialog>
-         <!--添加/编辑表单-->
-        <el-dialog v-model="addForm">
-            <el-form :model="form" :rules="rules" ref="form">
-                <!--<el-form-item v-if="category == 2" prop="department_id" label="部门" :label-width="formLabelWidth">
-                    <departmentSelect :type="companyID" v-model="form.department_id"
-                    v-on:change="val=>form.department_id = val">
-                    </departmentSelect>
-                </el-form-item>-->
-                
-                <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
-                </el-form-item>
-   
-                <el-form-item prop="professor" label="职称" :label-width="formLabelWidth">
-                    <el-input v-model="form.professor"  auto-complete="off"></el-input>
-                </el-form-item>
-                
-                <el-form-item prop="hospital_id" label="所属医院" :label-width="formLabelWidth">
-                    <!--<departmentSelect :type="govID" v-model="form.hospital_id"
-                    v-on:change="val=>form.hospital_id = val">
-                    </departmentSelect>-->
-                    <el-select clearable v-model="form.hospital_id" placeholder="未选择">
-                    <el-option v-for="(item, index) in hospital_list" :label="item.name" :value="item.id" :key="item.id">
-                    </el-option>
-                </el-select>
-                </el-form-item>
-                <el-form-item prop="department" label="科室" :label-width="formLabelWidth">
-                    <el-input  v-model="form.department" placeholder="科室" auto-complete="off"></el-input>
-                </el-form-item>
-                <!--<el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
-                    <el-date-picker type="date" v-model="form.birthday"></el-date-picker>
-                </el-form-item>-->
-                <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input v-model="form.introduce" placeholder="介绍" auto-complete="off"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="addForm = false">取 消</el-button>
-                <el-button type="primary" @click="submit('form')">确 定</el-button>
             </div>
         </el-dialog>
         <section class="manage-container">
             <!--<el-button type="primary" icon="plus" @click="$router.push({ name:'person-add',params:{sys_type:'add'}})">-->
             <el-button type="primary" icon="plus" @click="addAdmin">
-                <i>添加人员</i>
+                <i>添加专家</i>
             </el-button>
         </section>
 
@@ -132,13 +93,13 @@
             
             <!--<el-table-column type="selection"></el-table-column> 左侧选择按钮-->
 
-            <el-table-column min-width="150" prop="name" label="姓名" v-if="data">
+            <el-table-column min-width="120" prop="name" label="姓名" v-if="data">
             </el-table-column>
             <el-table-column min-width="200" prop="hospital_name" label="所属医院">
             </el-table-column>
-            <el-table-column min-width="170" prop="professor" label="职称">
+            <el-table-column min-width="100" prop="professor" label="职称">
             </el-table-column>
-            <el-table-column min-width="170" prop="department" label="科室">
+            <el-table-column min-width="100" prop="department" label="科室">
             </el-table-column>
             <el-table-column min-width="170" :formatter="Time" label="创建时间">
             </el-table-column>
@@ -229,85 +190,22 @@ export default {
                 birthday: '',          // 生日
                 addate: ''
             },
-            form: {                // 添加表单属性值
-                    hospital_id: void 0,        //医院 无管理权限0 
-                    // area_id:0,         //地区id
-                    gov_id: void 0,    //部门id
-                    name: '',          // 姓名
-                    professor: '',        // 职称
-                    department: '',        // 密码qu
-                    introduce: '',
-                    // address: '',       // 地址
-                    // sex: 0,            // 性别
-                    // birthday: ''       // 生日
-                },
-                rules: {
-                    department_id: [
-                        {type: 'number', required: true, message: '必须填写', trigger: 'blur'}
-                    ],
-                    name: [
-                        {required: true, message: '必须填写', trigger: 'blur'}
-                    ],
-                    professor: [
-                        {required: true, message: '必须填写', trigger: 'blur'},
-                    ],
-                    department: [
-                        {required: true, message: '必须填写', trigger: 'blur'}
-                    ]
-                },
-                addForm: false, // 表单弹窗是否显示
                 formLabelWidth: '120px', // 表单label的宽度
-                hospital_list:[]
 
         }
     },
     activated () {
         this.fetchData()
-        this.getHospitalList()
     },
     methods: {
-        //获取医院下拉列表
-            getHospitalList(val){
-                expertsService.fetchHospitalData({pagesize:-1}).then((ret)=>{
-                    console.log(ret)
-                 this.hospital_list=ret;
-                })
-            },
+       
         //添加人员
         addAdmin () {
-                // this.loading = false
-                // departmentService.getDepartment({
-                //     company_id: this.companyID
-                // }).then((ret) => {
-                //     if (ret.data.length > 0) {
-                //         this.departmentData = ret.data
-                //     }
-                // }).then(() => {
-                    // this.addForm = true
                     this.$router.push({
                         name: 'course-manage-experts-add',
                     })
-                // })
             },
-        //添加人员提交
-        submit (form) {
-            this.$refs[form].validate((valid) => {
-                if (valid) {
-                    // this.form.birthday = timeUtils.date2Str(this.form.birthday)
-                    expertsService.createExperts(this.form).then((ret) => {
-                        xmview.showTip('success', '添加成功')
-                    }).then(() => {
-                        this.addForm = false
-                        this.initFetchParam()
-                        this.page = 1
-                    }).catch((ret) => {
-                        xmview.showTip('error', ret.message)
-                    })
-                } else {
-                    return false
-                }
-            })
-        },
+      
 
      // 修改人员信息
         editUser(index, row) {
@@ -380,11 +278,8 @@ export default {
                 //         this.fetchParam.hospital_id = -1
                 //     }
             return expertsService.fetchExpertsData(this.fetchParam).then((ret) => {
-                this.data = ret
-                // this.total = ret.total
-                if(ret.length!==0){
-                    this.total = 100
-                }
+                this.data = ret.data
+                this.total = ret._exts.total
                 this.loadingData = false
                 xmview.setContentLoading(false)     
             })

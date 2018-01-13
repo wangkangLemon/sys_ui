@@ -58,8 +58,8 @@
                     pagesize: this.pageSize,
                     page: parseInt(length / this.pageSize) + 1
                 }).then((ret) => {
-                    this.$emit('changelist', ret.data)
-                    return ret
+                    // this.$emit('changelist', ret.data)
+                    return ret.data
                 })
             },
             handleChange(val) {

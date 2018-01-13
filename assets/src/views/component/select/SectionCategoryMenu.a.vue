@@ -1,4 +1,4 @@
-<!--课程栏目-->
+<!--区块数据-选取内容-课程栏目-->
 <style lang="scss">
     .course-select-container {
         .el-icon-caret-bottom {
@@ -15,7 +15,7 @@
 
 <script>
     import treeUtils from '../../../utils/treeUtils'
-    import courseService from '../../../services/course/courseService.js'
+    import cateService from '../../../services/section/cateService.js'
     export default {
         props: {
             value: [String, Number, Array],
@@ -59,6 +59,7 @@
 
             this.$refs.container.$el.addEventListener('click', () => {
                 if (this.loading || this.options.length > 0) return
+
                 if (this.lastData) {
                     this.options = this.lastData
 
@@ -66,10 +67,13 @@
 
                     this.loading = true
                     //获取数据的方法
-                    courseService.search_cate({
+                    cateService.fetchData({
                         pid: 0,
                         level: -1,
                     }).then((ret) => {
+
+                        console.log(ret)
+
                         ret.forEach(v => {
                             this.options.push({
                                 data: v,
@@ -78,12 +82,12 @@
                                 children: v.ended ? null : [] //是否最终菜单？
                             })
                         })
+                        console.log(this.options)
                         this.loading = false
                         xmview.setContentLoading(false)
                     })
 
-                    // courseService.getCategoryTree({type: this.type, pid:0})
-
+                    // cateService.getCategoryTree({type: this.type, pid:0})
                     //     .then(ret => {
                     //         // 不显示未分类那一项
                     //         if (!this.showNotCat) {
@@ -113,30 +117,16 @@
             handleItemChange(val) {
                 if (val.length < 1) return
                 // 递归找到该项
-                console.log(val)
+                // console.log(val)
                 let currItem = treeUtils.findItem(this.options, val, 'value') //拿到当前项 
 
                 //if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
                 var arr = []
-                courseService.search_cate({
+                cateService.fetchData({
                     pid: val[val.length - 1],
                     level: -1,
                 }).then((ret) => {
-                    console.log(ret)
-                    // this.options.forEach(v => {
-                    //     if (v.value == val[val.length-1]) {
-                    //         ret.forEach(retItem => {
-                    //             console.log(retItem)
-                    //             arr.push({
-                    //                 data: retItem,
-                    //                 label: retItem.name,
-                    //                 value: retItem.id,
-                    //                 children: retItem.ended ? null : []
-                    //             })
-                    //         })
-                    //         v.children = arr
-                    //     }
-                    // })
+         
                     var arr = ret.map(v => {
                         v.label = v.name
                         v.value = v.id
@@ -155,8 +145,8 @@
 
 
 
-                // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
-                // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
+                // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
+                // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
                 //     .then(ret => {
                 //         // 重新组合数据
                 //         ret.map((item) => {

@@ -42,6 +42,7 @@
         <section class="upload-avatar">
             <div class="img-container">
                 <img :src="fetchParam.image|fillImgPath" v-show="fetchParam.image"/>
+                 <!--<img :src="{url:clerkDetail.avatar, sex: clerkDetail.sex} | defaultAvatar" />-->
             </div>
             <ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>
         </section>     
@@ -51,7 +52,10 @@
                 <el-form-item label="专家名称" prop="name">
                     <el-input v-model.name="fetchParam.name"></el-input>
                 </el-form-item>
-
+                <el-form-item prop="sex" label="性别" :label-width="formLabelWidth">
+                    <el-radio class="radio" v-model="fetchParam.sex" :label="1" :value="1">男</el-radio>
+                    <el-radio class="radio" v-model="fetchParam.sex" :label="2" :value="2">女</el-radio>
+                </el-form-item>
                 <el-form-item label="职称" prop="professor">
                     <el-input v-model.professor="fetchParam.professor"></el-input>
                 </el-form-item>
@@ -70,7 +74,15 @@
                     <el-input v-model.department="fetchParam.department"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" prop="introduce">
-                    <el-input v-model="fetchParam.introduce" type="textarea" :autosize="{ minRows: 4, maxRows: 7}" placeholder="请输入内容">
+                    <el-input v-model.introduce="fetchParam.introduce" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请输入内容">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="擅长领域" prop="goodat">
+                    <el-input v-model.goodat="fetchParam.goodat" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请输入内容">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="荣誉" prop="honor">
+                    <el-input v-model.honor="fetchParam.honor" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请输入内容">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="" >
@@ -183,7 +195,7 @@
             //获取医院下拉列表
             getHospitalList(val){
                 expertsService.fetchHospitalData({pagesize:-1}).then((ret)=>{
-                 this.hospital_list=ret;
+                 this.hospital_list=ret.data;
                 })
             },
             //拿到医院列表输入建议
@@ -197,12 +209,10 @@
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
+                    console.log(this.fetchParam)
                     let req = expertsService.createExperts
                     if (this.fetchParam.id) req = expertsService.updateExperts
-                    console.log(this.fetchParam.id)
                     req(this.fetchParam).then((ret) => {
-                        console.log(111111111111)
-                        console.log(ret)
                         // 重置当前数据
                         //this.$refs[fetchParam].resetFields();//自己加的方法
                         xmview.showTip('success', '数据提交成功')
@@ -231,6 +241,9 @@
             hospital_id: void 0,
             department: '',
             introduce: '',
+            sex: void 0,
+            goodat:'',
+            honor:'',
 
         }
     }

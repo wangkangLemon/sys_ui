@@ -47,21 +47,24 @@
             }
         },
         watch: {
-            'value' (val) {  //点击之后选中的值
+            'value' (val) {
                 this.setCurrVal(val)
             },
-            'currVal' (val, old) { //高亮选中值
+            'currVal' (val, old) {
                 this.$emit('input', val.length > 0 ? parseInt(val[val.length - 1]) : val)
                 this.onchange && this.onchange(val)
             }
         },
-  
         mounted() {
+
             this.$refs.container.$el.addEventListener('click', () => {
                 if (this.loading || this.options.length > 0) return
+
                 if (this.lastData) {
                     this.options = this.lastData
+
                 } else {
+
                     this.loading = true
                     //获取数据的方法
                     cateService.fetchData({
@@ -75,6 +78,7 @@
                                     data: v,
                                     label: v.name,
                                     value: v.id,
+                                    
                                 }
                                 obj[v.id] = t;
                                 this.options.push(t);
@@ -99,19 +103,20 @@
                         })
                         this.loading = false
                         xmview.setContentLoading(false);
+                        console.log(this.options)
                     })
 
                     // cateService.getCategoryTree({type: this.type, pid:0})
-                        //     .then(ret => {
-                        //         // 不显示未分类那一项
-                        //         if (!this.showNotCat) {
-                        //             ret = ret.filter((item) => {
-                        //                 return item.id != 0
-                        //             })
-                        //         }
-                        //         this.options = treeUtils.arr2Cascader(ret, 0, void 0, void 0, 'name', 'id')
-                        //         this.loading = false
-                        //     })
+                    //     .then(ret => {
+                    //         // 不显示未分类那一项
+                    //         if (!this.showNotCat) {
+                    //             ret = ret.filter((item) => {
+                    //                 return item.id != 0
+                    //             })
+                    //         }
+                    //         this.options = treeUtils.arr2Cascader(ret, 0, void 0, void 0, 'name', 'id')
+                    //         this.loading = false
+                    //     })
                 }
             })
         },
@@ -121,59 +126,60 @@
                 this.options = []
             }
         },
+        activated() {},
         methods: {
             setCurrVal(val) { //在请求子集时判断设置值
-                console.log(this.currVal)
                 if (!val) this.$refs.container.clearValue(new window.Event('click'))
                 if (this.currVal == val || !val) return
                 this.currVal = val
-                console.log(this.currVal)
             },
             handleItemChange(val) {
+                if (val.length < 1) return
+                // 递归找到该项
                 // console.log(val)
-                    // if (val.length < 1) return
-                    // // 递归找到该项
-                    // // console.log(val)
-                    // let currItem = treeUtils.findItem(this.options, val, 'value') //拿到当前项 
+                let currItem = treeUtils.findItem(this.options, val, 'value') //拿到当前项 
 
-                    // //if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
-                    // var arr = []
-                    // cateService.fetchData({
-                    //     pid: val[val.length - 1],
-                    //     level: -1,
-                    // }).then((ret) => {
-                    //     var arr = ret.map(v => {
-                    //         v.label = v.name
-                    //         v.value = v.id
-                    //         v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组
-                    //         return v
-                    //     })
+                //if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
+                var arr = []
+                cateService.fetchData({
+                    pid: val[val.length - 1],
+                    level: -1,
+                }).then((ret) => {
 
-                    //     // currItem.children = arr
+                    var arr = ret.map(v => {
+                        v.label = v.name
+                        v.value = v.id
+                        v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组
+                        return v
+                    })
+                    console.log(currItem)
 
-                    //     this.loading = false
-                    //     xmview.setContentLoading(false)
-                    // })
+                    currItem.children = arr
+
+                    this.loading = false
+                    xmview.setContentLoading(false)
+                })
 
 
-                    // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
-                    // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
-                    //     .then(ret => {
-                    //         // 重新组合数据
-                    //         ret.map((item) => {
-                    //             item.label = item.name
-                    //             item.value = item.id
-                    //             item.children = item.has_children ? [{label: '加载中...'}] : null
-                    //         })
-                    //         currItem.children = ret
-                    //     })
+
+
+
+                // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
+                // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
+                //     .then(ret => {
+                //         // 重新组合数据
+                //         ret.map((item) => {
+                //             item.label = item.name
+                //             item.value = item.id
+                //             item.children = item.has_children ? [{label: '加载中...'}] : null
+                //         })
+                //         currItem.children = ret
+                //     })
             },
             clearData() {
                 this.lastData = this.options
                 this.options = []
-            },
-         
-
+            }
         },
         components: {}
     }

@@ -8,7 +8,7 @@ class sysService {
         let url = urlPre + '/lists'
         return api.get(url,{id, name, hospital_id }).then(ret => {
             if (ret.code == 0) {
-                return ret.data
+                return ret
             } else {
                 return Promise.reject(ret)
             }
@@ -18,7 +18,7 @@ class sysService {
         let url = urlPre + '/hospital/lists'
         return api.get(url,{id, name, hospital_id }).then(ret => {
             if (ret.code == 0) {
-                return ret.data
+                return ret
             } else {
                 return Promise.reject(ret)
             }
@@ -48,9 +48,9 @@ class sysService {
     }
 
     // 创建专家
-    createExperts({ name, image, professor, hospital_id, department, introduce }) {
+    createExperts({ name, image, professor, hospital_id, department, introduce, sex, goodat, honor }) {
         let url = urlPre + '/create'
-        return api.post(url, { name, image, professor, hospital_id, department, introduce }).then(ret => {
+        return api.post(url, { name, image, professor, hospital_id, department, introduce, sex, goodat, honor}).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -72,9 +72,9 @@ class sysService {
         })
     }
     // 更新专家
-    updateExperts({ id, name, image, professor, hospital_id, department, introduce }) {
+    updateExperts({ id, name, image, professor, hospital_id, department, introduce, sex, goodat, honor }) {
         let url = `${urlPre}/edit/${id}`
-        return api.post(url, { name, image, professor, hospital_id, department, introduce }).then(ret => {
+        return api.post(url, { name, image, professor, hospital_id, department, introduce, sex, goodat, honor }).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

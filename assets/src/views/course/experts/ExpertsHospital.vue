@@ -73,7 +73,7 @@
         <section class="manage-container">
             <!--<el-button type="primary" icon="plus" @click="$router.push({ name:'person-add',params:{sys_type:'add'}})">-->
             <el-button type="primary" icon="plus" @click="addAdmin">
-                <i>添加人员</i>
+                <i>添加医院</i>
             </el-button>
         </section>
 
@@ -114,7 +114,7 @@
         </el-table>
 
         <!--底部的page -->
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="100">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -308,8 +308,8 @@ export default {
                 //         this.fetchParam.role_id = -1
                 //     }
             return expertsService.fetchHospitalData(this.fetchParam).then((ret) => {
-                this.data = ret
-                this.total = ret.total
+                this.data = ret.data
+                this.total = ret._exts.total
                 this.loadingData = false
                 xmview.setContentLoading(false)     
             })

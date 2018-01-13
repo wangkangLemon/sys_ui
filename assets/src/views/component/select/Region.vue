@@ -168,7 +168,7 @@
                     village_id: this.fetchParam.villageSelect,
 
                 }).then((ret) => {
-                    this.cityData = ret
+                    this.cityData = ret.data
                     let arr = []
                     this.cityData.forEach(v => {
                         arr.push({

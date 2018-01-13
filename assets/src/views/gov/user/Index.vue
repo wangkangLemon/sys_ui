@@ -19,6 +19,9 @@
         .catmange {
             background: rgb(153, 102, 204);
         }
+        h3{
+            font-size:12px;
+        }
     }
 
     .search {
@@ -70,7 +73,7 @@
                 </el-form-item>-->
 
                 <el-form-item prop="gov_name" label="所属部门" :label-width="formLabelWidth">
-                    <el-input v-model="form.gov_name" ></el-input>
+                    <h3>{{form.gov_name}}</h3>
                 </el-form-item>
                 <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
                     <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
@@ -83,9 +86,6 @@
                     <el-option v-for="(item, index) in roleTypes" :label="item.name" :value="item.role_id" :key="item.role_id">
                     </el-option>
                 </el-select>
-                </el-form-item>
-                <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item prop="sex" label="性别" :label-width="formLabelWidth">
                     <el-radio class="radio" v-model="form.sex" :label="1">男</el-radio>
@@ -182,7 +182,7 @@
         </el-table>
 
         <!--底部的page -->
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="100">
+        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page" :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100]" layout="sizes,total, prev, pager, next" :total="total">
         </el-pagination>
 
         <!--底部的批量删除和移动两个按钮-->
@@ -430,7 +430,7 @@ export default {
             console.log(this.fetchParam)
             return userService.fetchData(this.fetchParam).then((ret) => {
                 this.dataCache = ret.data
-                this.total = ret.total
+                this.total = ret._exts.total
                 this.loadingData = false
                 xmview.setContentLoading(false)     
             })

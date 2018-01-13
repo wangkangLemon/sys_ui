@@ -296,10 +296,9 @@
                     area_id: this.fetchParam.areaSelect,
                     town_id: this.fetchParam.townSelect,
                     village_id: this.fetchParam.villageSelect,
-
                 }).then((ret) => {
-                    this.govData = ret
-                    this.total = ret.total
+                    this.govData = ret.data
+                    this.total = ret._exts.total
                 }).then(() => {
                     this.loading = false
                 })
