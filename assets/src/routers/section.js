@@ -37,7 +37,7 @@ export default {
                 noback: true
             }
         },
-         //数据管理
+        //数据管理
         // {
         //     path: 'data',
         //     name: 'section-data',
@@ -52,7 +52,7 @@ export default {
         //     }
         // },
         {
-            path: 'add',
+            path: 'add', 
             name: 'section-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -70,6 +70,19 @@ export default {
             component: resolve => {
                 require.ensure([], () => {
                     resolve(require('../views/section/Form.vue'))
+                })
+            },
+            meta: {
+                title: '数据更新',
+                noback: false
+            }
+        },
+         {
+            path: 'app/menu',
+            name: 'section-app-menu',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/section/appmenu/Index.vue'))
                 })
             },
             meta: {
