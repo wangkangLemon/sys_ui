@@ -67,6 +67,7 @@
                     cateService.fetchData({
                         pid: 0,
                         level: -1,
+                        pagesize:-1
                     }).then((ret) => {
                         var obj = {};
                         ret.forEach(v => {
