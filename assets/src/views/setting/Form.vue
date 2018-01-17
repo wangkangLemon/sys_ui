@@ -105,7 +105,6 @@
 
         methods: {
             btnNextClick() {
-                alert(11)
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
                     let req = setService.create

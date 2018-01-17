@@ -568,7 +568,7 @@
             },
             // 新建方案
             createScheme () {
-                alert('add')
+                // alert('add')
                 mobileService.createScheme({type: 'index'}).then((ret) => {
                     this.resultData.push(ret.data)
                 })
