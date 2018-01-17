@@ -151,10 +151,10 @@ class CourseService {
         })
     }
 
-    // 获取公开课列表 { course_name = '', status, category_id , time_start, time_end, page, pagesize }
-    getPublicCourselist({ course_name = '', status, category_id , time_start, time_end, page, pagesize}) {
+    // 获取公开课列表 { course_name = '', status, category_id , create_start, create_end, page, pagesize }
+    getPublicCourselist({ course_name = '', status, category_id , create_start, create_end, page, pagesize}) {
         let url = urlPre + '/lists'
-        return api.get(url, { course_name, status, category_id, time_start, time_end, page, pagesize }, false).then(ret => {
+        return api.get(url, { course_name, status, category_id, create_start, create_end, page, pagesize }, false).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -318,10 +318,10 @@ class CourseService {
     // ============================================= 专辑 开始 ======================================================
     
     // 获取专辑
-    getAlbumList({ govid, page, pagesize, keyword, time_start, time_end }) {
+    getAlbumList({ govid, page, pagesize, keyword, create_start, create_end }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/com/${govid}/course/album/search`
-        return api.get(finalUrl, { page, pagesize, keyword, time_start, time_end }).then((ret) => {
+        return api.get(finalUrl, { page, pagesize, keyword, create_start, create_end }).then((ret) => {
             return ret.data
         })
     }

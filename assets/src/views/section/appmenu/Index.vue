@@ -168,11 +168,11 @@
                         <el-option v-for="(item,index) in modulesVersions" :label="item" :value="item" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="type_id" label="选择功能" v-if="form.type == 'app_module'">
+                <!--<el-form-item prop="type_id" label="选择功能" v-if="form.type == 'app_module'">
                     <el-select v-model="form.type_id" @change="getDefaultLogo">
-                        <el-option v-for="(item,index) in modules" :label="item.name" :value="item.id" :key="index"></el-option>
+                        <el-option v-for="(item,index) in items" :label="item.name" :value="item.id" :key="index"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item prop="icon" v-loading="loading" label="应用logo">
                     <div class="img-wrap" v-if="form.icon" >
                         <img :src="form.icon | fillImgPath" alt=""/>
@@ -232,12 +232,14 @@
                 </el-select>
             </section>
         </section>
+        
         <article class="nav-list" v-for="(list,pindex) in resultData" :key="list.id">
             <section class="nav-imgs">
-                <section class="dragWrap" v-if="!list.active">
+                <section class="dragWrap" v-if="!list.active"> 
+                                             <!--没有 active激活（使用中）时有编辑和删除  -->
                     <div class="nav-item active"
-                         v-for="(item,index) in list.modules"
-                         v-dragging="{item: item, list: list.modules, group: 'item' + list.id}"
+                         v-for="(item,index) in list.items"
+                         v-dragging="{item: item, list: list.items, group: 'item' + list.id}"
                          :key="item.name">
                         <div class="parent" @mouseenter="showLayer" @mouseleave="hideLayer">
                             <img :src="item.icon | fillImgPath" alt=""/>
@@ -256,7 +258,7 @@
                 </section>
                 <section class="dragWrap" v-if="list.active">
                     <div class="nav-item"
-                         v-for="(item,index) in list.modules"
+                         v-for="(item,index) in list.items"
                          :key="list.id + index">
                         <div>
                             <img :src="item.icon | fillImgPath" alt=""/>
@@ -273,7 +275,7 @@
             <section class="nav-operate">
                 <span v-if="list.active">使用中</span>
                 <el-button type="text" v-if="!list.active" @click="getPlatVersions(list.id)">启用</el-button>
-                <el-button type="text" @click="cloneScheme(list.id)">克隆</el-button>
+                <el-button type="text" @click="cloneScheme(list.id)">克隆{{list.id}}</el-button>
                 <el-button type="text" @click="deleteScheme(list.id)" v-if="!list.active && !list.readonly">删除</el-button>
             </section>
             <div class="platform" v-if="list.active">
@@ -285,7 +287,7 @@
         </article>
         <div class="block">
             <el-pagination
-                    :page-size="page_size"
+                    :page-size="pagesize"
                     :current-page="currentPage"
                     @current-change="handleCurrentChange"
                     layout="total, prev, pager, next"
@@ -325,10 +327,10 @@
                 },
                 changeIcon: false,
                 modulesVersions: [], // 获取所有功能的版本
-                modules: [], // 获取功能列表
+                items: [], // 获取功能列表
                 total: 0,
                 currentPage: 1,
-                page_size: 10,
+                pagesize: 10,
                 resultData: [],
                 form: clearFn(),
                 rules: {
@@ -363,7 +365,7 @@
                     let schemeIndex = getArrayIdIndex(this.resultData, value.draged.menu_scheme_id)
                     if (!this.resultData[schemeIndex] || this.resultData[schemeIndex] == undefined) return
                     let newArr = []
-                    this.resultData[schemeIndex].modules.forEach((item, index) => {
+                    this.resultData[schemeIndex].items.forEach((item, index) => {
                         newArr.push({
                             id: item.id,
                             group: item.group,
@@ -372,7 +374,7 @@
                     })
                     mobileService.sortModule({
                         scheme_id: value.draged.menu_scheme_id,
-                        modules: JSON.stringify(newArr)
+                        items: JSON.stringify(newArr)
                     }).then(() => {
                         xmview.showTip('success', '排序成功')
                     })
@@ -380,20 +382,22 @@
             },
             getDefaultLogo () {
                 // 根据功能获取到默认logo
-                let curModule = getArrayIdIndex(this.modules, this.form.type_id)
-                if (curModule > -1) this.form.icon = this.modules[curModule]['icon']
+                let curModule = getArrayIdIndex(this.items, this.form.type_id)
+                if (curModule > -1) this.form.icon = this.items[curModule]['icon']
             },
             dialogOpen () {
                 // 当编辑弹窗显示的时候过去所有的功能版本
-                return mobileService.getModuleVersions().then((ret) => {
-                    this.modulesVersions = ret.data
-                })
+                // return mobileService.getModuleVersions().then((ret) => {
+                //     this.modulesVersions = ret.data
+                // })
+
+                this.modulesVersions=["1.1.0", "1.2.0", "1.3.1", "2.1.0", "2.1.2", "3.0.0", "3.1.0"]
             },
             // 表单版本发生变化的时候获取功能列表
             versionChange () {
 //                this.form.type_id = ''
                 return mobileService.getModules({version: this.form.version}).then((ret) => {
-                    this.modules = ret.data
+                    this.items = ret.data
                     return ret.data
                 })
             },
@@ -471,7 +475,7 @@
             delModule (scheme_id, module_id, pindex, index) {
                 mobileService.deleteModule({scheme_id, module_id}).then(() => {
                     xmview.showTip('success', '删除成功')
-                    this.resultData[pindex].modules.splice(index, 1)
+                    this.resultData[pindex].items.splice(index, 1)
                 })
             },
             handleCurrentChange (val) {
@@ -487,10 +491,11 @@
                         platform: this.fetchParam.plat,
                         version: this.fetchParam.version,
                         page: this.currentPage,
-                        page_size: this.page_size
+                        pagesize: this.pagesize
                     }
                 ).then((ret) => {
                     this.resultData = ret.data
+                    console.log(this.resultData)
                     this.total = ret.total
                 }).then(() => {
                     this.containerLoading = false
@@ -539,7 +544,7 @@
                             req = mobileService.updateModule
                             delete this.form.sort
                         } else {
-                            this.form.sort = this.resultData[this.currentData.pindex]['modules'].length + 1
+                            this.form.sort = this.resultData[this.currentData.pindex]['items'].length + 1
                             msg = '添加成功'
                             req = mobileService.addModule
                         }
@@ -548,10 +553,10 @@
                             if (!this.form.module_id) {
                                 this.form.module_id = ret.id
                                 // 追加一项
-                                this.resultData[this.currentData.pindex]['modules'].push(this.form)
+                                this.resultData[this.currentData.pindex]['items'].push(this.form)
                             } else {
                                 // 修改当前项
-                                this.resultData[this.currentData.pindex]['modules'][this.currentData.index] = this.form
+                                this.resultData[this.currentData.pindex]['items'][this.currentData.index] = this.form
                             }
                             this.changeIcon = false
                             xmview.showTip('success', msg)
@@ -563,6 +568,7 @@
             },
             // 新建方案
             createScheme () {
+                alert('add')
                 mobileService.createScheme({type: 'index'}).then((ret) => {
                     this.resultData.push(ret.data)
                 })
@@ -608,6 +614,11 @@
             name: '', // 功能名称
             icon: '', // 功能图标
             version: '', // 版本
+            group_id:void 0,//菜单组id
+            category_id:void 0,//课程栏目id
+            id:void 0,//课程id
+
+
         }
     }
 </script>

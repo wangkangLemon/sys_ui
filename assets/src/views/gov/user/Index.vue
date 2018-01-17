@@ -94,7 +94,7 @@
                 <el-form-item prop="mobile" label="手机号" :label-width="formLabelWidth">
                     <el-input v-model="form.mobile" type="number" placeholder="手机号" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="passwd" label="密码" :label-width="formLabelWidth">
+                <el-form-item prop="passwd" label="密码" :label-width="formLabelWidth" v-if="form.role_id==1">
                     <el-input type="password" v-model="form.passwd" placeholder="密码" auto-complete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
@@ -334,14 +334,13 @@ export default {
             this.$refs[form].validate((valid) => {
                 if (valid) {
                     // this.form.birthday = timeUtils.date2Str(this.form.birthday)
+                    console.log(this.form)
                     userService.create(this.form).then((ret) => {
                         xmview.showTip('success', '添加成功')
                     }).then(() => {
                         this.addForm = false
                         this.getData()
                         this.page = 1
-                    }).catch((ret) => {
-                        xmview.showTip('error', ret.message)
                     })
                 } else {
                     return false

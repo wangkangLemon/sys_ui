@@ -86,7 +86,7 @@ export default {
                 })
             },
             meta: {
-                title: '数据更新',
+                title: '客户端菜单',
                 noback: false
             }
         },

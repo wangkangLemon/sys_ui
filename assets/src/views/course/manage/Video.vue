@@ -71,9 +71,9 @@
                                        :change="fetchData"></IndustryCompanySelect>
             </section>-->
 
-            <DateRange title="创建时间" :start="fetchParam.time_start" :end="fetchParam.time_end"
-                       @changeStart="val=> fetchParam.time_start=val "
-                       @changeEnd="val=> fetchParam.time_end=val" :change="fetchData">
+            <DateRange title="创建时间" :start="fetchParam.create_start" :end="fetchParam.create_end"
+                       @changeStart="val=> fetchParam.create_start=val "
+                       @changeEnd="val=> fetchParam.create_end=val" :change="fetchData">
             </DateRange>
         </article>
 

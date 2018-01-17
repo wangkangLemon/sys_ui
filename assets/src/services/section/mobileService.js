@@ -20,9 +20,9 @@ class MobileService {
         return api.put(finalUrl, {image, url, status})
     }
     // 查询接口
-    menuSearch ({page, page_size}) {
-        let finalUrl = `${urlPre}/menu/scheme/search`
-        return api.get(finalUrl, {page, page_size}).then((ret) => {
+    menuSearch ({page, pagesize}) {
+        let finalUrl = `${urlPre}/menu/scheme/list`
+        return api.get(finalUrl, {page, pagesize}).then((ret) => {
             return ret.data
         })
     }
@@ -54,30 +54,30 @@ class MobileService {
         return api.put(finalUrl, info)
     }
     // -------------------导航管理部分-------------
-    // 获取方案列表
-    searchScheme ({type, platform, version, page, page_size}) {
+    // 获取方案组列表
+    searchScheme ({type, platform, version, page, pagesize}) {
         let finalUrl = `${urlPre}/group/lists`
-        return api.get(finalUrl, {type, platform, version, page, page_size}).then((ret) => {
-            return ret.data
+        return api.get(finalUrl, {type, platform, version, page, pagesize}).then((ret) => {
+            return ret
         })
     }
-    // 获取方案筛选版本
+    // 获取方案组筛选版本
     searchVersions ({type, platform}) {
         let finalUrl = `${urlPre}/menuscheme/versions`
         return api.get(finalUrl, {type, platform}).then((ret) => {
             return ret.data
         })
     }
-    // 创建方案
-    createScheme ({type}) {
-        let finalUrl = `${urlPre}/menuscheme`
-        return api.post(finalUrl, {type}).then((ret) => {
+    // 创建方案组
+    createScheme ({type, version, adapter, used}) {
+        let finalUrl = `${urlPre}/group/create`
+        return api.post(finalUrl, {type,version, adapter, used}).then((ret) => {
             return ret
         })
     }
-    // 克隆方案
+    // 克隆方案组
     cloneScheme ({scheme_id}) {
-        let finalUrl = `${urlPre}/menuscheme/clone`
+        let finalUrl = `${urlPre}/group/clone/${scheme_id}`
         return api.post(finalUrl, {scheme_id}).then((ret) => {
             return ret.data
         })
@@ -113,12 +113,18 @@ class MobileService {
     }
     // 获取功能列表
     getModules ({version}) {
-        let finalUrl = `${urlPre}/appmodule/search`
+        let finalUrl = `${urlPre}/list`
         return api.get(finalUrl, {version}).then((ret) => {
             return ret.data
         })
     }
     // 添加功能
+    // addModule ({scheme_id, type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group = 0}) {
+    //     let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module`
+    //     return api.post(finalUrl, {type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group}).then((ret) => {
+    //         return ret.data
+    //     })
+    // }
     addModule ({scheme_id, type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group = 0}) {
         let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module`
         return api.post(finalUrl, {type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group}).then((ret) => {
@@ -131,12 +137,28 @@ class MobileService {
         return api.put(finalUrl, {type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text})
     }
     // 上传功能图标
-    uploadModuleScheme ({image, alias, scheme_id}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module/icon`
-        return api.post(finalUrl, {image, alias}).then((ret) => {
+    // uploadModuleScheme ({image, alias, scheme_id}) {
+    //     let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module/icon`
+    //     return api.post(finalUrl, {image, alias}).then((ret) => {
+    //         return ret.data
+    //     })
+    // }
+
+    uploadModuleScheme ({image, alias, scheme_id, biz='section'}) {
+        let finalUrl =  `${config.apiHost}/common/upload/base64`
+        return api.post(finalUrl, {image, alias, biz}).then((ret) => {
+            xmview.showTip('success',ret.message)
             return ret.data
         })
     }
+    //      // 专家上传头像
+    // uploadExpertsAvatar({ image, alias = Date.now() + '.jpg', biz='expert' }) {
+    //     let url = `${config.apiHost}/common/upload/base64`
+    //     return api.post(url, { image, alias, biz }).then((ret) => {
+    //         xmview.showTip('success',ret.message)
+    //             return ret.data
+    //     })
+    // }
     // 功能排序
     sortModule ({scheme_id, modules}) {
         let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module/sort`

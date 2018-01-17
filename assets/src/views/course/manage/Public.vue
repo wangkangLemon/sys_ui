@@ -65,17 +65,18 @@
                 <CourseCategorySelect :onchange="fetchData" v-model="fetchParam.category_id"></CourseCategorySelect>
             </section>
 
-            <DateRange title="创建时间" :start="fetchParam.time_start" :end="fetchParam.time_end" @changeStart="val=> fetchParam.time_start=val "
-                @changeEnd="val=> fetchParam.time_end=val" :change="fetchData">
+            <DateRange title="创建时间" :start="fetchParam.create_start" :end="fetchParam.create_end" @changeStart="val=> fetchParam.create_start=val "
+                @changeEnd="val=> fetchParam.create_end=val" :change="fetchData">
             </DateRange>
 
-            <section>
+            <!--<section>
                 <i>课后考试</i>
                 <el-select v-model="fetchParam.need_testing" placeholder="未选择" @change="fetchData" :clearable="true">
                     <el-option label="不需要" value="0"></el-option>
                     <el-option label="需要" value="1"></el-option>
                 </el-select>
-            </section>
+            </section>-->
+
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow"
@@ -171,8 +172,8 @@
             page: 1,
             pagesize: 15,
             level: void 0,
-            time_start: void 0,
-            time_end: void 0,
+            create_start: void 0,
+            create_end: void 0,
             need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
             status: '', // 2- 视屏转码中 1-下线 0-正常
         }

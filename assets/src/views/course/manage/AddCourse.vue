@@ -75,7 +75,7 @@
                     <el-form-item label="课程名称" prop="course_name">
                         <el-input v-model="fetchParam.course_name"></el-input>
                     </el-form-item>
-                    <el-form-item label="课程类别">
+                    <el-form-item label="课程类别" prop="type">
                         <el-select v-model="fetchParam.type" placeholder="请选择">
                             <el-option label="私有课程" value="private"></el-option>
                             <el-option label="公开课程" value="public"></el-option>
@@ -96,8 +96,8 @@
                     <el-form-item label="课程封面图" prop="image">
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
                         <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
-                    </el-form-item>
-                    <el-form-item label="课程类型">
+                    </el-form-item> 
+                    <el-form-item label="课程类型" prop="material_type">
                         <el-select v-model="fetchParam.material_type" @change="typeChange" placeholder="请选择" >
                             <el-option label="视频" value="video"></el-option>
                             <el-option label="WORD" value="doc"></el-option>
@@ -268,6 +268,8 @@ export default {
                 description: { required: true, message: '请输入课程介绍', trigger: 'change' },
                 material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
                 need_testing: { required: true, type: 'number', message: '请选择是否需要课后考试', trigger: 'change' },
+                type: { required: true,  message: '请选择课程类别', trigger: 'change' },
+                material_type: { required: true,  message: '请选择题材类型', trigger: 'change' },
             },
             accept: '*.doc,*.docx', // 上传的文件格式
             // 考试设置部分
@@ -537,8 +539,8 @@ function getOrignData() {
         image: void 0,
         tags: void 0,
         gov:void 0, 
-        type: void 0, // 课程类别 private,public,industry,gov
-        material_type: void 0, //教材类型	video,doc,ppt,pdf
+        type: '', // 课程类别 private,public,industry,gov
+        material_type: '', //教材类型	video,doc,ppt,pdf
         material_id: void 0,
         material_name: '选择视频',
         albumid: void 0,
