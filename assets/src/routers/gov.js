@@ -116,5 +116,45 @@ export default {
             }
         },
 
+        {
+            path: 'coursetask',
+            name: 'gov-coursetask',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/Coursetask.vue'))
+                })
+            },
+            meta: {
+                title: '课程任务-企业',
+                noback: true
+            }
+        },
+        {
+            path: 'coursetask/template',
+            name: 'gov-coursetasktemplate',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/Coursetasktemplate.vue'))
+                })
+            },
+            meta: {
+                title: '课程任务模板-企业',
+                noback: true
+            }
+        },
+        // 添加修改课程任务模板
+        {
+            path: 'coursetask/template/add',
+            name: 'coursetask-template-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/AddCoursetasktemplate.vue'))
+                })
+            },
+            meta: {
+                title: '添加课程任务模板-企业',
+            }
+        },
+
     ]
 }
