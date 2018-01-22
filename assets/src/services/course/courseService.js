@@ -156,7 +156,7 @@ class CourseService {
         let url = urlPre + '/lists'
         return api.get(url, { course_name, status, category_id, create_start, create_end, page, pagesize }, false).then(ret => {
             if (ret.code == 0) {
-                return ret.data
+                return ret
             } else {
                 return Promise.reject(ret)
             }
@@ -164,10 +164,10 @@ class CourseService {
     }
 
     // 创建
-    addCourse({  category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status}) {
+    addCourse({  category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status, sort}) {
 
         let url = urlPre + '/create'
-        return api.post(url, {  category_id,  experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status }).then(ret => {
+        return api.post(url, {  category_id,  experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status, sort}).then(ret => {
             if (ret.code == 0) {
                 // console.log(ret)
                 return ret.data
@@ -186,10 +186,10 @@ class CourseService {
         })
     }
     // 修改课程
-    editCourse({ govid, contentid, category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, status, limit_time, limit_repeat, score_pass }) {
+    editCourse({ govid, contentid, category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, status, limit_time, limit_repeat, score_pass, sort}) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/edit/${contentid}`
-        return api.post(finalUrl, { category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, limit_time, status, limit_repeat, score_pass }).then((ret) => {
+        return api.post(finalUrl, { category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, limit_time, status, limit_repeat, score_pass, sort}).then((ret) => {
             return ret.data
         })
     }

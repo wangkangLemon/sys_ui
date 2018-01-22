@@ -66,12 +66,6 @@
                     <el-input v-model.mobile="fetchParam.mobile"></el-input>
                 </el-form-item>
 
-                <!--<el-form-item label="密码" prop="password" v-if="this.$route.params.id">
-                    <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="password" v-else>
-                    <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""  ></el-input>
-                </el-form-item>-->
                 <el-form-item label="角色" prop="role_id" :fetch-suggestions="querySearch">
                     <el-select class="select" v-model="fetchParam.role_id" placeholder="请输入角色">
                         <el-option  v-for="item in  role_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -81,9 +75,6 @@
                     <el-input v-model.password="fetchParam.password" v-if="this.$route.params.id" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
                     <el-input v-model.password="fetchParam.password" v-else auto-complete="off" type="password" key=""  ></el-input>
                 </el-form-item>
-
-
-                
 
                 <!--<el-form-item label="部门" prop="gov_id" :fetch-suggestions="querySearch">
                     <el-select class="select" v-model="fetchParam.gov_id" placeholder="请选择部门">

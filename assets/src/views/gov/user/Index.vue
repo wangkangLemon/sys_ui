@@ -223,7 +223,21 @@ function getFetchParam() {
         village_id: '',
     }
 }
-
+ function clearFormFn() {
+            return  {                // 添加表单属性值
+                    role_id: void 0,        //角色 无管理权限0 
+                    // area_id:0,         //地区id
+                    gov_id: void 0,    //部门id
+                    name: '',          // 姓名
+                    mobile: '',        // 手机
+                    passwd: '',        // 密码qu
+                    nickname: '',
+                    gov_name:'',
+                    // address: '',       // 地址
+                    // sex: 0,            // 性别
+                    // birthday: ''       // 生日
+                }
+    }
 export default {
     components: {
         DateRange,
@@ -271,19 +285,7 @@ export default {
                 birthday: '',          // 生日
                 addate: ''
             },
-            form: {                // 添加表单属性值
-                    role_id: void 0,        //角色 无管理权限0 
-                    // area_id:0,         //地区id
-                    gov_id: void 0,    //部门id
-                    name: '',          // 姓名
-                    mobile: '',        // 手机
-                    passwd: '',        // 密码qu
-                    nickname: '',
-                    gov_name:'',
-                    // address: '',       // 地址
-                    // sex: 0,            // 性别
-                    // birthday: ''       // 生日
-                },
+            form: clearFormFn(),
                 rules: {
                     department_id: [
                         {type: 'number', required: true, message: '必须填写', trigger: 'blur'}
@@ -320,6 +322,7 @@ export default {
                 //     }
                 // }).then(() => {
                     this.addForm = true
+                    this.form= clearFormFn()
                     this.form.gov_id = this.fetchParam.gov_id
                     // alert('this.form.gov_id='+this.form.gov_id)
                 // })

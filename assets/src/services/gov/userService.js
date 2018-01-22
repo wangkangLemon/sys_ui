@@ -29,9 +29,9 @@ class sysService {
     }
 
     // 创建
-    create({ role_id, area_id, gov_id, name, mobile, email, password }) {
+    create({ role_id, area_id, gov_id, name, mobile, email, passwd }) {
         let url = urlPre + '/create'
-        return api.post(url, { role_id, area_id, gov_id, name, mobile, email, password }).then(ret => {
+        return api.post(url, { role_id, area_id, gov_id, name, mobile, email, passwd }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {

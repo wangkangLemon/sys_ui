@@ -55,34 +55,29 @@
                     v-on:change="val=>form.department_id = val">
                     </departmentSelect>
                 </el-form-item>-->
-                <el-form-item prop="role_id" label="角色" :label-width="formLabelWidth">
-                    <!--<departmentSelect :type="govID" v-model="form.role_id"
-                    v-on:change="val=>form.role_id = val">
-                    </departmentSelect>-->
-                    <el-select clearable v-model="form.role_id" placeholder="未选择">
-                    <el-option v-for="(item, index) in roleTypes" :label="item.name" :value="item.role_id" :key="item.role_id">
-                    </el-option>
-                </el-select>
-                </el-form-item>
+                
                 <el-form-item prop="name" label="姓名" :label-width="formLabelWidth">
                     <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
                 </el-form-item>
-                <!--<el-form-item prop="sex" label="性别" :label-width="formLabelWidth">
-                    <el-radio class="radio" v-model="form.sex" :label="1">男</el-radio>
-                    <el-radio class="radio" v-model="form.sex" :label="0">女</el-radio>
-                </el-form-item>-->
+                <el-form-item label="昵称" :label-width="formLabelWidth">
+                    <el-input v-model="form.nickname" placeholder="昵称" auto-complete="off"></el-input>
+                </el-form-item>
                 <el-form-item prop="mobile" label="手机号" :label-width="formLabelWidth">
                     <el-input v-model="form.mobile" type="number" placeholder="手机号" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="passwd" label="密码" :label-width="formLabelWidth">
+                 <el-form-item prop="role_id" label="角色" :label-width="formLabelWidth">
+                    <el-select clearable v-model="form.role_id" placeholder="未选择">
+                        <el-option v-for="(item, index) in roleTypes" :label="item.name" :value="item.role_id" :key="item.role_id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="passwd" label="密码" v-if="form.role_id==1" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.passwd" placeholder="密码" auto-complete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
                     <el-date-picker type="date" v-model="form.birthday"></el-date-picker>
                 </el-form-item>-->
-                <el-form-item label="昵称" :label-width="formLabelWidth">
-                    <el-input v-model="form.nickname" placeholder="昵称" auto-complete="off"></el-input>
-                </el-form-item>
+                
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addForm = false">取 消</el-button>
@@ -229,18 +224,7 @@
                 departmentData: [],
                 companyID: this.$route.params.gov_id,
                 showDetail: false,     // 是否显示详情对话框
-                form: {                // 表单属性值
-                    role_id: void 0,        //角色 无管理权限0 
-                    // area_id:0,         //地区id
-                    gov_id: void 0,    //部门id
-                    name: '',          // 姓名
-                    mobile: '',        // 手机
-                    passwd: '',        // 密码qu
-                    nickname: '',
-                    // address: '',       // 地址
-                    // sex: 0,            // 性别
-                    // birthday: ''       // 生日
-                },
+                form: clearFormFn(),
                 rules: {
                     department_id: [
                         {type: 'number', required: true, message: '必须填写', trigger: 'blur'}
@@ -271,7 +255,6 @@
         },
         computed: {
             govID () { 
-                console.log( 'this.$route.params.gov_id===='+1)
                 return this.$route.params.gov_id
             },
             category () {  //1 系统 2 政府
@@ -338,6 +321,7 @@
                 //         this.departmentData = ret.data
                 //     }
                 // }).then(() => {
+                    this.form = clearFormFn()
                     this.addForm = true
                 // })
             },
@@ -357,8 +341,7 @@
                 }).then((ret) => {
                     this.adminData = ret
                     this.loading = false
-                    console.log( typeof(ret))  // object
-                    console.log( 'ret.length='+ret.length) 
+                    // console.log( typeof(ret))  // object
                     if(ret.length== 0){
                         return
                     }
@@ -417,4 +400,19 @@
             }
         }
     }
+        function clearFormFn() {
+            return  {                // 表单属性值
+                    role_id: void 0,        //角色 无管理权限0 
+                    // area_id:0,         //地区id
+                    gov_id: void 0,    //部门id
+                    name: '',          // 姓名
+                    mobile: '',        // 手机
+                    passwd: '',        // 密码qu
+                    nickname: '',
+                    // address: '',       // 地址
+                    // sex: 0,            // 性别
+                    // birthday: ''       // 生日
+                }
+    }
+
 </script>

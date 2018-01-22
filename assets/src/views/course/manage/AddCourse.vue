@@ -125,10 +125,13 @@
                         <el-input v-model="fetchParam.description" type="textarea" :autosize="{ minRows: 4, maxRows: 6}" placeholder="请输入内容">
                         </el-input>
                     </el-form-item>
-    
                     <el-form-item label="课程标签">
                         <vTags v-model="courseTags"></vTags>
                     </el-form-item>
+                    <el-form-item label="排序" prop="sort">
+                        <el-input v-model="fetchParam.sort" type="number" placeholder="请输入序列号"></el-input>
+                    </el-form-item>
+                    
     
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
@@ -554,6 +557,7 @@ function getOrignData() {
         price: void 0,
         price_floa: void 0,
         experts_id: void 0,
+        sort:void 0,
     }
 
     return orignData

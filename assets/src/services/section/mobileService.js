@@ -17,9 +17,9 @@ class MobileService {
     // 更新启动图
     updateBoot ({company_id, image, url, status}) {
         let finalUrl = `${urlPre}/boot`
-        return api.put(finalUrl, {image, url, status})
+        return api.post(finalUrl, {image, url, status})
     }
-    // 查询接口
+    // 查询接口  13.8 菜单列表接口 接口地址：/appmenu/lists
     menuSearch ({page, pagesize}) {
         let finalUrl = `${urlPre}/menu/scheme/list`
         return api.get(finalUrl, {page, pagesize}).then((ret) => {
@@ -29,17 +29,17 @@ class MobileService {
     // 应用导航方案
     applyMenu (id) {
         let finalUrl = `${urlPre}/menu/scheme/${id}/enable`
-        return api.put(finalUrl)
+        return api.post(finalUrl)
     }
     // 克隆导航
     menuClone (id) {
         let finalUrl = `${urlPre}/menu/scheme/${id}/copy`
-        return api.put(finalUrl)
+        return api.post(finalUrl)
     }
     // 删除导航方案
     menuDelete (id) {
         let finalUrl = `${urlPre}/menu/scheme/${id}`
-        return api.del(finalUrl)
+        return api.get(finalUrl)
     }
     // 上传导航图标
     uploadNavIcon ({image, alias}) {
@@ -49,9 +49,9 @@ class MobileService {
         })
     }
     // 更新方案
-    updateMenu ({info, scheme_id}) {
-        let finalUrl = `${urlPre}/menu/scheme/${scheme_id}`
-        return api.put(finalUrl, info)
+    updateMenu ({info, group_id}) {
+        let finalUrl = `${urlPre}/menu/scheme/${group_id}`
+        return api.post(finalUrl, info)
     }
     // -------------------导航管理部分-------------
     // 获取方案组列表
@@ -69,40 +69,54 @@ class MobileService {
         })
     }
     // 创建方案组
-    createScheme ({type, version, adapter, used}) {
+    createScheme ({ version, adapter, used}) {
         let finalUrl = `${urlPre}/group/create`
-        return api.post(finalUrl, {type,version, adapter, used}).then((ret) => {
+        return api.post(finalUrl, {version, adapter, used}).then((ret) => {
+            return ret
+        })
+    }
+    // 编辑方案组
+    editScheme ({id,version, adapter, used}) {
+        let finalUrl = `${urlPre}/group/edit/${id}`
+        return api.post(finalUrl, {version, adapter, used}).then((ret) => {
             return ret
         })
     }
     // 克隆方案组
-    cloneScheme ({scheme_id}) {
-        let finalUrl = `${urlPre}/group/clone/${scheme_id}`
-        return api.post(finalUrl, {scheme_id}).then((ret) => {
+    cloneScheme ({group_id}) {
+        let finalUrl = `${urlPre}/group/clone/${group_id}`
+        return api.post(finalUrl, {group_id}).then((ret) => {
             return ret.data
         })
     }
+    
     // 删除导航方案
-    deleteScheme ({scheme_id}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}`
-        return api.del(finalUrl)
+    deleteScheme ({group_id}) {
+        let finalUrl = `${urlPre}/group/delete/${group_id}`
+        return api.get(finalUrl)
     }
     // 启用方案
-    activeScheme ({scheme_id, ios, android}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}/active`
-        return api.post(finalUrl, {ios, android})
+    // activeScheme ({group_id, ios, android}) {
+    //     let finalUrl = `${urlPre}/menuscheme/${group_id}/active`
+    //     return api.post(finalUrl, {ios, android})
+    // }
+    activeScheme ({group_id,used}) {
+        let finalUrl = `${urlPre}/group/edit/${group_id}`
+        return api.post(finalUrl, {used}).then((ret) => {
+            return ret.data
+        })
     }
     // 获取平台版本列表
-    getPlatVersions ({scheme_id}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}/validate`
+    getPlatVersions ({group_id}) {
+        let finalUrl = `${urlPre}/menuscheme/${group_id}/validate`
         return api.get(finalUrl).then((ret) => {
             return ret.data
         })
     }
     // 删除功能
-    deleteModule ({scheme_id, module_id}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module/${module_id}`
-        return api.del(finalUrl)
+    deleteModule ({group_id, module_id}) {
+        let finalUrl = `${urlPre}/delete/${module_id}`
+        return api.get(finalUrl)
     }
     // 获取功能版本
     getModuleVersions () {
@@ -119,32 +133,32 @@ class MobileService {
         })
     }
     // 添加功能
-    // addModule ({scheme_id, type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group = 0}) {
-    //     let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module`
+    // addModule ({group_id, type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group = 0}) {
+    //     let finalUrl = `${urlPre}/menuscheme/${group_id}/module`
     //     return api.post(finalUrl, {type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group}).then((ret) => {
     //         return ret.data
     //     })
     // }
-    addModule ({scheme_id, type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group = 0}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module`
-        return api.post(finalUrl, {type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text, sort, group}).then((ret) => {
+    addModule ({category_id, group_id, name, model, path, icon, title, download, sort}) {
+        let finalUrl = `${urlPre}/create`
+        return api.post(finalUrl, {category_id, group_id, name, model, path, icon, title, download, sort}).then((ret) => {
             return ret.data
         })
     }
     // 更新功能
-    updateModule ({scheme_id, module_id, type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module/${module_id}`
-        return api.put(finalUrl, {type, type_id, url, name, icon, notify, notify_node, notify_icon, notify_text})
+    updateModule ({category_id, group_id, name, model, path, icon, title, download, sort, module_id}) {
+        let finalUrl = `${urlPre}/edit/${module_id}`
+        return api.post(finalUrl, {category_id, group_id, name, model, path, icon, title, download, sort})
     }
     // 上传功能图标
-    // uploadModuleScheme ({image, alias, scheme_id}) {
-    //     let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module/icon`
+    // uploadModuleScheme ({image, alias, group_id}) {
+    //     let finalUrl = `${urlPre}/menuscheme/${group_id}/module/icon`
     //     return api.post(finalUrl, {image, alias}).then((ret) => {
     //         return ret.data
     //     })
     // }
 
-    uploadModuleScheme ({image, alias, scheme_id, biz='section'}) {
+    uploadModuleScheme ({image, alias, group_id, biz='section'}) {
         let finalUrl =  `${config.apiHost}/common/upload/base64`
         return api.post(finalUrl, {image, alias, biz}).then((ret) => {
             xmview.showTip('success',ret.message)
@@ -160,8 +174,8 @@ class MobileService {
     //     })
     // }
     // 功能排序
-    sortModule ({scheme_id, modules}) {
-        let finalUrl = `${urlPre}/menuscheme/${scheme_id}/module/sort`
+    sortModule ({group_id, modules}) {
+        let finalUrl = `${urlPre}/menuscheme/${group_id}/module/sort`
         return api.post(finalUrl, {modules})
     }
 }

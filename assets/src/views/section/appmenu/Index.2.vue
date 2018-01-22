@@ -22,7 +22,7 @@
             .img-wrap {
                 width: 140px;
                 height: 140px;
-                >img {
+                > img {
                     border-radius: 50%;
                     width: 100%;
                     height: 100%;
@@ -37,7 +37,7 @@
             &:hover {
                 background: #ededed;
             }
-            >section {
+            > section {
                 display: inline-block;
                 vertical-align: top;
             }
@@ -108,13 +108,13 @@
                     display: inline-block;
                     vertical-align: top;
                 }
-                >i {
+                > i {
                     width: 105px;
                     margin-top: 5px;
                 }
-                >div {
+                > div {
                     width: 80%;
-                    >em {
+                    > em {
                         margin: 5px;
                         padding: 2px 5px;
                         background: rgba(0, 0, 0, 0.1);
@@ -132,7 +132,7 @@
             section {
                 display: flex;
                 margin-bottom: 10px;
-                >i {
+                > i {
                     display: block;
                     width: 100px;
                     text-align: right;
@@ -154,21 +154,22 @@
 </style>
 <template>
     <article class="index-nav-container" v-loading="containerLoading">
-        <!--添加/编辑组     方案====菜单组 -->
-        <el-dialog :title="dialogGroupTitle" v-model="addForm">
+         <!--添加/编辑组     方案====菜单组 -->
+        <el-dialog title="新建方案" v-model="addForm">
             <el-form :model="fetchGroup" :rules="grouprules" ref="fetchGroup" :label-width="formLabelWidth">
-                <el-form-item prop="version" label="分组名称">
+                <el-form-item prop="version" label="分组名称" >
                     <el-input v-model="fetchGroup.version" placeholder="分组名称如v1 v2" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="adapter" label="适配版本">
+                <el-form-item prop="adapter" label="适配版本" >
                     <el-input v-model="fetchGroup.adapter" placeholder="适配版本" auto-complete="off"></el-input>
                 </el-form-item>
-                <!--<el-form-item prop="used" label="是否使用中">
+                <el-form-item prop="used" label="是否使用中" >
                     <el-radio-group v-model="fetchGroup.used">
                         <el-radio :label="0">未使用</el-radio>
                         <el-radio :label="1">使用</el-radio>
                     </el-radio-group>
-                </el-form-item>-->
+                    <!--<el-input v-model="fetchGroup.used" placeholder="分组名称如v1 v2" auto-complete="off"></el-input>-->
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addForm = false">取 消</el-button>
@@ -179,14 +180,13 @@
         <el-dialog class="form" :title="dialogTitle" v-model="changeIcon" @open="dialogOpen">
             <el-form :model="form" :rules="rules" ref="form" label-width="120px">
                 <el-form-item label="推荐类别">
-                    <el-select clearable v-model="form.model">
-                        <el-option label="原生功能" value="native"></el-option>
-                        <el-option label="混合应用" value="hybrid"></el-option>
+                    <el-select clearable v-model="form.model" @change="typeChange">
+                        <el-option label="功能推荐" value="app_module"></el-option>
                         <el-option label="添加链接" value="link"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="功能支持版本" v-if="form.type == 'app_module'">
-                    <el-select clearable placeholder="全部" v-model="form.version">
+                    <el-select clearable placeholder="全部" v-model="form.version" @change="versionChange">
                         <el-option v-for="(item,index) in modulesVersions" :label="item" :value="item" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
@@ -195,28 +195,28 @@
                         <el-option v-for="(item,index) in items" :label="item.name" :value="item.id" :key="index"></el-option>
                     </el-select>
                 </el-form-item>-->
-                <el-form-item prop="category_id" label="课程栏目">
-                    <el-select v-model="form.category_id" @change="getCourseCataName(category_id)" :placeholder="form.courseName">
+                <el-form-item prop="category_id" label="课程栏目" >
+                    <el-select v-model="form.category_id" @change="getCourseCataName" :placeholder="form.id" >
                         <el-option v-for="(item,index) in CourseCatas" :label="item.name" :value="item.id" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="icon" v-loading="loading" label="应用logo">
-                    <div class="img-wrap" v-if="form.icon">
-                        <img :src="form.icon | fillImgPath" alt="" />
+                    <div class="img-wrap" v-if="form.icon" >
+                        <img :src="form.icon | fillImgPath" alt=""/>
                     </div>
                     <p class="tip">建议上传图片尺寸为 140*140</p>
                     <el-button type="primary" @click="() => {$refs.imgcropper.chooseImg()}">上传</el-button>
                 </el-form-item>
-                <el-form-item prop="name" label="应用名称">
+                <el-form-item prop="name" label="应用名称" >
                     <el-input v-model="form.name" placeholder="控制在4个字以内，展示效果最佳"></el-input>
                 </el-form-item>
-                <el-form-item prop="title" label="标题">
+                <el-form-item prop="title" label="标题" >
                     <el-input v-model="form.title" placeholder="请输入标题"></el-input>
                 </el-form-item>
-                <el-form-item prop="sort" label="排序" v-if="form.id">
+                <el-form-item prop="sort" label="排序" >
                     <el-input v-model="form.sort" placeholder="请输入序列号"></el-input>
                 </el-form-item>
-                <el-form-item prop="path" label="应用链接" >
+                <el-form-item prop="path" label="应用链接" v-if="form.type == 'link'">
                     <el-input v-model="form.path" placeholder="请以http://或者https://开头"></el-input>
                 </el-form-item>
             </el-form>
@@ -227,7 +227,7 @@
         </el-dialog>
         <!--启用弹窗-->
         <el-dialog class="apply-version" title="选择方案应用平台和版本" :visible.sync="versionDialog">
-            <article v-loading="versionLoading">
+            <article v-loading="versionLoading" >
                 <p>此方案可应用到以下平台版本：</p>
                 <section>
                     <i>Android：</i>
@@ -250,7 +250,7 @@
         <div class="add">
             <el-button type="primary" icon="plus" class="recharge" @click="openScheme">新建方案</el-button>
         </div>
-        <!--<section class="search">
+        <section class="search">
             <section>
                 <i>平台</i>
                 <el-select clearable v-model="fetchParam.plat" @change="()=>{searchVersions();getData()}">
@@ -264,16 +264,18 @@
                     <el-option v-for="(item,index) in versions" :label="item" :value="item" :key="index"></el-option>
                 </el-select>
             </section>
-        </section>-->
-
+        </section>
+        
         <article class="nav-list" v-for="(list,pindex) in resultData" :key="list.id">
             <section class="nav-imgs">
-                <section class="dragWrap" v-if="!list.used">
-                    <!--没有 active激活（使用中）时有编辑和删除  -->
-                    <div class="nav-item used" v-for="(item,index) in list.items" v-dragging="{item: item, list: list.items, group: 'item' + list.id}"
-                        :key="item.name">
+                <section class="dragWrap" v-if="!list.active"> 
+                                             <!--没有 active激活（使用中）时有编辑和删除  -->
+                    <div class="nav-item active"
+                         v-for="(item,index) in list.items"
+                         v-dragging="{item: item, list: list.items, group: 'item' + list.id}"
+                         :key="item.name">
                         <div class="parent" @mouseenter="showLayer" @mouseleave="hideLayer">
-                            <img :src="item.icon | fillImgPath" alt="" />
+                            <img :src="item.icon | fillImgPath" alt=""/>
                             <p>{{item.name}}</p>
                             <div class="operate-layer">
                                 <i class="iconfont icon-edit" @click="editModule(item, list.id, pindex, index)"></i>
@@ -281,20 +283,22 @@
                             </div>
                         </div>
                     </div>
-                    <div @click="addModule(list.id, pindex)" class="nav-item additem" v-if="!list.used">
+                    <div @click="addModule(list.id, pindex)" class="nav-item additem" v-if="!list.active">
                         <div>
                             <img src="../images/add.png" alt="">
                         </div>
                     </div>
                 </section>
-                <section class="dragWrap" v-if="list.used">
-                    <div class="nav-item" v-for="(item,index) in list.items" :key="list.id + index">
+                <section class="dragWrap" v-if="list.active">
+                    <div class="nav-item"
+                         v-for="(item,index) in list.items"
+                         :key="list.id + index">
                         <div>
-                            <img :src="item.icon | fillImgPath" alt="" />
+                            <img :src="item.icon | fillImgPath" alt=""/>
                             <p>{{item.name}}</p>
                         </div>
                     </div>
-                    <div @click="addModule(list.id, pindex)" class="nav-item additem" v-if="!list.used">
+                    <div @click="addModule(list.id, pindex)" class="nav-item additem" v-if="!list.active">
                         <div>
                             <img src="../images/add.png" alt="">
                         </div>
@@ -302,13 +306,12 @@
                 </section>
             </section>
             <section class="nav-operate">
-                <span v-if="list.used">使用中</span>
-                <el-button type="text" v-if="!list.used" @click="getPlatVersions(list,list.id)">启用</el-button>
-                <el-button type="text" @click="cloneScheme(list.id)">克隆</el-button>
-                <el-button type="text" @click="editScheme(list,list.id)">编辑</el-button>
-                <el-button type="text" @click="deleteScheme(list.id)" v-if="!list.used && !list.readonly">删除</el-button>
+                <span v-if="list.active">使用中</span>
+                <el-button type="text" v-if="!list.active" @click="getPlatVersions(list.id)">启用</el-button>
+                <el-button type="text" @click="cloneScheme(list.id)">克隆{{list.id}}</el-button>
+                <el-button type="text" @click="deleteScheme(list.id)" v-if="!list.active && !list.readonly">删除</el-button>
             </section>
-            <div class="platform" v-if="list.used">
+            <div class="platform" v-if="list.active">
                 <i>使用平台和版本:</i>
                 <div>
                     <em v-for="(version,index) in list.platform_tag" :key="index">{{version}}</em>
@@ -316,33 +319,30 @@
             </div>
         </article>
         <div class="block">
-            <el-pagination :page-size="pagesize" :current-page="currentPage" @current-change="handleCurrentChange" layout="total, prev, pager, next"
-                :total="total">
+            <el-pagination
+                    :page-size="pagesize"
+                    :current-page="currentPage"
+                    @current-change="handleCurrentChange"
+                    layout="total, prev, pager, next"
+                    :total="total">
             </el-pagination>
         </div>
-        <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="cropperFn" :aspectRatio="1" :isRound="true"></ImagEcropperInput>
+        <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="cropperFn" :aspectRatio="1"
+                           :isRound="true"></ImagEcropperInput>
     </article>
 </template>
 <script>
     import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
     import mobileService from '../../../services/section/mobileService.js'
     import courseService from '../../../services/course/courseService.js'
-    import {
-        getArrayIdIndex
-    } from '../../../utils/common'
+    import {getArrayIdIndex} from '../../../utils/common'
     import clone from 'clone'
-    export default {
+    export default{
         name: 'navigatioin-index',
-        data() {
+        data () {
             return {
-                obj: {
-                    bbb: void 0
-                },
-                aaa: 'aaa',
-                category_id: '',
                 containerLoading: false,
                 dialogTitle: '', // 编辑功能标题
-                dialogGroupTitle:'',// 编辑菜单组标题
                 versions: [], // 搜索版本列表
                 fetchParam: { // 搜索条件
                     plat: '',
@@ -361,97 +361,52 @@
                 },
                 changeIcon: false,
                 modulesVersions: [], // 获取所有功能的版本
-                CourseCatas: [], //所有课程列表名称
+                CourseCatas:[], //所有课程列表名称
                 items: [], // 获取功能列表
                 total: 0,
                 currentPage: 1,
                 pagesize: 10,
                 resultData: [],
                 form: clearFn(),
-                
-                fetchGroup: groupFn(),
-                grouprules: {
-                    version: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'blur'
-                    },
-                    adapter: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'blur'
-                    },
-                    // used: {
-                    //     required: true,
-                    //     message: '请选择使用状态',
-                    //     trigger: 'change'
-                    // },
+                fetchGroup:groupFn(),
+                grouprules:{
+                    version: {required: true, message: '必须填写', trigger: 'blur'},
+                    adapter:{required: true, message: '必须填写', trigger: 'blur'},
+                    used: {required: true, message: '请选择使用状态'},
                 },
                 rules: {
-                    // category_id: {
-                    //     required: true,
-                    //     message: '必须填写',
-                    // },
-                    name: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'blur'
-                    },
-                    model: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'blur'
-                    },
-                    path: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'change'
-                    },
-                    icon: {
-                        required: true,
-                        message: '必须上传',
-                        trigger: 'change'
-                    },
-                    title: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'blur'
-                    },
-                    sort: {
-                        required: true,
-                        message: '必须填写',
-                    }
+                    category_id: {required: true, message: '必须填写', trigger: 'blur'},
+                    name: {required: true, message: '必须填写', trigger: 'blur'},
+                    model: {required: true, message: '必须填写', trigger: 'blur'},
+                    path: {required: true, message: '必须填写', trigger: 'change'},
+                    icon: {required: true, message: '必须上传', trigger: 'change'},
+                    title: {required: true, message: '必须填写', trigger: 'blur'},
+                    sort: {required: true, message: '必须填写', trigger: 'blur'}
                 },
                 addForm: false, // 新建组弹窗是否显示
                 formLabelWidth: '120px', // 表单label的宽度
-
+                
             }
         },
         watch: {
-            'form.version' (val) {
-                // this.versionChange().then((ret) => {
-                //     if (getArrayIdIndex(ret, this.form.type_id) == -1) {
-                //         this.form.type_id = ''
-                //     }
-                // })
-            },
-            'fetchGroup.version'(val){
-                if(this.fetchGroup.version=="undefined"&&this.fetchGroup.adapter=="undefined"){
-                    this.fetchGroup.version=''
-                    this.fetchGroup.adapter=''
-                }
+            'form.version'(val) {
+                this.versionChange().then((ret) => {
+                    if (getArrayIdIndex(ret, this.form.type_id) == -1) {
+                        this.form.type_id = ''
+                    }
+                })
             }
         },
-        created() {
+        created () {
             this.getData().then(() => {
                 xmview.setContentLoading(false)
             })
         },
-        mounted() {
+        mounted () {
             this.drag()
         },
         methods: {
-            drag() {
+            drag () {
                 this.$dragging.$on('dragged', (value) => {
                     // 根据方案id获取方案的索引
                     let schemeIndex = getArrayIdIndex(this.resultData, value.draged.menu_scheme_id)
@@ -472,38 +427,51 @@
                     })
                 })
             },
-            getDefaultLogo() {
+            getDefaultLogo () {
                 // 根据功能获取到默认logo
                 let curModule = getArrayIdIndex(this.items, this.form.type_id)
                 if (curModule > -1) this.form.icon = this.items[curModule]['icon']
             },
-            getCourseCataName(category_id) {
-                console.log(category_id)
+            getCourseCataName (){
+                console.log('name')
             },
-            dialogOpen() {
+            dialogOpen () {
                 // 当编辑弹窗显示的时候过去所有的功能版本
                 // return mobileService.getModuleVersions().then((ret) => {
                 //     this.modulesVersions = ret.data
                 // })
 
-                this.modulesVersions = ["1.1.0", "1.2.0", "1.3.1", "2.1.0", "2.1.2", "3.0.0", "3.1.0"]
+                this.modulesVersions=["1.1.0", "1.2.0", "1.3.1", "2.1.0", "2.1.2", "3.0.0", "3.1.0"]
                 this.getCourseName()
             },
-            getCourseName(id) {
-                courseService.search_cate({
-                    pid: 0
-                }).then((ret, index) => {
+            getCourseName(){
+                courseService.search_cate({pid: 0}).then((ret) => {
                     this.CourseCatas = ret
-                    ret.forEach(v => {
-                        if (v.id == id) {
-                            this.form.courseName = v.name;
-                            // alert(this.form.courseName)
-                        }
-                    })
-                });
-
+                    this.form.name=ret.name
+                    return ret
+                })
             },
-            addModule(group_id, pindex) {
+            // 表单版本发生变化的时候获取功能列表
+            versionChange () {
+//                this.form.type_id = ''
+                return mobileService.getModules({version: this.form.version}).then((ret) => {
+                    this.items = ret.data
+                    return ret.data
+                })
+            },
+            typeChange () {
+                if (this.form.type == 'link') {
+                    this.form.url = '' // 链接地址
+                    this.form.name = '' // 功能名称
+                    this.form.icon = '' // 功能图标
+                } else {
+                    this.form.type_id = '' // 功能id
+                    this.form.version = '' // 版本
+                    this.form.name = '' // 功能名称
+                    this.form.icon = '' // 功能图标
+                }
+            },
+            addModule (group_id, pindex) {
                 console.log(group_id, pindex)
                 this.dialogTitle = '添加'
                 this.form = clearFn()
@@ -518,136 +486,13 @@
                     this.$refs.form.resetFields()
                 })
             },
-            editModule(item, group_id, pindex, index) {
-                this.getCourseName(item.id);
-                console.log(item, group_id, pindex, index)
-                this.currentData = {
-                    pindex,
-                    index,
-                    group_id
-                }
-                this.changeIcon = true
-                // this.form.model = item.model
-                this.dialogTitle = item.name
-                item.version = ''
-                this.$nextTick(() => {
-                    this.form = clone(item)
-                    this.form.module_id=this.form.id
-                    console.log(this.form)
-                    // this.versionChange().then(() => {
-                    //     if (this.form.model == 'link') {
-                    //         this.form.group_id = group_id
-                    //         this.form.module_id = item.id
-                    //         this.form.version = ''
-                    //     } else {
-                    //         this.getActiveVersion(item.type_id).then((ret) => {
-                    //             this.form.version = ret[0].version
-                    //             this.form.group_id = group_id
-                    //             this.form.module_id = item.id
-
-                    //         })
-                    //     }
-                    // })
-                })
-            },
-            delModule(group_id, module_id, pindex, index) {
-                mobileService.deleteModule({
-                    group_id,
-                    module_id
-                }).then(() => {
-                    xmview.showTip('success', '删除成功')
-                    this.resultData[pindex].items.splice(index, 1)
-                })
-            },
-            handleCurrentChange(val) {
-                this.currentPage = val
-                this.getData()
-            },
-            getData() {
-                // 拖拽方法
-                this.containerLoading = true
-                return mobileService.searchScheme({
-                    type: 'index',
-                    platform: this.fetchParam.plat,
-                    version: this.fetchParam.version,
-                    page: this.currentPage,
-                    pagesize: this.pagesize
-                }).then((ret) => {
-                    this.resultData = ret.data
-                    // console.log(this.resultData)
-                    this.total = ret.total
-                }).then(() => {
-                    this.containerLoading = false
-                })
-            },
-            submit(form) {
-                this.$refs[form].validate((valid) => {
-                    if (valid) {
-                        let msg = ''
-                        let req = ''
-                        
-                        if (this.form.module_id) {
-                            console.log(this.form)
-                            // alert('编辑')
-                            msg = '修改成功'
-                            req = mobileService.updateModule
-                            delete this.form.sort
-                        } else {
-                            // alert('新建')
-                            this.form.sort = this.resultData[this.currentData.pindex]['items'].length + 1
-                            msg = '添加成功'
-                            req = mobileService.addModule
-                        }
-                        console.log(this.form)
-                        req(this.form).then((ret) => {
-                            // 添加
-                            if (!this.form.module_id) {
-                                this.form.module_id = ret.id
-                                // 追加一项
-                                this.resultData[this.currentData.pindex]['items'].push(this.form)
-                            } else {
-                                // 修改当前项
-                                this.resultData[this.currentData.pindex]['items'][this.currentData.index] =
-                                    this.form
-                            }
-                            this.changeIcon = false
-                            xmview.showTip('success', msg)
-                        })
-                    } else {
-                        return false
-                    }
-                })
-            },
-           
-            // 表单版本发生变化的时候获取功能列表
-            versionChange() {
-                //                this.form.type_id = ''
-                return mobileService.getModules({
-                    version: this.form.version
-                }).then((ret) => {
-                    this.items = ret.data
-                    return ret.data
-                })
-            },
-            // typeChange() {
-            //     if (this.form.type == 'link') {
-            //         this.form.url = '' // 链接地址
-            //         this.form.name = '' // 功能名称
-            //         this.form.icon = '' // 功能图标
-            //     } else {
-            //         this.form.type_id = '' // 功能id
-            //         this.form.version = '' // 版本
-            //         this.form.name = '' // 功能名称
-            //         this.form.icon = '' // 功能图标
-            //     }
-            // },
-            showLayer(e) {
+            showLayer (e) {
                 e.target.querySelector('.operate-layer').style.visibility = 'visible'
             },
-            hideLayer(e) {
+            hideLayer (e) {
                 e.target.querySelector('.operate-layer').style.visibility = 'hidden'
             },
-            cropperFn(data, ext) {
+            cropperFn (data, ext) {
                 this.loading = true
                 // 执行上传
                 mobileService.uploadModuleScheme({
@@ -659,52 +504,140 @@
                     this.form.icon = ret.url
                 })
             },
-            searchVersions() {
-                mobileService.searchVersions({
-                    type: 'index',
-                    platform: this.fetchParam.plat
-                }).then((ret) => {
-                    this.versions = ret.data
+            editModule (item, group_id, pindex, index) {
+                console.log(item, group_id, pindex, index)
+                this.currentData = {
+                    pindex,
+                    index,
+                    group_id
+                }
+                this.changeIcon = true
+                this.form.model = item.model
+                this.dialogTitle = item.name
+                item.version = ''
+                this.$nextTick(() => {
+                    this.form = clone(item)
+                    this.versionChange().then(() => {
+                        if (this.form.model == 'link') {
+                            this.form.group_id = group_id
+                            this.form.module_id = item.id
+                            this.form.version = ''
+                        } else {
+                            this.getActiveVersion(item.type_id).then((ret) => {
+                                this.form.version = ret[0].version
+                                this.form.group_id = group_id
+                                this.form.module_id = item.id
+                                
+                            })
+                        }
+                    })
                 })
+            },
+            delModule (group_id, module_id, pindex, index) {
+                mobileService.deleteModule({group_id, module_id}).then(() => {
+                    xmview.showTip('success', '删除成功')
+                    this.resultData[pindex].items.splice(index, 1)
+                })
+            },
+            handleCurrentChange (val) {
+                this.currentPage = val
+                this.getData()
+            },
+            getData () {
+                // 拖拽方法
+                this.containerLoading = true
+                return mobileService.searchScheme(
+                    {
+                        type: 'index',
+                        platform: this.fetchParam.plat,
+                        version: this.fetchParam.version,
+                        page: this.currentPage,
+                        pagesize: this.pagesize
+                    }
+                ).then((ret) => {
+                    this.resultData = ret.data
+                    // console.log(this.resultData)
+                    this.total = ret.total
+                }).then(() => {
+                    this.containerLoading = false
+                })
+            },
+            searchVersions () {
+                mobileService.searchVersions(
+                    {
+                        type: 'index',
+                        platform: this.fetchParam.plat
+                    }).then((ret) => {
+                        this.versions = ret.data
+                    })
             },
             // 获取启用的版本
-            // getPlatVersions(group_id) {
-            //     this.checkedIos = []
-            //     this.checkedAndroids = []
-            //     this.versionDialog = true
-            //     this.versionLoading = true
-            //     mobileService.getPlatVersions({
-            //         group_id
-            //     }).then((ret) => {
-            //         this.platForm = ret.data
-            //         this.platForm.group_id = group_id
-            //         this.versionLoading = false
-            //     })
-            // },
-            getPlatVersions(group,group_id){
-                mobileService.activeScheme({group_id,used:1}).then((ret) => {
-                    this.getData()
+            getPlatVersions (group_id) {
+                this.checkedIos = []
+                this.checkedAndroids = []
+                this.versionDialog = true
+                this.versionLoading = true
+                mobileService.getPlatVersions({group_id}).then((ret) => {
+                    this.platForm = ret.data
+                    this.platForm.group_id = group_id
+                    this.versionLoading = false
                 })
             },
-            cloneScheme(group_id) {
-                mobileService.cloneScheme({
-                    group_id
-                }).then(() => {
+            cloneScheme (group_id) {
+                mobileService.cloneScheme({group_id}).then(() => {
                     xmview.showTip('success', '克隆成功')
                     this.getData()
                 })
             },
-             // 新建方案
-            openScheme() {
-                this.fetchGroup = groupFn()
-                this.addForm = true
-                this.dialogGroupTitle = "添加方案组"
+            deleteScheme (group_id) {
+                mobileService.deleteScheme({group_id}).then(() => {
+                    xmview.showTip('success', '删除成功')
+                    this.getData()
+                })
             },
-            addGroup() {
-                this.$refs['fetchGroup'].validate((valid) => {
+            submit (form) {
+                this.$refs[form].validate((valid) => {
+                    if (valid) {
+                        let msg = ''
+                        let req = ''
+                        if (this.form.module_id) {
+                            msg = '修改成功'
+                            req = mobileService.updateModule
+                            delete this.form.sort
+                        } else {
+                            this.form.sort = this.resultData[this.currentData.pindex]['items'].length + 1
+                            msg = '添加成功'
+                            req = mobileService.addModule
+                        }
+                        req(this.form).then((ret) => {
+                            // 添加
+                            if (!this.form.module_id) {
+                                this.form.module_id = ret.id
+                                // 追加一项
+                                this.resultData[this.currentData.pindex]['items'].push(this.form)
+                            } else {
+                                // 修改当前项
+                                this.resultData[this.currentData.pindex]['items'][this.currentData.index] = this.form
+                            }
+                            this.changeIcon = false
+                            xmview.showTip('success', msg)
+                        })
+                    } else {
+                        return false
+                    }
+                })
+            },
+            // 新建方案
+            openScheme () {
+                this.fetchGroup=groupFn()
+                this.addForm = true
+              
+            },
+            addGroup(){
+                 this.$refs['fetchGroup'].validate((valid) => {
                     if (valid) {
                         console.log(this.fetchGroup)
-                        mobileService.createScheme(this.fetchGroup).then((ret) => {
+                          mobileService.createScheme(this.fetchGroup).then((ret) => {
                             this.addForm = false
                             this.resultData.push(ret.data)
                         })
@@ -713,62 +646,43 @@
                     }
                 })
             },
-            editScheme(group,group_id) {
-                this.dialogGroupTitle = "修改方案组"+group_id
-                this.addForm = true
-                console.log(group)
-                this.fetchGroup = group
-                mobileService.editScheme(this.fetchGroup).then((ret) => {
-                    this.fetchGroup.used=ret.used
-                })
-            },
-            deleteScheme(group_id) {
-                mobileService.deleteScheme({
-                    group_id
-                }).then(() => {
-                    xmview.showTip('success', '删除成功')
-                    this.getData()
-                })
-            },
-            
             // 启用版本号
-            activeScheme() {
+            activeScheme () {
                 if (this.checkedIos.length < 1 && this.checkedAndroids.length < 1) {
                     xmview.showTip('error', '至少选择一个版本')
                     return false
                 }
-                mobileService.activeScheme({
-                    group_id: this.platForm.group_id,
-                    ios: this.checkedIos.toString(),
-                    android: this.checkedAndroids.toString()
-                }).then(() => {
-                    xmview.showTip('success', '启用成功')
-                    this.versionDialog = false
-                    this.getData()
-                }).catch((ret) => {
-                    xmview.showTip('success', ret.message || '启用失败')
+                mobileService.activeScheme(
+                    {
+                        group_id: this.platForm.group_id,
+                        ios: this.checkedIos.toString(),
+                        android: this.checkedAndroids.toString()
+                    }
+                    ).then(() => {
+                        xmview.showTip('success', '启用成功')
+                        this.versionDialog = false
+                        this.getData()
+                    }).catch((ret) => {
+                        xmview.showTip('success', ret.message || '启用失败')
+                    })
+            },
+            getActiveVersion (type_id) {
+                return this.versionChange().then((ret) => {
+                    let versionArr = ret.filter((item) => {
+                        if (item.id == type_id) {
+                            return item
+                        }
+                    })
+                    return versionArr
                 })
             },
-            // getActiveVersion(type_id) {
-            //     return this.versionChange().then((ret) => {
-            //         let versionArr = ret.filter((item) => {
-            //             if (item.id == type_id) {
-            //                 return item
-            //             }
-            //         })
-            //         return versionArr
-            //     })
-            // },
-
+            
         },
         computed: {
-
+            
         },
-        components: {
-            ImagEcropperInput
-        }
+        components: {ImagEcropperInput}
     }
-
     function clearFn() {
         return {
             type: '', // 功能类型
@@ -776,19 +690,17 @@
             name: '', // 功能名称
             icon: '', // 功能图标
             version: '', // 版本
-            group_id: void 0, //菜单组id
-            category_id: void 0, //课程栏目id
-            id: void 0, //课程id，
-            module_id: void 0,
+            group_id: void 0,//菜单组id
+            category_id: void 0,//课程栏目id
+            id: void 0,//课程id，
             model: null,
             path: '',
             title: '',
             download: '',
             sort: void 0,
-            courseName: '请选择',
+            courseName:'',
         }
     }
-
     function groupFn() {
         return {
             version: '', // 分组名称，入v1 v2
