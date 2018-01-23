@@ -161,7 +161,7 @@ class MobileService {
     uploadModuleScheme ({image, alias, group_id, biz='section'}) {
         let finalUrl =  `${config.apiHost}/common/upload/base64`
         return api.post(finalUrl, {image, alias, biz}).then((ret) => {
-            xmview.showTip('success',ret.message)
+            xmview.showTip('success','上传成功')
             return ret.data
         })
     }

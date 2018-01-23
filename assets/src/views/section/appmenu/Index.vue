@@ -526,7 +526,7 @@
             },
             editModule(item, group_id, pindex, index) {
                 this.getCourseName(item.id);
-                console.log(item, group_id, pindex, index)
+                // console.log(item, group_id, pindex, index)
                 this.currentData = {
                     pindex,
                     index,
@@ -537,9 +537,10 @@
                 this.dialogTitle = item.name
                 item.version = ''
                 this.$nextTick(() => {
+                    console.log(item.id)
                     this.form = clone(item)
-                    this.form.module_id=this.form.id
-                    console.log(this.form)
+                    this.form.module_id= item.id
+                    // console.log(this.form)
                 })
             },
             submit(form) {
@@ -547,8 +548,8 @@
                     if (valid) {
                         let msg = ''
                         let req = ''
-                        
-                        if (this.form.module_id) {
+                        // alert('this.form.module_id='+this.form.id)
+                        if (this.form.id||this.form.module_id) {
                             console.log(this.form)
                             // alert('编辑')
                             msg = '修改成功'
@@ -556,6 +557,8 @@
                             // delete this.form.sort
                         } else {
                             // alert('新建')
+                            console.log(this.resultData[this.currentData.pindex]['items'])
+                            console.log(this.resultData[this.currentData.pindex])
                             this.form.sort = this.resultData[this.currentData.pindex]['items'].length + 1
                             msg = '添加成功'
                             req = mobileService.addModule
@@ -563,7 +566,7 @@
                         console.log(this.form)
                         req(this.form).then((ret) => {
                             // 添加
-                            if (!this.form.module_id) {
+                            if (!(this.form.id||this.form.module_id)) {
                                 this.form.module_id = ret.id
                                 // 追加一项
                                 this.resultData[this.currentData.pindex]['items'].push(this.form)
@@ -574,7 +577,9 @@
                                     this.form
                             }
                             this.changeIcon = false
+                            this.getData()
                             xmview.showTip('success', msg)
+
                         })
                     } else {
                         return false
@@ -730,13 +735,13 @@
                     if (valid) {
                         let msg = ''
                         let req = ''
-                        alert(this.fetchGroup.id)
+                        // alert(this.fetchGroup.id)
                         if (this.fetchGroup.id) {
-                            alert('编辑')
+                            // alert('编辑')
                             msg = '修改成功'
                             req = mobileService.editScheme
                         } else {
-                            alert('新建')
+                            // alert('新建')
                             msg = '添加成功'
                             req = mobileService.createScheme
                         }
@@ -744,16 +749,17 @@
                         req(this.fetchGroup).then((ret) => {
                             //添加
                             if(!this.fetchGroup.id){
-                                alert('返回添加')
+                                // alert('返回添加')
                                 this.resultData.push(ret.data)
                             }else{ // 修改当前项
-                                alert('返回编辑')
+                                // alert('返回编辑')
                                 console.log(this.resultData[this.currentGroupData.pindex])
                                 this.resultData[this.currentGroupData.pindex] = this.fetchGroup
                                 console.log(this.resultData[this.currentGroupData.pindex])
                                 // this.fetchGroup.used=ret.used
                             }
                             this.addForm = false
+                            this.getData()
                             xmview.showTip('success', msg)
                         })
                     } else {
