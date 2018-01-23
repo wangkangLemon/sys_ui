@@ -172,7 +172,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addForm = false">取 消</el-button>
-                <el-button type="primary" @click="addGroup('fetchGroup')">确 定</el-button>
+                <el-button type="primary" @click="submitGroupData('fetchGroup')">确 定</el-button>
             </div>
         </el-dialog>
         <!--添加编辑/弹窗  appmenu添加-->
@@ -303,15 +303,17 @@
             </section>
             <section class="nav-operate">
                 <span v-if="list.used">使用中</span>
-                <el-button type="text" v-if="!list.used" @click="getPlatVersions(list,list.id)">启用</el-button>
+                <!--<el-button type="text" v-if="(!list.used)&list.adapter" @click="getPlatVersions(list,list.id)">启用</el-button>-->
+                <el-button type="text" v-if="!list.used" @click="getPlatVersions(list,list.id, pindex)">启用</el-button>
                 <el-button type="text" @click="cloneScheme(list.id)">克隆</el-button>
-                <el-button type="text" @click="editScheme(list,list.id)">编辑</el-button>
+                <el-button type="text" @click="editScheme(list,list.id, pindex)">编辑</el-button>
                 <el-button type="text" @click="deleteScheme(list.id)" v-if="!list.used && !list.readonly">删除</el-button>
             </section>
             <div class="platform" v-if="list.used">
                 <i>使用平台和版本:</i>
                 <div>
-                    <em v-for="(version,index) in list.platform_tag" :key="index">{{version}}</em>
+                    <!--<em v-for="(version,index) in list.platform_tag" :key="index">{{version}}</em>-->
+                    <em >ios &nbsp;{{list.adapter}}</em><em >android &nbsp;{{list.adapter}}</em>
                 </div>
             </div>
         </article>
@@ -324,7 +326,7 @@
     </article>
 </template>
 <script>
-    import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
+    import ImagEcropperInput from '../../component/upload/ImagEcropperInputExperts.vue'
     import mobileService from '../../../services/section/mobileService.js'
     import courseService from '../../../services/course/courseService.js'
     import {
@@ -355,6 +357,11 @@
                 checkedIos: [], // 已选的ios列表
                 loading: false,
                 currentData: {
+                    group_id: '',
+                    pindex: '', // 父层索引
+                    index: '' // 子层索引
+                },
+                currentGroupData: {
                     group_id: '',
                     pindex: '', // 父层索引
                     index: '' // 子层索引
@@ -424,7 +431,6 @@
                 },
                 addForm: false, // 新建组弹窗是否显示
                 formLabelWidth: '120px', // 表单label的宽度
-
             }
         },
         watch: {
@@ -472,11 +478,11 @@
                     })
                 })
             },
-            getDefaultLogo() {
-                // 根据功能获取到默认logo
-                let curModule = getArrayIdIndex(this.items, this.form.type_id)
-                if (curModule > -1) this.form.icon = this.items[curModule]['icon']
-            },
+            // getDefaultLogo() {
+            //     // 根据功能获取到默认logo
+            //     let curModule = getArrayIdIndex(this.items, this.form.type_id)
+            //     if (curModule > -1) this.form.icon = this.items[curModule]['icon']
+            // },
             getCourseCataName(category_id) {
                 console.log(category_id)
             },
@@ -534,20 +540,45 @@
                     this.form = clone(item)
                     this.form.module_id=this.form.id
                     console.log(this.form)
-                    // this.versionChange().then(() => {
-                    //     if (this.form.model == 'link') {
-                    //         this.form.group_id = group_id
-                    //         this.form.module_id = item.id
-                    //         this.form.version = ''
-                    //     } else {
-                    //         this.getActiveVersion(item.type_id).then((ret) => {
-                    //             this.form.version = ret[0].version
-                    //             this.form.group_id = group_id
-                    //             this.form.module_id = item.id
-
-                    //         })
-                    //     }
-                    // })
+                })
+            },
+            submit(form) {
+                this.$refs[form].validate((valid) => {
+                    if (valid) {
+                        let msg = ''
+                        let req = ''
+                        
+                        if (this.form.module_id) {
+                            console.log(this.form)
+                            // alert('编辑')
+                            msg = '修改成功'
+                            req = mobileService.updateModule
+                            // delete this.form.sort
+                        } else {
+                            // alert('新建')
+                            this.form.sort = this.resultData[this.currentData.pindex]['items'].length + 1
+                            msg = '添加成功'
+                            req = mobileService.addModule
+                        }
+                        console.log(this.form)
+                        req(this.form).then((ret) => {
+                            // 添加
+                            if (!this.form.module_id) {
+                                this.form.module_id = ret.id
+                                // 追加一项
+                                this.resultData[this.currentData.pindex]['items'].push(this.form)
+                            } else {
+                                // 修改当前项
+                                console.log(this.form)
+                                this.resultData[this.currentData.pindex]['items'][this.currentData.index] =
+                                    this.form
+                            }
+                            this.changeIcon = false
+                            xmview.showTip('success', msg)
+                        })
+                    } else {
+                        return false
+                    }
                 })
             },
             delModule(group_id, module_id, pindex, index) {
@@ -580,44 +611,7 @@
                     this.containerLoading = false
                 })
             },
-            submit(form) {
-                this.$refs[form].validate((valid) => {
-                    if (valid) {
-                        let msg = ''
-                        let req = ''
-                        
-                        if (this.form.module_id) {
-                            console.log(this.form)
-                            // alert('编辑')
-                            msg = '修改成功'
-                            req = mobileService.updateModule
-                            delete this.form.sort
-                        } else {
-                            // alert('新建')
-                            this.form.sort = this.resultData[this.currentData.pindex]['items'].length + 1
-                            msg = '添加成功'
-                            req = mobileService.addModule
-                        }
-                        console.log(this.form)
-                        req(this.form).then((ret) => {
-                            // 添加
-                            if (!this.form.module_id) {
-                                this.form.module_id = ret.id
-                                // 追加一项
-                                this.resultData[this.currentData.pindex]['items'].push(this.form)
-                            } else {
-                                // 修改当前项
-                                this.resultData[this.currentData.pindex]['items'][this.currentData.index] =
-                                    this.form
-                            }
-                            this.changeIcon = false
-                            xmview.showTip('success', msg)
-                        })
-                    } else {
-                        return false
-                    }
-                })
-            },
+            
            
             // 表单版本发生变化的时候获取功能列表
             versionChange() {
@@ -701,25 +695,70 @@
                 this.dialogGroupTitle = "添加方案组"
             },
             addGroup() {
-                this.$refs['fetchGroup'].validate((valid) => {
+                this.dialogGroupTitle = '添加'
+                this.addForm = true
+                // this.$refs['fetchGroup'].validate((valid) => {
+                //     if (valid) {
+                //         console.log(this.fetchGroup)
+                //         mobileService.createScheme(this.fetchGroup).then((ret) => {
+                //             this.addForm = false
+                //             this.resultData.push(ret.data)
+                //         })
+                //     } else {
+                //         return false
+                //     }
+                // })
+            },
+            editScheme(group,group_id, pindex) {
+                this.dialogGroupTitle = "修改方案组"+group_id
+                this.addForm = true
+                this.fetchGroup = group
+                 this.$nextTick(() => {
+                    this.fetchGroup = clone(group)
+                })
+                this.currentGroupData = {
+                    pindex,
+                    group_id
+                }
+                console.log(this.currentGroupData)
+                // mobileService.editScheme(this.fetchGroup).then((ret) => {
+                //     this.fetchGroup.used=ret.used
+                // })
+            },
+            submitGroupData(fetchGroup){
+                this.$refs[fetchGroup].validate((valid) => {
                     if (valid) {
+                        let msg = ''
+                        let req = ''
+                        alert(this.fetchGroup.id)
+                        if (this.fetchGroup.id) {
+                            alert('编辑')
+                            msg = '修改成功'
+                            req = mobileService.editScheme
+                        } else {
+                            alert('新建')
+                            msg = '添加成功'
+                            req = mobileService.createScheme
+                        }
                         console.log(this.fetchGroup)
-                        mobileService.createScheme(this.fetchGroup).then((ret) => {
+                        req(this.fetchGroup).then((ret) => {
+                            //添加
+                            if(!this.fetchGroup.id){
+                                alert('返回添加')
+                                this.resultData.push(ret.data)
+                            }else{ // 修改当前项
+                                alert('返回编辑')
+                                console.log(this.resultData[this.currentGroupData.pindex])
+                                this.resultData[this.currentGroupData.pindex] = this.fetchGroup
+                                console.log(this.resultData[this.currentGroupData.pindex])
+                                // this.fetchGroup.used=ret.used
+                            }
                             this.addForm = false
-                            this.resultData.push(ret.data)
+                            xmview.showTip('success', msg)
                         })
                     } else {
                         return false
                     }
-                })
-            },
-            editScheme(group,group_id) {
-                this.dialogGroupTitle = "修改方案组"+group_id
-                this.addForm = true
-                console.log(group)
-                this.fetchGroup = group
-                mobileService.editScheme(this.fetchGroup).then((ret) => {
-                    this.fetchGroup.used=ret.used
                 })
             },
             deleteScheme(group_id) {
