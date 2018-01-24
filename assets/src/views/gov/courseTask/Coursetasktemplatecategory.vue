@@ -116,7 +116,7 @@
 </template>
 
 <script type="text/jsx">
-    import govService from '../../../services/gov/govService.js'
+    import courseTaskService from '../../../services/gov/courseTaskService.js'
     import treeUtils from '../../../utils/treeUtils'
     import CourseTaskTemplateCategoryTree from '../../component/tree/CourseTaskTemplateCategory.vue'
     import UploadImg from '../../component/upload/UploadImg.vue'
@@ -162,7 +162,7 @@
         },
         activated () {
             xmview.setContentLoading(false)
-            this.uploadImgUrl = govService.getCategoryImageUrl()
+            this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
         },
         methods: {
             // 删除分类
@@ -176,7 +176,7 @@
                 this.dialogConfirm.isShow = true
                 this.dialogConfirm.msg = `是否确认删除分类 <i style="color:red">${node.label}</i> 吗？`
                 this.dialogConfirm.confirmClick = () => {
-                    govService.delCategory({id: node.value}).then(() => {
+                    courseTaskService.delCategory({id: node.value}).then(() => {
                         xmview.showTip('success', '操作成功!')
                         this.$refs.courseTaskTemplateCategory.removeItem(node, this.nodeParentSelected)
                         node = null
@@ -217,9 +217,9 @@
 
                     let p
                     if (this.activeTab === 'add')
-                        p = govService.createCategory(this.fetchParam)
+                        p = courseTaskService.createCategory(this.fetchParam)
                     else
-                        p = govService.updateCategory(this.fetchParam)
+                        p = courseTaskService.updateCategory(this.fetchParam)
 
                     p.then((ret) => {
                         xmview.showTip('success', '操作成功!')
@@ -266,7 +266,7 @@
                         xmview.showTip('warning', '请选择不同的分类')
                         return
                     }
-                    govService.moveCategory({id, to}).then((ret) => {
+                    courseTaskService.moveCategory({id, to}).then((ret) => {
                         // 重新渲染树节点
                         if (ret.code === 0) {
                             xmview.showTip('success', '操作成功!')
@@ -293,7 +293,7 @@
                         xmview.showTip('warning', '请选择不同的分类')
                         return
                     }
-                    govService.moveCategoryContent({id, to}).then((ret) => {
+                    courseTaskService.moveCategoryContent({id, to}).then((ret) => {
                         // 重新渲染树节点
                         if (ret.code === 0) {
                             xmview.showTip('success', '操作成功!')

@@ -42,10 +42,9 @@
 
 <template>
     <article id="course-manage-coursecategory">
-        <section class="manage-container">
+        <!--<section class="manage-container">
             <el-button type="primary" @click="addRootCategory">新建栏目</el-button>
-        </section>
-
+        </section>-->
         <section class="left-container">
             <!--这是view-->
             <CourseCategoryTree v-model="treeData" ref="courseCategory"
@@ -71,7 +70,7 @@
                     <el-form-item label="栏目logo" prop="image">
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl"
                                    :disabled="fetchParam.pid == null"
-                                   :onSuccess="handleImgUploaded">
+                                   :onSuccess="handleImgUploaded" :before-remove="removeImg">
                         </UploadImg>
                     </el-form-item>
                     <el-form-item label="课程类型" prop="category_type">
@@ -217,6 +216,10 @@
             // 图片上传完毕
             handleImgUploaded (response) {
                 this.fetchParam.image = response.data.url
+            },
+            //图片删除
+            removeImg(file, fileList){
+                console.log(file, fileList)
             },
             // 新建根节点
             addRootCategory () {

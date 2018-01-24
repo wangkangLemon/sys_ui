@@ -17,7 +17,7 @@
 
 <script>
     import treeUtils from '../../../utils/treeUtils'
-    import govService from '../../../services/gov/govService.js'
+    import courseTaskService from '../../../services/gov/courseTaskService.js'
     export default{
         props: {
             value: [String, Number],
@@ -39,7 +39,7 @@
             }
         },
         created () {
-            govService.getCategoryTree({}).then((ret) => {
+            courseTaskService.getCategoryTree({}).then((ret) => {
                 ret.map((item) => {
                     item.children = item.has_children ? [{label: '加载中...'}] : null
                 })
@@ -58,7 +58,7 @@
                 // 递归找到该项
                 let currItem = treeUtils.findItem(this.options, val, 'value')
                 if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
-                govService.getCategoryTree({
+                courseTaskService.getCategoryTree({
                     id: val[val.length - 1]
                 }).then((ret) => {
                     // 重新组合数据

@@ -96,9 +96,9 @@
                 }
             },
             save() {
-                xmview.showDialog(this.selectData, () => {
+                // xmview.showDialog(this.selectData, () => {
                     this.$emit('handleSave', this.selectData)
-                })
+                // })
             },
             // 图片上传完毕
             handleImgUploaded (response) {

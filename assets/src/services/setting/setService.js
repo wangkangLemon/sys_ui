@@ -4,7 +4,7 @@ const urlPre = config.apiHost + '/setting'
 
 class setService {
     //拿到区块列表
-    fetchData ( {pagesize, page}) {
+    fetchData ( {page, pagesize, id, category ,field}) {
         let url = urlPre + '/lists'
         return api.post(url,{pagesize, page}).then(ret => {
             if (ret.code == 0) {

@@ -40,7 +40,7 @@
 <template>
     <article id="course-index-container">
 
-            <section class="manage-container"><button type="button" icon="plus" class="el-button el-button--primary"  @click="create"><span>新建分类</span></button></section>
+            <!--<section class="manage-container"><button type="button" icon="plus" class="el-button el-button--primary"  @click="create"><span>新建分类</span></button></section>-->
             <section class="left-container">
                 
                 <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="secCategory"></MenuTree>

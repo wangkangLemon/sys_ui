@@ -32,10 +32,15 @@
                     <Region :province="form.province_id"
                             :city="form.city_id"
                             :area="form.area_id"
+                            :town="form.town_id"
+                            :village="form.village_id"
                             title=""
                             v-on:provinceChange="val => form.province_id = val"
                             v-on:cityChange="val => form.city_id = val"
-                            v-on:areaChange="val => form.area_id = val">
+                            v-on:areaChange="val => form.area_id = val"
+                            v-on:townChange="val => form.town_id = val"
+                            v-on:villageChange="val => form.village_id = val"
+                            >
                     </Region>
                 </el-form-item>
                 <el-form-item prop="name" label="政府单位名称	" :label-width="formLabelWidth">

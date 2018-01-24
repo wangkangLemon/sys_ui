@@ -110,6 +110,7 @@
                    :on-error="handleRemove"
                    :on-preview="handlePictureCardPreview"
                    :on-remove="handleRemove"
+                   :before-remove="removeImg"
                    accept="image/jpg,image/jpeg,image/png,image/gif"
                    :file-list="currImg">
             <i class="el-icon-plus"></i>
@@ -193,6 +194,10 @@
                 setTimeout(() => {
                     this.clearFiles()
                 }, 500)
+            },
+            //图片删除
+            removeImg(file, fileList){
+                console.log(file, fileList)
             },
             handlePictureCardPreview (file) {
                 this.dialogVisible = true

@@ -148,7 +148,7 @@
 </template>
 <script>
     import DateRange from '../../component/form/DateRangePicker.vue'
-    import govService from '../../../services/gov/govService.js'
+    import govService from '../../../services/gov/courseTaskService.js'
     import CourseTaskTemplateCategorySelect from '../../component/select/CourseTaskTemplateCategory.vue'
     import {fillImgPath} from '../../../utils/filterUtils'
 
@@ -172,7 +172,7 @@
                 coursetasktemplateData: [],
                 total: 0,
                 currentPage: 1, // 分页当前显示的页数
-                pageSize: 15
+                pagesize: 15
             }
         },
         activated () {
@@ -228,7 +228,7 @@
                 }
             },
             handleSizeChange (val) {
-                this.pageSize = val
+                this.pagesize = val
                 this.getData()
             },
             handleCurrentChange (val) {
@@ -241,7 +241,7 @@
                     category_id: this.fetchParam.category_id,
                     title: this.fetchParam.title,
                     page: this.currentPage,
-                    page_size: this.pageSize
+                    pagesize: this.pagesize
                 }).then((ret) => {
                     this.coursetasktemplateData = ret.data
                     this.total = ret.total

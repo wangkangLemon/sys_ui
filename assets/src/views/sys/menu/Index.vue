@@ -46,17 +46,17 @@
         <article class="search">
             <section>
                 <i>菜单名称</i>
-                <el-input v-model="keyWord" placeholder="请输入菜单名称"></el-input>
+                <el-input v-model="fetchParam.menu_name" placeholder="请输入菜单名称" @keyup.enter.native="fetchData"></el-input>
             </section>
 
         </article>
 
-        <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
+        <el-table class="data-table" v-loading="loadingData" :data="dataCache" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="100" prop="id" label="ID" v-if="data">
             </el-table-column>
-            <el-table-column min-width="200" prop="menu_name" label="角色名">
+            <el-table-column min-width="200" prop="menu_name" label="菜单名称">
             </el-table-column>
             <el-table-column min-width="200" prop="addate" label="添加时间">
             </el-table-column>
@@ -176,6 +176,7 @@ export default {
             return sysService.fetchData(this.fetchParam).then((ret) => {
                 // console.log(ret.data)
                 this.dataCache = ret.data
+                this.total = ret._exts.total
                 this.loadingData = false
                 // console.log(ret)
                 xmview.setContentLoading(false)     

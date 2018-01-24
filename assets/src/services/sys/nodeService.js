@@ -4,10 +4,9 @@ const urlPre = config.apiHost + '/node'
 
 class sysService {
     //拿到数据 
-    fetchData () {
+    fetchData ({page, pagesize, level, pid ,node_name}) {
         let url = urlPre + '/lists'
-        return api.post(url,{
-        }).then(ret => {
+        return api.post(url,{page, pagesize, level, pid ,node_name}).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {

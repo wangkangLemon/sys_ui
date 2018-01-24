@@ -73,7 +73,7 @@
 <script>
     import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
     import CourseTaskTemplateCategorySelect from '../../component/select/CourseTaskTemplateCategory.vue'
-    import govService from '../../../services/gov/govService.js'
+    import courseTaskService from '../../../services/gov/courseTaskService.js'
     import courseService from '../../../services/course/courseService.js'
     import dialogSelectData from '../../component/dialog/SelectData4table.vue'
 
@@ -115,7 +115,7 @@
         },
         methods: {
             cropperFn(data, ext) {
-                govService.CourseTaskTemplateUploadUrl({
+                courseTaskService.CourseTaskTemplateUploadUrl({
                     avatar: data,
                     alias: `${Date.now()}${ext}`
                 }).then((ret) => {
@@ -142,9 +142,9 @@
                     if (s > 0) {
                         this.form.status = s
                     }
-                    let reqFn = govService.addCourseTaskTemplate
+                    let reqFn = courseTaskService.addCourseTaskTemplate
                     if (this.form.id) {
-                        reqFn = govService.updateCourseTaskTemplate
+                        reqFn = courseTaskService.updateCourseTaskTemplate
                     }
                     reqFn(this.form).then((ret) => {
                         xmview.showTip('success', '保存成功')

@@ -46,12 +46,12 @@
         <article class="search">
             <section>
                 <i>设置名称</i>
-                <el-input v-model="keyWord" placeholder="请输入设置名称"></el-input>
+                <el-input v-model="fetchParam.category" placeholder="请输入设置名称" @keyup.enter.native="fetchData"></el-input>
             </section>
 
         </article>
 
-        <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
+        <el-table class="data-table" v-loading="loadingData" :data="dataCache" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="100" prop="id" label="记录id" v-if="data">
@@ -151,6 +151,7 @@ export default {
             return sysService.fetchData(this.fetchParam).then((ret) => {
                 // console.log(ret.data)
                 this.dataCache = ret.data
+                this.total = ret._exts.total
                 this.loadingData = false
                 xmview.setContentLoading(false)     
             })
