@@ -125,7 +125,7 @@ export default {
                 })
             },
             meta: {
-                title: '课程任务-企业',
+                title: '课程任务',
                 noback: true
             }
         },
@@ -138,7 +138,7 @@ export default {
                 })
             },
             meta: {
-                title: '课程任务模板-企业',
+                title: '课程任务模板',
                 noback: true
             }
         },
@@ -152,7 +152,7 @@ export default {
                 })
             },
             meta: {
-                title: '添加课程任务模板-企业',
+                title: '添加课程任务',
             }
         },
 

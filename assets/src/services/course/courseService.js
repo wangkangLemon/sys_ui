@@ -44,10 +44,10 @@ class CourseService {
 
 
     //========================种类数据请求===================================
-    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1 }) {
+    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1, pagesize=-1}) {
         let finalUrl = urlPre + '/category/lists'
         // alert('进入getData')
-        return api.get(finalUrl, { id, filter, type, pid, level }).then((ret) => {
+        return api.get(finalUrl, { id, filter, type, pid, level, pagesize }).then((ret) => {
             // console.log(ret)
             return ret
         })

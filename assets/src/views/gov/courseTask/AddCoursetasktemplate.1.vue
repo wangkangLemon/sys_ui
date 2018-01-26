@@ -3,63 +3,8 @@
     @import "../../../utils/mixins/common";
     @import "../../../utils/mixins/mixins";
 
-    #coursetask-addcoursetamplte {
+    #company-coursetask-addcoursetamplte {
         @extend %content-container;
-        background: #fff;
-        padding: 20px;
-        .el-form {
-            width: 60%;
-            img {
-                width: 35%;
-                // height: 50% 
-            }
-        }
-        /*.search {
-            @extend %top-search-container;
-        }*/
-        .collection {
-            align-items: center;
-            min-height: 36px;
-            border-radius: 4px;
-            padding: 3px 10px;
-            border: 1px solid #bfcbd9;
-        }
-        .collection {
-            align-items: center;
-            min-height: 36px;
-            border-radius: 4px;
-            padding: 3px 10px;
-            border: 1px solid #bfcbd9;
-        }
-        .u-course-tag {
-            margin-right: 10px;
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-        .el-tabs__content {
-            position: relative;
-            .dialog-select-item {
-                h5 {
-                    line-height: 40px;
-                    font-size: 14px;
-                    padding-left: 20px;
-                    background: #fbfdff;
-                    border: 1px solid #d1dbe5;
-                    border-bottom: none;
-                }
-                position: absolute;
-                top: 54px;
-                right: 120px;
-                height: 500px;
-                width: 42%;
-                display: inline-block;
-                vertical-align: top;
-            }
-        }
-        .row-class {
-            border: 1px solid #d1dbe5;
-        }
 
         .course-search {
             margin-bottom: 12px;
@@ -74,7 +19,7 @@
 </style>
 
 <template>
-    <article id="coursetask-addcoursetamplte">
+    <article id="company-coursetask-addcoursetamplte">
         <el-form :model="form" :rules="rules" label-position="right" ref="form" label-width="120px" style="width: 60%">
             
             <el-form-item prop="title" label="标题">
@@ -158,7 +103,7 @@
             <template v-if="pushTypeDialog.isSearch">
                 <section class="search">
                     <section>
-                        <i>部门</i>
+                        <i>111111111111</i>
                         <DepSelect v-model="pushTypeDialog.form.department_id" :change="getPushTypeData"></DepSelect>
                     </section>
                 </section>
@@ -179,12 +124,9 @@
 </template>
 
 <script>
-    import Transfer from '../../component/dialog/Transfer.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
     import courseTaskService from '../../../services/gov/courseTaskService.js'
     import courseService from '../../../services/course/courseService.js'
-    import govService from '../../../services/gov/govService.js'
-    import userService from '../../../services/gov/userService.js'
     import dialogSelectData from '../../component/dialog/SelectData4table.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
 
@@ -247,9 +189,6 @@
             }
         },
         methods: {
-            transferConfirmFn () {
-                this.pushTypeDialog.showDialog = false
-            },
             //打开发布对象弹出框
             openPushTypeDialog () {
                 this.pushTypeDialog.showDialog = true
@@ -285,8 +224,8 @@
             fetchPushTypeData (type) {
                 type !== 'no-clear' && (this.pushTypeDialog.data = [])
                 let map = {
-                    1: govService.getSelectList,  //部门
-                    2: userService.fetchData,  //人员 
+                    2: depService.getDepartmentByName,
+                    1: userNameList,
                     // user_group: userService.userGroupSearch
                 }
                 let param = {
@@ -294,10 +233,7 @@
                     page: this.pushTypeDialog.page,
                     page_size: this.pushTypeDialog.page_size
                 }
-                
                 if (this.pushTypeDialog.isSearch) {
-                    alert(222)
-                    console.log(param)
                     param.department_id = this.pushTypeDialog.fetchParam.department_id
                 }
                 map[this.pushTypeDialog.type](param).then(ret => {
@@ -349,6 +285,6 @@
                 })
             }
         },
-        components: {DateRange,ImagEcropperInput, dialogSelectData,Transfer}
+        components: {DateRange,ImagEcropperInput, dialogSelectData}
     }
 </script>
