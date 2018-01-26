@@ -37,12 +37,8 @@
                         }]  //是否最终菜单？点箭头触发请求
                     })
                })
-              
-
-               // 能在这也存储一个类似item 吗？ 在视图 this.fechparam   反正两个改一个  在这要改的话 怎么像map 一样给个  item.item=item
                this.loading = false
                xmview.setContentLoading(false)
-             
             })
         },
         watch: {

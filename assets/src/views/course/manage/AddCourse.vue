@@ -131,7 +131,10 @@
                     <el-form-item label="排序" prop="sort">
                         <el-input v-model="fetchParam.sort" type="number" placeholder="请输入序列号"></el-input>
                     </el-form-item>
-                    
+                    <el-form-item label="是否分享" prop="share">
+                        <el-radio class="radio" v-model="fetchParam.share" :label="1">是</el-radio>
+                        <el-radio class="radio" v-model="fetchParam.share" :label="0">否</el-radio>
+                    </el-form-item>
     
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
@@ -558,6 +561,7 @@ function getOrignData() {
         price_floa: void 0,
         experts_id: void 0,
         sort:void 0,
+        share:void 0,
     }
 
     return orignData
