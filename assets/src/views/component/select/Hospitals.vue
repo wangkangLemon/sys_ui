@@ -19,7 +19,7 @@
             value: [String, Number],
             change: Function,
             placeholder: String,
-            list: Array,
+            list: Object,
             disabled: {
                 type: Boolean,
                 default: false
@@ -51,15 +51,15 @@
             // },
 
             getHospitalList (val, length) {
-                alert(122331)
                 return expertsService.fetchHospitalData({
                     name: val,
                     // category: this.type,
                     pagesize: this.pageSize,
                     page: parseInt(length / this.pageSize) + 1
                 }).then((ret) => {
-                    // this.$emit('changelist', ret.data)
-                    return ret.data
+                    this.$emit('changelist', ret)
+                    console.log(ret)
+                    return ret
                 })
             },
             handleChange(val) {

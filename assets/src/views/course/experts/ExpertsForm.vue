@@ -60,16 +60,20 @@
                     <el-input v-model.professor="fetchParam.professor"></el-input>
                 </el-form-item>
 
-                <el-form-item  label="所属医院" :label-width="formLabelWidth" :fetch-suggestions="querySearch">
+                <!--<el-form-item  label="所属医院" :label-width="formLabelWidth" :fetch-suggestions="querySearch">
                     <el-select clearable v-model="fetchParam.hospital_id" placeholder="未选择">
                         <el-option v-for="(item, index) in hospital_list" :label="item.name" :value="item.id" :key="item.id">
                         </el-option>
                     </el-select>
-                    <!--<i>所属医院</i>
-                    <Hospitals v-model="fetchParam.hospital_id" :placeholder="fetchParam.hospital_id"
-                                           v-on:change="val=>fetchParam.hospital_id=val" :change="getHospitalList">
-                    </Hospitals>-->
+                </el-form-item>-->
+
+
+                <el-form-item  label="所属医院"  :fetch-suggestions="querySearch">
+                        <Hospitals v-model="fetchParam.hospital_id" :placeholder="fetchParam.name"
+                                            v-on:change="val=>fetchParam.hospital_id=val" :change="getHospitalList" :list="changelist">
+                        </Hospitals>
                 </el-form-item>
+
                 <el-form-item label="科室" prop="department">
                     <el-input v-model.department="fetchParam.department"></el-input>
                 </el-form-item>
@@ -154,6 +158,7 @@
                 resultData: [],
                 hospital_list:[],
                 formLabelWidth: '120px', // 表单label的宽度
+                changelist:{}
             }
         },
         created() {
@@ -175,6 +180,13 @@
             this.getHospitalList()
         },
         methods: {
+            //拿到医院列表输入建议
+            querySearch(queryString, cb) {
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据返回建议列表的数据
+                cb(results);
+            },
             // passFn(){
             //     return this.$route.params.id != undefined?false:true
             // },
@@ -193,19 +205,31 @@
             },
             
             //获取医院下拉列表
-            getHospitalList(val){
-                expertsService.fetchHospitalData({pagesize:-1}).then((ret)=>{
-                 this.hospital_list=ret.data;
+            getHospitalList(val,length){
+                expertsService.fetchHospitalData({
+                    name: val,
+                    // category: this.type,
+                    pagesize: this.pageSize,
+                    page: parseInt(length / this.pageSize) + 1
+                }).then((ret)=>{
+                    this.$emit('changelist', ret)
+                    this.changelist=ret
+                    return ret
                 })
             },
-            //拿到医院列表输入建议
-            querySearch(queryString, cb) {
-                var restaurants = this.restaurants;
-                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-                // 调用 callback 返回建议列表的数据返回建议列表的数据
-                cb(results);
+            getExpertsList (val, length) {
+                return expertsService.fetchExpertsData({
+                    name: val,
+                    // category: this.type,
+                    pagesize: this.pageSize,
+                    page: parseInt(length / this.pageSize) + 1
+                }).then((ret) => {
+                    this.$emit('changelist', ret)
+                    this.changelist = ret;
+                    return ret
+                })
             },
-
+ 
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
@@ -238,7 +262,7 @@
             name: '',
             image:'',
             professor:'',
-            hospital_id: void 0,
+            hospital_id: 0,
             department: '',
             introduce: '',
             sex: void 0,

@@ -98,7 +98,7 @@
                         :closable="true"
                         @close="form.courses.splice(index,1)"
                         type="success">
-                    {{c.name}}
+                    {{c.course_name}}
                 <!--c-->
                 </el-tag>
                 <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
@@ -145,7 +145,7 @@
         <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
                           :selectedList="form.course" @changeSelected="val=>form.course=val">
             <div slot="search" class="course-search">
-                <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.keyword"
+                <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.name"
                           icon="search"
                           placeholder="请输入关键字搜索"></el-input>
             </div>
@@ -164,7 +164,7 @@
                 </section>
             </template>
             <Transfer placeholder="搜索"
-                      @searchFn="(val)=>{pushTypeDialog.page=1;pushTypeDialog.form.keyword=val;fetchPushTypeData();}"
+                      @searchFn="(val)=>{pushTypeDialog.page=1;pushTypeDialog.form.name=val;fetchPushTypeData();}"
                       @moreFn="()=>{pushTypeDialog.page++;fetchPushTypeData('no-clear');}" 
                       :total="pushTypeDialog.total"
                       :data="pushTypeDialog.data"
@@ -215,12 +215,12 @@
                 dialogCourse: {
                     loading: false,
                     isShow: false,
-                    keyword: void 0,
+                    name: void 0,
                 },
                 pushTypeDialog: { //发布对象数据模型
                     fetchParam: {
                         department_id: '',
-                        keyword: ''
+                        name: ''
                     },
                     title: '',
                     isSearch: '',
@@ -233,7 +233,7 @@
                     },
                     data: [],
                     page: 1,
-                    page_size: 15,
+                    pagesize: 15,
                     total: 0,
                 },
             }
@@ -255,7 +255,7 @@
                 this.pushTypeDialog.showDialog = true
                 this.pushTypeDialog.page = 1
                 this.pushTypeDialog.fetchParam.department_id = ''
-                this.pushTypeDialog.fetchParam.keyword = ''
+                this.pushTypeDialog.fetchParam.name = ''
                 this.fetchPushTypeData()
             },
             //选择发布对象
@@ -290,9 +290,9 @@
                     // user_group: userService.userGroupSearch
                 }
                 let param = {
-                    keyword: this.pushTypeDialog.fetchParam.keyword,
+                    name: this.pushTypeDialog.fetchParam.name,
                     page: this.pushTypeDialog.page,
-                    page_size: this.pushTypeDialog.page_size
+                    pagesize: this.pushTypeDialog.pagesize
                 }
                 
                 if (this.pushTypeDialog.isSearch) {

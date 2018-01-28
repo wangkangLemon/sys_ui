@@ -107,7 +107,7 @@
                     </el-form-item>
                     <el-form-item label="课程文件" prop="material_id">
                         <UploadFile :onSuccess="handleUploadDoc" :url="uploadDocUrl" :accept="accept" :disabled="fetchParam.material_type == null" v-show="fetchParam.material_type !== 'video'"></UploadFile>
-                        <el-button v-show="fetchParam.material_type === 'video'" @click="isShowVideoDialog=true">
+                        <el-button v-show="fetchParam.material_type === 'video'" @click="getVideoName">
                             <i>{{fetchParam.material_name}}</i>
                         </el-button>
                         
@@ -299,8 +299,9 @@ export default {
             for(let i in this.$route.params.courseInfo){
                  this.fetchParam[i]=this.$route.params.courseInfo[i]
             }
+            console.log(this.fetchParam)
             // console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
-            // this.fetchParam.name= this.$route.params.courseInfo.name
+            this.fetchParam.material_name= this.$route.params.courseInfo.course_name
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')
         } else if (this.$route.query.contentid) {
@@ -308,6 +309,8 @@ export default {
             courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
                 this.fetchParam = ret.course                  // 没拿到信息 获取信息
                 this.fetchParam.course_name= this.$route.params.courseInfo.course_name
+                this.fetchParam.material_name= this.$route.params.courseInfo.course_name
+
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
                 xmview.setContentTile('编辑课程-培训')
             }).catch((ret) => {
@@ -318,7 +321,6 @@ export default {
         this.$route.params.tab && (this.activeTab = this.$route.params.tab)
         this.readonly = this.$route.params.readonly
         xmview.setContentLoading(false)
-        this.getVideoName()
         this.getExpertsList()
 
     },
@@ -406,6 +408,7 @@ export default {
         
         // 拿到视频名称
         getVideoName(){
+            this.isShowVideoDialog=true
             return videoService.getVideoPreviewUrl(this.fetchParam.material_id).then((ret) => {
                     this.fetchParam.material_name = ret.file_name
                     // this.videoUrl = ret.video
@@ -552,7 +555,7 @@ function getOrignData() {
         albumid: void 0,
         album_name: void 0,
         description: void 0,
-        need_testing: void 0,
+        need_testing: 0,
         limit_time: void 0,
         limit_repeat: void 0,
         score_pass: void 0,
