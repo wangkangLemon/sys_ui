@@ -78,16 +78,16 @@
         <!--添加/编辑表单-->
         <!--点击添加 form数据取邮箱/手机号 密码-->
         <article class="manage-container">
-            <el-button icon="plus" type="primary" @click="()=> $router.push({name:'coursetask-template-add'}) ">添加
+            <el-button icon="plus" type="primary" @click="()=> $router.push({name:'server-manage-add'}) ">添加
             <!--添加-->
             </el-button>
         </article>
         <section class="search">
-            <section>
+            <!--<section>
                 <i>类别</i>
                 <CourseTaskTemplateCategorySelect :onchange="getData"
                                                   v-model="fetchParam.category_id"></CourseTaskTemplateCategorySelect>
-            </section>
+            </section>-->
             <section>
                 <i>课程名称</i>
                 <el-input @keyup.enter.native="getData" class="name" v-model="fetchParam.title"/>
@@ -99,12 +99,12 @@
                     label="课程任务">
             </el-table-column>
             <el-table-column
-                    prop="create_time_name"
+                    prop="addate"
                     label="创建时间"
                     width="200">
             </el-table-column>
             <el-table-column
-                    prop="status_name"
+                    prop="status"
                     label="状态"
                     width="100">
                 <template scope="scope">
@@ -149,7 +149,7 @@
 <script>
     import DateRange from '../../component/form/DateRangePicker.vue'
     import courseTaskService from '../../../services/gov/courseTaskService.js'
-    import CourseTaskTemplateCategorySelect from '../../component/select/CourseTaskTemplateCategory.vue'
+    // import CourseTaskTemplateCategorySelect from '../../component/select/CourseTaskTemplateCategory.vue'
     import {fillImgPath} from '../../../utils/filterUtils'
 
     export default {
@@ -158,7 +158,7 @@
         },
         components: {
             DateRange,
-            CourseTaskTemplateCategorySelect,
+            // CourseTaskTemplateCategorySelect,
         },
         data () {
             return {
@@ -197,7 +197,7 @@
             },
             editItm (row) {
                 row.course = row.course || []
-                this.$router.push({name: 'coursetask-template-add', params: {item: row}})
+                this.$router.push({name: 'server-manage-add', query: {item: row}})
             },
             publishCourseTaskTemplate (row) {
                 xmview.showDialog(`你将要上线课程任务【<i style="color:red">${row.title || ''}</i>】吗？`, this.publishItem(row.id))
@@ -238,7 +238,7 @@
             getData () {
                 this.loading = true
                 return courseTaskService.getCourseTaskList({
-                    category_id: this.fetchParam.category_id,
+                    // category_id: this.fetchParam.category_id,
                     title: this.fetchParam.title,
                     page: this.currentPage,
                     pagesize: this.pagesize

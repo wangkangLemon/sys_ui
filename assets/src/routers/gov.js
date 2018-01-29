@@ -129,6 +129,20 @@ export default {
                 noback: true
             }
         },
+        
+         // 添加修改课程任务
+        {
+            path: 'coursetask/template/add',
+            name: 'server-manage-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/AddCoursetask.vue'))
+                })
+            },
+            meta: {
+                title: '添加课程任务',
+            }
+        },
         {
             path: 'coursetask/template',
             name: 'gov-coursetasktemplate',
@@ -142,6 +156,7 @@ export default {
                 noback: true
             }
         },
+
         // 添加修改课程任务模板
         {
             path: 'coursetask/template/add',
