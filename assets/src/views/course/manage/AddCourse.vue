@@ -96,7 +96,7 @@
                     <el-form-item label="课程封面图" prop="image">
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
                         <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
-                    </el-form-item> 
+                    </el-form-item>
                     <el-form-item label="课程类型" prop="material_type">
                         <el-select v-model="fetchParam.material_type" @change="typeChange" placeholder="请选择" >
                             <el-option label="视频" value="video"></el-option>
@@ -110,9 +110,9 @@
                         <el-button v-show="fetchParam.material_type === 'video'" @click="getVideoName">
                             <i>{{fetchParam.material_name}}</i>
                         </el-button>
-                        
+
                         <el-button @click="preview(fetchParam.material_id)" type="text" size="big"
-                               
+
                                > 查看
                         </el-button>
 
@@ -131,11 +131,11 @@
                     <el-form-item label="排序" prop="sort">
                         <el-input v-model="fetchParam.sort" type="number" placeholder="请输入序列号"></el-input>
                     </el-form-item>
-                    <el-form-item label="是否分享" prop="share">
+                    <el-form-item label="是否允许分享" prop="share">
                         <el-radio class="radio" v-model="fetchParam.share" :label="1">是</el-radio>
                         <el-radio class="radio" v-model="fetchParam.share" :label="0">否</el-radio>
                     </el-form-item>
-    
+
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
                         <el-radio class="radio" v-model="fetchParam.need_testing" :label="1">需要</el-radio>
@@ -150,7 +150,7 @@
                     <el-form-item label="及格分数" prop="score_pass">
                         <el-input :disabled="fetchParam.need_testing == 0" v-model="fetchParam.score_pass"></el-input>
                     </el-form-item>
-    
+
                     <el-form-item label="" v-if="!readonly">
                         <el-button style="float: right" type="primary" @click="btnNextClick">
                             <i>{{ fetchParam.need_testing == 0 ? '保存' : '保存并下一步' }}</i>
@@ -182,7 +182,7 @@
                         <el-form-item label="配图">
                             <UploadImg :defaultImg="item.image" :url="uploadImgUrl" :disabled="!item.editable" :onSuccess="res => item.image = res.data.url"></UploadImg>
                         </el-form-item>
-    
+
                         <!--判断题的正确错误选项-->
                         <el-form-item label="选项" v-if="item.category == 0">
                             <el-radio class="radio" :disabled="!item.editable" v-model="item.correct" :label="1">
@@ -192,7 +192,7 @@
                                 <i>错误</i>
                             </el-radio>
                         </el-form-item>
-    
+
                         <!--单选|多选的答案部分-->
                         <el-form-item label="选项" v-else>
                             <h5>请在正确答案前面打勾</h5>
@@ -210,16 +210,16 @@
                                 <el-button v-if="item.editable" type="text" @click="addMoreTestingOption(item.options)">添加更多选项</el-button>
                             </div>
                         </el-form-item>
-    
+
                         <el-form-item label="答案详解">
                             <el-input v-model="item.explain" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 4, maxRows: 6}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
-    
+
                         <hr>
                     </el-form>
                 </el-form>
-    
+
                 <el-form label-width="120px" v-if="!readonly">
                     <el-form-item label="">
                         <el-button icon="plus" @click='addTesting(0, fetchTesting.length)'>判断题</el-button>
@@ -227,14 +227,14 @@
                         <el-button icon="plus" @click='addTesting(2, fetchTesting.length)'>多选题</el-button>
                     </el-form-item>
                 </el-form>
-    
+
                 <div class="bottom-btns" v-if="!readonly">
                     <el-button @click="btnPreClick">上一步</el-button>
                     <el-button class="submit" type="primary" @click="handleSubmitTesting">发布</el-button>
                 </div>
             </el-tab-pane>
         </el-tabs>
-    
+
         <DialogVideo :onSelect="handleVideoSelected" v-model="isShowVideoDialog"></DialogVideo>
 
         <VideoPreview :url="videoUrl" :onchange="fetchVideoData" ref="videoPreview"></VideoPreview>
@@ -286,14 +286,14 @@ export default {
             changelist:{}
         }
     },
- 
+
     created() {
         this.uploadDocUrl = courseService.getCourseDocUploadUrl()
         this.uploadImgUrl = courseService.commonUploadImage()
-    
-        //编辑页面 
+
+        //编辑页面
         if (this.$route.params.courseInfo) {
-            
+
             this.activeTab= 'first'
             // this.fetchParam = this.$route.params.courseInfo   //从主页传递信息
             for(let i in this.$route.params.courseInfo){
@@ -317,7 +317,7 @@ export default {
                 xmview.showTip('error', ret.message)
             })
         }
- 
+
         this.$route.params.tab && (this.activeTab = this.$route.params.tab)
         this.readonly = this.$route.params.readonly
         xmview.setContentLoading(false)
@@ -401,11 +401,11 @@ export default {
                 // 拿到播放地址
                 videoService.getVideoPreviewUrl(index).then((ret) => {
                     this.videoUrl = ret.video
-                    // this.row = row 
+                    // this.row = row
                     this.$refs.videoPreview.show(this.fetchParam.material_name) //返回视频的数据后显示弹窗
                 })
             },
-        
+
         // 拿到视频名称
         getVideoName(){
             this.isShowVideoDialog=true
@@ -498,7 +498,7 @@ export default {
                         item.options[item.correct].correct = 1
                         delete item.correct
                     }
-                  
+
                 }
 
                 // 修复sort属性
@@ -544,10 +544,10 @@ function getOrignData() {
         category_id: void 0,
         category_type:void 0, //栏目分类	1.课程栏目; 2.应试培训栏目
         course_name: void 0,
-        name: void 0, //栏目名称	
+        name: void 0, //栏目名称
         image: void 0,
         tags: void 0,
-        gov:void 0, 
+        gov:void 0,
         type: '', // 课程类别 private,public,industry,gov
         material_type: '', //教材类型	video,doc,ppt,pdf
         material_id: void 0,
