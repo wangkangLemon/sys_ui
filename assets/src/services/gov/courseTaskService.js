@@ -142,16 +142,24 @@ class sysService {
         return api.post(finalUrl, {})
     }
 
-    // 获取课程任务模板分类
-    getCategoryTree ({id = 'tree', filter = true}) {
-        let finalUrl = config.apiHost + '/sys/coursetask/template/category/children'
-        return api.get(finalUrl, {id, filter}).catch((ret) => {
-            ret.tipCom.close()
+    // 获取课程任务模板分列表
+    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1, pagesize=-1}) {
+        let finalUrl = urlPre + '/template/category/lists'
+        // alert('进入getData')
+        return api.get(finalUrl, { id, name }).then((ret) => {
+            // console.log(ret)
             return ret
         })
     }
 
     // 创建分类
+    // createCategory ({parent_id, name, image, sort}) {
+    //     let finalUrl = config.apiHost + `/sys/coursetask/template/category`
+    //     let reqParam = {parent_id, name, image, sort}
+    //     if (parent_id === 0) delete reqParam['parent_id']
+    //     return api.post(finalUrl, reqParam)
+    // }
+    
     createCategory ({parent_id, name, image, sort}) {
         let finalUrl = config.apiHost + `/sys/coursetask/template/category`
         let reqParam = {parent_id, name, image, sort}

@@ -310,7 +310,6 @@ export default {
                 this.fetchParam = ret.course                  // 没拿到信息 获取信息
                 this.fetchParam.course_name= this.$route.params.courseInfo.course_name
                 this.fetchParam.material_name= this.$route.params.courseInfo.course_name
-
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
                 xmview.setContentTile('编辑课程-培训')
             }).catch((ret) => {
@@ -467,8 +466,11 @@ export default {
         },
         // 删除考试
         deleteTesting(index, item) {
+            console.log(index, item)
             xmview.showDialog(`是否确定删除题目【 <i style="color:red">${item.description || ''}</i> 】?`, () => {
-                this.fetchTesting.splice(index, 1)
+                courseService.delCourse({course_id:item.course_id,id:item.id}).then((ret) => {
+                        this.fetchTesting.splice(index, 1)
+                    })
             })
         },
         // 添加多选 单选的选项

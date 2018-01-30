@@ -10,7 +10,7 @@
             @extend %right-top-btnContainer;
         }
 
-        > section {
+        >section {
             display: inline-block;
             vertical-align: top;
         }
@@ -46,37 +46,34 @@
         </section>
 
         <section class="left-container">
-            <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory"
-                                            :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
+            <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
         </section>
 
         <section class="right-container">
-            <div v-if="fetchParam.parent_id != 0">
+            <div>
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改分类</el-button>
+                <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">添加根节点</el-button>
                 <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子分类</el-button>
-
                 <el-button @click="moveSubCategory">移动分类</el-button>
                 <el-button @click="moveSubCategoryContent">移动分类下内容</el-button>
                 <el-button type="danger" @click="deleteCategory">删除分类</el-button>
             </div>
-
-            <div v-if="fetchParam.parent_id === 0">
+            <!--<div v-if="fetchParam.parent_id === 0">
                 <el-button type="primary">添加根节点</el-button>
-            </div>
+            </div>-->
             <el-card class="edit-content">
                 <el-form label-position="right" label-width="90px" :rules="rules" :model="fetchParam" ref="form">
                     <el-form-item label="分类名称" prop="name">
-                        <el-input v-model="fetchParam.name" :disabled="fetchParam.parent_id == null"></el-input>
+                        <el-input v-model="fetchParam.name" ></el-input>
                     </el-form-item>
                     <el-form-item label="图片" prop="image">
-                        <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl"
-                                   :onSuccess="handleImgUploaded"></UploadImg>
+                        <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl" :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>
                     <el-form-item label="分类排序" prop="sort">
-                        <el-input :disabled="fetchParam.parent_id == null" placeholder="最小的排在前面" v-model.number="fetchParam.sort"></el-input>
+                        <el-input  placeholder="最小的排在前面" v-model.number="fetchParam.sort"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button :disabled="fetchParam.parent_id == null" type="info" @click="submitForm">保存</el-button>
+                        <el-button  type="info" @click="submitForm">保存</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -100,8 +97,7 @@
                     </span> <i>】到</i>
                 </section>
                 <section class="el-dialog__body">
-                    <CourseTaskTemplateCategoryTree v-model="treeData" node-key="id"
-                                                    :onNodeClick="treeNodeClick.bind(this,2)"></CourseTaskTemplateCategoryTree>
+                    <CourseTaskTemplateCategoryTree v-model="treeData" node-key="id" :onNodeClick="treeNodeClick.bind(this,2)"></CourseTaskTemplateCategoryTree>
                 </section>
 
                 <section class="el-dialog__footer">
@@ -115,14 +111,14 @@
     </article>
 </template>
 
-<script type="text/jsx">
+<script>
     import courseTaskService from '../../../services/gov/courseTaskService.js'
     import treeUtils from '../../../utils/treeUtils'
     import CourseTaskTemplateCategoryTree from '../../component/tree/CourseTaskTemplateCategory.vue'
     import UploadImg from '../../component/upload/UploadImg.vue'
 
-    export default{
-        data () {
+    export default {
+        data() {
             return {
                 activeTab: 'add',
                 uploadImgUrl: void 0,
@@ -147,26 +143,28 @@
                     id: 0
                 },
                 rules: {
-                    name: [
-                        {required: true, message: '请输入分类名称', trigger: 'blur'},
-                    ]
+                    name: [{
+                        required: true,
+                        message: '请输入分类名称',
+                        trigger: 'blur'
+                    }, ]
                 }
             }
         },
         watch: {
-            'activeTab'(val) {
-                if (val === 'add') {
+            'activeTab' (val) {
+                if (val === 'add'||val === 'root') {
                     this.resetForm()
                 }
             },
         },
-        activated () {
+        activated() {
             xmview.setContentLoading(false)
             this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
         },
         methods: {
             // 删除分类
-            deleteCategory (){
+            deleteCategory() {
                 let node = this.nodeSelected
                 if (node && node.children) {
                     xmview.showTip('warning', '该分类下还有子分类,不能被删除')
@@ -176,7 +174,9 @@
                 this.dialogConfirm.isShow = true
                 this.dialogConfirm.msg = `是否确认删除分类 <i style="color:red">${node.label}</i> 吗？`
                 this.dialogConfirm.confirmClick = () => {
-                    courseTaskService.delCategory({id: node.value}).then(() => {
+                    courseTaskService.delCategory({
+                        id: node.value
+                    }).then(() => {
                         xmview.showTip('success', '操作成功!')
                         this.$refs.courseTaskTemplateCategory.removeItem(node, this.nodeParentSelected)
                         node = null
@@ -186,32 +186,38 @@
                 }
             },
             // 左边的节点被点击
-            treeNodeClick (type, data, node, store) {
+            treeNodeClick(type, data, node, store) {
                 if (type == 1) {
-                    if (this.nodeSelected && this.nodeSelected.value === data.value) return
                     this.nodeParentSelected = node.parent// 记录父节点
-                    this.nodeSelected = data // 记录当前节点
+                    this.nodeSelected = node // 记录当前节点
                     this.$refs.uploadImg.clearFiles()
-                    this.fetchParam = data.item
-                    this.fetchParam.parent_id = data.value // 重新指向当前的id
+                    this.fetchParam = Object.assign({},node.data)  //解决左右数据
                     this.activeTab = 'edit'
                 } else if (type == 2) {
                     this.moveToNode = node
                 }
             },
             // 图片上传完毕
-            handleImgUploaded (response) {
+            handleImgUploaded(response) {
                 this.fetchParam.image = response.data.url
             },
+            //图片删除
+            removeImg(file, fileList){
+                console.log(file, fileList)
+            },
             // 新建根节点
-            addRootCategory () {
-                this.activeTab = 'add'
+            addRootCategory() {
+                this.activeTab = 'root'
                 // 清空选中项
                 this.$refs.courseTaskTemplateCategory.clearSelected()
-                this.fetchParam.parent_id = 0
+                this.fetchParam.pid = 0
+            },
+            // 清空选中项
+            clearSelected () {
+                this.selectable = false
             },
             // 提交表单
-            submitForm () {
+            submitForm() {
                 this.$refs.form.validate((ret) => {
                     if (!ret) return
 
@@ -228,7 +234,7 @@
                             this.nodeSelected.item = this.fetchParam
                             this.$forceUpdate()
                         } else {
-//                            this.fetchParam.id = ret.data.id
+                            this.fetchParam.id = ret.data.id
                             let addedItem = {
                                 label: this.fetchParam.name,
                                 value: this.fetchParam.id,
@@ -236,23 +242,20 @@
                             }
 
                             // 如果是添加的根节点
-                            if (this.fetchParam.parent_id === 0) {
-                                this.treeData.push(addedItem)
-                            } else if (!this.nodeSelected.children) {
-                                this.nodeSelected.children = [{label: '加载中...'}]
-                            } else if (this.nodeSelected.children[0].value) {
-                                this.nodeSelected.children.push(addedItem)
-                            }
+                            if (this.fetchParam.parent_id === 0) {this.treeData.push(addedItem)} 
+                            // if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
+                            else if (!this.nodeSelected.children) {this.nodeSelected.children = [{label: '加载中...'}]} 
+                            else if (this.nodeSelected.children[0].value) {this.nodeSelected.children.push(addedItem)}
                         }
                     })
                 })
             },
             // 重置表单
-            resetForm () {
+            resetForm() {
                 this.$refs.form.resetFields()
             },
             // 移动子分类点击
-            moveSubCategory () {
+            moveSubCategory() {
                 if (!this.nodeSelected) {
                     xmview.showTip('warning', '请先选中一个分类')
                     return
@@ -266,7 +269,7 @@
                         xmview.showTip('warning', '请选择不同的分类')
                         return
                     }
-                    courseTaskService.moveCategory({id, to}).then((ret) => {
+                    courseTaskService.moveCategory({id,to}).then((ret) => {
                         // 重新渲染树节点
                         if (ret.code === 0) {
                             xmview.showTip('success', '操作成功!')
@@ -279,7 +282,7 @@
                 }
             },
             // 移动分类下的内容
-            moveSubCategoryContent () {
+            moveSubCategoryContent() {
                 if (!this.nodeSelected) {
                     xmview.showTip('warning', '请先选中一个分类')
                     return
@@ -293,7 +296,7 @@
                         xmview.showTip('warning', '请选择不同的分类')
                         return
                     }
-                    courseTaskService.moveCategoryContent({id, to}).then((ret) => {
+                    courseTaskService.moveCategoryContent({id,to}).then((ret) => {
                         // 重新渲染树节点
                         if (ret.code === 0) {
                             xmview.showTip('success', '操作成功!')
@@ -305,6 +308,7 @@
                 }
             }
         },
-        components: {CourseTaskTemplateCategoryTree, UploadImg}
+        components: {
+            CourseTaskTemplateCategoryTree,UploadImg}
     }
 </script>

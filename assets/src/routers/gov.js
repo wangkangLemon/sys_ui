@@ -129,7 +129,6 @@ export default {
                 noback: true
             }
         },
-        
          // 添加修改课程任务
         {
             path: 'coursetask/template/add',
@@ -156,7 +155,6 @@ export default {
                 noback: true
             }
         },
-
         // 添加修改课程任务模板
         {
             path: 'coursetask/template/add',
@@ -168,6 +166,20 @@ export default {
             },
             meta: {
                 title: '添加课程任务',
+            }
+        },
+        // 课程任务模板栏目
+        {
+            path: 'coursetask/template/category',
+            name: 'company-coursetasktemplate-category',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/Coursetasktemplatecategory.vue'))
+                })
+            },
+            meta: {
+                title: '课程任务模板分类-企业',
+                noback: true
             }
         },
 

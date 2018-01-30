@@ -193,6 +193,7 @@ class CourseService {
             return ret.data
         })
     }
+   
 
     // 上下线课程
     offlineCourse({ govid, course_id, status }) {
@@ -314,6 +315,16 @@ class CourseService {
             }
         })
     }
+    // 删除试题
+    delCourse({ course_id,id }) {
+        // govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${config.apiHost}/course/subject/delete/${course_id}/${id}`
+        return api.get(finalUrl,{ }).then((ret) => {
+            // console.log(ret)
+            return ret.data
+        })
+    }
+
 
     // ============================================= 专辑 开始 ======================================================
     

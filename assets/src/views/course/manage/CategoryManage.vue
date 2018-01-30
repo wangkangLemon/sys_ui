@@ -47,19 +47,17 @@
         </section>-->
         <section class="left-container">
             <!--这是view-->
-            <CourseCategoryTree v-model="treeData" ref="courseCategory"
-                                :onNodeClick="treeNodeClick.bind(this,1)">
-            </CourseCategoryTree>
+            <CourseCategoryTree v-model="treeData" ref="courseCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseCategoryTree>
         </section>
 
         <section class="right-container">
             <div >
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改栏目</el-button>
+                <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">添加根节点</el-button>
                 <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'" >添加子栏目</el-button>
                 <el-button @click="moveSubCategory" disabled>移动栏目</el-button>
                 <el-button @click="moveSubCategoryContent" disabled>移动栏目下内容</el-button>
                 <el-button type="danger" @click="deleteCategory">删除栏目</el-button>
-                <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">添加根节点</el-button>
             </div>
 
             <el-card class="edit-content">
