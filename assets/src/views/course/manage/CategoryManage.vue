@@ -178,7 +178,7 @@
             // 删除栏目
             deleteCategory (){
                 let node = this.nodeSelected
-                // console.log( node.value)
+                console.log(node, this.nodeParentSelected)
                 if (node && node.children) {
                     xmview.showTip('warning', '该栏目下还有子栏目,不能被删除')
                     return
@@ -188,9 +188,9 @@
                 this.dialogConfirm.confirmClick = () => {
                     courseService.delete_cate( node.value).then(() => {
                         xmview.showTip('success', '操作成功!')
+                        this.dialogConfirm.isShow = false
                         this.$refs.courseCategory.removeItem(node, this.nodeParentSelected)
                         node = null
-                        this.dialogConfirm.isShow = false
                         this.resetForm()
                         this.fetchParam = getFetchParam()
                     })
@@ -240,6 +240,9 @@
                         this.fetchParam.pid =this.fetchParam.id  
                         p = courseService.create_cate(this.fetchParam)
                         
+                    }
+                    else if(this.activeTab === 'root'){
+                         p = courseService.create_cate(this.fetchParam)
                     }
                     else{
                         p = courseService.update_cate(this.fetchParam)

@@ -27,24 +27,18 @@
         created () {
             // this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1}).then(ret=>{ 
             this.getData({ id:'', name }).then(ret=>{ 
-                 this.data = ret.data.map(v=>{
-                        v.data=v
-                        v.label = v.name
-                        v.value=v.id
-                        return v
-                    }) 
-            //    ret.data.forEach(v => {
-            //         this.data.push({
-            //             data: v,
-            //             label: v.name,
-            //             value: v.id,
-            //             children: v.ended ? null : [{  //暂无下级添加
-            //                 label: '正在加载',
-            //                 value: -1,
-            //             }]  //是否最终菜单？点箭头触发请求
-            //         })
-            //    })
-              
+               ret.data.forEach(v => {
+                    this.data.push({
+                        data: v,
+                        label: v.name,
+                        value: v.id,
+                        children: v.ended ? null : [{  //暂无下级添加
+                            label: '正在加载',
+                            value: -1,
+                        }]  //是否最终菜单？点箭头触发请求
+                    })
+               })
+               console.log(this.data)
                this.loading = false
                xmview.setContentLoading(false)
             })
@@ -90,7 +84,7 @@
             },
             removeItem (item, parent) {
                 // 父节点没有children 说明当前是根节点
-                if (!parent.data.children) { //根节点
+                if (!parent.data.children) {
                     this.data = this.data.filter((curr) => {
                         return curr.value != item.value
                     })

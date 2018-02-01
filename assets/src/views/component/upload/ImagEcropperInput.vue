@@ -129,7 +129,7 @@
                 let image = this.$refs.container.querySelector('.image-preview')
                 let _this = this
                 this.cropper = new Cropper(image, {
-                    // aspectRatio: this.finalRatio,
+                    aspectRatio: this.finalRatio,
                     scalable: false,
                     zoomable: false,
                     viewMode: 1,

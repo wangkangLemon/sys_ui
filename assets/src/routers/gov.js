@@ -129,19 +129,20 @@ export default {
                 noback: true
             }
         },
-         // 添加修改课程任务
-        {
-            path: 'coursetask/template/add',
-            name: 'server-manage-add',
-            component: resolve => {
-                require.ensure([], () => {
-                    resolve(require('../views/gov/courseTask/AddCoursetask.vue'))
-                })
-            },
-            meta: {
-                title: '添加课程任务',
-            }
-        },
+        //  // 添加修改课程任务
+        // {
+        //     path: 'coursetask/template/add',
+        //     name: 'server-manage-add',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/gov/courseTask/AddCoursetask.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '添加课程模板',
+        //     }
+        // },
+        // 课程任务模板
         {
             path: 'coursetask/template',
             name: 'gov-coursetasktemplate',
@@ -165,7 +166,7 @@ export default {
                 })
             },
             meta: {
-                title: '添加课程任务',
+                title: '添加课程任务模板',
             }
         },
         // 课程任务模板栏目
@@ -178,7 +179,7 @@ export default {
                 })
             },
             meta: {
-                title: '课程任务模板分类-企业',
+                title: '课程任务模板分类',
                 noback: true
             }
         },

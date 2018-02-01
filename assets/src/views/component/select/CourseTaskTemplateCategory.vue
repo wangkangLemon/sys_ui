@@ -59,7 +59,7 @@
                 let currItem = treeUtils.findItem(this.options, val, 'value')
                 if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
                 courseTaskService.getCategoryTree({
-                    id: val[val.length - 1]
+                    // id: val[val.length - 1]
                 }).then((ret) => {
                     // 重新组合数据
                     ret.map((item) => {

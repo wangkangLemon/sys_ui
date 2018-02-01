@@ -53,9 +53,9 @@
             <div>
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改分类</el-button>
                 <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">添加根节点</el-button>
-                <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子分类</el-button>
-                <el-button @click="moveSubCategory">移动分类</el-button>
-                <el-button @click="moveSubCategoryContent">移动分类下内容</el-button>
+                <!--<el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子分类</el-button>-->
+                <!--<el-button @click="moveSubCategory" disabled>移动分类</el-button>-->
+                <!--<el-button @click="moveSubCategoryContent" disabled>移动分类下内容</el-button>-->
                 <el-button type="danger" @click="deleteCategory">删除分类</el-button>
             </div>
             <!--<div v-if="fetchParam.parent_id === 0">
@@ -66,11 +66,11 @@
                     <el-form-item label="分类名称" prop="name">
                         <el-input v-model="fetchParam.name" ></el-input>
                     </el-form-item>
-                    <el-form-item label="图片" prop="image">
+                    <!--<el-form-item label="图片" prop="image">
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl" :onSuccess="handleImgUploaded"></UploadImg>
-                    </el-form-item>
+                    </el-form-item>-->
                     <el-form-item label="分类排序" prop="sort">
-                        <el-input  placeholder="最小的排在前面" v-model.number="fetchParam.sort"></el-input>
+                        <el-input  placeholder="最小的排在前面" v-model.sort="fetchParam.sort"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button  type="info" @click="submitForm">保存</el-button>
@@ -143,11 +143,17 @@
                     id: 0
                 },
                 rules: {
+                    
+                    sort: [{
+                        required: true,
+                        message: '请输入分类排序',
+                        trigger: 'blur'
+                    }],
                     name: [{
                         required: true,
                         message: '请输入分类名称',
                         trigger: 'blur'
-                    }, ]
+                    }],
                 }
             }
         },
@@ -166,22 +172,23 @@
             // 删除分类
             deleteCategory() {
                 let node = this.nodeSelected
+                console.log(node, this.nodeParentSelected)
                 if (node && node.children) {
                     xmview.showTip('warning', '该分类下还有子分类,不能被删除')
                     return
                 }
-
                 this.dialogConfirm.isShow = true
                 this.dialogConfirm.msg = `是否确认删除分类 <i style="color:red">${node.label}</i> 吗？`
                 this.dialogConfirm.confirmClick = () => {
                     courseTaskService.delCategory({
                         id: node.value
                     }).then(() => {
+                         this.dialogConfirm.isShow = false
                         xmview.showTip('success', '操作成功!')
                         this.$refs.courseTaskTemplateCategory.removeItem(node, this.nodeParentSelected)
                         node = null
-                        this.dialogConfirm.isShow = false
                         this.resetForm()
+                        this.fetchParam = getFetchParam()
                     })
                 }
             },
@@ -190,7 +197,7 @@
                 if (type == 1) {
                     this.nodeParentSelected = node.parent// 记录父节点
                     this.nodeSelected = node // 记录当前节点
-                    this.$refs.uploadImg.clearFiles()
+                    // this.$refs.uploadImg.clearFiles()
                     this.fetchParam = Object.assign({},node.data)  //解决左右数据
                     this.activeTab = 'edit'
                 } else if (type == 2) {
@@ -221,11 +228,18 @@
                 this.$refs.form.validate((ret) => {
                     if (!ret) return
 
-                    let p
-                    if (this.activeTab === 'add')
-                        p = courseTaskService.createCategory(this.fetchParam)
-                    else
-                        p = courseTaskService.updateCategory(this.fetchParam)
+                    let p 
+                    if (this.activeTab === 'add'){
+                        this.fetchParam.pid =this.fetchParam.id  
+                        p = courseTaskService.create_cate(this.fetchParam)
+                        
+                    }
+                    else if(this.activeTab === 'root'){
+                         p = courseTaskService.create_cate(this.fetchParam)
+                    }
+                    else{
+                        p = courseTaskService.update_cate(this.fetchParam)
+                    }
 
                     p.then((ret) => {
                         xmview.showTip('success', '操作成功!')
@@ -240,12 +254,13 @@
                                 value: this.fetchParam.id,
                                 item: this.fetchParam
                             }
-
+                            this.$forceUpdate()
                             // 如果是添加的根节点
-                            if (this.fetchParam.parent_id === 0) {this.treeData.push(addedItem)} 
+                            if (this.activeTab === 'root') {this.treeData.push(addedItem)} 
                             // if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
                             else if (!this.nodeSelected.children) {this.nodeSelected.children = [{label: '加载中...'}]} 
                             else if (this.nodeSelected.children[0].value) {this.nodeSelected.children.push(addedItem)}
+                            this.fetchParam = getFetchParam()
                         }
                     })
                 })
@@ -260,7 +275,6 @@
                     xmview.showTip('warning', '请先选中一个分类')
                     return
                 }
-
                 this.dialogTree.isShow = true
                 this.dialogTree.confirmClick = () => {
                     let id = this.nodeSelected.value
@@ -287,7 +301,6 @@
                     xmview.showTip('warning', '请先选中一个分类')
                     return
                 }
-
                 this.dialogTree.isShow = true
                 this.dialogTree.confirmClick = () => {
                     let id = this.nodeSelected.value

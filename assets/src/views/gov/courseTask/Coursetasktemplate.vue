@@ -85,8 +85,13 @@
         <section class="search">
             <section>
                 <i>类别</i>
-                <CourseTaskTemplateCategorySelect :onchange="getData"
-                                                  v-model="fetchParam.category_id"></CourseTaskTemplateCategorySelect>
+                <!--<CourseTaskTemplateCategorySelect :onchange="getData"
+                                                  v-model="fetchParam.category_id"></CourseTaskTemplateCategorySelect>-->
+                <el-form  prop="category_id" :fetch-suggestions="querySearch" >
+                    <el-select clearable class="select" v-model="fetchParam.category_id" placeholder="请选择部门"  @change="getData">
+                        <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form>
             </section>
             <section>
                 <i>课程名称</i>
@@ -99,7 +104,7 @@
                     label="课程任务">
             </el-table-column>
             <el-table-column
-                    prop="create_time_name"
+                    prop="addate"
                     label="创建时间"
                     width="200">
             </el-table-column>
@@ -148,8 +153,8 @@
 </template>
 <script>
     import DateRange from '../../component/form/DateRangePicker.vue'
-    import govService from '../../../services/gov/courseTaskService.js'
-    import CourseTaskTemplateCategorySelect from '../../component/select/CourseTaskTemplateCategory.vue'
+    import courseTaskService from '../../../services/gov/courseTaskService.js'
+    // import CourseTaskTemplateCategorySelect from '../../component/select/CourseTaskTemplateCategory.vue'
     import {fillImgPath} from '../../../utils/filterUtils'
 
     export default {
@@ -158,7 +163,7 @@
         },
         components: {
             DateRange,
-            CourseTaskTemplateCategorySelect,
+            // CourseTaskTemplateCategorySelect,
         },
         data () {
             return {
@@ -167,27 +172,44 @@
                 fetchParam: {
                     title: '',
                     category_id: '',
+                    status: -1,
+                    deleted: -1
                 },
                 itemName: '',           // 要删除项名称
                 coursetasktemplateData: [],
                 total: 0,
                 currentPage: 1, // 分页当前显示的页数
-                pagesize: 15
+                pagesize: 15,
+                category_list:[]
             }
         },
         activated () {
             this.getData().then(() => {
                 xmview.setContentLoading(false)
             })
+            this.getCategory()
         },
         methods: {
+            //获取部门组下拉列表
+            getCategory(val){
+                courseTaskService.getCategoryTree({pagesize:-1}).then((ret)=>{
+                 this.category_list = ret.data;
+                })
+            },
+            //拿到部门组
+            querySearch(queryString, cb) {
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据返回建议列表的数据
+                cb(results);
+            },
             handleDelete (index, row) {
                 xmview.showDialog(`你将要删除课程任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, this.deleteItem(row.id))
             },
             deleteItem (id) {
                 // 以下执行接口删除动作
                 return () => {
-                    govService.deleteCourseTaskTemplate(id).then((ret) => {
+                    courseTaskService.deleteCourseTaskTemplate(id).then((ret) => {
                         xmview.showTip('success', '删除成功')
                         this.getData()
                     }).catch((ret) => {
@@ -197,7 +219,7 @@
             },
             editItm (row) {
                 row.course = row.course || []
-                this.$router.push({name: 'coursetask-template-add', params: {item: row}})
+                this.$router.push({name: 'coursetask-template-add',params: {coursetaskInfo:row}, query: {id: row.id}})
             },
             publishCourseTaskTemplate (row) {
                 xmview.showDialog(`你将要上线课程任务【<i style="color:red">${row.title || ''}</i>】吗？`, this.publishItem(row.id))
@@ -205,7 +227,7 @@
             publishItem (id) {
                 // 以下执行接口删除动作
                 return () => {
-                    govService.publishCourseTaskTemplate(id).then((ret) => {
+                    courseTaskService.publishCourseTaskTemplate(id).then((ret) => {
                         xmview.showTip('success', '上线成功')
                         this.getData()
                     }).catch((ret) => {
@@ -219,7 +241,7 @@
             revokeItem (id) {
                 // 以下执行接口删除动作
                 return () => {
-                    govService.revokeCourseTaskTemplate(id).then((ret) => {
+                    courseTaskService.revokeCourseTaskTemplate(id).then((ret) => {
                         xmview.showTip('success', '下线成功')
                         this.getData()
                     }).catch((ret) => {
@@ -237,14 +259,17 @@
             },
             getData () {
                 this.loading = true
-                return govService.getCourseTaskTemplateList({
+                console.log(this.fetchParam)
+                return courseTaskService.getCourseTaskTemplateList({
                     category_id: this.fetchParam.category_id,
                     title: this.fetchParam.title,
+                    deleted: this.fetchParam.deleted,
+                    status: this.fetchParam.status,
                     page: this.currentPage,
                     pagesize: this.pagesize
                 }).then((ret) => {
                     this.coursetasktemplateData = ret.data
-                    this.total = ret.total
+                    this.total = ret._exts.total
                 }).then(() => {
                     this.loading = false
                 })
