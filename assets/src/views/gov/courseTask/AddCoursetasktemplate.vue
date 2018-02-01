@@ -86,13 +86,14 @@
                     <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item prop="title" label="标题">
+
+           <el-form-item prop="title" label="标题">
                 <el-input v-model="form.title" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item prop="description" label="描述">
                 <el-input v-model="form.description" auto-complete="off" :rows="6" type="textarea"></el-input>
             </el-form-item>
-            <el-form-item prop="imgUrl" label="任务封面图">
+            <el-form-item prop="image" label="任务封面图">
                 <div class="img-wrap" v-if="form.image">
                     <img :src="form.image | fillImgPath" alt=""/>
                 </div>
@@ -113,6 +114,7 @@
             <el-form-item prop="sort" label="排序">
                 <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
             </el-form-item>
+
             <!--<el-form-item label="时间">
                 <DateRange :start="form.stime" :end="form.etime" @changeStart="val=> form.stime=val"
                     @changeEnd="val=> form.etime=val" :defaultStart="form.stime" :defaultEnd="form.etime">
@@ -224,9 +226,11 @@
                     etime:'',
                 },
                 rules: {
-                    title: [
-                        {required: true, message: '必须填写', trigger: 'blur'}
-                    ],
+                    title: [{required: true, min: 1, message: '必须填写', trigger: 'blur'}],
+                    description: [{required: true, min: 1,message: '必须填写', trigger: 'blur'}],
+                    image: [{required: true, message: '必须填写', trigger: 'blur'}],
+                    sort: [{required: true, message: '必须填写'}],
+                    course: [{ required: true, message: '必须填写'}],
                     category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
                 },
                 dialogCourse: {
