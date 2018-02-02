@@ -279,11 +279,10 @@
             if (this.$route.params.coursetaskInfo) {
                 courseTaskService.getCourseTaskTemplateEditDetail(this.$route.query.id).then((ret) => {
                     this.form = Object.assign(this.form, ret.data)
-                    this.form.stime =  ret.data.start_date.split(' ')[0]
-                    this.form.etime =  ret.data.end_date.split(' ')[0]
-                    this.form.type = ret.data.type
-                    this.pushTypeDialog.type = ret.data.type
-                    // console.log(ret.data.courses)
+                    // this.form.stime =  ret.data.start_date.split(' ')[0]
+                    // this.form.etime =  ret.data.end_date.split(' ')[0]
+                    // this.form.type = ret.data.type
+                    // this.pushTypeDialog.type = ret.data.type
                     this.form.course = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v

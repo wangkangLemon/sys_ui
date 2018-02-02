@@ -41,9 +41,9 @@
 
 <template>
     <article id="course-task-template-category">
-        <section class="manage-container">
+        <!--<section class="manage-container">
             <el-button type="primary" @click="addRootCategory">新建分类</el-button>
-        </section>
+        </section>-->
 
         <section class="left-container">
             <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
@@ -52,7 +52,7 @@
         <section class="right-container">
             <div>
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改分类</el-button>
-                <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">添加根节点</el-button>
+                <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">新建分类</el-button>
                 <!--<el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子分类</el-button>-->
                 <!--<el-button @click="moveSubCategory" disabled>移动分类</el-button>-->
                 <!--<el-button @click="moveSubCategoryContent" disabled>移动分类下内容</el-button>-->

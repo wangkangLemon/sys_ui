@@ -159,7 +159,7 @@ class sysService {
 
     // 删除课程任务模板
     deleteCourseTaskTemplate (task_id) {
-        let finalUrl = urlPre + `/template/delete${task_id}`
+        let finalUrl = urlPre + `/template/delete/${task_id}`
         return api.post(finalUrl, {})
     }
 

@@ -113,9 +113,9 @@
                     label="状态"
                     width="100">
                 <template scope="scope">
-                    <el-tag type="success" v-if="scope.row.status == 0">正常</el-tag>
-                    <el-tag type="gray" v-if="scope.row.status == 1">草稿</el-tag>
-                    <el-tag type="gray" v-if="scope.row.status == 2">下线</el-tag>
+                    <el-tag type="success" v-if="scope.row.status == 2">正常</el-tag>
+                    <!--<el-tag type="gray" v-if="scope.row.status == 1">草稿</el-tag>
+                    <el-tag type="gray" v-if="scope.row.status == 2">下线</el-tag>-->
                 </template>
             </el-table-column>
             <el-table-column prop="operate" label="操作" width="160">
@@ -124,15 +124,14 @@
                         修改
                         <!--点击详情 form数据变成当前管理员的信息-->
                     </el-button>
-                    <el-button v-if="scope.row.status == 2 || scope.row.status == 1 " type="text" size="small"
+                    <!--<el-button v-if="scope.row.status == 2 || scope.row.status == 1 " type="text" size="small"
                                @click="publishCourseTaskTemplate(scope.row)">
                         上线
-                        <!--上线-->
                     </el-button>
                     <el-button v-if="scope.row.status == 0 " type="text" size="small"
                                @click="revokeCourseTaskTemplate(scope.row)">
                         <i>下线</i>
-                    </el-button>
+                    </el-button>-->
                     <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">
                         <i>删除</i>
                     </el-button>
@@ -144,6 +143,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
+                    :page-size="pagesize"
                     :page-sizes="[15, 30, 60, 100]"
                     layout="total, sizes, ->, prev, pager, next, jumper"
                     :total="total">
