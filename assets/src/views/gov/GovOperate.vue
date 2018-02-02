@@ -162,7 +162,6 @@
             _this = this
             xmview.setContentLoading(false)
             if (this.govID == undefined) {
-
                 this.form = {
                     gov_id: void 0, //初始化govid
                     category: '', // 类型
@@ -197,33 +196,40 @@
                 this.$refs[form].validate((valid) => {
                     if (valid) {
                         this.form = Object.assign(this.form, this.sign)
-                        let reqFn = govService.addGov
-                        let msg = '添加成功'
-                        
-                        if(this.form.province_id) {
-                            this.form.pid = this.form.province_id
-                            console.log( 'this.form.province_id='+ this.form.province_id)
-                            if(this.form.province_id && this.form.city_id){
-                                 this.form.pid = this.form.city_id
-                                 console.log( 'this.form.city_id='+ this.form.city_id)
-                                 if(this.form.province_id && this.form.city_id && this.form.area_id){
-                                    this.form.pid = this.form.area_id
-                                    console.log( 'this.form.area_id='+ this.form.area_id)
-                                    if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id){
-                                        this.form.pid = this.form.town_id
-                                        if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id && this.form.village_id){
-                                            this.form.pid = this.form.village_id
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
+                        let reqFn, msg 
                         if (this.govID) {
                             this.form.gov_id = this.govID
                             reqFn = govService.updateGov
                             msg = '修改成功'
+                        }else{
+                            reqFn = govService.addGov
+                            msg= '添加成功'
                         }
+                        // if(this.form.province_id) {
+                        //     this.form.pid = this.form.province_id
+                        //     console.log( 'this.form.province_id='+ this.form.province_id)
+                        //     if(this.form.province_id && this.form.city_id){
+                        //          this.form.pid = this.form.city_id
+                        //          console.log( 'this.form.city_id='+ this.form.city_id)
+                        //          if(this.form.province_id && this.form.city_id && this.form.area_id){
+                        //             this.form.pid = this.form.area_id
+                        //             console.log( 'this.form.area_id='+ this.form.area_id)
+                        //             if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id){
+                        //                 this.form.pid = this.form.town_id
+                        //                 if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id && this.form.village_id){
+                        //                     this.form.pid = this.form.village_id
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
+                        // }
+                        console.log(this.$route.params.govinfo)
+                        if(this.$route.params.govinfo!=undefined){
+                            this.form.pid = this.$route.params.govinfo.pid
+                        }else{
+                            this.form.pid = this.form.village_id||this.form.town_id|| this.form.area_id||this.form.city_id ||this.form.province_id
+                        }
+                        console.log(this.form)
                         reqFn(this.form).then(() => {
                             xmview.showTip('success', msg)
                         }).then(() => {
