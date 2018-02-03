@@ -98,6 +98,10 @@
                     }
                 }
             }
+
+            .title{
+                white-space:nowrap;
+            }
         }
 
         .content {

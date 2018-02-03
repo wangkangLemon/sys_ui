@@ -70,7 +70,7 @@
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl" :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>-->
                     <el-form-item label="分类排序" prop="sort">
-                        <el-input type="number" placeholder="最小的排在前面" v-model="fetchParam.sort"></el-input>
+                        <el-input  type="number" :placeholder="placeholder" v-model.sort="fetchParam.sort"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button  type="info" @click="submitForm">保存</el-button>
@@ -135,6 +135,7 @@
                     isShow: false,
                     confirmClick: {}
                 },
+                placeholder:'最小的排在前面',
                 fetchParam: {
                     parent_id: void 0,
                     name: void 0,
@@ -143,12 +144,12 @@
                     id: 0
                 },
                 rules: {
-                    sort: [{
-                        required: true,
-                        type:'number',
-                        message: '请输入分类排序',
-                        trigger: 'blur'
-                    }],
+                    // sort: [{
+                    //     required: true,
+                    //     type:'number',
+                    //     message: '请输入分类排序',
+                    //     trigger: 'blur'
+                    // }],
                     name: [{
                         required: true,
                         message: '请输入分类名称',
@@ -163,6 +164,10 @@
                     this.resetForm()
                 }
             },
+            // 'fetchParam.sort'(){
+            //     this.fetchParam.sort=Number(this.fetchParam.sort)
+            //     console.log(typeof(this.fetchParam.sort))
+            // }
         },
         activated() {
             xmview.setContentLoading(false)
@@ -242,7 +247,7 @@
                         
                         p = courseTaskService.update_cate(this.fetchParam)
                     }
-
+                    console.log(this.fetchParam)
                     p.then((ret) => {
                         xmview.showTip('success', '操作成功!')
                         if (this.activeTab === 'edit') {

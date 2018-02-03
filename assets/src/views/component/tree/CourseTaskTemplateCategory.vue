@@ -26,7 +26,7 @@
         },
         created () {
             // this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1}).then(ret=>{ 
-            this.getData({ id:'', name }).then(ret=>{ 
+            this.getData({ id:'', name, pagesize:-1 }).then(ret=>{ 
                  this.data = ret.data.map(v=>{
                         v.data=v
                         v.label = v.name
