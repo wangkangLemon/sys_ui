@@ -70,7 +70,7 @@
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl" :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>-->
                     <el-form-item label="分类排序" prop="sort">
-                        <el-input  placeholder="最小的排在前面" v-model.sort="fetchParam.sort"></el-input>
+                        <el-input type="number" placeholder="最小的排在前面" v-model="fetchParam.sort"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button  type="info" @click="submitForm">保存</el-button>
@@ -143,9 +143,9 @@
                     id: 0
                 },
                 rules: {
-                    
                     sort: [{
                         required: true,
+                        type:'number',
                         message: '请输入分类排序',
                         trigger: 'blur'
                     }],
@@ -200,6 +200,7 @@
                     // this.$refs.uploadImg.clearFiles()
                     this.fetchParam = Object.assign({},node.data)  //解决左右数据
                     this.activeTab = 'edit'
+                    console.log(this.fetchParam )
                 } else if (type == 2) {
                     this.moveToNode = node
                 }
@@ -238,6 +239,7 @@
                          p = courseTaskService.create_cate(this.fetchParam)
                     }
                     else{
+                        
                         p = courseTaskService.update_cate(this.fetchParam)
                     }
 
@@ -254,13 +256,16 @@
                                 value: this.fetchParam.id,
                                 item: this.fetchParam
                             }
+                            this.resetForm()
+                            this.fetchParam = getFetchParam()
+
                             this.$forceUpdate()
                             // 如果是添加的根节点
                             if (this.activeTab === 'root') {this.treeData.push(addedItem)} 
                             // if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
                             else if (!this.nodeSelected.children) {this.nodeSelected.children = [{label: '加载中...'}]} 
                             else if (this.nodeSelected.children[0].value) {this.nodeSelected.children.push(addedItem)}
-                            this.fetchParam = getFetchParam()
+                           
                         }
                     })
                 })

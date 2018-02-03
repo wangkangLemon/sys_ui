@@ -226,8 +226,8 @@
                     etime:'',
                 },
                 rules: {
-                    title: [{required: true, pattern:  /\S$/, min: 1, message: '请输入非空格或特殊字符的标题', trigger: 'blur'}],
-                    description: [{required: true, min: 1,message: '必须填写', trigger: 'blur'}],
+                    title: [{required: true, pattern:  /\S$/, min: 1, message: '请输入非空格或非特殊字符的标题', trigger: 'blur'}],
+                    description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
                     image: [{required: true, message: '必须填写', trigger: 'blur'}],
                     sort: [{required: true, message: '必须填写'}],
                     course: [{ required: true, message: '必须填写'}],
