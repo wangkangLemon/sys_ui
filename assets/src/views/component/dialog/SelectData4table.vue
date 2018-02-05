@@ -92,6 +92,7 @@
                 fetchParam: {
                     page: 1,
                     pagesize: 15,
+                    need_testing: 1,
                 },
                 total: 0,
                 data: [],
