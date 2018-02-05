@@ -88,8 +88,7 @@
                             <el-option v-for="(item, index) in experts_list" :label="item.name" :value="item.id" :key="item.id">
                             </el-option>
                         </el-select>-->
-                        <!--<i>关联专家</i>-->
-                        <Experts v-model="fetchParam.experts_id" :placeholder="fetchParam.name"
+                        <Experts v-model="fetchParam.experts_id" :placeholder="fetchParam.experts_name"
                                             v-on:change="val=>fetchParam.experts_id=val" :change="getExpertsList" :list="changelist">
                         </Experts>
                     </el-form-item>
@@ -302,6 +301,8 @@ export default {
             console.log(this.fetchParam)
             // console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
             this.fetchParam.material_name= this.$route.params.courseInfo.course_name
+            this.fetchParam.experts_id = this.$route.params.courseInfo.experts_name
+            
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')
         } else if (this.$route.query.contentid) {
@@ -391,7 +392,7 @@ export default {
                 this.loadingData = true
                 return videoService.getVideo(this.fetchParam).then((ret) => {
                     this.data = ret.data
-                    this.total = ret.total
+                    this.total = ret._exts.total
                     this.loadingData = false
                 })
             },
@@ -565,6 +566,7 @@ function getOrignData() {
         price: void 0,
         price_floa: void 0,
         experts_id: void 0,
+        experts_name:'',
         sort:void 0,
         share:void 0,
     }

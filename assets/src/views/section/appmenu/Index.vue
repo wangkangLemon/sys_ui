@@ -499,8 +499,8 @@
                 courseService.search_cate({
                     pid: 0
                 }).then((ret, index) => {
-                    this.CourseCatas = ret
-                    ret.forEach(v => {
+                    this.CourseCatas = ret.data
+                    ret.data.forEach(v => {
                         if (v.id == id) {
                             this.form.courseName = v.name;
                             // alert(this.form.courseName)
@@ -611,7 +611,7 @@
                 }).then((ret) => {
                     this.resultData = ret.data
                     // console.log(this.resultData)
-                    this.total = ret.total
+                    this.total = ret._exts.total
                 }).then(() => {
                     this.containerLoading = false
                 })

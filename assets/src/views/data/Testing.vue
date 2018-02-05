@@ -210,8 +210,8 @@
                     time_start: this.search.createTime,
                     time_end: this.search.endTime,
                 }).then((ret) => {
-                    this.total = ret.total
-                    this.testingData = ret
+                    this.total = ret._exts.total
+                    this.testingData = ret.data
                 }).then(() => {
                     this.loading = false
                 })

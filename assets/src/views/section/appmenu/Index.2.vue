@@ -446,7 +446,7 @@
             },
             getCourseName(){
                 courseService.search_cate({pid: 0}).then((ret) => {
-                    this.CourseCatas = ret
+                    this.CourseCatas = ret.data
                     this.form.name=ret.name
                     return ret
                 })
@@ -557,7 +557,7 @@
                 ).then((ret) => {
                     this.resultData = ret.data
                     // console.log(this.resultData)
-                    this.total = ret.total
+                    this.total = ret._exts.total
                 }).then(() => {
                     this.containerLoading = false
                 })

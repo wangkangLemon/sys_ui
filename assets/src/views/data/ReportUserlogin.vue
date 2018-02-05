@@ -365,8 +365,8 @@
                     date_end: this.search.endTime,
                     level:this.fetchParam.level,
                 }).then((ret) => {
-                    this.total = ret.total
-                    this.manageData = ret
+                    this.total = ret._exts.total
+                    this.manageData = ret.data
                 }).then(() => {
                     this.loading = false
                 })

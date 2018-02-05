@@ -71,7 +71,7 @@
                         level: -1,
                         pagesize:-1
                     }).then((ret) => {
-                        ret.forEach(v => {
+                        ret.data.forEach(v => {
                             this.options.push({
                                 data: v,
                                 label: v.name,
@@ -139,7 +139,7 @@
                     //         v.children = arr
                     //     }
                     // })
-                    var arr = ret.map(v => {
+                    var arr = ret.data.map(v => {
                         v.label = v.name
                         v.value = v.id
                         v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组

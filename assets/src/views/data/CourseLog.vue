@@ -192,8 +192,8 @@
 
                 }).then((ret) => {
                     this.loadingData = false
-                    this.total = ret.total
-                    this.tableData = ret
+                    this.total = ret._exts.total
+                    this.tableData = ret.data
                     console.log(ret)
                     xmview.setContentLoading(false)
                 })

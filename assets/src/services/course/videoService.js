@@ -12,7 +12,7 @@ class VideoService {
             status = -1
         }
         return api.get(url, { status, file_name, time_start, time_end }).then((ret) => {
-            return ret.data
+            return ret
         })
     }
 

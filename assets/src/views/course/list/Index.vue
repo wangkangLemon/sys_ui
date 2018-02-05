@@ -173,9 +173,8 @@
             fetchData(val) {
                 this.loadingData = true
                 return courseService.search_cate(this.fetchParam).then((ret) => {
-                    this.data = ret
-                    console.log(ret)
-                    this.total = ret.total
+                    this.data = ret.data
+                    this.total = ret._exts.total
                     this.loadingData = false
                     xmview.setContentLoading(false)
                 })

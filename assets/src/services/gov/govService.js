@@ -490,7 +490,7 @@ class govService {
             date_start,
             date_end,
         }).then((ret) => {
-            return ret.data
+            return ret
         })
     }    
     // 注册登陆统计
@@ -517,7 +517,7 @@ class govService {
             date_end,
             level,
         }).then((ret) => {
-            return ret.data
+            return ret
         })
     }    
 //------------------------------------------------课程观看日志---------------------------------------------------------------------------
@@ -544,7 +544,7 @@ class govService {
             date_start,
             date_end,
         }).then((ret) => {
-            return ret.data
+            return ret
         })
     }
 

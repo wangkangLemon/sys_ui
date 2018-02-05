@@ -243,7 +243,7 @@
                     pagesize: this.pagesize
                 }).then((ret) => {
                     this.coursetasktemplateData = ret.data
-                    this.total = ret.total
+                    this.total = ret._exts.total
                 }).then(() => {
                     this.loading = false
                 })

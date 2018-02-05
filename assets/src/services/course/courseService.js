@@ -59,7 +59,7 @@ class CourseService {
         return api.get(url, { id, name, category_type, pid, level, ended, disabled, page, pagesize }, false).then(ret => {
             if (ret.code == 0) {
                 // console.log(ret)
-                return ret.data
+                return ret
             } else {
                 return Promise.reject(ret)
             }

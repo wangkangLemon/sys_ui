@@ -126,7 +126,7 @@
                 if (isFirst) this.fetchParam.page = 1
                 this.getData(this.fetchParam).then((ret) => {
                     // this.total = ret._exts.total
-                    this.total = 2000
+                    this.total = ret._exts.total
                     // 是否首次加载
                     if (this.fetchParam.page === 1) {
                         this.fetchParam.page = 1

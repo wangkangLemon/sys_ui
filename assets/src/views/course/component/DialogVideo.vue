@@ -82,8 +82,8 @@ export default {
             this.loadingData = true
             console.log((this.fetchParam))
             videoService.search(this.fetchParam).then((ret) => {
-                this.data = ret
-                this.total = ret.total
+                this.data = ret.data
+                this.total = ret._exts.total
                 this.loadingData = false
                 xmview.setContentLoading(false)
             })

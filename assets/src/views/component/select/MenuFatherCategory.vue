@@ -138,7 +138,7 @@
                         //         v.children = arr
                         //     }
                         // })
-                        var arr = ret.map(v=>{
+                        var arr = ret.data.map(v=>{
                             v.label = v.name
                             v.value = v.pid
                             v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组

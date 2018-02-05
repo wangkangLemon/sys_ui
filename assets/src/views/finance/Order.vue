@@ -181,7 +181,7 @@ export default {
             this.loading = true
             return orderService.search(this.fetchParam).then((ret) => {
                 this.dataList = ret.data
-                this.total = ret.total
+                this.total = ret._exts.total
                 this.loading = false
             })
         },
