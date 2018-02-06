@@ -75,33 +75,33 @@ export default {
             }
         },
         // //编辑管理员
-        // {
-        //     path: 'user/edit/:user_id',
-        //     name: 'user-edit',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/gov/user/Form.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '管理员修改',
-        //         noback: false
-        //     }
-        // },
+            // {
+            //     path: 'user/edit/:user_id',
+            //     name: 'user-edit',
+            //     component: resolve => {
+            //         require.ensure([], () => {
+            //             resolve(require('../views/gov/user/Form.vue'))
+            //         })
+            //     },
+            //     meta: {
+            //         title: '管理员修改',
+            //         noback: false
+            //     }
+            // },
         //  //新建人员
-        // {
-        //     path: 'person/edit/:user_id',
-        //     name: 'person-add',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/gov/user/personForm.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '人员新建',
-        //         noback: false
-        //     }
-        // },
+            // {
+            //     path: 'person/edit/:user_id',
+            //     name: 'person-add',
+            //     component: resolve => {
+            //         require.ensure([], () => {
+            //             resolve(require('../views/gov/user/personForm.vue'))
+            //         })
+            //     },
+            //     meta: {
+            //         title: '人员新建',
+            //         noback: false
+            //     }
+            // },
         {
             path: 'person/edit/:user_id',//编辑人员
             name: 'person-edit',
@@ -129,19 +129,7 @@ export default {
                 noback: true
             }
         },
-        //  // 添加修改课程任务
-        // {
-        //     path: 'coursetask/template/add',
-        //     name: 'server-manage-add',
-        //     component: resolve => {
-        //         require.ensure([], () => {
-        //             resolve(require('../views/gov/courseTask/AddCoursetask.vue'))
-        //         })
-        //     },
-        //     meta: {
-        //         title: '添加课程模板',
-        //     }
-        // },
+ 
         // 课程任务模板
         {
             path: 'coursetask/template',
@@ -180,6 +168,33 @@ export default {
             },
             meta: {
                 title: '课程任务模板分类',
+                noback: true
+            }
+        },
+        // // 公告列表
+            // {
+            //     path: 'announce/list',
+            //     name: 'gov-announce-category',
+            //     component: resolve => {
+            //         require.ensure([], () => {
+            //             resolve(require('../views/gov/courseTask/Coursetasktemplate.vue'))
+            //         })
+            //     },
+            //     meta: {
+            //         title: '公告列表',
+            //         noback: true
+            //     }
+            // },
+        {
+            path: 'announce/category',
+            name: 'gov-announce-category-manage',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/announce/AnnounceCategory.vue'))
+                })
+            },
+            meta: {
+                title: '公告栏目管理',
                 noback: true
             }
         },

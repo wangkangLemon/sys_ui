@@ -88,7 +88,7 @@
                 <!--<CourseTaskTemplateCategorySelect :onchange="getData"
                                                   v-model="fetchParam.category_id"></CourseTaskTemplateCategorySelect>-->
                 <el-form  prop="category_id" :fetch-suggestions="querySearch" >
-                    <el-select clearable class="select" v-model="fetchParam.category_id" placeholder="请选择部门"  @change="getData">
+                    <el-select clearable class="select" v-model="fetchParam.category_id" placeholder="请选择类别"  @change="getData">
                         <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form>
