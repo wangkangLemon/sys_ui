@@ -67,7 +67,7 @@
                         <el-input v-model="fetchParam.name" ></el-input>
                     </el-form-item>
                     <el-form-item label="图片" prop="image">
-                        <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl" 
+                        <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl"
                         :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>
                     <el-form-item label="分类排序" prop="sort">
@@ -243,17 +243,17 @@
                 this.$refs.form.validate((ret) => {
                     if (!ret) return
 
-                    let p 
+                    let p
                     if (this.activeTab === 'add'){
-                        this.fetchParam.pid =this.fetchParam.id  
+                        this.fetchParam.pid =this.fetchParam.id
                         p = announceService.create_cate(this.fetchParam)
-                        
+
                     }
                     else if(this.activeTab === 'root'){
                          p = announceService.create_cate(this.fetchParam)
                     }
                     else{
-                        
+
                         p = announceService.update_cate(this.fetchParam)
                     }
                     console.log(this.fetchParam)
@@ -275,11 +275,11 @@
 
                             this.$forceUpdate()
                             // 如果是添加的根节点
-                            if (this.activeTab === 'root') {this.treeData.push(addedItem)} 
+                            if (this.activeTab === 'root') {this.treeData.push(addedItem)}
                             // if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
-                            else if (!this.nodeSelected.children) {this.nodeSelected.children = [{label: '加载中...'}]} 
+                            else if (!this.nodeSelected.children) {this.nodeSelected.children = [{label: '加载中...'}]}
                             else if (this.nodeSelected.children[0].value) {this.nodeSelected.children.push(addedItem)}
-                           
+
                         }
                     })
                 })
