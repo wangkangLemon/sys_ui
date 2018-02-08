@@ -262,7 +262,8 @@
                                 value: this.fetchParam.id,
                                 item: this.fetchParam
                             }
-
+                            
+                            this.fetchParam = getFetchParam()
                             // 如果是添加的根节点
                             if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
                             else if (!this.nodeSelected.children) this.nodeSelected.children = [{label: '加载中...'}]

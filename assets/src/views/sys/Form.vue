@@ -139,6 +139,13 @@
             this.getrole()
             this.loadingData=false;
         },
+        watch: {
+            'fetchParam.password'(){
+                if(this.fetchParam.password==undefined){
+                    this.fetchParam.password=''
+                }
+            }
+        },
         methods: {
             // 裁切后的回调
             cropperFn(data, ext) {
@@ -167,6 +174,8 @@
                     let req = sysService.create
                     if (this.fetchParam.id) req = sysService.update
                     // console.log(this.fetchParam.id)
+
+                    // if(this.fetchParam.password)
                     req(this.fetchParam).then((ret) => {
                         // 重置当前数据
                         //this.$refs[fetchParam].resetFields();//自己加的方法

@@ -24,8 +24,8 @@ class VideoService {
 
     // 删除
     delete({ id }) {
-        let url = `${urlPre}/${id}`
-        return api.del(url)
+        let url = `${urlPre}/delete/${id}`
+        return api.post(url)
     }
 
     // 批量删除

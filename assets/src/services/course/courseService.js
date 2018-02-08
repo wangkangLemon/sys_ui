@@ -37,7 +37,7 @@ class CourseService {
     // deleteCategory({ govid, id }) {
     //     govid = govid || authUtils.getUserInfo().company_id
     //     let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-    //     return api.del(finalUrl, {})
+    //     return api.post(finalUrl, {})
     // }
 
 
@@ -253,7 +253,7 @@ class CourseService {
     deleteCourse({ govid, course_id }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/delete/${course_id}`
-        return api.del(finalUrl, {})
+        return api.post(finalUrl, {})
     }
 
     // 批量删除课程
@@ -319,7 +319,7 @@ class CourseService {
     delCourse({ course_id,id }) {
         // govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/subject/delete/${course_id}/${id}`
-        return api.get(finalUrl,{ }).then((ret) => {
+        return api.post(finalUrl,{ }).then((ret) => {
             // console.log(ret)
             return ret.data
         })
@@ -341,7 +341,7 @@ class CourseService {
     deleteAlbum({ govid, id }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/com/${govid}/course/album/${id}`
-        return api.del(finalUrl, {})
+        return api.post(finalUrl, {})
     }
 
     // 批量删除专辑 ids: id数组

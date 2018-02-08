@@ -135,6 +135,7 @@
             create( ) {
                 cateService.create().then(() => {
                         console.log(ret)
+                        this.selectData=null
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
                         }, 300)
@@ -156,6 +157,7 @@
                         message.pid=this.$store.state.index.secPid
                     }
                     cateService.create( message ).then(( ret ) => {
+                        this.selectData=null
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
                         }, 300)
