@@ -379,7 +379,7 @@
                 pagesize: 10,
                 resultData: [],
                 form: clearFn(),
-                
+
                 fetchGroup: groupFn(),
                 grouprules: {
                     version: {
@@ -620,8 +620,8 @@
                     this.containerLoading = false
                 })
             },
-            
-           
+
+
             // 表单版本发生变化的时候获取功能列表
             versionChange() {
                 //                this.form.type_id = ''
@@ -779,7 +779,7 @@
                     this.getData()
                 })
             },
-            
+
             // 启用版本号
             activeScheme() {
                 if (this.checkedIos.length < 1 && this.checkedAndroids.length < 1) {
