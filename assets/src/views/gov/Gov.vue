@@ -254,6 +254,8 @@
                 // if (this.fetchParam.provinceSelect!=='') {
                 //     this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
                 // }
+                let level_pid=this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
+                // }
                 let flag = false
                 let index
                 let arr = ['provinceSelect', 'citySelect', 'areaSelect', 'townSelect', 'villageSelect']
@@ -268,10 +270,17 @@
                 })
                 
                 if(index>0){
-                    if(type){
+                    if(type){ //从后向前获取
+                        console.log(type)
+                        alert('index-1')
                         this.fetchParam.pid = this.fetchParam[arr[index-1]];
-                    }else{
-                        this.fetchParam.pid = this.fetchParam[arr[index]];
+                        if(this.fetchParam.name!=''||this.fetchParam.typeSelect!=''){
+                            alert('name')
+                            this.fetchParam.pid = level_pid
+                        }
+                    }else{  //从前向后获取
+                        alert('index')
+                        this.fetchParam.pid = this.finallyVal
                     }
                     
                 }else{
@@ -279,10 +288,10 @@
                 }
                
 
-                if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
-                    this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
-                    this.fetchParam.pid = 27
-                }
+                // if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
+                //     this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
+                //     this.fetchParam.pid = 27
+                // }
                 this.loading = true
                 return govService.getSelectList({
                     pagesize: this.pageSize,
