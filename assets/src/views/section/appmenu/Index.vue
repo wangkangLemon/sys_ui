@@ -120,6 +120,9 @@
                         background: rgba(0, 0, 0, 0.1);
                     }
                 }
+                strong{
+                    color:coral
+                }
             }
         }
         .apply-version {
@@ -267,6 +270,7 @@
         </section>-->
 
         <article class="nav-list" v-for="(list,pindex) in resultData" :key="list.id">
+            <div  class="platform "> <strong>分组名称 (version) : {{list.version}}</strong></div>
             <section class="nav-imgs">
                 <section class="dragWrap" v-if="!list.used">
                     <!--没有 active激活（使用中）时有编辑和删除  -->
@@ -600,7 +604,7 @@
                 this.getData()
             },
             getData() {
-                // 拖拽方法
+                // 拖拽方法 // 获取方案组列表
                 this.containerLoading = true
                 return mobileService.searchScheme({
                     type: 'index',
@@ -629,17 +633,17 @@
                 })
             },
             // typeChange() {
-            //     if (this.form.type == 'link') {
-            //         this.form.url = '' // 链接地址
-            //         this.form.name = '' // 功能名称
-            //         this.form.icon = '' // 功能图标
-            //     } else {
-            //         this.form.type_id = '' // 功能id
-            //         this.form.version = '' // 版本
-            //         this.form.name = '' // 功能名称
-            //         this.form.icon = '' // 功能图标
-            //     }
-            // },
+                //     if (this.form.type == 'link') {
+                //         this.form.url = '' // 链接地址
+                //         this.form.name = '' // 功能名称
+                //         this.form.icon = '' // 功能图标
+                //     } else {
+                //         this.form.type_id = '' // 功能id
+                //         this.form.version = '' // 版本
+                //         this.form.name = '' // 功能名称
+                //         this.form.icon = '' // 功能图标
+                //     }
+                // },
             showLayer(e) {
                 e.target.querySelector('.operate-layer').style.visibility = 'visible'
             },
@@ -667,19 +671,19 @@
                 })
             },
             // 获取启用的版本
-            // getPlatVersions(group_id) {
-            //     this.checkedIos = []
-            //     this.checkedAndroids = []
-            //     this.versionDialog = true
-            //     this.versionLoading = true
-            //     mobileService.getPlatVersions({
-            //         group_id
-            //     }).then((ret) => {
-            //         this.platForm = ret.data
-            //         this.platForm.group_id = group_id
-            //         this.versionLoading = false
-            //     })
-            // },
+                // getPlatVersions(group_id) {
+                //     this.checkedIos = []
+                //     this.checkedAndroids = []
+                //     this.versionDialog = true
+                //     this.versionLoading = true
+                //     mobileService.getPlatVersions({
+                //         group_id
+                //     }).then((ret) => {
+                //         this.platForm = ret.data
+                //         this.platForm.group_id = group_id
+                //         this.versionLoading = false
+                //     })
+                // },
             getPlatVersions(group,group_id){
                 mobileService.activeScheme({group_id,used:1}).then((ret) => {
                     this.getData()
