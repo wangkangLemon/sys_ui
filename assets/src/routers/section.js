@@ -87,7 +87,7 @@ export default {
             },
             meta: {
                 title: '客户端菜单',
-                noback: false
+                noback: true
             }
         },
     ]

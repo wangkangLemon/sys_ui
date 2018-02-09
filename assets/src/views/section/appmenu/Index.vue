@@ -121,7 +121,7 @@
                     }
                 }
                 strong{
-                    color:coral
+                    color:#20a0ff;
                 }
             }
         }
@@ -270,7 +270,7 @@
         </section>-->
 
         <article class="nav-list" v-for="(list,pindex) in resultData" :key="list.id">
-            <div  class="platform "> <strong>分组名称 (version) : {{list.version}}</strong></div>
+            <div  class="platform "> <strong>{{list.id}}.分组名称 (version) : {{list.version}}</strong></div>
             <section class="nav-imgs">
                 <section class="dragWrap" v-if="!list.used">
                     <!--没有 active激活（使用中）时有编辑和删除  -->
@@ -311,7 +311,7 @@
                 <el-button type="text" v-if="!list.used" @click="getPlatVersions(list,list.id, pindex)">启用</el-button>
                 <el-button type="text" @click="cloneScheme(list.id)">克隆</el-button>
                 <el-button type="text" @click="editScheme(list,list.id, pindex)">编辑</el-button>
-                <el-button type="text" @click="deleteScheme(list.id)" v-if="!list.used && !list.readonly">删除</el-button>
+                <el-button type="text" @click="deleteScheme(list,list.id)" v-if="!list.used && !list.readonly">删除</el-button>
             </section>
             <div class="platform" v-if="list.used">
                 <i>使用平台和版本:</i>
@@ -591,13 +591,15 @@
                 })
             },
             delModule(group_id, module_id, pindex, index) {
-                mobileService.deleteModule({
-                    group_id,
-                    module_id
-                }).then(() => {
-                    xmview.showTip('success', '删除成功')
-                    this.resultData[pindex].items.splice(index, 1)
-                })
+                // xmview.showDialog(`你将要删除 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
+                    mobileService.deleteModule({
+                        group_id,
+                        module_id
+                    }).then(() => {
+                        xmview.showTip('success', '删除成功')
+                        this.resultData[pindex].items.splice(index, 1)
+                    })
+                //  })
             },
             handleCurrentChange(val) {
                 this.currentPage = val
@@ -771,12 +773,15 @@
                     }
                 })
             },
-            deleteScheme(group_id) {
-                mobileService.deleteScheme({
-                    group_id
-                }).then(() => {
-                    xmview.showTip('success', '删除成功')
-                    this.getData()
+            deleteScheme(row,group_id) {
+                console.log(row)
+                xmview.showDialog(`你将要删除菜单组 <span style="color:red">${row.version}</span>  此操作不可恢复确认吗?`, () => {
+                    mobileService.deleteScheme({
+                        group_id
+                    }).then(() => {
+                        xmview.showTip('success', '删除成功')
+                        this.getData()
+                    })
                 })
             },
             
