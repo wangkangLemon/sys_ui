@@ -65,7 +65,7 @@
             </Region>
             <section>
                 <i>名称：</i>
-                <el-input @keyup.enter.native="getData" v-model="fetchParam.name" @change="changeName" auto-complete="off"></el-input>
+                <el-input @keyup.enter.native="getData()" v-model="fetchParam.name" auto-complete="off"></el-input>
             </section>
             <DateRange title="创建时间" :start="fetchParam.addate" :end="fetchParam.update" v-on:changeStart="val=> fetchParam.addate = val"
                 v-on:changeEnd="val=> fetchParam.update = val" :change="getData">
@@ -251,6 +251,7 @@
                 this.getData()
             },
             getData(type) {
+                console.log(type)
                 // if (this.fetchParam.provinceSelect!=='') {
                 //     this.fetchParam.pid = this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
                 // }

@@ -382,11 +382,6 @@
 
                 fetchGroup: groupFn(),
                 grouprules: {
-                    version: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'blur'
-                    },
                     adapter: {
                         required: true,
                         message: '必须填写',
