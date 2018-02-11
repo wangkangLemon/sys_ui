@@ -23,7 +23,7 @@
                     <UploadImg ref="uploadImg" :defaultImg="selectData.image" :url="uploadImgUrl"  :onSuccess="handleImgUploaded"></UploadImg>
                 </el-form-item>
                 <el-form-item label="分类排序" prop="sort">
-                    <el-input placeholder="最小的排在前面"  v-model.number="selectData.sort"></el-input>
+                    <el-input placeholder="最小的排在前面"  v-model="selectData.sort"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="info"  @click="save">保存
@@ -46,10 +46,10 @@
                 SecMenu: [],
                 selectData: {
                     name: '',
-                    model: null,
+                    model: '',
                     path: '',
                     rkey :'',
-                    sort: void 0,
+                    sort: '',
                     image: null,
                 },
                 uploadImgUrl: '',
@@ -57,6 +57,9 @@
                     name: [
                         {required: true, message: '请输入栏目名称', trigger: 'blur'},
                     ],
+                    // rkey: [
+                    //     {required: true, message: '请输入	栏目标识', trigger: 'blur'},
+                    // ],
                     image: [
                         {required: true, message: '请上传栏目logo', trigger: 'blur'}
                     ]
@@ -88,10 +91,10 @@
             initData() {
                 this.selectData  = {
                     name: '',
-                    model: null,
+                    model: '',
                     path: '',
                     rkey :'',
-                    sort: void 0,
+                    sort: '',
                     image: null,
                 }
             },
@@ -117,10 +120,10 @@
     function setSelectData(){
         return {
                     name: '',
-                    model: null,
+                    model: '',
                     path: '',
                     rkey :'',
-                    sort: void 0,
+                    sort: '',
                     image: null,
                 }
     }

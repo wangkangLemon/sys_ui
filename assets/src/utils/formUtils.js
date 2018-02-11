@@ -51,4 +51,14 @@ function produceData4serialize (key, val, keyName, arrayNeedKey) {
     return ret
 }
 
+
+/**
+ * 判断参数为undefined 转化为 空
+ * obj {name: undefined, code: xx}
+ */
+function transformParam(obj) {
+    for (let i in obj) {
+        obj[i] = obj[i] == undefined ? '' : obj[i]
+    }
+}
 export default new FormUtils()

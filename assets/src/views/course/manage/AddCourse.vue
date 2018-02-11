@@ -252,6 +252,7 @@ import CourseCategorySelect from '../../component/select/CourseCategory.vue'
 import CourseAlbumSelect from '../../component/select/CourseAlbum'
 import testingFactory from '../utils/testingFactory'
 import formUtils from '../../../utils/formUtils'
+import {transformParam} from '../../../utils/common'
 import vTags from '../../component/form/Tags.vue'
 
 import VideoPreview from '../../component/dialog/VideoPreview.vue'
@@ -423,6 +424,15 @@ export default {
             this.fetchParam.tags = this.courseTags ? this.courseTags.join(',') : ''
             this.$refs.formFirst.validate((isValidate) => {
                 if (!isValidate) return
+                transformParam(this.fetchParam)
+                //  console.log(this.fetchParam)
+                // for(let i in this.fetchParam){
+                //     this.fetchParam[i] = this.fetchParam[i]== undefined ?'': this.fetchParam[i]
+                    
+                // }
+                console.log(this.fetchParam)
+
+
                 let p
                 // 如果是编辑
                 if (this.fetchParam.contentid) {
@@ -435,7 +445,7 @@ export default {
                         this.activeTab = 'second'
                     })
                 }
-
+                
                 p.then(() => {
                     // 如果只是保存不需要考试  跳回去
                     if (this.fetchParam.need_testing === 0) {

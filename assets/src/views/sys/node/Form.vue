@@ -25,41 +25,41 @@
             <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
         </section>     
         <section class="submit-form">   
-            <el-form label-width="120px" ref="form" :model="fetchParam">
-            <el-form-item label="权限节点名称" prop="node_name">
-                <el-input v-model.name="fetchParam.node_name"></el-input>
-            </el-form-item>
-            <el-form-item label="节点标识" prop="node">
-                <el-input v-model.mobile="fetchParam.node"></el-input>
-            </el-form-item>
-            <!--<el-form-item label="父级菜单id"  prop="pid">
-                <el-input v-model.email="fetchParam.pid" type="number" ></el-input>
-            </el-form-item>-->
-            <el-form-item label="父级菜单" prop="pid" :fetch-suggestions="querySearch">
-                <el-select v-model="fetchParam.pid" placeholder="请输入父级菜单">
-                    <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.node_name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="菜单层级" prop="level">
-                <el-input v-model.password="fetchParam.level" type="number"></el-input>
-            </el-form-item>
-            <el-form-item label="排序字段" prop="sort">
-                <el-input v-model.address="fetchParam.sort"></el-input>
-            </el-form-item>
-            <el-form-item label="备注" prop="remark">
-                <el-input v-model.address="fetchParam.remark"></el-input>
-            </el-form-item>
-            <el-form-item label="" v-if="this.$route.params.sys_type">
-                <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
-                <el-button type="primary" @click="btnNextClick">确认</el-button>
-            </el-form-item>
+            <el-form label-width="120px" ref="form" :model="fetchParam" :rules="rules">
+                <el-form-item label="权限节点名称" prop="node_name">
+                    <el-input v-model="fetchParam.node_name"></el-input>
+                </el-form-item>
+                <el-form-item label="节点标识" prop="node">
+                    <el-input v-model="fetchParam.node"></el-input>
+                </el-form-item>
+                <!--<el-form-item label="父级菜单id"  prop="pid">
+                    <el-input v-model.email="fetchParam.pid" type="number" ></el-input>
+                </el-form-item>-->
+                <el-form-item label="父级菜单" prop="pid" :fetch-suggestions="querySearch">
+                    <el-select v-model="fetchParam.pid" placeholder="请输入父级菜单">
+                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.node_name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="菜单层级" prop="level">
+                    <el-input v-model="fetchParam.level" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="排序字段" prop="sort">
+                    <el-input v-model="fetchParam.sort"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark">
+                    <el-input v-model="fetchParam.remark"></el-input>
+                </el-form-item>
+                <el-form-item label="" v-if="this.$route.params.sys_type">
+                    <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
+                    <el-button type="primary" @click="btnNextClick">确认</el-button>
+                </el-form-item>
             </el-form>
         </section>
     </main>
 </template>
 
 <script>
-    import nodeService from '../../../services/sys/nodeService.js'
+    import nodeService from '../../../services/sys/nodeService'
     import config from '../../../utils/config'
     export default {
         name: 'sys-form',
@@ -75,6 +75,26 @@
                 fetchParam: getOriginData(),
                 resultData: [],
                 drop_list:[],
+                rules: {
+                    node_name: [
+                        {required: true, message: '必须输入', trigger: 'blur'},
+                    ],
+                    node: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    remark: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    sort: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    pid: [
+                        {required: true, type:'number',message: '必须输入', trigger: 'blur'}
+                    ],
+                    level: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                }
             }
         },
         created() {
@@ -93,8 +113,17 @@
         methods: {
             //获取父级菜下拉列表
             getDropval(){
-                nodeService.fetchData().then((ret)=>{
-                console.log(ret.data)
+                let param={
+                    page: '',
+                    pagesize: -1,
+                    node_name:'', //以下几行代码不给disablied传参的话可不写
+                    node:'',
+                    pid: void 0,
+                    level: '',
+                    disabled: 0
+                }
+                nodeService.fetchData(param).then((ret)=>{
+                console.log(ret)
                  this.drop_list=ret.data;
                 })
             },
@@ -113,7 +142,6 @@
                     console.log(req)
                     // console.log(this.$route.params.sys_id)
                     req(this.fetchParam).then((ret) => {
-                        console.log(111111111111)
                         console.log(ret)
                         // 重置当前数据
                         xmview.showTip('success', '数据提交成功')

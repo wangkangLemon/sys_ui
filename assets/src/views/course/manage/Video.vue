@@ -133,8 +133,6 @@
                 </template>
             </el-table-column>
         </el-table>
-
-        <!--底部的批量删除和移动两个按钮-->
         <!--<div class="bottom-manage">
             <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
         </div>-->
@@ -165,10 +163,6 @@
                 </el-form-item>
                 <el-form-item label="视频时长">
                     <el-input v-model="videoModel.duration"></el-input>
-                </el-form-item>
-                <el-form-item label="是否关联">
-                    <el-input v-model="videoModel.used">
-                    </el-input>
                 </el-form-item>
                  <el-form-item label="是否关联">
                         <template v-model="videoModel">
@@ -254,7 +248,7 @@
                 fetchParam: getFetchParam(),
                 dialogAdd: {
                     isShow: false,
-                    title: '添加课程',
+                    title: '编辑视频',
                     confirmFn: {}
                 },
                 videoModel: getVideoModel(),
@@ -325,7 +319,6 @@
                 xmview.showDialog(`你将要删除视频 <span style="color:red">${row.file_name}</span> 操作不可恢复确认吗?`, () => {
                     this.loadingData = true
                     videoService.deleteVideo({id: row.material_id}).then(() => {
-                        xmview.showTip('success', '操作成功')
                         this.data.splice(index, 1)
                         this.loadingData = false
                     }).catch(() => {

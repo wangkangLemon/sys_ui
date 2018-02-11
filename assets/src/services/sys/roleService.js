@@ -6,10 +6,11 @@ const urlPre_node = config.apiHost + '/role_nodes'
 
 class sysService {
     //拿到数据 
-    fetchData () {
+    fetchData(page, pagesize ) {
         let url = urlPre + '/lists'
-        return api.post(url,{
-        }).then(ret => {
+        return api.get(url, 
+            page, pagesize
+        ).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {

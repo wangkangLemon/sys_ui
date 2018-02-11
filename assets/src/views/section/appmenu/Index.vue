@@ -418,11 +418,6 @@
                         message: '必须上传',
                         trigger: 'change'
                     },
-                    title: {
-                        required: true,
-                        message: '必须填写',
-                        trigger: 'blur'
-                    },
                     sort: {
                         required: true,
                         message: '必须填写',

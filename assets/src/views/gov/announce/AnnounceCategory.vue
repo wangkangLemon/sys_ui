@@ -348,7 +348,7 @@
                 parent_id: void 0,
                 name: void 0,
                 image: void 0,
-                sort: void 0,
+                sort: '',
                 id: 0,
                 remark:'',
                 disabled:'',

@@ -25,7 +25,7 @@
             <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
         </section>     
         <section class="submit-form">   
-            <el-form label-width="120px" ref="form" :model="fetchParam">
+            <el-form label-width="120px" ref="form" :model="fetchParam" :rules="rules" >
                 <el-form-item  v-if="$route.params.sys_id" label="ID" prop="category">
                     <el-input v-model="fetchParam.id" disabled></el-input>
                 </el-form-item>
@@ -54,10 +54,10 @@
                     </el-select>
                 </el-form-item>-->
                 <el-form-item label="字段值"  prop="val">
-                    <el-input v-model.email="fetchParam.val"></el-input>
+                    <el-input v-model="fetchParam.val"></el-input>
                 </el-form-item>
                 <el-form-item label="超长字段存储" prop="describe">
-                    <el-input v-model.password="fetchParam.describe"></el-input>
+                    <el-input v-model="fetchParam.describe"></el-input>
                 </el-form-item>
                 <el-form-item label="" v-if="this.$route.params.sys_type">
                     <el-button @click="$router.push({ name:'setting-list'})">取消</el-button>
@@ -85,6 +85,23 @@
                 fetchParam: getOriginData(),
                 resultData: [],
                 role_list:[],
+                rules: {
+                    category: [
+                        {required: true, message: '必须输入', trigger: 'blur'},
+                    ],
+                    field: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    usage: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    ftype: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    val: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                }
             }
         },
         activated () {
@@ -136,7 +153,7 @@
             usage: '',
             ftype: '',
             val:'',
-            describe: void 0,
+            describe: '',
         }
     }
 

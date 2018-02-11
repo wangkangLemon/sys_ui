@@ -84,7 +84,7 @@ class VideoService {
     updateVideo({ file_name, gov_id, tags, cover, duration, material_id }) {
         gov_id = gov_id || authUtils.getUserInfo().gov_id
         let url = `${urlPre}/edit/${material_id}`
-        return api.post(url, { file_name, gov_id: gov_id, tags, cover, duration })
+        return api.post(url, { file_name, gov_id, tags, cover, duration })
     }
 
     // 获取oss的上传token
@@ -111,7 +111,15 @@ class VideoService {
 
     deleteVideo({ id }) {
         let url = `${urlPre}/delete/${id}`
-        return api.get(url)
+        return api.post(url).then((ret)=>{
+            if (ret.code == 0) {
+                xmview.showTip('success', '操作成功')
+                return ret
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
     }
 
     // 获取视频预览地址

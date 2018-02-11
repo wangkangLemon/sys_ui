@@ -133,6 +133,7 @@
     import treeUtils from '../../../utils/treeUtils'
     import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
     import UploadImg from '../../component/upload/UploadImg.vue'
+    import {transformParam} from '../../../utils/common'
 
     export default{
         data () {
@@ -234,6 +235,7 @@
             submitForm () {
                 this.$refs.form.validate((ret) => {
                     if (!ret) return
+                    transformParam(this.fetchParam)
 
                     let p
                     if (this.activeTab === 'add'){
@@ -250,12 +252,17 @@
 
                     p.then((ret) => {
                         xmview.showTip('success', '操作成功!')
+                        
                         if (this.activeTab === 'edit') {
                             this.nodeSelected.label = this.fetchParam.name  
                             node.data.data=this.fetchParam
                             // this.nodeSelected.item = this.fetchParam
                             this.$forceUpdate()
-                        } else {
+                        } 
+                        else if(this.activeTab === 'root'||'add'){
+                            this.fetchParam = getFetchParam()
+                        }
+                        else {
                             this.fetchParam.id = ret.data.id
                             let addedItem = {
                                 label: this.fetchParam.name,
@@ -263,12 +270,11 @@
                                 item: this.fetchParam
                             }
                             
-                            this.fetchParam = getFetchParam()
+                            
                             // 如果是添加的根节点
                             if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
                             else if (!this.nodeSelected.children) this.nodeSelected.children = [{label: '加载中...'}]
                             else if (this.nodeSelected.children[0].value) this.nodeSelected.children.push(addedItem)
-                            this.fetchParam = getFetchParam()
                         }
                     })
                 })
@@ -337,10 +343,10 @@
     function getFetchParam () {
         return {
             pid: void 0, //父级id
-            category_type: void '',
+            category_type: void 0,
             name: void 0,
             image: void 0,
-            sort: void 0,
+            sort: '',
             id: 0,
             ended: void 0,
         }

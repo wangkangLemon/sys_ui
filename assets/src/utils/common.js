@@ -1,6 +1,4 @@
-/**
- * Created by huangrui on 2017/7/4.
- */
+
 /*
  * 获取数组ID所在项的index
  * 数组 array
@@ -20,3 +18,15 @@ export function isArrayEqual(arrA, arrB, formatter) {
     formatter && (arrB = formatter(arrB))
     return arrA.filter(x => !arrB.includes(x)).length
 }
+/**
+ * 判断参数为undefined 转化为 空
+ * obj {name: undefined, code: xx}
+ */
+export function transformParam(obj) {
+    for (let i in obj) {
+        obj[i] = obj[i] == undefined ? '' : obj[i]
+    }
+}
+
+
+

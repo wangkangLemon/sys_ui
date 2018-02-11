@@ -6,7 +6,7 @@ class sysService {
     //拿到数据 
     fetchData (page, pagesize, level, pid ,menu_name) {
         let url = urlPre + '/lists'
-        return api.post(url,page, pagesize, level, pid, menu_name).then(ret => {
+        return api.get(url,page, pagesize, level, pid, menu_name).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {

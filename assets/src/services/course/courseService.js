@@ -167,7 +167,7 @@ class CourseService {
     addCourse({  category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status, sort, share}) {
 
         let url = urlPre + '/create'
-        return api.post(url, {  category_id,  experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status, sort, share}).then(ret => {
+        return api.post(url, {  category_id,  experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, sort, share}).then(ret => {
             if (ret.code == 0) {
                 // console.log(ret)
                 return ret.data

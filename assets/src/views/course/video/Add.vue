@@ -171,8 +171,8 @@ export default {
                 }, ret => {
                     // 创建视频
                     videoService.create({
-                        gov_id:void 0,
-                        size:void 0,
+                        gov_id:this.user.id,
+                        size:'',
                         file_name: item.name,
                         tags: item.tags.join(','),
                         source_type: 'aliyun',

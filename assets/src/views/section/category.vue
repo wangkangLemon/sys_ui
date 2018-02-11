@@ -65,6 +65,7 @@
     import cateService from '../../services/section/cateService.js'
     import MenuTree from '../component/tree/MenuTreeSec.vue'
     import SecCard from '../component/table/SecCard.vue'
+    import {transformParam} from '../../utils/common'
     function getFetchParam() {
         return {
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
@@ -100,7 +101,8 @@
         watch: {
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
-                // console.log(this.$store.state.index.secMenu)
+                this.selectData.sort=''
+                console.log(this.$store.state.index.secMenu)
             }
         },
         activated() {
@@ -127,7 +129,6 @@
             fetchData() {
                 cateService.fetchData( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
-                        console.log(ret)
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     
                     })
@@ -147,7 +148,9 @@
                 // if(){
                 //     xmview.showDialog('请先添加要保存的数据')
                 // }else{}
-               console.log( message )
+
+                transformParam(message)
+                
             //    if( message.pid == 0 || message.pid == 1 ){
                if( this.type == 'P'|| this.type == 'S' ){
                     if(this.type == 'P'){
@@ -163,6 +166,7 @@
                         }, 300)
                     })
                }else {
+                   transformParam(message)
                     cateService.edit( message ).then(( ret ) => {
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据 
@@ -195,10 +199,10 @@
                 if(type!="update"){
                     this.$store.dispatch('setSecMenu', {
                     name: '',
-                    model: null,
+                    model: '',
                     path: '',
                     rkey :'',
-                    sort: void 0,
+                    sort: '',
                     image: null,
                 });
                 }

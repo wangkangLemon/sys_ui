@@ -25,12 +25,12 @@
             <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
         </section>     
         <section class="submit-form">   
-            <el-form label-width="120px" ref="form" :model="fetchParam">
+            <el-form label-width="120px" ref="form" :model="fetchParam"  :rules="rules">
             <el-form-item label="菜单名称" prop="menu_name">
-                <el-input v-model.name="fetchParam.menu_name"></el-input>
+                <el-input v-model="fetchParam.menu_name"></el-input>
             </el-form-item>
             <el-form-item label="菜单标识" prop="menu_node">
-                <el-input v-model.mobile="fetchParam.menu_node"></el-input>
+                <el-input v-model="fetchParam.menu_node"></el-input>
             </el-form-item>
             <el-form-item label="父级名称" prop="pid" :fetch-suggestions="querySearch">
                 <el-select v-model="fetchParam.pid" placeholder="请输入父级名称">
@@ -44,10 +44,10 @@
                 <el-input v-model.password="fetchParam.level" type="number"></el-input>
             </el-form-item>-->
             <el-form-item label="排序字段" prop="sort">
-                <el-input v-model.address="fetchParam.sort"></el-input>
+                <el-input v-model="fetchParam.sort"></el-input>
             </el-form-item>
             <el-form-item label="备注" prop="remark">
-                <el-input v-model.address="fetchParam.remark"></el-input>
+                <el-input v-model="fetchParam.remark"></el-input>
             </el-form-item> 
             <el-form-item label=""  v-if="this.$route.params.sys_type">
                 <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
@@ -77,6 +77,26 @@
                 fetchParam: getOriginData(),
                 resultData: [],
                 drop_list:[],
+                rules: {
+                    menu_name: [
+                        {required: true, message: '必须输入', trigger: 'blur'},
+                    ],
+                    menu_node: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    remark: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    sort: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                    pid: [
+                        {required: true, type:'number',message: '必须输入', trigger: 'blur'}
+                    ],
+                    level: [
+                        {required: true, message: '必须输入', trigger: 'blur'}
+                    ],
+                }
             }
         },
         created() {
@@ -93,7 +113,6 @@
             //获取父级菜下拉列表
             getDropval(){
                 menuService.fetchData({pagesize:-1}).then((ret)=>{
-                console.log(ret.data)
                  this.drop_list=ret.data;
                 })
             },
