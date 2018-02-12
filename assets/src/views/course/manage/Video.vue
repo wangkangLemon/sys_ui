@@ -57,13 +57,13 @@
                 </el-select>
             </section>
 
-            <section>
+            <!-- <section>
                 <i>是否关联</i>
                 <el-select :clearable="true" v-model="fetchParam.used" placeholder="请选择" @change="fetchData">
                     <el-option label="已关联" :value="1"></el-option>
                     <el-option label="未关联" :value="0"></el-option>
                 </el-select>
-            </section>
+            </section> -->
 
             <!--<section>
                 <i>所属政府部门</i>
@@ -97,7 +97,7 @@
             <el-table-column
                     width="130"
                     prop="duration"
-                    label="时长">
+                    label="时长（秒）">
             </el-table-column>
             <el-table-column width="130" label="状态">
                 <template scope="scope">

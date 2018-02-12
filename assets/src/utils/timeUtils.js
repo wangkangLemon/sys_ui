@@ -11,7 +11,7 @@ export function getTimezonOffset () {
 /**
  * 获取当前的时间戳 单位:秒
  */
-export function getUTCTimetamp () {
+export function getUTCTimetamp() {
     return parseInt(Date.now() / 1000) + getTimezonOffset()
 }
 

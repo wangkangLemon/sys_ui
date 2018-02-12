@@ -8,9 +8,9 @@ class MineService {
     //     let url = `${urlPre}/profile`
     //     return api.post(url, { name, address, sex })
     // }
-    updateProfile({ name, address, sex }) {
-        let url = `${urlPre}/profile`
-        return api.post(url, { name, address, sex })
+    updateProfile({ id, name,sex, avatar, address, email}) {
+        let url = `${config.apiHost}/admin/update/${id}`
+        return api.post(url, { name, sex, avatar, address, email})
     }
 
     // 上传头像

@@ -155,7 +155,7 @@
                     keyword: this.search.name,
                     gov_id: this.govID
                 }).then((ret) => {
-                    this.userList = ret
+                    this.userList = ret.data
                     //拿到数据后根据id 把name 对应给user_id
                     this.loading = false
                     // message.pid=this.$store.state.index.secPid    

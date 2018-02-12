@@ -62,16 +62,16 @@
                 <el-form-item label="昵称" :label-width="formLabelWidth">
                     <el-input v-model="form.nickname" placeholder="昵称" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="mobile" label="手机号" :label-width="formLabelWidth">
+                <el-form-item label="手机号" prop="mobile"  :label-width="formLabelWidth">
                     <el-input v-model="form.mobile" type="number" placeholder="手机号" auto-complete="off"></el-input>
                 </el-form-item>
-                 <el-form-item prop="role_id" label="角色" :label-width="formLabelWidth">
+                 <el-form-item label="角色"  prop="role_id" :label-width="formLabelWidth">
                     <el-select clearable v-model="form.role_id" placeholder="未选择">
                         <el-option v-for="(item, index) in roleTypes" :label="item.name" :value="item.role_id" :key="item.role_id">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="passwd" label="密码" v-if="form.role_id==1" :label-width="formLabelWidth">
+                <el-form-item label="密码" prop="passwd"  v-if="form.role_id==1" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.passwd" placeholder="密码" auto-complete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
@@ -119,11 +119,6 @@
                         min-width="150">
                 </el-table-column>
                 <el-table-column
-                        prop="email"
-                        label="邮箱"
-                        min-width="150">
-                </el-table-column>
-                <el-table-column
                         prop="addate"
                         label="上次登录时间"
                         min-width="200">
@@ -165,7 +160,7 @@
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="page"
-                        :page-sizes="[20, 30, 60, 100]"
+                        :page-sizes="[15, 30, 60, 100]"
                         :page-size="pageSize"
                         layout="total, sizes, ->, prev, pager, next, jumper"
                         :total='total'>
@@ -227,10 +222,18 @@
                 form: clearFormFn(),
                 rules: {
                     department_id: [
-                        {type: 'number', required: true, message: '必须填写', trigger: 'blur'}
+                        {type: 'number', required: true, message: '必须填写', trigger: 'blur'},
                     ],
                     name: [
-                        {required: true, message: '必须填写', trigger: 'blur'}
+                        {required: true, max:10, message: '必须填写', trigger: 'blur'},
+                        {
+                            min: 1,
+                            max: 10,
+                            message: '长度不得大于 10个字符' 
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的姓名'
+                        }
                     ],
                     mobile: [
                         {required: true, message: '必须填写', trigger: 'blur'},
@@ -339,13 +342,13 @@
                     gov_id: this.govID,
                     active: this.$route.params.active
                 }).then((ret) => {
-                    this.adminData = ret
+                    this.adminData = ret.data
                     this.loading = false
                     // console.log( typeof(ret))  // object
                     if(ret.length== 0){
                         return
                     }
-                        this.total = 200
+                        this.total =ret._exts.total
                     
                     
                 })

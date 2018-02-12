@@ -207,7 +207,6 @@
             },
             //拿到栏目菜单
             querySearch(queryString, cb) {
-                alert(1111)
                 console.log(1111)
                 console.log(queryString, cb)
                 var restaurants = this.restaurants;

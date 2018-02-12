@@ -175,10 +175,9 @@
                         min-width="180"
                         label="注册人数">
                         <template scope="scope">
-                            <router-link tag="a"  :to="{name: 'data-report-user-user', params: {gov_id: scope.row.gov_id,active:-1}}">
+                            <!-- <router-link tag="a"  :to="{name: 'data-report-user-user', params: {gov_id: scope.row.gov_id,active:-1}}"> -->
                             {{scope.row.user_cnt}}
-                            <!--占坑-->
-                            </router-link>
+                            <!-- </router-link> -->
                         </template>
                 </el-table-column>
                 <el-table-column
@@ -186,9 +185,10 @@
                         label="已登录人数">
                         <template scope="scope">
                             <!--<span @click="loginDetail(scope.$index, scope.row)">{{scope.row.logined_cnt}}</span>-->
-                            <router-link tag="a"  :to="{name: 'data-report-userlogin-user', params: {gov_id: scope.row.gov_id,active:1}}">
+
+                            <!-- <router-link tag="a"  :to="{name: 'data-report-userlogin-user', params: {gov_id: scope.row.gov_id,active:1}}"> -->
                             {{scope.row.logined_cnt}}
-                            </router-link>
+                            <!-- </router-link> -->
                         </template>
                 </el-table-column>
                 <el-table-column
@@ -196,9 +196,10 @@
                         label="未登录人数">
                         <template scope="scope">
                             <!--<span @click="nologinDetail(scope.$index, scope.row)">{{scope.row.nologin_cnt}}</span>-->
-                            <router-link tag="a"  :to="{name: 'data-report-nouserlogin-user', params: {gov_id: scope.row.gov_id,active:0}}">
+
+                            <!-- <router-link tag="a"  :to="{name: 'data-report-nouserlogin-user', params: {gov_id: scope.row.gov_id,active:0}}"> -->
                             {{scope.row.nologin_cnt}}
-                            </router-link>
+                            <!-- </router-link> -->
                         </template>
                 </el-table-column>
             </el-table>

@@ -139,6 +139,14 @@
                 <i>手机号</i>
                 <el-input v-model="fetchParam.mobile" placeholder="请输入手机号"   @keyup.enter.native="fetchData" ></el-input>
             </section>
+             <section>
+                <i>是否激活</i>
+                <el-select clearable v-model="fetchParam.active" @change="fetchData">
+                    <el-option label="全部" :value="-1"></el-option>
+                    <el-option label="已激活" value="1"></el-option>
+                    <el-option label="未激活" value="0"></el-option>
+                </el-select>
+            </section>
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
@@ -221,6 +229,7 @@ function getFetchParam() {
         area_id: '',
         town_id: '',
         village_id: '',
+        active: -1,
     }
 }
  function clearFormFn() {

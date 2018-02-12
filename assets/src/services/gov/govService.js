@@ -207,7 +207,7 @@ class govService {
             mobile,
             active
         }).then((ret) => {
-            return ret.data
+            return ret
         })
     }
      // 企业管理员查询接口

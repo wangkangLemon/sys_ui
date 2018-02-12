@@ -23,6 +23,11 @@
         .search {
             @extend %top-search-container;
         } // 底部的管理按钮
+        .data-table{
+            .c{
+                text-align: center;
+            }
+        }
         .bottom-manage {
             margin-top: 15px;
         }
@@ -94,9 +99,9 @@
                     </el-button>
                 </template>
             </el-table-column>
-            <el-table-column width="80" prop="total_score" label="总分数">
+            <el-table-column width="80" prop="total_score" label="总分数" class="c">
             </el-table-column>
-            <el-table-column width="80" prop="limit_time" label="限时">
+            <el-table-column width="108" prop="limit_time" label="限时（分）" class="c">
             </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">

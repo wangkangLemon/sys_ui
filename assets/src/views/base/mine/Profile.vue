@@ -42,22 +42,20 @@
                 <el-form-item label="手机号码" :label-width="formLabelWidth">
                     <el-input v-model="form.mobile" :disabled="true" type="number" placeholder="手机号码" auto-complete="off"></el-input>
                 </el-form-item>
-                <!--<el-form-item label="邮箱" :label-width="formLabelWidth">
+                <el-form-item label="邮箱" :label-width="formLabelWidth">
                     <el-input v-model="form.email" :disabled="true" placeholder="邮箱" auto-complete="off"></el-input>
-                </el-form-item>-->
+                </el-form-item>
                 <el-form-item prop="name" label="名字" :label-width="formLabelWidth">
                     <el-input v-model="form.name" placeholder="名字" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="nickname" label="昵称" :label-width="formLabelWidth">
-                    <el-input v-model="form.nickname" placeholder="昵称" auto-complete="off"></el-input>
-                </el-form-item>
-                <!--<el-form-item prop="address" label="地址" :label-width="formLabelWidth">
-                    <el-input v-model="form.address" placeholder="地址" auto-complete="off"></el-input>
-                </el-form-item>-->
-                <!--<el-form-item prop="sex" label="称谓" :label-width="formLabelWidth">
+                <el-form-item prop="sex" label="性别" :label-width="formLabelWidth">
                     <el-radio class="radio" v-model="form.sex" :label="1">先生</el-radio>
-                    <el-radio class="radio" v-model="form.sex" :label="0">女士</el-radio>
-                </el-form-item>-->
+                    <el-radio class="radio" v-model="form.sex" :label="2">女士</el-radio>
+                </el-form-item>
+                <el-form-item prop="address" label="地址" :label-width="formLabelWidth">
+                    <el-input v-model="form.address" placeholder="地址" auto-complete="off"></el-input>
+                </el-form-item>
+            
                 <el-form-item class="subButton">
                     <el-button type="primary" @click="submit('form')">提交修改</el-button>
                 </el-form-item>
@@ -87,7 +85,7 @@ export default {
                 name: '',
                 address: '',
                 sex: 0,
-                nickname:''
+                avatar:''
             },
             rules: {
                 name: { required: true, message: '必须填写', trigger: 'blur' }
@@ -96,30 +94,34 @@ export default {
         }
     },
     created() {
+        xmview.setContentLoading(false)
         this.form = authUtils.getUserInfo()
-
         if (!this.form.avatar) {
             this.imgUrl = filterUtils.defaultAvatar({ url: '', sex: this.form.sex })
         } else {
             // this.imgUrl = this.form.avatar.indexOf(config.apiHost) > -1 ? this.form.avatar : config.apiHost + this.form.avatar
             this.imgUrl = this.form.avatar 
         }
-        xmview.setContentLoading(false)
     },
     methods: {
         // 裁切后的回调
         cropperFn(data, ext) {
-            commonService.commonUploadImageBase({
-                avatar: data,
+            commonService.commonUploadAvatar({
+                id: this.form.id,
+                image: data,
                 alias: `${Date.now()}${ext}`,
-                id: this.form.id
+                biz: 'avatar',
+                extpath: this.form.id,
             }).then((ret) => {
-                xmview.showTip('success', '上传成功')
                 this.imgUrl = data
+                console.log( ret)
+                this.form.avatar = ret.url
+                xmview.showTip('success', '上传成功')
                 authUtils.setAvatar(ret.data.url)
-            }).catch((ret) => {
-                xmview.showTip('error', ret.message)
             })
+            // .catch((ret) => {
+            //     xmview.showTip('error', ret.message)
+            // })
         },
         submit(form) {
             this.$refs[form].validate((valid) => {
