@@ -195,6 +195,19 @@ export default {
                 noback: false
             }
         }, 
+        {
+            path: 'operation/log',
+            name: 'operation-log',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/Operation/Log.vue'))
+                })
+            },
+            meta: {
+                title: '后台操作日志',
+                noback: false
+            }
+        }, 
 
     ]
 }

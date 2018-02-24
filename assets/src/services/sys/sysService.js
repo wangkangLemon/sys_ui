@@ -4,9 +4,20 @@ const urlPre = config.apiHost + '/admin'
 
 class sysService {
     //拿到数据 
-    fetchData ({pagesize, page}) {
+    fetchData({ pagesize, page, role_id}) {
         let url = urlPre + '/lists'
-        return api.get(url,{pagesize, page}).then(ret => {
+        return api.get(url, { pagesize, page, role_id}).then(ret => {
+            if (ret.code == 0) {
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //拿到操作日志列表
+    getOperationLog({ pagesize, page, role_id, uri }) {
+        let url = `${config.apiHost}/operation/log/lists`
+        return api.get(url, { pagesize, page, role_id, uri  }).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -104,6 +115,7 @@ class sysService {
             return ret.data
         })
     }
+  
 
 }
 export default new sysService()
