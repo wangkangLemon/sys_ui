@@ -48,3 +48,6 @@ ERROR:root:version updated : [0.0.0.43] ---> [0.0.0.44]
 ERROR:root:version updated : [0.0.0.44] ---> [0.0.0.45]
 ERROR:root:version updated : [0.0.0.45] ---> [0.0.0.46]
 ERROR:root:version updated : [0.0.0.46] ---> [0.0.0.47]
+ERROR:root:shell execute have error! code: 32768  cmd:
+GIT_POOL=`git remote -v  | grep push | awk '{print $2}' ` ; CUR_BRANCH=`git branch | grep \* | awk '{print $2}'`; git pull $GIT_POOL $CUR_BRANCH ; git push $GIT_POOL $CUR_BRANCH ; 
+ERROR:root:version updated : [0.0.0.47] ---> [0.0.0.48]
