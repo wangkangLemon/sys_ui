@@ -74,7 +74,7 @@
             </section>
             <section>
                 <i>姓名</i>
-                <RolerSelect  :change="fetchRoler" v-model="fetchParam.role_id" :placeholder="fetchParam.name"
+                <RolerSelect  :change="fetchData" v-model="fetchParam.role_id" :placeholder="fetchParam.name"
                                 v-on:change="val=>fetchParam.role_id=val" :list="changelist">
                 </RolerSelect>
             </section>

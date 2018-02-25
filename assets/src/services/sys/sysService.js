@@ -4,9 +4,9 @@ const urlPre = config.apiHost + '/admin'
 
 class sysService {
     //拿到数据 
-    fetchData({ pagesize, page, role_id}) {
+    fetchData({ pagesize, page, role_id, name}) {
         let url = urlPre + '/lists'
-        return api.get(url, { pagesize, page, role_id}).then(ret => {
+        return api.get(url, { pagesize, page, role_id, name}).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {

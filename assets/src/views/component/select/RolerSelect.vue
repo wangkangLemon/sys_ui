@@ -41,8 +41,7 @@
         methods: {
             fetchRoler (val, length) { 
                 return sysService.fetchData({
-                    role_id: val,
-                    category: this.type,
+                    name:val,
                     pagesize: this.pageSize,
                     page: parseInt(length / this.pageSize) + 1
                 }).then((ret) => {

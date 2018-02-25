@@ -6,7 +6,7 @@ class setService {
     //拿到区块列表
     fetchData ( {page, pagesize, id, category ,field}) {
         let url = urlPre + '/lists'
-        return api.post(url,{pagesize, page}).then(ret => {
+        return api.post(url, { pagesize, page, category, field}).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {

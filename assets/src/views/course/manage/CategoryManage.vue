@@ -157,6 +157,14 @@
                 rules: {
                     name: [
                         {required: true, message: '请输入栏目名称', trigger: 'blur'},
+                        {
+                            min: 1,
+                            max: 40,
+                            message: '长度不得大于 40 个字符'
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的栏目名称'
+                        }
                     ],
                     image: [
                         {required: true, message: '请上传栏目logo', trigger: 'blur'}
@@ -190,10 +198,10 @@
                     courseService.delete_cate( node.value).then(() => {
                         xmview.showTip('success', '操作成功!')
                         this.dialogConfirm.isShow = false
+                        this.fetchParam = getFetchParam()
                         this.$refs.courseCategory.removeItem(node, this.nodeParentSelected)
                         node = null
                         this.resetForm()
-                        this.fetchParam = getFetchParam()
                     })
                 }
             },
@@ -269,8 +277,6 @@
                                 value: this.fetchParam.id,
                                 item: this.fetchParam
                             }
-                            
-                            
                             // 如果是添加的根节点
                             if (this.fetchParam.pid === 0) this.$refs.courseCategory.initData()
                             else if (!this.nodeSelected.children) this.nodeSelected.children = [{label: '加载中...'}]

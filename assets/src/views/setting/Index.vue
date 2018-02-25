@@ -48,6 +48,10 @@
                 <i>设置名称</i>
                 <el-input v-model="fetchParam.category" placeholder="请输入设置名称" @keyup.enter.native="fetchData"></el-input>
             </section>
+            <section>
+                <i>字段名</i>
+                <el-input v-model="fetchParam.field" placeholder="请输入字段名称" @keyup.enter.native="fetchData"></el-input>
+            </section>
 
         </article>
 
@@ -92,7 +96,7 @@
 </template>
 
 <script>
-import sysService from '../../services/setting/setService.js'
+import setService from '../../services/setting/setService.js'
 import DateRange from '../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
@@ -100,6 +104,9 @@ function getFetchParam() {
         status: void 0, //  1-禁用 0-正常
         page: 1,
         pagesize: 15,
+        id:void 0, 
+        category:'' ,
+        field:''
     }
 }
 
@@ -148,7 +155,7 @@ export default {
             this.fetchData()
         },
         fetchData(val) {
-            return sysService.fetchData(this.fetchParam).then((ret) => {
+            return setService.fetchData(this.fetchParam).then((ret) => {
                 // console.log(ret.data)
                 this.dataCache = ret.data
                 this.total = ret._exts.total
@@ -157,7 +164,7 @@ export default {
             })
         },
         search(val){
-               return sysService.search(this.fetchParam).then((ret) => {
+               return setService.search(this.fetchParam).then((ret) => {
             })
         },      
         // 单行被选中
@@ -171,7 +178,7 @@ export default {
         // 单条删除
         del(index, row) {
             xmview.showDialog(`你将要删除设置 <span style="color:red">${row.category}</span>  此操作不可恢复确认吗?`, () => {
-                sysService.delete(row.id).then(() => {
+                setService.delete(row.id).then(() => {
                     this.dataCache.splice(index, 1)//删除选中项
                     row.deleted = 1
                     xmview.showTip('success', '操作成功')
@@ -181,7 +188,7 @@ export default {
         // 批量删除
         delMulti() {
             xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
-                sysService.deleteMulty(this.selectedIds.join(',')).then(() => {
+                setService.deleteMulty(this.selectedIds.join(',')).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.dialogTree.isShow = false
                     setTimeout(() => {

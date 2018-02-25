@@ -47,14 +47,21 @@
                 
             </section>
             <section class="right-container">
-                <div><button type="button" class="el-button" :class="{'el-button--primary':type=='update'}" @click="changeType('update')"><span>修改分类</span></button>                    
-                    <button type="button" class="el-button" :class="{'el-button--primary':type=='P'}" @click="changeType('P')"><span>添加根节点</span></button>                    
-                    <button type="button" class="el-button" :class="{'el-button--primary':type=='S'}" @click="changeType('S')"><span>添加子分类</span></button>                    
-                    <button type="button" class="el-button" :class="{'el-button--primary':type=='C'}" @click="changeType('C')" ><span>移动分类</span></button>
-                    <button type="button" class="el-button" :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" ><span>移动分类下内容</span></button> 
-                    <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button>
+                <div>
+                    <el-button :class="{'el-button--primary':type=='update'}" @click="changeType('update')">修改栏目</el-button>
+                    <el-button :class="{'el-button--primary':type=='P'}" @click="changeType('P')">添加根节点</el-button>
+                    <el-button :class="{'el-button--primary':type=='S'}" @click="changeType('S')">添加子分类</el-button>
+                    <el-button :class="{'el-button--primary':type=='C'}" @click="changeType('C')" disabled>移动栏目</el-button>
+                    <el-button :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" disabled>移动栏目下内容</el-button>
+                    <el-button type="danger"  @click="del">删除分类</el-button>
+                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='update'}" @click="changeType('update')"><span>修改分类</span></button>                     -->
+                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='P'}" @click="changeType('P')"><span>添加根节点</span></button>                     -->
+                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='S'}" @click="changeType('S')"><span>添加子分类</span></button>                     -->
+                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='C'}" @click="changeType('C')" ><span>移动分类</span></button> -->
+                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" ><span>移动分类下内容</span></button>  -->
+                    <!-- <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button> -->
                 </div>
-                <SecCard @handleSave="handle" :data="selectData" :type="type"></SecCard>
+                <SecCard @handleSave="submit" :data="selectData" :type="type"></SecCard>
             </section>
             <!--{{secMenu}}-->
     </article>
@@ -102,7 +109,7 @@
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
                 this.selectData.sort=''
-                console.log(this.$store.state.index.secMenu)
+                // console.log(this.$store.state.index.secMenu)
             }
         },
         activated() {
@@ -144,24 +151,22 @@
             },
  
             //处理保存的数据
-            handle( message ) {
+            submit( message ) {
                 // if(){
                 //     xmview.showDialog('请先添加要保存的数据')
                 // }else{}
-
                 transformParam(message)
-                
             //    if( message.pid == 0 || message.pid == 1 ){
                if( this.type == 'P'|| this.type == 'S' ){
                     if(this.type == 'P'){
                         message.pid=0
-                        
                     } else if( this.type == 'S'){
                         message.pid=this.$store.state.index.secPid
                     }
                     cateService.create( message ).then(( ret ) => {
                         this.selectData=null
                         setTimeout(() => {
+                            this.selectData = {}  //通过初始化组件传值清空
                             this.fetchData() // 重新刷新数据
                         }, 300)
                     })
@@ -197,7 +202,7 @@
             changeType(type){
                 this.type = type
                 if(type!="update"){
-                    this.$store.dispatch('setSecMenu', {
+                    this.$store.dispatch('setSecMenu', { //通过清空vuex清空
                     name: '',
                     model: '',
                     path: '',
@@ -218,6 +223,7 @@
                     cateService.delete(this.selectData.id).then(() => {
                         // store.commit('increment', 10)
                         xmview.showTip('success', '操作成功')
+                        this.selectData = {}  //通过初始化组件传值清空
                     })
                 })
                 }else{

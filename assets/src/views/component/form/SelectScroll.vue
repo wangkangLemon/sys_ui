@@ -88,7 +88,7 @@
 
         },
         created() {
-
+            
             
         },
         mounted() {
@@ -99,7 +99,7 @@
             filter(val) {
                 this.loading = true
                 this.keyword = val
-                this.requestCb(val, 0).then(ret => {
+                this.requestCb(val, 0).then(ret => {  //根据关键字搜索下拉列表 
                     this.isShowGetMore = true
                     this.processRequestRet(ret, 1)
                 })
@@ -123,7 +123,7 @@
                     }, true)
                 })
             },
-            handleChange(val) {
+            handleChange(val) { //拿到关键字后的回调ID值 emit去主动调用父组件v-model="currVal" 
                 this.changeCb && this.changeCb(val)
                 this.$emit('input', val)
             },
