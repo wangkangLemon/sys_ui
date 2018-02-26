@@ -82,15 +82,21 @@
                             <el-radio :label="0">否</el-radio>
                             <el-radio :label="1">是</el-radio>
                         </el-radio-group>
+                    </el-form-item >
+                    <el-form-item label="栏目练习题数量" prop="category_subject_num" :disabled="fetchParam.pid == null" v-if="fetchParam.ended">
+                        <el-input placeholder="请输入习题数量" v-if="fetchParam.ended" 
+                                  v-model="fetchParam.category_subject_num">
+                        </el-input>
                     </el-form-item>
                     <el-form-item label="栏目排序" prop="sort">
                         <el-input placeholder="最小的排在前面" :disabled="fetchParam.pid == null"
-                                  v-model.number="fetchParam.sort"></el-input>
+                                  v-model="fetchParam.sort">
+                        </el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="info" @click="submitForm" :disabled="fetchParam.pid == null">保存
                             <!--zhankeng-->
-                        </el-button>
+                        </el-button>        
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -176,6 +182,8 @@
             'activeTab'(val) {
                 if (val === 'add'||val === 'root') {
                     this.resetForm()
+                    this.fetchParam.category_subject_num=''
+                    console.log(this.fetchParam)
                 }
             },
         },
@@ -350,9 +358,10 @@
         return {
             pid: void 0, //父级id
             category_type: void 0,
-            name: void 0,
+            name: '',
             image: void 0,
             sort: '',
+            category_subject_num: void 0,
             id: 0,
             ended: void 0,
         }

@@ -66,8 +66,8 @@ class CourseService {
         })
     }
     // 创建
-    create_cate({ name, sort, category_type, pid, ended, image }) {
-        let reqParam = { name, sort, category_type, pid, ended, image }
+    create_cate({ name, sort, category_type, pid, ended, image, category_subject_num}) {
+        let reqParam = { name, sort, category_type, pid, ended, image, category_subject_num}
         if (pid === 0) delete reqParam['pid']
         let url = urlPre + '/category/create'
         return api.post(url, reqParam).then(ret => {
@@ -82,9 +82,9 @@ class CourseService {
     }
 
      // 更新
-    update_cate({ id, name, image, category_type, sort, ended, disabled, pid }) {
+    update_cate({ id, name, image, category_type, sort, ended, disabled, pid, category_subject_num}) {
         let url = `${urlPre}/category/edit/${id}`
-        return api.post(url, { name, image, category_type, sort, ended, disabled, pid }).then(ret => {
+        return api.post(url, { name, image, category_type, sort, ended, disabled, pid, category_subject_num}).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

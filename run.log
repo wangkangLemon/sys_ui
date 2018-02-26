@@ -55,3 +55,4 @@ ERROR:root:shell execute have error! code: 32768  cmd:
 GIT_POOL=`git remote -v  | grep push | awk '{print $2}' ` ; CUR_BRANCH=`git branch | grep \* | awk '{print $2}'`; git pull $GIT_POOL $CUR_BRANCH ; git push $GIT_POOL $CUR_BRANCH ; 
 ERROR:root:version updated : [0.0.0.48] ---> [0.0.0.49]
 ERROR:root:version updated : [0.0.0.49] ---> [0.0.0.50]
+ERROR:root:version updated : [0.0.0.50] ---> [0.0.0.51]
