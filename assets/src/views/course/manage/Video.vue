@@ -46,7 +46,6 @@
                 <i>视频</i>
                 <el-input v-model="fetchParam.file_name" @keyup.enter.native="fetchData"></el-input>
             </section>
-
             <section>
                 <i>状态</i>
                 <el-select :clearable="true" v-model="fetchParam.status" placeholder="请选择" @change="fetchData">
@@ -56,7 +55,6 @@
                     <el-option label="正常" :value="0"></el-option>
                 </el-select>
             </section>
-
             <!-- <section>
                 <i>是否关联</i>
                 <el-select :clearable="true" v-model="fetchParam.used" placeholder="请选择" @change="fetchData">
@@ -64,13 +62,11 @@
                     <el-option label="未关联" :value="0"></el-option>
                 </el-select>
             </section> -->
-
             <!--<section>
                 <i>所属政府部门</i>
                 <IndustryCompanySelect v-model="fetchParam.gov_id"
                                        :change="fetchData"></IndustryCompanySelect>
             </section>-->
-
             <DateRange title="创建时间" :start="fetchParam.create_start" :end="fetchParam.create_end"
                        @changeStart="val=> fetchParam.create_start=val "
                        @changeEnd="val=> fetchParam.create_end=val" :change="fetchData">

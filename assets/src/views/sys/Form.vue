@@ -224,7 +224,8 @@
             password: '',
             address: '',
             id: 0,
-            sex: 1
+            sex: 1,
+            avatar:'',
         }
     }
 

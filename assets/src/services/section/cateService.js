@@ -6,7 +6,7 @@ class cateService {
     //拿到区块列表
     fetchData (pid, level, pagesize) {
         let url = urlPre + '/lists'
-        return api.post(url,pid, level, pagesize
+        return api.get(url,pid, level, pagesize
         ).then(ret => {
             if (ret.code == 0) {
                 return ret.data

@@ -148,6 +148,7 @@ export default {
             if (this.listData.length > 0) this.uploadVideo()
         },
         uploadVideo(count = 0) {
+            debugger
             let item = this.listData[count]
             videoService.getOssToken().then((ret) => {
                 ossSdk = new OssSdk(ret)
@@ -155,9 +156,6 @@ export default {
                 // 开始上传
                 // 格式化名称
                 var now = new Date()
-                console.log("========================================")
-                console.log(this.user)
-                console.log("========================================")
                 var name = [
                     'yxt', this.user.id,
                     now.getFullYear(), now.getMonth() + 1, now.getDate(),
@@ -188,6 +186,7 @@ export default {
                                 this.$router.back()
                             }, 300)
                         }
+                        ossSdk = new OssSdk(ret)
                     })
                 }, err => {
                     xmview.showTip('error', '上传出现错误' + JSON.stringify(err))

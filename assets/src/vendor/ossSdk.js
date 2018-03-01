@@ -6,12 +6,12 @@ export default function (ossOption, changeToken) {
         ossOption.bucket = ossOption.BucketName;
         ossOption.region = ossOption.Region;
         ossOption.secure = location.protocol === 'https:'
-        // region: 'oss-cn-beijing',
-        //     accessKeyId: 'STS.FAHYC9xQu9hULJpFaZLJ1LFSo',
-        //     accessKeySecret: 'F6Mn61wJpWXydKY6L9nCHfbQYBhKqP9ufBxirwqNrfSu',
-        //     stsToken: 'CAIS9QF1q6Ft5B2yfSjIp4L9EvmNlY5Ujqq\x2bTmzBomEPQMUdo4P4jTz2IHtFenFvAO8WsPw2mmFT7PcZlqF6R5pEQ3uVMJOtWWuxL0DzDbDasumZsJYm6vT8a0XxZjf\/2MjNGZabKPrWZvaqbX3diyZ32sGUXD6\x2bXlujQ\/br4NwdGbZxZASjaidcD9p7PxZrrNRgVUHcLvGwKBXn8AGyZQhKwlMm0Dslt\/nkmJTEsUqO1wTAp7VL99irEP\x2bNdNJxOZpzadCx0dFte7DJuCwqsEMbqv8p1fMUp2\x2be4IDGWQgK\x2bXOXKPbK89FiKxJhYq8zF77DAz1AUAKD0BqAAbNwaudwLzy5hfjzPzE6mTgSc\x2bndCdh24s1NjN93YJrg3RqjNtuqmi1jvtQp5vAHXHcd5qGNbxcrqxQA7oVlnMXwC87ZAb\/mIOtUH4I2HdOM4NuPfVaohDfwCmByymk7XqdYSECB\x2btHrThyUhSILr9dWJo98JTFGwO3KSd7G2rtH',
-        //     bucket: 'yst-vod',
-        //     secure: location.protocol === 'https:'
+            // region: 'oss-cn-beijing',
+            //     accessKeyId: 'STS.FAHYC9xQu9hULJpFaZLJ1LFSo',
+            //     accessKeySecret: 'F6Mn61wJpWXydKY6L9nCHfbQYBhKqP9ufBxirwqNrfSu',
+            //     stsToken: 'CAIS9QF1q6Ft5B2yfSjIp4L9EvmNlY5Ujqq\x2bTmzBomEPQMUdo4P4jTz2IHtFenFvAO8WsPw2mmFT7PcZlqF6R5pEQ3uVMJOtWWuxL0DzDbDasumZsJYm6vT8a0XxZjf\/2MjNGZabKPrWZvaqbX3diyZ32sGUXD6\x2bXlujQ\/br4NwdGbZxZASjaidcD9p7PxZrrNRgVUHcLvGwKBXn8AGyZQhKwlMm0Dslt\/nkmJTEsUqO1wTAp7VL99irEP\x2bNdNJxOZpzadCx0dFte7DJuCwqsEMbqv8p1fMUp2\x2be4IDGWQgK\x2bXOXKPbK89FiKxJhYq8zF77DAz1AUAKD0BqAAbNwaudwLzy5hfjzPzE6mTgSc\x2bndCdh24s1NjN93YJrg3RqjNtuqmi1jvtQp5vAHXHcd5qGNbxcrqxQA7oVlnMXwC87ZAb\/mIOtUH4I2HdOM4NuPfVaohDfwCmByymk7XqdYSECB\x2btHrThyUhSILr9dWJo98JTFGwO3KSd7G2rtH',
+            //     bucket: 'yst-vod',
+            //     secure: location.protocol === 'https:'
     }
     var client = window.OSS && new OSS.Wrapper(ossOption);
     var checkPointIndexes = {};

@@ -72,18 +72,18 @@
                         </UploadImg>
                     </el-form-item>
                     <el-form-item label="课程类型" prop="category_type">
-                        <el-radio-group v-model="fetchParam.category_type">
+                        <el-radio-group v-model="fetchParam.category_type" :disabled="fetchParam.pid == null">
                             <el-radio :label="1">课程栏目</el-radio>
                             <el-radio :label="2">应试课程栏目</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="是否最终菜单" prop="ended">
-                        <el-radio-group v-model="fetchParam.ended">
+                        <el-radio-group v-model="fetchParam.ended" :disabled="fetchParam.pid == null">
                             <el-radio :label="0">否</el-radio>
                             <el-radio :label="1">是</el-radio>
                         </el-radio-group>
                     </el-form-item >
-                    <el-form-item label="栏目练习题数量" prop="category_subject_num" :disabled="fetchParam.pid == null" v-if="fetchParam.ended">
+                    <el-form-item label="栏目练习题数量" prop="category_subject_num" v-if="fetchParam.ended">
                         <el-input placeholder="请输入习题数量" v-if="fetchParam.ended" 
                                   v-model="fetchParam.category_subject_num">
                         </el-input>
@@ -93,6 +93,22 @@
                                   v-model="fetchParam.sort">
                         </el-input>
                     </el-form-item>
+                    <el-form-item label="课程排序规则" prop="course_sort">
+                        <el-select v-model="fetchParam.course_sort" placeholder="默认排序" :disabled="fetchParam.pid == null">
+                            <el-option label="默认排序" :value="0"></el-option>
+                            <el-option label="按课程添加时间升序" :value="1"></el-option>
+                            <el-option label="按课程添加时间倒序" :value="2"></el-option>
+                            <el-option label="按课程排序字段升序" :value="3"></el-option>
+                            <el-option label="按课程排序字段倒序" :value="4"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="未观看优先" prop="sort_type" >
+                        <el-checkbox v-model="fetchParam.sort_type" :true-label="1" :false-label="0" :disabled="fetchParam.pid == null"></el-checkbox>
+                        <!-- <el-radio-group v-model="fetchParam.sort_type">
+                            <el-radio :label="0">否</el-radio>
+                            <el-radio :label="1">是</el-radio>
+                        </el-radio-group> -->
+                    </el-form-item >
                     <el-form-item>
                         <el-button type="info" @click="submitForm" :disabled="fetchParam.pid == null">保存
                             <!--zhankeng-->
@@ -182,7 +198,7 @@
             'activeTab'(val) {
                 if (val === 'add'||val === 'root') {
                     this.resetForm()
-                    this.fetchParam.category_subject_num=''
+                    this.fetchParam.category_subject_num=10
                     console.log(this.fetchParam)
                 }
             },
@@ -265,7 +281,6 @@
                     else{
                         p = courseService.update_cate(this.fetchParam)
                     }
-
                     p.then((ret) => {
                         xmview.showTip('success', '操作成功!')
                         
@@ -361,9 +376,11 @@
             name: '',
             image: void 0,
             sort: '',
-            category_subject_num: void 0,
+            category_subject_num: 10,
             id: 0,
             ended: void 0,
+            course_sort:void 0,//课程排序规则 0.无 1.按课程添加时间升序 2.按课程添加时间倒序 3.按课程排序字段升序 4.按课程排序字段倒序
+            sort_type:0,//课程排序类型 0：默认无规则 1：未观看优先
         }
     }
 

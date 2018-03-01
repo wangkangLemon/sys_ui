@@ -15,7 +15,7 @@
 
 <script>
     import treeUtils from '../../../utils/treeUtils'
-    import cateService from '../../../services/section/cateService.js'
+    import cateService from '../../../services/section/cateService'
     export default {
         props: {
             value: [String, Number, Array],
@@ -62,7 +62,7 @@
                 if (this.lastData) {
                     this.options = this.lastData
                 } else {
-                    this.loading = true
+                    // this.loading = true //这是在请求数据前打开loading动画2-28打开
                     //获取数据的方法
                     cateService.fetchData({
                         pid: 0,
