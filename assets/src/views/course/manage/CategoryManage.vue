@@ -77,23 +77,24 @@
                             <el-radio :label="2">应试课程栏目</el-radio>
                         </el-radio-group>
                     </el-form-item>
+                    <el-form-item label="栏目排序" prop="sort">
+                        <el-input placeholder="最小的排在前面" :disabled="fetchParam.pid == null"
+                                  v-model="fetchParam.sort">
+                        </el-input>
+                    </el-form-item>
                     <el-form-item label="是否最终菜单" prop="ended">
                         <el-radio-group v-model="fetchParam.ended" :disabled="fetchParam.pid == null">
                             <el-radio :label="0">否</el-radio>
                             <el-radio :label="1">是</el-radio>
                         </el-radio-group>
                     </el-form-item >
+                    
                     <el-form-item label="栏目练习题数量" prop="category_subject_num" v-if="fetchParam.ended">
                         <el-input placeholder="请输入习题数量" v-if="fetchParam.ended" 
                                   v-model="fetchParam.category_subject_num">
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="栏目排序" prop="sort">
-                        <el-input placeholder="最小的排在前面" :disabled="fetchParam.pid == null"
-                                  v-model="fetchParam.sort">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item label="课程排序规则" prop="course_sort">
+                    <el-form-item label="课程排序规则" prop="course_sort" v-if="fetchParam.ended">
                         <el-select v-model="fetchParam.course_sort" placeholder="默认排序" :disabled="fetchParam.pid == null">
                             <el-option label="默认排序" :value="0"></el-option>
                             <el-option label="按课程添加时间升序" :value="1"></el-option>
@@ -102,7 +103,7 @@
                             <el-option label="按课程排序字段倒序" :value="4"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="未观看优先" prop="sort_type" >
+                    <el-form-item label="未观看优先" prop="sort_type" v-if="fetchParam.ended">
                         <el-checkbox v-model="fetchParam.sort_type" :true-label="1" :false-label="0" :disabled="fetchParam.pid == null"></el-checkbox>
                         <!-- <el-radio-group v-model="fetchParam.sort_type">
                             <el-radio :label="0">否</el-radio>

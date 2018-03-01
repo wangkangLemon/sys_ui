@@ -106,6 +106,7 @@
         },
         methods: {
             handleNodeClick(a){
+                if (!a)return
                 if( a.level == 0 ){
                     this.$store.dispatch('savePid',a.id)
                 }

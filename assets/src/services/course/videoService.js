@@ -6,12 +6,12 @@ const urlPre = config.apiHost + '/video'
 
 class VideoService {
     // // 搜索
-    search({ status, file_name,  time_start, time_end }) {
+    search({ page, pagesize, status, file_name,  time_start, time_end }) {
         let url = `${urlPre}/lists`
         if (status == null || status === '') {
             status = -1
         }
-        return api.get(url, { status, file_name, time_start, time_end }).then((ret) => {
+        return api.get(url, { page, pagesize,  status, file_name, time_start, time_end }).then((ret) => {
             return ret
         })
     }

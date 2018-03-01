@@ -2,6 +2,8 @@
 <style lang='scss' rel="stylesheet/scss">
     @import "../../utils/mixins/mixins";
     @import "../../utils/mixins/table";
+    @import "../../utils/mixins/common";
+    @import "../../utils/mixins/topSearch";
 
     .block-manage {
         @extend %justify;
@@ -35,34 +37,76 @@
 
             .content-list {
                 padding: 20px;
+                section{
+                     width: 100%;
+                    margin-bottom: 10px;
+                     #input{
+                        width: 50%;
+                        display: inline-block;
+                        margin-left: 10px;
+                    }
+                }
+                .tag {
+                span {
+                    padding: 10px;
+                    border: 1px solid #e2e7eb;
+                    background: #fff;
+                    border-right: none;
+                    &:last-of-type {
+                        border-right: 1px solid #e2e7eb;
+                    }
+                    &:hover {
+                        background: #e2e7eb;
+                    }
+                    &.active {
+                        background: #e2e7eb;
+                    }
+                }
+                
+                
             }
+            }
+
             .el-pagination {
                 float: right;
                 margin-top: 10px;
             }
         }
+
+        .el-dialog__wrapper {
+            padding-top: 15px;
+            background: rgba(0, 0, 0, .5);
+            z-index: 1000;
+        }
+        // .manage-container {
+        //     @extend %right-top-btnContainer;
+        //     >* {
+        //         color: #fff;
+        //         border-radius: 5px;
+        //     } // 添加课程
+        //     .add {
+        //         background: rgb(0, 204, 255);
+        //     } // 管理栏目
+        //     .catmange {
+        //         background: rgb(153, 102, 204);
+        //     }
+        // }
+
     }
 </style>
 <template>
     <article class="block-manage">
+        <!--选取内容-->
+        <ChooseContent v-model="select.isShow" v-on:result="contentConfirm"></ChooseContent>
+
         <!--添加/编辑区块-->
         <el-dialog v-model="addForm" :title="formTitle" size="tiny">
             <el-form label-position="top" class="addForm" :model="form" :rules="rules" ref="form">
                 <el-form-item prop="name" label="名称" :label-width="formLabelWidth">
                     <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="sort" label="排序" :label-width="formLabelWidth">
-                    <el-input v-model="form.sort" placeholder="最小的排在前面" auto-complete="off"></el-input>
-                </el-form-item>
-                 <!-- <el-form-item prop="status" label="状态" :label-width="formLabelWidth">
-                     <el-radio-group v-model="form.disabled">
-                            <el-radio :label="0">启用</el-radio>
-                            <el-radio :label="1">禁用</el-radio>
-                    </el-radio-group>    
-                </el-form-item> -->
-                <!-- <el-form-item label="绑定公开课栏目（可选）" :label-width="formLabelWidth">
-                    <CourseCategorySelect :placeholder="editPlacehoder" v-model="form.course_category_id"></CourseCategorySelect>
-                </el-form-item> -->
+                
+                
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addForm = false">取 消</el-button>
@@ -76,24 +120,35 @@
             </div>
             <div class="classify-tree">
                 <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="secCategory" ></MenuTree>
-                <!-- <el-tree class="leftSubTree" :expand-on-click-node="false" :highlight-current="true" :data="category.data"
+                    <!-- <el-tree class="leftSubTree" :expand-on-click-node="false" :highlight-current="true" :data="category.data"
                          :props="defaultProps" @node-expand="leftClassifyExpend" @node-click="leftClassifyClick"></el-tree> -->
             </div>
         </section>
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>区块列表
-                <el-button @click="add">添加区块</el-button>
+                
+
+                <!-- <el-button @click="add">添加区块</el-button> -->
+                <el-button type="primary" icon="plus" @click="select.isShow = true">选取内容</el-button>
             </div>
             <div class="content-list">
+                <section>
+                     <i>标题</i><el-input id="input" size='small' v-model="section.title" placeholder="请输入标题" @keyup.enter.native="getSectionData" auto-complete="off" ></el-input>
+                </section>  
+                   
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="title" label="名称"></el-table-column>
-                    <el-table-column prop="category_name" label="绑定栏目" width="200">
+                    <el-table-column prop="category_name" label="绑定栏目" width="100">
                         <!-- <template scope="scope">
                             {{scope.row.category_name || '无'}}
                         </template> -->
                     </el-table-column>
-                    <el-table-column prop="sort" label="排序" width="100"></el-table-column>
+                    <el-table-column prop="sort" label="排序" width="70"></el-table-column>
+                    <el-table-column prop="tags" label="标签" width="100"></el-table-column>
+                    <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
+                        <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
+                    </el-table-column> -->
                     <el-table-column prop="update_time_name" label="更新时间" width="200"></el-table-column>
                      <!-- <el-table-column
                         prop="status_name"
@@ -133,6 +188,7 @@
     import dataService from '../../services/section/dataService'
     import cateService from '../../services/section/cateService'
     import MenuTree from '../component/tree/MenuTreeSec.vue'
+    import ChooseContent from '../component/choose/ChooseContent'
     // import CourseCategorySelect from '../../component/select/CourseCategory.vue'
     function clearFn() {
         return {
@@ -145,7 +201,7 @@
     }
     export default {
         components: {
-            MenuTree// CourseCategorySelect
+            MenuTree,ChooseContent// CourseCategorySelect
         },
         data () {
             return {
@@ -172,6 +228,7 @@
                 section: {
                     loading: false,
                     data: [],
+                    title:'',
                     page: 1,
                     pagesize: 10,
                     total: 0
@@ -181,6 +238,10 @@
                     label: 'name'
                 },
                 SecMenu:[],
+                // 选取
+                select: {
+                    isShow: false
+                },
             }
         },
         watch: {
@@ -189,7 +250,8 @@
                 console.log(this.category.currentData.id)
             },
             'category.currentData.id'(){
-                this.$refs.secCategory.handleNodeClick(a)
+                this.getSectionData () 
+                // this.$refs.secCategory.handleNodeClick()
             }
         },
         activated () {
@@ -204,6 +266,28 @@
             this.fetchData()
         },
         methods: {
+            // 保持同步
+            keepSync() {
+                this.form.ref_sync = 1
+                this.form.course_name = this.form.content.course_name
+                this.form.image = this.form.content.image
+                this.form.description = this.form.content.description
+                this.form.addate = this.form.content.addate
+                this.form.sort = ''
+            },
+            //弹窗内容
+            contentConfirm(dataObj) {
+                this.form.content = dataObj
+                // this.form.category_id = dataObj.category_id  
+                // this.form.ref_id = dataObj.contentid
+                this.form.ref_id = dataObj.contentid
+                this.form.ref_sync = 1
+                this.form.tags = ''
+                // this.category = dataObj.category
+                if (this.form.id) delete this.form.id
+                this.keepSync()
+                this.addForm = true
+            },
             fetchData() {
                 cateService.fetchData( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
@@ -245,6 +329,7 @@
             getSectionData () {
                 this.section.loading = true
                 return dataService.fetchData({
+                    title:this.section.title,
                     page: this.section.page,
                     pagesize: this.section.pagesize,
                     category_id: this.category.currentData.id
