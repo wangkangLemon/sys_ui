@@ -24,7 +24,7 @@ export default {
         },
         {
             path: 'gov/add',
-            name: 'gov-add',
+            name: 'gov-edit',
             component: resolve => {
                 require.ensure([], () => {
                     resolve(require('../views/gov/GovOperate.vue'))
@@ -88,20 +88,20 @@ export default {
             //         noback: false
             //     }
             // },
-        //  //新建人员
-            // {
-            //     path: 'person/edit/:user_id',
-            //     name: 'person-add',
-            //     component: resolve => {
-            //         require.ensure([], () => {
-            //             resolve(require('../views/gov/user/personForm.vue'))
-            //         })
-            //     },
-            //     meta: {
-            //         title: '人员新建',
-            //         noback: false
-            //     }
-            // },
+         //新建人员
+            {
+                path: 'person/add',
+                name: 'person-edit',
+                component: resolve => {
+                    require.ensure([], () => {
+                        resolve(require('../views/gov/user/personForm.vue'))
+                    })
+                },
+                meta: {
+                    title: '人员新建',
+                    noback: false
+                }
+            },
         {
             path: 'person/edit/:user_id',//编辑人员
             name: 'person-edit',

@@ -6,7 +6,12 @@
 
 #medical-index-container {
     @extend %content-container;
-
+    .info{
+        .gov{
+            font-size:15px;
+            font-weight:  900
+        }
+    }
     .manage-container {
         @extend %right-top-btnContainer;
         >* {
@@ -48,8 +53,13 @@
             </div>
             <div class="info">
                 <h2>{{clerkDetail.name}}</h2>
-                <p><i class="title">所属部门：</i><span class="value">{{clerkDetail.gov_name}}</span></p>
-                <p><i class="title">手机号：</i> <span class="value">{{clerkDetail.mobile}}</span></p>
+                <p class="gov"><i class="title">所属部门：</i><span class="value">{{clerkDetail.gov_name}}</span></p>
+                <p v-if="clerkDetail.province_name"><i class="title">所属省份：</i><span class="value">{{clerkDetail.province_name}}</span></p>
+                <p v-if="clerkDetail.city_name"><i class="title">所属城市：</i><span class="value">{{clerkDetail.city_name}}</span></p>
+                <p v-if="clerkDetail.area_name"><i class="title">区（县）：</i><span class="value">{{clerkDetail.area_name}}</span></p>
+                <p v-if="clerkDetail.town_name"><i class="title">所属镇：</i><span class="value">{{clerkDetail.town_name}}</span></p>
+                <p v-if="clerkDetail.village_name"><i class="title">所属村：</i><span class="value">{{clerkDetail.village_name}}</span></p>
+                <p v-if="clerkDetail.mobile"><i class="title">手机号：</i> <span class="value">{{clerkDetail.mobile}}</span></p>
                 <p>
                     <i class="title">状态：</i>
                     <span class="value">
@@ -117,7 +127,7 @@
         </section>
 
         <article class="search">
-             <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" :town="fetchParam.townSelect"
+            <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" :town="fetchParam.townSelect"
                 :village="fetchParam.villageSelect" title="部门" v-on:provinceChange="val => {fetchParam.provinceSelect = val;finallyVal = val}"
                 v-on:cityChange="val => {fetchParam.citySelect = val;finallyVal = val}" v-on:areaChange="val => {fetchParam.areaSelect = val;finallyVal = val}"
                 v-on:townChange="val => {fetchParam.townSelect = val;finallyVal = val}" v-on:villageChange="val => {fetchParam.villageSelect = val;finallyVal = val}"
@@ -312,14 +322,12 @@ export default {
                 },
                 addForm: false, // 表单弹窗是否显示
                 formLabelWidth: '120px', // 表单label的宽度
-
         }
     },
     activated () {
         this.fetchData()
     },
     methods: {
-
         //添加人员
         addAdmin () {
                 // this.loading = false
@@ -330,15 +338,20 @@ export default {
                 //         this.departmentData = ret.data
                 //     }
                 // }).then(() => {
-                    this.addForm = true
-                    this.form= clearFormFn()
-                    this.form.gov_id = this.fetchParam.gov_id
-                    // alert('this.form.gov_id='+this.form.gov_id)
+                    
+                //     this.addForm = true
+                //     this.form= clearFormFn()
+                //     this.form.gov_id = this.fetchParam.gov_id
+                // // })
+                // // 显示政府名称
+                // govService.getGovInfo(this.form.gov_id).then((ret) => {
+                //     this.form.gov_name = ret.name
                 // })
-                // 显示政府名称
-                govService.getGovInfo(this.form.gov_id).then((ret) => {
-                    this.form.gov_name = ret.name
-                })
+
+                this.$router.push({
+                name: 'person-edit',
+            })
+
 
             },
         //添加人员提交
@@ -346,7 +359,6 @@ export default {
             this.$refs[form].validate((valid) => {
                 if (valid) {
                     // this.form.birthday = timeUtils.date2Str(this.form.birthday)
-                    console.log(this.form)
                     userService.create(this.form).then((ret) => {
                         xmview.showTip('success', '添加成功')
                     }).then(() => {
@@ -420,8 +432,6 @@ export default {
                 }else{
                     this.fetchParam.gov_id = this.finallyVal
                 }
-               
-
                 if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
                     this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
                     this.fetchParam.gov_id = -1
@@ -437,8 +447,7 @@ export default {
             this.fetchParam.city_id = this.fetchParam.citySelect,
             this.fetchParam.area_id = this.fetchParam.areaSelect,
             this.fetchParam.town_id = this.fetchParam.townSelect,
-            this.fetchParam.village_id = this.fetchParam.villageSelect,    
-            console.log(this.fetchParam)
+            this.fetchParam.village_id = this.fetchParam.villageSelect
             return userService.fetchData(this.fetchParam).then((ret) => {
                 this.dataCache = ret.data
                 this.total = ret._exts.total
@@ -481,7 +490,6 @@ export default {
             }else{
                  xmview.showDialog(`管理员 <span style="color:red">${row.name}</span> 已删除，无法启用！`)
             }
-            
         },
         // 单条删除
         del(index, row) {
@@ -516,7 +524,6 @@ export default {
                 }, this);
             return time
         },
-
     },
     computed: {
         // timeFilter(row, column, cellValue){
@@ -527,8 +534,6 @@ export default {
         //     })
         //    return arr
         // },
-
-        
         tableData(){
             let arr = this.dataCache.filter(v=>{
                 return v.name.indexOf(this.name)>=0

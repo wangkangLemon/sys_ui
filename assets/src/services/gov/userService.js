@@ -29,9 +29,9 @@ class sysService {
     }
 
     // 创建
-    create({ role_id, area_id, gov_id, name, mobile, email, passwd }) {
+    create({ role_id, gov_id, name, nickname, mobile, email, passwd, province_id, city_id, area_id, town_id, village_id }) {
         let url = urlPre + '/create'
-        return api.post(url, { role_id,  gov_id, name, mobile,  passwd }).then(ret => {
+        return api.post(url, { role_id, gov_id, name, nickname, mobile, passwd, province_id, city_id, area_id, town_id, village_id }).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -41,9 +41,9 @@ class sysService {
         })
     }
     // 更新
-    update({ id, role_id, avatar, password, area_id, gov_id, name, nickname, mobile, email, sex, address }) {
+    update({ id, role_id, avatar, password, gov_id, name, nickname, mobile, email, sex, address, province_id, city_id, area_id, town_id, village_id}) {
         let url = `${urlPre}/edit/${id}`
-        return api.post(url, { role_id, avatar, password, area_id, gov_id, name, nickname, mobile, email, sex, address }).then(ret => {
+        return api.post(url, { role_id, avatar, password, gov_id, name, nickname, mobile, email, sex, address, province_id, city_id, area_id, town_id, village_id}).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

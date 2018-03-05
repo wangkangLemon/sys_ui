@@ -104,7 +104,7 @@
                 }
             },
             town(val) {
-                if (this.province && this.citySelect && this.townSelect && val) {
+                if (this.province && this.citySelect && this.areaSelect && val) {
                     this.townSelect = val
                     this.currentVal(3, val)
                     // console.log('this.townSelect='+this.townSelect)
@@ -113,7 +113,7 @@
                 }
             },
             village(val) {
-                if (this.province && this.citySelect && this.citySelect && this.villageSelect && val) {
+                if (this.province && this.citySelect && this.areaSelect && this.townSelect && val) {
                     this.villageSelect = val
                     this.currentVal(4, val)
                     // console.log('this.villageSelect='+this.villageSelect)

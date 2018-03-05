@@ -22,7 +22,7 @@
         }
         }*/
         .submit-form {
-        width: 45%;
+        width: 65%;
         padding: 20px;
             .select{
                 width: 100%;
@@ -34,7 +34,7 @@
                 width:200px;
             }
             div{
-                text-align: center
+                // text-align: center
             }
     }
     }
@@ -45,7 +45,7 @@
             <div class="img-container">
                 <img :src="imgUrl" />
             </div>
-            <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
+            <!-- <ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput> -->
         </section>     
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
@@ -75,7 +75,29 @@
                     <el-input v-model.password="fetchParam.password" v-if="this.$route.params.id" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
                     <el-input v-model.password="fetchParam.password" v-else auto-complete="off" type="password" key=""  ></el-input>
                 </el-form-item>
-
+                <!-- <el-form-item label="部门">
+                    <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" :town="fetchParam.townSelect"
+                        :village="fetchParam.villageSelect"  v-on:provinceChange="val => {fetchParam.provinceSelect = val;finallyVal = val}"
+                        v-on:cityChange="val => {fetchParam.citySelect = val;finallyVal = val}" v-on:areaChange="val => {fetchParam.areaSelect = val;finallyVal = val}"
+                        v-on:townChange="val => {fetchParam.townSelect = val;finallyVal = val}" v-on:villageChange="val => {fetchParam.villageSelect = val;finallyVal = val}"
+                        :change="fetchData">
+                    </Region>
+                </el-form-item>  -->
+                <el-form-item label="部门">
+                    <Region :province="fetchParam.province_id"
+                            :city="fetchParam.city_id"
+                            :area="fetchParam.area_id"
+                            :town="fetchParam.town_id"
+                            :village="fetchParam.village_id"
+                            title=""
+                            v-on:provinceChange="val => fetchParam.province_id = val"
+                            v-on:cityChange="val => fetchParam.city_id = val"
+                            v-on:areaChange="val => fetchParam.area_id = val"
+                            v-on:townChange="val => fetchParam.town_id = val"
+                            v-on:villageChange="val => fetchParam.village_id = val"
+                            >
+                    </Region>
+                </el-form-item>    
                 <!--<el-form-item label="部门" prop="gov_id" :fetch-suggestions="querySearch">
                     <el-select class="select" v-model="fetchParam.gov_id" placeholder="请选择部门">
                         <el-option  v-for="item in  gov_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -99,6 +121,7 @@
     import govService from '../../../services/gov/govService.js'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
     import clone from 'clone'
+    import Region from '../../component/select/Region.vue'
 
     function clearFn() {
         return {
@@ -114,7 +137,7 @@
     export default {
         name: 'person-edit',
         components: {
-            ImagEcropperInput
+            ImagEcropperInput,Region
         },
         data() {
             return {
@@ -162,7 +185,9 @@
                     // this.passValue = false
                     userService.getAdminInfo(this.$route.params.id).then((ret) => {
                         this.fetchParam = ret
-                        console.log(ret)
+                        console.log(1111111111111111111111111)
+                        console.log(this.fetchParam)
+                        console.log(222222222222)
                         // this.fetchParam.role_id = ret.course.role_id
                     })
                 } 
@@ -210,10 +235,10 @@
                     if (!valid) return
                     let req = userService.create
                     if (this.fetchParam.id) req = userService.update
-                    console.log(this.fetchParam.id)
+                    console.log(this.fetchParam)
+                    this.fetchParam.gov_id = this.fetchParam.village_id||this.fetchParam.town_id|| this.fetchParam.area_id||this.fetchParam.city_id ||this.fetchParam.province_id
                     req(this.fetchParam).then((ret) => {
                         console.log(111111111111)
-                        console.log(ret)
                         // 重置当前数据
                         //this.$refs[fetchParam].resetFields();//自己加的方法
                         xmview.showTip('success', '数据提交成功')
@@ -264,12 +289,11 @@
             sex: 1,
             gov_id: void 0,
 
-            typeSelect: '',
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
+            province_id : '', // 省
+            city_id: '',  // 市
+            area_id: '',  // 区
+            town_id: '',  //乡镇                       -----
+            village_id: '', // 街道 
             pid: void -1,
 
         }
