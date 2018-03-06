@@ -264,19 +264,13 @@
                 return parseInt(this.$route.query.category)
             }
         },
-        activated () {
-             this.total=null   
+        created () {
+            this.total=null   
              xmview.setContentLoading(false)
             this.getData().then(() => {
                 xmview.setContentLoading(false)
             })
         },
-        // created () {
-        //     xmview.setContentLoading(false)
-        //     this.getData().then(() => {
-        //         xmview.setContentLoading(false)
-        //     })
-        // },
         watch:{
 
         },

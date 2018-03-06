@@ -49,7 +49,21 @@
         </section>     
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
-                
+                <el-form-item label="部门"  prop="province_id">
+                    <Region :province="fetchParam.province_id" v-model="fetchParam.province_id"
+                            :city="fetchParam.city_id"
+                            :area="fetchParam.area_id"
+                            :town="fetchParam.town_id"
+                            :village="fetchParam.village_id"
+                            title=""
+                            v-on:provinceChange="val => fetchParam.province_id = val"
+                            v-on:cityChange="val => fetchParam.city_id = val"
+                            v-on:areaChange="val => fetchParam.area_id = val"
+                            v-on:townChange="val => fetchParam.town_id = val"
+                            v-on:villageChange="val => fetchParam.village_id = val"
+                            >
+                    </Region>
+                </el-form-item>    
                 <el-form-item label="姓名" prop="name">
                     <el-input v-model="fetchParam.name"  auto-complete="off"></el-input>
                 </el-form-item>
@@ -83,21 +97,7 @@
                         :change="fetchData">
                     </Region>
                 </el-form-item>  -->
-                <el-form-item label="部门"  prop="province_id">
-                    <Region :province="fetchParam.province_id" v-model="fetchParam.province_id"
-                            :city="fetchParam.city_id"
-                            :area="fetchParam.area_id"
-                            :town="fetchParam.town_id"
-                            :village="fetchParam.village_id"
-                            title=""
-                            v-on:provinceChange="val => fetchParam.province_id = val"
-                            v-on:cityChange="val => fetchParam.city_id = val"
-                            v-on:areaChange="val => fetchParam.area_id = val"
-                            v-on:townChange="val => fetchParam.town_id = val"
-                            v-on:villageChange="val => fetchParam.village_id = val"
-                            >
-                    </Region>
-                </el-form-item>    
+                
                 <!--<el-form-item label="部门" prop="gov_id" :fetch-suggestions="querySearch">
                     <el-select class="select" v-model="fetchParam.gov_id" placeholder="请选择部门">
                         <el-option  v-for="item in  gov_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
