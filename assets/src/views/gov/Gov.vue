@@ -133,6 +133,7 @@
             finallyVal: ''
         }
     }
+    
     export default {
         components: {
             DateRange,

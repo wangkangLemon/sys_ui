@@ -24,7 +24,7 @@ export default {
         },
         {
             path: 'gov/add',
-            name: 'gov-edit',
+            name: 'gov-add',
             component: resolve => {
                 require.ensure([], () => {
                     resolve(require('../views/gov/GovOperate.vue'))
@@ -91,7 +91,7 @@ export default {
          //新建人员
             {
                 path: 'person/add',
-                name: 'person-edit',
+                name: 'person-add',
                 component: resolve => {
                     require.ensure([], () => {
                         resolve(require('../views/gov/user/personForm.vue'))
@@ -103,7 +103,7 @@ export default {
                 }
             },
         {
-            path: 'person/edit/:user_id',//编辑人员
+            path: 'person/edit/:id',//编辑人员
             name: 'person-edit',
             component: resolve => {
                 require.ensure([], () => {

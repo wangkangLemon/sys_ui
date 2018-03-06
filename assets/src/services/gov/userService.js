@@ -41,9 +41,9 @@ class sysService {
         })
     }
     // 更新
-    update({ id, role_id, avatar, password, gov_id, name, nickname, mobile, email, sex, address, province_id, city_id, area_id, town_id, village_id}) {
+    update({ id, role_id, avatar, passwd, gov_id, name, nickname, mobile, email, sex, address, province_id, city_id, area_id, town_id, village_id}) {
         let url = `${urlPre}/edit/${id}`
-        return api.post(url, { role_id, avatar, password, gov_id, name, nickname, mobile, email, sex, address, province_id, city_id, area_id, town_id, village_id}).then(ret => {
+        return api.post(url, { role_id, avatar, passwd, gov_id, name, nickname, mobile, sex, address, province_id, city_id, area_id, town_id, village_id}).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

@@ -349,7 +349,7 @@ export default {
                 // })
 
                 this.$router.push({
-                name: 'person-edit',
+                name: 'person-add',
             })
 
 
@@ -377,7 +377,9 @@ export default {
             this.$router.push({
                 name: 'person-edit',
                 params: {
-                    id: row.id
+                    id: row.id,
+                    role_id:row.role_id,
+                    userinfo: row,
                 }
             })
         },

@@ -330,7 +330,6 @@
                 catArr: {
                     'course': '课程',
                     'article': '资讯',
-                    'speaking': '药我说',
                     'link': '链接'
                 },
                 category: 'course',

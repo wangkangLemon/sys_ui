@@ -36,7 +36,7 @@
             div{
                 // text-align: center
             }
-    }
+        }
     }
 </style>
 <template>
@@ -71,9 +71,9 @@
                         <el-option  v-for="item in  role_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="密码" prop="password" v-if="fetchParam.role_id==1">
-                    <el-input v-model.password="fetchParam.password" v-if="this.$route.params.id" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
-                    <el-input v-model.password="fetchParam.password" v-else auto-complete="off" type="password" key=""  ></el-input>
+                <el-form-item label="密码" prop="passwd" v-if="fetchParam.role_id==1">
+                    <el-input v-model="fetchParam.passwd" v-if="this.$route.params.id" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
+                    <el-input v-model="fetchParam.passwd" v-else auto-complete="off" type="password" key=""  ></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="部门">
                     <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" :town="fetchParam.townSelect"
@@ -163,12 +163,21 @@
                 rules: {
                     role_id: { required: true, message: '请输入角色'},
                     gov_id:{ required: true },
-                    name: { required: true, message: '请输入姓名'},
+                    name: [
+                        { required: true, message: '请输入姓名'},
+                        {
+                            min: 1,
+                            max: 9,
+                            message: '长度不得大于 9个字符'
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的姓名'
+                        }],
                     sex: { required: true },
                     mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
                     email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    // password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入6-12位包含数字与字母的密码', trigger: 'blur' },
-                    password: { required: !this.$route.params.id, message:  !this.$route.params.id?'请输入密码':'密码、不修改请留空', trigger: 'blur' },
+                    // passwd: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入6-12位包含数字与字母的密码', trigger: 'blur' },
+                    passwd: { required: !this.$route.params.id , message:  !this.$route.params.id?'请输入密码':'密码、不修改请留空', trigger: 'blur' },
             },
                 multi: {
                     data: [{
@@ -179,10 +188,18 @@
                 gov_list:[],
             }
         },
-        created() {
-            xmview.setContentLoading(false);
-                if (this.$route.params.id != undefined) {    //路由id传递
+        created () {
+            
+        },
+        activated() {
+            xmview.setContentLoading(false)
+            console.log('this.$route.params='+this.$route.params)
+            if (this.$route.params.id  == undefined) {
+                this.fetchParam =  getOriginData()
+                return false
+            }  //路由id传递
                     // this.passValue = false
+                    console.log('this.$route.params.id='+this.$route.params.id)
                     userService.getAdminInfo(this.$route.params.id).then((ret) => {
                         this.fetchParam = ret
                         console.log(1111111111111111111111111)
@@ -190,18 +207,18 @@
                         console.log(222222222222)
                         // this.fetchParam.role_id = ret.course.role_id
                     })
-                } 
+             
             //暂时不获取角色列表       
              this.getrole()
             this.loadingData=false;
         },
-        activated () {
-            this.getrole()
-        },
+        // activated () {
+        //     this.getrole()
+        // },
         watch: {
-            'fetchParam.password'(){
-                if(this.fetchParam.password==undefined){
-                    this.fetchParam.password=''
+            'fetchParam.passwd'(){
+                if(this.fetchParam.passwd==undefined){
+                    this.fetchParam.passwd=''
                 }
             }
         },
@@ -283,16 +300,16 @@
             name: '',
             mobile: '',
             email: '',
-            password: '',
+            passwd: '',
             address: '',
             id: 0,
-            sex: 1,
+            sex: 0,
             gov_id: void 0,
-
+            nickname:'',
             province_id : '', // 省
             city_id: '',  // 市
             area_id: '',  // 区
-            town_id: '',  //乡镇                       -----
+            town_id: '',  //乡镇     
             village_id: '', // 街道 
             pid: void -1,
 

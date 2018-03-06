@@ -83,6 +83,29 @@
 <script>
     import govService from '../../services/gov/govService.js'
     import Region from '../component/select/Region.vue'
+    function clearFormFn() {
+            return  {
+                    gov_id: void 0,
+                    category: '', // 类型
+                    pid:'', //上级部门                    
+                    province_id : '', // 省
+                    city_id: '',  // 市
+                    area_id: '',  // 区
+                    town_id: '',  //乡镇                       -----
+                    village_id: '', // 街道                    -----
+                    name: '', // 名称
+                    concact: '', // 联系人
+                    mobile: '', // 联系人手机
+                    email: '', // 联系人邮箱
+                    mobile_title: '', // 手机端客户端名称        ----
+                    tel: '', // 电话
+                    zip: '', // 邮编
+                    fax: '', // 传真
+                    url: '', // 企业网址
+                    address: '', // 地址
+                    description: '', // 企业介绍
+                }
+    }
     let _this
     export default {
         components: {
@@ -107,34 +130,13 @@
                         name: '政府',
                         id: 2
                     },
-                    {
-                        name: '系统',
-                        id: 1
-                    }
+                    // {
+                    //     name: '系统',
+                    //     id: 1
+                    // }
                 ],
                 formLabelWidth: '120px',
-                form: {
-                    gov_id: void 0,
-                    category: '', // 类型
-                    pid:'', //上级部门                    
-                    province_id : '', // 省
-                    city_id: '',  // 市
-                    area_id: '',  // 区
-                    town_id: '',  //乡镇                       -----
-                    village_id: '', // 街道                    -----
-                    name: '', // 名称
-                    concact: '', // 联系人
-                    mobile: '', // 联系人手机
-                    email: '', // 联系人邮箱
-                    mobile_title: '', // 手机端客户端名称        ----
-                    tel: '', // 电话
-                    zip: '', // 邮编
-                    fax: '', // 传真
-                    url: '', // 企业网址
-                    address: '', // 地址
-                    description: '', // 企业介绍
-                },
-  
+                form: clearFormFn(),
                 rules: {
                     name: [
                         {required: true, message: '必填项', trigger: 'blur'}
@@ -162,27 +164,7 @@
             _this = this
             xmview.setContentLoading(false)
             if (this.govID == undefined) {
-                this.form = {
-                    gov_id: void 0, //初始化govid
-                    category: '', // 类型
-                    pid:'', //上级部门                    
-                    province_id : '', // 省
-                    city_id: '',  // 市
-                    area_id: '',  // 区
-                    town_id: '',  //乡镇                       -----
-                    village_id: '', // 街道                    -----
-                    name: '', // 名称
-                    concact: '', // 联系人
-                    mobile: '', // 联系人手机
-                    email: '', // 联系人邮箱
-                    mobile_title: '', // 手机端客户端名称        ----
-                    tel: '', // 电话
-                    zip: '', // 邮编
-                    fax: '', // 传真
-                    url: '', // 企业网址
-                    address: '', // 地址
-                    description: '', // 企业介绍
-                }
+                this.form = clearFormFn()
                 return false
             }
             govService.getGovInfo(this.govID).then((ret) => {
@@ -205,24 +187,6 @@
                             reqFn = govService.addGov
                             msg= '添加成功'
                         }
-                        // if(this.form.province_id) {
-                        //     this.form.pid = this.form.province_id
-                        //     console.log( 'this.form.province_id='+ this.form.province_id)
-                        //     if(this.form.province_id && this.form.city_id){
-                        //          this.form.pid = this.form.city_id
-                        //          console.log( 'this.form.city_id='+ this.form.city_id)
-                        //          if(this.form.province_id && this.form.city_id && this.form.area_id){
-                        //             this.form.pid = this.form.area_id
-                        //             console.log( 'this.form.area_id='+ this.form.area_id)
-                        //             if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id){
-                        //                 this.form.pid = this.form.town_id
-                        //                 if(this.form.province_id && this.form.city_id && this.form.area_id && this.form.town_id && this.form.village_id){
-                        //                     this.form.pid = this.form.village_id
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
-                        // }
                         console.log(this.$route.params.govinfo)
                         if(this.$route.params.govinfo!=undefined){
                             this.form.pid = this.$route.params.govinfo.pid
