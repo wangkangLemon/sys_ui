@@ -173,7 +173,6 @@
             })
         },
         methods: {
- 
             submit (form) { // 表单提交
                 this.$refs[form].validate((valid) => {
                     if (valid) {

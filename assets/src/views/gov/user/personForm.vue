@@ -51,10 +51,10 @@
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
                 
                 <el-form-item label="姓名" prop="name">
-                    <el-input v-model.name="fetchParam.name"></el-input>
+                    <el-input v-model="fetchParam.name"  auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="昵称" prop="price">
-                    <el-input v-model.nickname="fetchParam.nickname"></el-input>
+                    <el-input v-model="fetchParam.nickname"></el-input>
                 </el-form-item>
                 <!--<el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="fetchParam.sex">
@@ -63,7 +63,7 @@
                     </el-radio-group>
                 </el-form-item>-->
                 <el-form-item label="手机号" prop="mobile">
-                    <el-input v-model.mobile="fetchParam.mobile"></el-input>
+                    <el-input v-model="fetchParam.mobile"></el-input>
                 </el-form-item>
 
                 <el-form-item label="角色" prop="role_id" :fetch-suggestions="querySearch">
@@ -83,8 +83,8 @@
                         :change="fetchData">
                     </Region>
                 </el-form-item>  -->
-                <el-form-item label="部门">
-                    <Region :province="fetchParam.province_id"
+                <el-form-item label="部门"  prop="province_id">
+                    <Region :province="fetchParam.province_id" v-model="fetchParam.province_id"
                             :city="fetchParam.city_id"
                             :area="fetchParam.area_id"
                             :town="fetchParam.town_id"
@@ -135,11 +135,22 @@
         }
     }
     export default {
-        name: 'person-edit',
+        name: 'sys-form',
         components: {
             ImagEcropperInput,Region
         },
         data() {
+            var valigovPass = (rule, value, callback) => {
+                if (!value) {
+                    callback(new Error('请输入部门'));
+                } else {
+                    // debugger
+                    // if (this.fetchParam.province_id) {
+                    //    this.$refs.form.validateField('province_id');
+                    // }
+                    callback();
+                }
+            };
             return {
                 imgUrl: '',
                 loadingData: false,
@@ -161,10 +172,10 @@
                     },
                 ],
                 rules: {
-                    role_id: { required: true, message: '请输入角色'},
-                    gov_id:{ required: true },
+                    role_id: { required: true, type: 'number',message: '请输入角色',trigger: 'blur'},
+                    province_id:{ validator: valigovPass, trigger: 'change'},
                     name: [
-                        { required: true, message: '请输入姓名'},
+                        { required: true, message: '请输入姓名', trigger: 'blur'},
                         {
                             min: 1,
                             max: 9,
@@ -174,7 +185,7 @@
                             message: '请输入非空格或非特殊字符的姓名'
                         }],
                     sex: { required: true },
-                    mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
+                    mobile: { pattern: /^1[34578]\d{9}$/, required: true,  message: '请输入正确的手机号', trigger: 'blur' },
                     email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
                     // passwd: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入6-12位包含数字与字母的密码', trigger: 'blur' },
                     passwd: { required: !this.$route.params.id , message:  !this.$route.params.id?'请输入密码':'密码、不修改请留空', trigger: 'blur' },
@@ -188,28 +199,23 @@
                 gov_list:[],
             }
         },
-        created () {
-            
-        },
-        activated() {
+        created() {
             xmview.setContentLoading(false)
             console.log('this.$route.params='+this.$route.params)
             if (this.$route.params.id  == undefined) {
                 this.fetchParam =  getOriginData()
                 return false
             }  //路由id传递
-                    // this.passValue = false
-                    console.log('this.$route.params.id='+this.$route.params.id)
-                    userService.getAdminInfo(this.$route.params.id).then((ret) => {
-                        this.fetchParam = ret
-                        console.log(1111111111111111111111111)
-                        console.log(this.fetchParam)
-                        console.log(222222222222)
-                        // this.fetchParam.role_id = ret.course.role_id
-                    })
-             
+            // this.passValue = false
+            console.log('this.$route.params.id='+this.$route.params.id)
+            userService.getAdminInfo(this.$route.params.id).then((ret) => {
+                this.fetchParam = ret
+                console.log(1111111111111111111111111)
+                console.log(this.fetchParam)
+                console.log(222222222222)
+            })
             //暂时不获取角色列表       
-             this.getrole()
+            //  this.getrole()
             this.loadingData=false;
         },
         // activated () {
@@ -220,7 +226,13 @@
                 if(this.fetchParam.passwd==undefined){
                     this.fetchParam.passwd=''
                 }
-            }
+            },
+            // 'fetchParam.province_id'(){
+            //     console.log('govid')
+            //      if(this.fetchParam.gov_id){
+            //         this.fetchParam.gov_id = this.fetchParam.village_id||this.fetchParam.town_id|| this.fetchParam.area_id||this.fetchParam.city_id ||this.fetchParam.province_id
+            //     }
+            // }
         },
         methods: {
             // passFn(){
@@ -240,12 +252,12 @@
                 })
             },
             
-            //获取角色组下拉列表
-            getrole(val){
-                govService.getSelectList({pagesize:-1}).then((ret)=>{
-                 this.gov_list=ret.data;
-                })
-            },
+            // //获取角色组下拉列表
+            // getrole(val){
+            //     govService.getSelectList({pagesize:-1}).then((ret)=>{
+            //      this.gov_list=ret.data;
+            //     })
+            // },
 
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
@@ -267,7 +279,8 @@
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
-                        this.$router.go(-1)
+                        // this.$router.go(-1)
+                        this.$router.push({name: 'user-index'})
                     })
                 })
             },
