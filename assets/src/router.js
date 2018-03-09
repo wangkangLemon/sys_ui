@@ -11,6 +11,7 @@ import section from './routers/section'        // 区块模块
 import setting from './routers/setting'        // 设置模块
 import gov from './routers/gov'                // 政府模块
 import data from './routers/data'              // 数据分析模块
+import exam from './routers/exam' // 应试考试
 
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
@@ -87,7 +88,8 @@ const routes = [{
             gov,
             // ============ 数据分析模块 ==============
             data,
-
+            // ============ 应试考试模块 ==============
+            exam,
         ]
     },
     { // 登录

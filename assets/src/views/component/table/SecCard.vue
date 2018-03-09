@@ -70,6 +70,7 @@
 
         watch: {
             'type' () {
+                console.log(this.type)
                 this.initData()
             },
             'data' () {
@@ -84,6 +85,7 @@
             // }
         },
         activated () {
+            console.log(this.type)
             xmview.setContentLoading(false)
             this.uploadImgUrl = courseService.getUploadCategoryImgUrl()
         },

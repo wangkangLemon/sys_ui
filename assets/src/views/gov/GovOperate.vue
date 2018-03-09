@@ -1,8 +1,9 @@
-<!--编辑/添加企业-->
+<!--编辑/添加部门-->
 <style lang="scss" rel="stylesheet/scss">
     .gov-operate-container {
         background: #fff;
         padding: 20px 200px;
+        overflow: auto;
         .addForm {
             .tip {
                 text-align: center;

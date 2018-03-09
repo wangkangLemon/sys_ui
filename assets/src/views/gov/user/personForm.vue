@@ -89,21 +89,6 @@
                     <el-input v-model="fetchParam.passwd" v-if="this.$route.params.id" auto-complete="off" type="password" key=""  placeholder="密码、不修改请留空"></el-input>
                     <el-input v-model="fetchParam.passwd" v-else auto-complete="off" type="password" key=""  ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="部门">
-                    <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" :town="fetchParam.townSelect"
-                        :village="fetchParam.villageSelect"  v-on:provinceChange="val => {fetchParam.provinceSelect = val;finallyVal = val}"
-                        v-on:cityChange="val => {fetchParam.citySelect = val;finallyVal = val}" v-on:areaChange="val => {fetchParam.areaSelect = val;finallyVal = val}"
-                        v-on:townChange="val => {fetchParam.townSelect = val;finallyVal = val}" v-on:villageChange="val => {fetchParam.villageSelect = val;finallyVal = val}"
-                        :change="fetchData">
-                    </Region>
-                </el-form-item>  -->
-                
-                <!--<el-form-item label="部门" prop="gov_id" :fetch-suggestions="querySearch">
-                    <el-select class="select" v-model="fetchParam.gov_id" placeholder="请选择部门">
-                        <el-option  v-for="item in  gov_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>-->
-   
                 <el-form-item label="" >
                     <!--<el-button @click="$router.push({ name:'medical-index'})">取消</el-button>-->
                     <div>
@@ -144,10 +129,6 @@
                 if (!value) {
                     callback(new Error('请输入部门'));
                 } else {
-                    // debugger
-                    // if (this.fetchParam.province_id) {
-                    //    this.$refs.form.validateField('province_id');
-                    // }
                     callback();
                 }
             };
@@ -160,7 +141,6 @@
                     index: -1
                 },
                 fetchParam: getOriginData(),
-                // passValue: true,
                 role_list:[
                     {
                         name: '管理员',
@@ -214,8 +194,6 @@
                 console.log(this.fetchParam)
                 console.log(222222222222)
             })
-            //暂时不获取角色列表       
-            //  this.getrole()
             this.loadingData=false;
         },
         // activated () {
@@ -227,17 +205,8 @@
                     this.fetchParam.passwd=''
                 }
             },
-            // 'fetchParam.province_id'(){
-            //     console.log('govid')
-            //      if(this.fetchParam.gov_id){
-            //         this.fetchParam.gov_id = this.fetchParam.village_id||this.fetchParam.town_id|| this.fetchParam.area_id||this.fetchParam.city_id ||this.fetchParam.province_id
-            //     }
-            // }
         },
         methods: {
-            // passFn(){
-            //     return this.$route.params.id != undefined?false:true
-            // },
             // 裁切后的回调
             cropperFn(data, ext) {
                 mineService.uploadAvatar({
@@ -251,14 +220,6 @@
                     xmview.showTip('error', ret.message)
                 })
             },
-            
-            // //获取角色组下拉列表
-            // getrole(val){
-            //     govService.getSelectList({pagesize:-1}).then((ret)=>{
-            //      this.gov_list=ret.data;
-            //     })
-            // },
-
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
@@ -290,16 +251,6 @@
                 var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
                 // 调用 callback 返回建议列表的数据返回建议列表的数据
                 cb(results);
-            },
-      
-            saveResult() {
-                let result = [{
-                    id: 0,
-                    name: '',
-                    sort: 0,
-                    deleted: false,
-                    lessons: []
-                }]
             },
         }
     }

@@ -125,7 +125,7 @@ export default {
                 })
             },
             meta: {
-                title: '系统',
+                title: '菜单管理',
                 noback: true
             }
         },

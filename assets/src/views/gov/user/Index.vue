@@ -68,7 +68,7 @@
                     </span>
                 </p>
                 <!--<p><i class="title">性别：</i> <span class="value">{{clerkDetail.sex ? '男' : '女'}}</span></p>-->
-                <p><i class="title">生日：</i> <span class="value">{{clerkDetail.birthday}}</span></p>
+                <!-- <p><i class="title">生日：</i> <span class="value">{{clerkDetail.birthday}}</span></p> -->
                 <p><i class="title">地址：</i> <span class="value">{{clerkDetail.address}}</span></p>
                 <p><i class="title">注册时间：</i><span class="value">{{clerkDetail.addate}}</span></p>
             </div>
@@ -81,7 +81,6 @@
                     v-on:change="val=>form.department_id = val">
                     </departmentSelect>
                 </el-form-item>-->
-
                 <el-form-item prop="gov_name" label="所属部门" :label-width="formLabelWidth">
                     <h3>{{form.gov_name}}</h3>
                 </el-form-item>

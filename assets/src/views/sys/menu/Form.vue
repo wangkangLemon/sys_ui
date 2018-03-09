@@ -84,14 +84,8 @@
                     menu_node: [
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
-                    remark: [
-                        {required: true, message: '必须输入', trigger: 'blur'}
-                    ],
                     sort: [
                         {required: true, message: '必须输入', trigger: 'blur'}
-                    ],
-                    pid: [
-                        {required: true, type:'number',message: '必须输入', trigger: 'blur'}
                     ],
                     level: [
                         {required: true, message: '必须输入', trigger: 'blur'}

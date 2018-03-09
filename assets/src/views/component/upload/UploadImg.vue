@@ -103,6 +103,7 @@
         <el-upload :headers="headers" :disabled="disabled"
                    :action="url"
                    :name="name"
+                   :data="data"
                    list-type="picture-card"
                    :multiple="false"
                    :before-upload="beforeUpload"
@@ -142,7 +143,17 @@
             disabled: {
                 type: Boolean,
                 default: false
+            },
+             //上传的参数
+            data:{
+                type:Object,
+                default:()=>({
+                    biz: "",
+                    extpath: ""
+                })
+               
             }
+            
         },
         data () {
             return {
