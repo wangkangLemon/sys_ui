@@ -94,6 +94,90 @@ class examService {
             }
         })
     }
+    //
+    // 添加课程
+    addGov({
+        category_id,
+        chapter_id,
+        course_name,
+        image,
+        tags,
+        description,
+        material_id,
+        status,
+        deleted,
+        experts_id,
+        sort,
+        audited,
+    }) {
+        let finalUrl = urlPre + '/course/create'
+        return api.post(finalUrl, {
+            category_id,
+            chapter_id,
+            course_name,
+            image,
+            tags,
+            description,
+            material_id,
+            status,
+            deleted,
+            experts_id,
+            sort,
+            audited,
+        }).then((ret) => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 更新课程信息
+    updateGov({
+        gov_id,
+        category,
+        pid,
+        province_id,
+        city_id,
+        area_id,
+        town_id,
+        village_id,
+        name,
+        concact,
+        mobile,
+        email,
+        mobile_title,
+        tel,
+        zip,
+        fax,
+        url,
+        address,
+        description,
+    }) {
+        let finalUrl = `${urlPre}/course/edit/${gov_id}`
+        return api.post(finalUrl, {
+            category,
+            pid,
+            province_id,
+            city_id,
+            area_id,
+            town_id,
+            village_id,
+            name,
+            concact,
+            mobile,
+            email,
+            mobile_title,
+            tel,
+            zip,
+            fax,
+            url,
+            address,
+            description,
+        }).then((ret) => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
 
 
 }

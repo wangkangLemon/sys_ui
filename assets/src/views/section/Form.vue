@@ -49,7 +49,7 @@
                 <el-form-item v-else >
                 </el-form-item>
                 <el-form-item  label="区块栏目">
-                    <Section-category-menu :placeholder="fetchParam.name" :autoClear="true" v-model="fetchParam.category_id"></Section-category-menu>
+                    <Section-category-menu :placeholder="fetchParam.name" :autoClear="true" v-model="fetchParam.category_id" :reqFun="reqFun"></Section-category-menu>
                 </el-form-item>
 
                 <el-form-item label="引用类型">
@@ -143,6 +143,13 @@
                 ],
                 formLabelWidth: '50px', // 表单label的宽度
                 SecCateName: null, //处理区块栏目名称
+                reqFun:()=>{
+                    return cateService.fetchData({
+                        pid: 0,
+                        level: -1,
+                        pagesize:-1
+                    })
+                }
             }
         },
         activated () {
@@ -190,7 +197,9 @@
             },
         },
         methods: {
+            getDataFun () {
 
+            },
             toggleTag(value) {
                 this.fetchParam.tags = value
             },

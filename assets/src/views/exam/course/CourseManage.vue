@@ -153,26 +153,18 @@
     <article class="block-manage">
  
         <!--选取内容-->
-        <ChooseContent v-model="select.isShow" v-on:result="contentConfirm"></ChooseContent>
+        <!-- <ChooseContent v-model="select.isShow" v-on:result="contentConfirm"></ChooseContent> -->
 
         <!--添加/编辑内容课程-->
         <el-dialog v-model="addForm" :title="formTitle">
             <section v-if="form.ref_id">
-                <!--<div class="keep" v-if="form.ref_sync"></div>  同步遮罩 -->
                 <div class="synchronize">
                     {{catArr[chooseCate]}}：{{chooseCate == 'course' ? form.content.course_name : form.content.title}}
-                    <!--<el-button @click="form.ref_sync = 0" v-if="form.ref_sync">关闭同步</el-button>
-                    <el-button @click="keepSync" v-if="!form.ref_sync">开启同步</el-button>-->
                 </div>
             </section>
 
             <!--1 这是区块选取的栏目 -->
             <el-form label-position="top" :rules="rules">
-                <!--<el-form-item label="区块栏目" :fetch-suggestions="querySearch">
-                    <el-select v-model="dialog.category_id" placeholder="请输入栏目菜单">
-                        <el-option v-for="item in SecCateName" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>-->
                 <el-form-item  label="区块栏目">
                     <Section-category-menu :placeholder="form.name" :autoClear="true" v-model="form.category_id"></Section-category-menu>
                 </el-form-item>
@@ -202,9 +194,6 @@
                 <el-form-item prop="description" label="描述" :label-width="formLabelWidth">
                     <el-input type="textarea" :rows="3" v-model="form.description" auto-complete="off"></el-input>
                 </el-form-item>
-                <!-- <el-form-item class="tag" label="标签" :label-width="formLabelWidth">
-                    <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
-                </el-form-item> -->
                 <el-form-item prop="addate" label="日期" :label-width="formLabelWidth">
                     <el-date-picker v-model="form.addate" type="date" />
                 </el-form-item>
@@ -239,16 +228,12 @@
             </div>
             <div class="classify-tree">
                  <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="chapterCategory" :Mult='Mult'></MenuTree>
-                    <!-- <el-tree class="leftSubTree" :expand-on-click-node="false" :highlight-current="true" :data="category.data"
-                         :props="defaultProps" @node-expand="leftClassifyExpend" @node-click="leftClassifyClick"></el-tree> -->
             </div>
         </section>
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>课程列表
-                <!-- <el-button @click="add">添加区块</el-button> -->
-                <!-- <el-button type="primary" icon="plus" @click="select.isShow = true">添加课程</el-button> -->
-                 <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-course-add'})">添加kecheng</el-button>
+                 <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-course-add'})">添加课程</el-button>
             </div>
             <div class="content-list">
                 <section>
@@ -300,18 +285,18 @@
                 </div>
             </div>
         </section>
-        <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput>
+        <!-- <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput> -->
     </article>
 </template>
 <script>
     // import examService from '../../../services/section/examService'
-    import cateService from '../../../services/section/cateService'
+    // import cateService from '../../../services/section/cateService'
     import examService from '../../../services/exam/examService'
     import MenuTree from '../../component/tree/MenuTreeExam.vue'
-    import ChooseContent from '../../component/choose/ChooseContent'
+    // import ChooseContent from '../../component/choose/ChooseContent'
     import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
-    import courseService from '../../../services/course/courseService.js'
+    // import courseService from '../../../services/course/courseService.js'
     // import CourseCategorySelect from '../../component/select/CourseCategory.vue'
     function clearFn() {
         return {
@@ -333,7 +318,7 @@
     }
     export default {
         components: {
-            MenuTree,ChooseContent,SectionCategoryMenu,ImagEcropperInput
+            MenuTree,SectionCategoryMenu,ImagEcropperInput
             // CourseCategorySelect
         },
         data () {
@@ -383,7 +368,8 @@
                 select: {
                     isShow: false
                 },
-                Mult:'true',// 判断左边 课程多级栏目树状标识
+                Mult:'true',// 判断左边 课程多级栏目树状标识,
+                
             }
         },
         watch: {
@@ -397,14 +383,8 @@
         },
         activated () {
             this.category.loading = true
-            // this.getCategoryTree().then((ret) => {
-            //     this.category.data = ret
-            //     xmview.setContentLoading(false)
-            //     this.category.loading = false
-            //     this.category.currentData = ret[0]
-            //     this.fetchCourseLists()
-            // })
             this.fetchData()
+            this.fetchCourseLists()
         },
         methods: {
             // 保持同步
@@ -416,16 +396,16 @@
                 this.form.addate = this.form.content.addate
                 this.form.sort = ''
             },
-            // 图片上传完毕
-            handleImgUploaded(data, ext) {
-                courseService.commonUploadImageBaseSection({
-                    // section_id: this.section.currentID,
-                    alias: Date.now() + ext,
-                    image: data
-                }).then((ret) => {
-                    this.form.image = ret.url
-                })
-            },
+            // // 图片上传完毕
+            // handleImgUploaded(data, ext) {
+            //     courseService.commonUploadImageBaseSection({
+            //         // section_id: this.section.currentID,
+            //         alias: Date.now() + ext,
+            //         image: data
+            //     }).then((ret) => {
+            //         this.form.image = ret.url
+            //     })
+            // },
             //弹窗内容
             contentConfirm(dataObj) {
                 console.log(dataObj)
@@ -507,7 +487,7 @@
                         let reqFn = examService.create
                         let msg = '添加成功'
                         if (this.form.id) {
-                            reqFn = examService.edit
+                            reqFn = examService.updateGov
                             msg = '修改成功'
                         }
                         reqFn(this.form).then(() => {

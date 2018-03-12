@@ -209,7 +209,7 @@
             <!--2 选择联动表--> <!--//需改进待后台返ended数据后做联动列表-->
             <section>
                     <i>区块栏目</i>
-                    <Section-category-menu :onchange="fetchCate" v-model="fetchParam.category_id"></Section-category-menu>
+                    <Section-category-menu :onchange="fetchCate" v-model="fetchParam.category_id" :reqFun='reqFun'></Section-category-menu>
             </section>
 
             <!--没用-->
@@ -379,6 +379,13 @@
                     category_id: [{
                         required: true,
                     }]
+                },
+                reqFun:()=>{
+                    return cateService.fetchData({
+                        pid: 0,
+                        level: -1,
+                        pagesize:-1
+                    })
                 }
             }
         },

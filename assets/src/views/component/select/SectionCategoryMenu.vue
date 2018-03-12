@@ -8,7 +8,7 @@
     }
 </style>
 <template>
-    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false"
+    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" :reqFun="reqFun"
         :placeholder="placeholder" @active-item-change="handleItemChange" :clearable="true" @change="setCurrVal">
     </el-cascader>
 </template>
@@ -16,6 +16,7 @@
 <script>
     import treeUtils from '../../../utils/treeUtils'
     import cateService from '../../../services/section/cateService'
+    import examService from '../../../services/exam/examService'
     export default {
         props: {
             value: [String, Number, Array],
@@ -35,7 +36,8 @@
             type: {
                 type: String,
                 default: ''
-            }
+            },
+            reqFun:Function,
         },
         data() {
             return {
@@ -55,8 +57,8 @@
                 this.onchange && this.onchange(val)
             }
         },
-  
         mounted() {
+            //  alert(this.reqFun)
             this.$refs.container.$el.addEventListener('click', () => {
                 if (this.loading || this.options.length > 0) return
                 if (this.lastData) {
@@ -64,11 +66,12 @@
                 } else {
                     // this.loading = true //这是在请求数据前打开loading动画2-28打开
                     //获取数据的方法
-                    cateService.fetchData({
-                        pid: 0,
-                        level: -1,
-                        pagesize:-1
-                    }).then((ret) => {
+                    // let req = cateService.fetchData
+                    // // debugger
+                   
+                    // if(this.req=='sec') req=cateService.fetchData
+                    // else if(this.req=='exam') req=examService.fetchChapterCategory
+                    this.reqFun().then((ret) => {
                         var obj = {};
                         ret.forEach(v => {
                             if (v.level == 0) {
@@ -81,7 +84,6 @@
                                 this.options.push(t);
                             }
                         })
-                        
                         var arr = {};
                         ret.forEach(v => {
                             if (v.level == 1) {

@@ -22,7 +22,7 @@
         <section>
             <el-form class="addForm" :model="form" :rules="rules" ref="form" :label-width="formLabelWidth">
                 <el-form-item  label="区块栏目">
-                    <Section-category-menu :placeholder="form.name" :autoClear="true" v-model="form.category_id"></Section-category-menu>
+                    <Section-category-menu :placeholder="form.name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                 </el-form-item>
                 <el-form-item prop="course_name" label="标题" :label-width="formLabelWidth">
                     <el-input v-model="form.course_name" auto-complete="off"></el-input>
@@ -55,39 +55,34 @@
                 <el-button type="primary" @click="submit('form')">提交</el-button>
             </div>
         </section>
+        <ImagEcropperInput :compress="1" :isShowBtn="false" ref="imgcropper" :confirmFn="handleImgUploaded" :aspectRatio="ratio"></ImagEcropperInput>
     </article>
 </template>
 <script>
     import examService from '../../../services/exam/examService'
     import Region from '../../component/select/Region.vue'
     import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
+    import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     function clearFormFn() {
             return  {
-                    gov_id: void 0,
-                    category: '', // 类型
-                    pid:'', //上级部门                    
-                    province_id : '', // 省
-                    city_id: '',  // 市
-                    area_id: '',  // 区
-                    town_id: '',  //乡镇                       -----
-                    village_id: '', // 街道                    -----
-                    name: '', // 名称
-                    concact: '', // 联系人
-                    mobile: '', // 联系人手机
-                    email: '', // 联系人邮箱
-                    mobile_title: '', // 手机端客户端名称        ----
-                    tel: '', // 电话
-                    zip: '', // 邮编
-                    fax: '', // 传真
-                    url: '', // 企业网址
-                    address: '', // 地址
-                    description: '', // 企业介绍
+                    category_id: void 0,
+                    chapter_id: void 0,
+                    course_name: '',
+                    image: '',
+                    tags:'',
+                    description: '',
+                    material_id:void 0,
+                    status:void 0,
+                    deleted:void 0,
+                    experts_id:void 0,
+                    sort:void 0,
+                    audited:void 0,
                 }
     }
     let _this
     export default {
         components: {
-            Region,SectionCategoryMenu,
+            Region,SectionCategoryMenu,ImagEcropperInput
         },
         data () {
             let validateEmail = (rule, value, callback) => {
@@ -103,6 +98,7 @@
                 callback()
             }
             return {
+                ratio: 0, // 裁剪的比例
                 govTypes: [ // 部门类型
                     {
                         name: '政府',
@@ -131,6 +127,13 @@
                         // {validator: validateEmail, trigger: 'blur'}
                     ]
                 },
+                reqFun:()=>{
+                    return examService.fetchChapterCategory({
+                        // pid: 0,
+                        // level: -1,
+                        // pagesize:-1
+                    })
+                }
             }
         },
         computed: {
@@ -151,6 +154,16 @@
             })
         },
         methods: {
+            // 图片上传完毕
+            handleImgUploaded(data, ext) {
+                courseService.commonUploadImageBaseSection({
+                    // section_id: this.section.currentID,
+                    alias: Date.now() + ext,
+                    image: data
+                }).then((ret) => {
+                    this.form.image = ret.url
+                })
+            },
             submit (form) { // 表单提交
                 this.$refs[form].validate((valid) => {
                     if (valid) {
@@ -174,7 +187,7 @@
                         reqFn(this.form).then(() => {
                             xmview.showTip('success', msg)
                         }).then(() => {
-                            this.$router.push({name: 'gov-index'})
+                            this.$router.push({name: 'exam-course-manage'})
                         }).catch((ret) => {
                             xmview.showTip('error', ret.message)
                         })
