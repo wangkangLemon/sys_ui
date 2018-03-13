@@ -35,7 +35,7 @@ export default {
                 noback: true
             }
         },
-        {//添加修改表单
+        {//添加修改课程表单
             path: 'course/add',
             name: 'exam-course-add',
             component: resolve => {
@@ -49,7 +49,7 @@ export default {
             }
         },
         {
-            path: 'edit/:id',
+            path: 'course/edit/:id',
             name: 'exam-course-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -86,6 +86,32 @@ export default {
             meta: {
                 title: ' 试题管理',
                 noback: true
+            }
+        },
+        {//添加修改考题表单
+            path: 'subject/add',
+            name: 'exam-subject-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/chapter/ExamSubjectForm.vue'))
+                })
+            },
+            meta: {
+                title: '试题添加',
+                noback: false
+            }
+        },
+        {
+            path: 'subject/edit/:id',
+            name: 'exam-subject-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/chapter/ExamSubjectForm.vue'))
+                })
+            },
+            meta: {
+                title: '试题更新',
+                noback: false
             }
         },
     ]

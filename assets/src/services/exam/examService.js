@@ -83,10 +83,10 @@ class examService {
             return ret.data
         })
     }
-    //
-    fetchCourseLists ({pagesize, page, title,category_id}) {
+    //课程列表
+    fetchCourseLists({ pagesize, page, course_name, chapter_id, status}) {
         let url = urlPre + '/course/lists'
-        return api.get(url, { pagesize, page, title, category_id }).then(ret => {
+        return api.get(url, { pagesize, page, course_name, chapter_id, status }).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -96,89 +96,104 @@ class examService {
     }
     //
     // 添加课程
-    addGov({
-        category_id,
-        chapter_id,
-        course_name,
-        image,
-        tags,
-        description,
-        material_id,
-        status,
-        deleted,
-        experts_id,
-        sort,
-        audited,
-    }) {
+    addCourse(fetchParam) {
         let finalUrl = urlPre + '/course/create'
-        return api.post(finalUrl, {
-            category_id,
-            chapter_id,
-            course_name,
-            image,
-            tags,
-            description,
-            material_id,
-            status,
-            deleted,
-            experts_id,
-            sort,
-            audited,
-        }).then((ret) => {
+        return api.post(finalUrl, fetchParam).then((ret) => {
             if (ret.code) {
                 return Promise.reject(ret)
             }
         })
     }
     // 更新课程信息
-    updateGov({
-        gov_id,
-        category,
-        pid,
-        province_id,
-        city_id,
-        area_id,
-        town_id,
-        village_id,
-        name,
-        concact,
-        mobile,
-        email,
-        mobile_title,
-        tel,
-        zip,
-        fax,
-        url,
-        address,
-        description,
-    }) {
-        let finalUrl = `${urlPre}/course/edit/${gov_id}`
-        return api.post(finalUrl, {
-            category,
-            pid,
-            province_id,
-            city_id,
-            area_id,
-            town_id,
-            village_id,
-            name,
-            concact,
-            mobile,
-            email,
-            mobile_title,
-            tel,
-            zip,
-            fax,
-            url,
-            address,
-            description,
-        }).then((ret) => {
+    updateCourse(fetchParam, id) {
+        let finalUrl = `${urlPre}/course/edit/${id}`
+        return api.post(finalUrl, fetchParam).then((ret) => {
             if (ret.code) {
                 return Promise.reject(ret)
             }
         })
     }
+    getExamCourse(id) {
+        let url = `${urlPre}/course/get/${id}`         //传递的地址的id
+        return api.get(url, {}, false).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 上下线课程
+    offlineCourse({ govid, id, status }) {
+        // govid = govid || authUtils.getUserInfo().company_id
+        let finalUrl = `${urlPre}/course/edit/${id}`
+        return api.post(finalUrl, { status })
+    }
 
+    deleteCourse(id) {
+        let url = `${urlPre}/course/delete/${id}`
+        return api.post(url, {}).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //课程列表
+    fetchSubjectLists(params) {
+        let url = urlPre + '/subject/lists'
+        return api.get(url, params).then(ret => {
+            if (ret.code == 0) {
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //
+    // 添加课程
+    addSubject(fetchParam) {
+        let finalUrl = urlPre + '/subject/create'
+        return api.post(finalUrl, fetchParam).then((ret) => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 更新课程信息
+    upSubject(fetchParam, id) {
+        let finalUrl = `${urlPre}/subject/edit/${id}`
+        return api.post(finalUrl, fetchParam).then((ret) => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    getExamSubject(id) {
+        let url = `${urlPre}/subject/get/${id}`         //传递的地址的id
+        return api.get(url, {}, false).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    delSubject(id) {
+        let url = `${urlPre}/subject/delete/${id}`
+        return api.post(url, {}).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
 
 }
 export default new examService()

@@ -105,8 +105,9 @@ let authUtils = {
             authUtils.refreshToken()
         }, 1000 * 10)
         refreshIntervalId = setInterval(() => {
+            alert('authUtils.refreshToken()+Date.now()===' + Date.now())
             authUtils.refreshToken()
-        }, 1000 * 60 * 120) // 30分钟一请求
+        }, 1000 * 60 * 50) // 30分钟一请求
     },
     refreshToken () {
         let userinfo = authUtils.getUserInfo()
@@ -120,9 +121,11 @@ let authUtils = {
             }
         }
     },
-    clearAuthRefreshToken () {
+    clearAuthRefreshToken () { //清除信息刷新token
         refreshIntervalId && clearInterval(refreshIntervalId)
         firstRefreshTimeoutId && clearTimeout(firstRefreshTimeoutId)
+        // alert('clearAuthRefreshToken()+Date.now()===' + Date.now())
+        
     },
     clearAuthInfo () {
         authUtils.setAuthToken('')

@@ -109,13 +109,9 @@
                         <el-button v-show="fetchParam.material_type === 'video'" @click="getVideoName">
                             <i>{{fetchParam.material_name}}</i>
                         </el-button>
-
-                        <el-button @click="preview(fetchParam.material_id)" type="text" size="big"
-
+                        <el-button v-show="fetchParam.material_type === 'video'" @click="preview(fetchParam.material_id)" type="text" size="big"
                                > 查看
                         </el-button>
-
-
                     </el-form-item>
                     <!--<el-form-item label="所属专辑">
                         <CourseAlbumSelect :placeholder="fetchParam.album_name" v-model="fetchParam.albumid"></CourseAlbumSelect>
@@ -254,7 +250,6 @@ import testingFactory from '../utils/testingFactory'
 import formUtils from '../../../utils/formUtils'
 import {transformParam} from '../../../utils/common'
 import vTags from '../../component/form/Tags.vue'
-
 import VideoPreview from '../../component/dialog/VideoPreview.vue'
 import Experts from '../../component/select/Experts'
 
@@ -282,7 +277,7 @@ export default {
             fetchTesting: [],
             readonly: false, // 只读模式
             videoUrl: '', // 预览的视频url
-            experts_list:[],
+            // experts_list:[],
             changelist:{}
         }
     },
@@ -362,14 +357,6 @@ export default {
         }
     },
     methods: {
-        //获取医院下拉列表
-        // getExpertsList(val){
-        //     expertsService.fetchExpertsData({pagesize:-1}).then((ret)=>{
-        //         console.log(ret)
-        //         xmview.setContentLoading(false)
-        //         this.experts_list=ret.data
-        //     })
-        // },
         getExpertsList (val, length) {
                 return expertsService.fetchExpertsData({
                     name: val,
@@ -431,8 +418,6 @@ export default {
                     
                 // }
                 console.log(this.fetchParam)
-
-
                 let p
                 // 如果是编辑
                 if (this.fetchParam.contentid) {
