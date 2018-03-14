@@ -100,7 +100,7 @@
                     <section>
                         <i>状态</i>
                         <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
-                            <el-option label="全部" value="-1"></el-option>
+                            <el-option label="全部" :value="-1"></el-option>
                             <el-option label="正常" value="0"></el-option>
                             <el-option label="禁用 " value="1"></el-option>
                         </el-select>
@@ -201,7 +201,7 @@
                     page: 1,
                     pagesize: 10,
                     total: 0,
-                    status
+                    status:-1
                 },
                 defaultProps: {
                     children: 'children',
@@ -248,13 +248,14 @@
             },
             fetchCourseLists () {
                 this.section.loading = true
-                return examService.fetchCourseLists({
+                let params={
                     course_name:this.section.course_name,
                     status:this.section.status,
                     page: this.section.page,
                     pagesize: this.section.pagesize,
                     chapter_id: this.category.currentData.id
-                }).then((ret) => {
+                }
+                return examService.fetchCourseLists(params).then((ret) => {
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
                     this.section.loading = false

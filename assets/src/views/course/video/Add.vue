@@ -148,7 +148,6 @@ export default {
             if (this.listData.length > 0) this.uploadVideo()
         },
         uploadVideo(count = 0) {
-            debugger
             let item = this.listData[count]
             videoService.getOssToken().then((ret) => {
                 ossSdk = new OssSdk(ret)

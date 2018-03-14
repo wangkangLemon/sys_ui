@@ -6,18 +6,17 @@
                 <el-form-item label="章节名称" prop="name">
                     <el-input v-model="selectData.name" ></el-input>
                 </el-form-item>
-                
                 <el-form-item label="章节类型" prop="chapter_type">
-                    <el-select v-model="selectData.chapter_type" placeholder="请选择">
-                        <el-option label="课程章节" :value="1"></el-option>
-                        <el-option label="习题章节" :value="2"></el-option>
-                        <el-option label="历年真题" :value="3"></el-option>
+                    <el-select v-model="selectData.chapter_type" placeholder="请选择" disabled >
+                        <el-option label="课程章节" :value="'1'"></el-option>
+                        <el-option label="习题章节" :value="'2'"></el-option>
+                        <el-option label="历年真题" :value="'3'"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="图片访问地址" prop="image">
+                <el-form-item label="栏目图片" prop="image">
                     <UploadImg ref="uploadImg" :defaultImg="selectData.image" :url="uploadImgUrl"  :onSuccess="handleImgUploaded" :data='uploadextraData'></UploadImg>
                 </el-form-item>
-                <el-form-item label="备注或简介" prop="remark">
+                <el-form-item label="简介" prop="remark">
                     <el-input v-model="selectData.remark" ></el-input>
                 </el-form-item>
                 <el-form-item label="分类排序" prop="sort">
@@ -62,7 +61,7 @@
                 }
             }
         },
-        props: ['data', 'type','category'],
+        props: ['data', 'type','category','chaptertype'],
 
         watch: {
             'type' () {
@@ -81,6 +80,7 @@
         },
         activated () {
             this.selectData.category_id=this.category
+            this.selectData.chapter_type=this.chaptertype
             xmview.setContentLoading(false)
             this.uploadImgUrl = commonService.commonUploadImage()
         },

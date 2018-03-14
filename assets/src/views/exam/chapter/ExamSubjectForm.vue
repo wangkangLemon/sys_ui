@@ -9,8 +9,6 @@
     h2 {
         margin-bottom: 10px;
     }
-
-
     .el-tab-pane {
         max-width: 700px;
     }
@@ -24,7 +22,18 @@
     } // 考试题目设置
     // .testing-set {
             // max-width: 700px;
-        
+        .cate{
+            i{
+                font-size: 14px;
+            }
+            width: 100%;
+            transform: translateY(15%) translateX(6%);
+            .el-input {
+                display: inline-block;
+                width: 100%;
+                vertical-align: middle;
+            }
+        }
         .el-form {
             
             padding-top: 17px;
@@ -69,7 +78,12 @@
     <article id="course-manage-addcourse-container">
         <!-- <el-tabs v-model="activeTab" class="tab"> -->
             <!-- <el-tab-pane  label="考试题目设置" name="second" class="testing-set"> -->
-                <el-form  class="testing-set">
+                <el-form  class="testing-set"  >
+                    <el-form class="cate" label-width="120px" :model="form"  :rules="rules" ref="ref">
+                        <el-form-item  label="所属栏目" props="chapter_id">
+                            <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
+                        </el-form-item>
+                    </el-form>
                     <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index">
                         <el-form-item label="" v-if="!readonly">
                             <el-button icon="plus" @click='addTesting(0, index)'>判断题</el-button>
@@ -78,23 +92,23 @@
                             <el-button icon="delete" type="danger" @click='deleteTesting(index, item)'>删除</el-button>
                         </el-form-item>
                         <el-form-item :label="'第' + (index+1) + '题'">
-                            <span v-if="item.category == 0">判断题</span>
-                            <span v-else-if="item.category == 1">单选题</span>
+                            <span v-if="item.type == 0">判断题</span>
+                            <span v-else-if="item.type == 1">单选题</span>
                             <span v-else>多选题</span>
                         </el-form-item>
                         <el-form-item label="题目">
                             <el-input v-model="item.description" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="分数">
+                        <!-- <el-form-item label="分数">
                             <el-input placeholder="为该题设置分数" :disabled="!item.editable" v-model="item.score"></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="配图">
                             <UploadImg :defaultImg="item.image" :url="uploadImgUrl" :disabled="!item.editable" :onSuccess="res => item.image = res.data.url"></UploadImg>
                         </el-form-item>
 
                         <!--判断题的正确错误选项-->
-                        <el-form-item label="选项" v-if="item.category == 0">
+                        <el-form-item label="选项" v-if="item.type == 0">
                             <el-radio class="radio" :disabled="!item.editable" v-model="item.correct" :label="1">
                                 <i>正确</i>
                             </el-radio>
@@ -107,7 +121,7 @@
                         <el-form-item label="选项" v-else>
                             <h5>请在正确答案前面打勾</h5>
                             <div class="multy-choose-item" v-for="(option,indexOption) in item.options" :key="indexOption">
-                                <el-checkbox v-model="option.correct" :true-label="1" :disabled="!item.editable" v-if="item.category == 2"></el-checkbox>
+                                <el-checkbox v-model="option.correct" :true-label="1" :disabled="!item.editable" v-if="item.type == 2"></el-checkbox>
                                 <el-radio class="radio" v-model="item.correct" :label="indexOption" :disabled="!item.editable" v-else>
                                     <i></i>
                                 </el-radio>
@@ -130,7 +144,7 @@
                     </el-form>
                 </el-form>
 
-                <el-form label-width="120px" v-if="!readonly">
+                <el-form label-width="120px" v-if="!readonly" >
                     <el-form-item label="">
                         <el-button icon="plus" @click='addTesting(0, fetchTesting.length)'>判断题</el-button>
                         <el-button icon="plus" @click='addTesting(1, fetchTesting.length)'>单选题</el-button>
@@ -153,6 +167,7 @@ import testingFactory from '../../course/utils/testingFactory'
 import formUtils from '../../../utils/formUtils'
 import {transformParam} from '../../../utils/common'
 import UploadImg from '../../component/upload/UploadImg.vue'
+import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
 
 export default {
     name: 'exam-subject-form',
@@ -161,39 +176,49 @@ export default {
             uploadDocUrl: '', // 上传文档的url
             isShowVideoDialog: false, // 是否显示视频列表弹出框
             courseTags: [],
-            rulesFirst: { // 课程信息的校验规则
-                course_name: { required: true, message: '请输入课程名称', trigger: 'change' },
-                category_id: { required: true, type: 'number', message: '请选择课程栏目', trigger: 'change' },
-                // image: { required: true, message: '请上传课程封面', trigger: 'change' },
-                description: { required: true, message: '请输入课程介绍', trigger: 'change' },
-                material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
-                need_testing: { required: true, type: 'number', message: '请选择是否需要课后考试', trigger: 'change' },
-                type: { required: true,  message: '请选择课程类别', trigger: 'change' },
-                material_type: { required: true,  message: '请选择题材类型', trigger: 'change' },
-            },
+            rules: {
+                    chapter_id: { required: true, type: 'number', message: '请选择试题栏目', trigger: 'change' },
+                },
             accept: '*.doc,*.docx', // 上传的文件格式
             // 考试设置部分
             fetchTesting: [],
             readonly: false, // 只读模式
             videoUrl: '', // 预览的视频url
-            changelist:{}
+            changelist:{},
+            category_id:1,
+            form:{
+                chapter_id:'',
+                chapter_name:''
+            },
+            reqFun:()=>{
+                    return examService.fetchChapterCategory({
+                        pid: 0,
+                        // level: 1,
+                        pagesize:-1
+                    })
+                },
+            
         }
     },
     activated(){
         this.uploadDocUrl = courseService.getCourseDocUploadUrl()
         this.uploadImgUrl = courseService.commonUploadImage()
-
         //编辑页面
-        if (this.$route.params.courseInfo) {
-
-            // this.fetchParam = this.$route.params.courseInfo   //从主页传递信息
-            for(let i in this.$route.params.courseInfo){
-                //  this.fetchParam[i]=this.$route.params.courseInfo[i]
-            }
-            xmview.setContentTile('编辑课程-培训')
-        } else if (this.$route.query.contentid) {
-            courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
+        // if (this.$route.params.courseInfo) {
+        //     alert(1)
+        //     // this.fetchParam = this.$route.params.courseInfo   //从主页传递信息
+        //     for(let i in this.$route.params.courseInfo){
+        //          this.fetchTesting[i]=this.$route.params.courseInfo[i]
+        //     }
+        //     console.log(this.fetchTesting)
+        //     xmview.setContentTile('编辑课程-培训')
+        // } else 
+        if (this.$route.params.id) {
+            examService.getExamSubject(this.$route.params.id).then((ret) => {
                 xmview.setContentTile('编辑课程-培训')
+                var arr = []
+                arr.push(ret)
+                this.fetchTesting = arr
             }).catch((ret) => {
                 xmview.showTip('error', ret.message)
             })
@@ -203,7 +228,7 @@ export default {
     },
     methods: {
         addTesting(type, index) {
-            this.fetchTesting.splice(index, 0, testingFactory.getTestingSet(type))
+            this.fetchTesting.splice(index, 0, testingFactory.getExamSet(type))
         },
         // 删除考试
         deleteTesting(index, item) {
@@ -230,10 +255,12 @@ export default {
                 this.$router.back()
                 return
             }
+            console.log(this.fetchTesting)
+            console.log(requestParam)
             let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
             for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
                 // 处理单选题的正确答案选中
-                if (item.category == 1 && typeof item.correct == 'number') {
+                if (item.type == 1 && typeof item.correct == 'number') {
                     if(item.options){
                         item.options.map((itemOptions) => {
                             delete itemOptions.correct
@@ -251,9 +278,13 @@ export default {
                 }
             }
             xmview.setContentLoading(true)
-            examService.addSubject({
-                // course_id: this.fetchParam.contentid,
-                subjects: encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
+            // requestParam['category_id'] = this.category_id,
+            // requestParam['chapter_id'] = this.chapter_id,
+            console.log(encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'))
+            examService.addSubject({ 
+                category_id:this.category_id,
+                chapter_id:this.form.chapter_id,
+                subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
             }).then((ret) => {
                 xmview.showTip('success', '操作成功')
                 this.$router.back()
@@ -263,7 +294,7 @@ export default {
             })
         },
     },
-    components: { UploadImg}
+    components: { UploadImg,SectionCategoryMenu}
 }
 
 </script>

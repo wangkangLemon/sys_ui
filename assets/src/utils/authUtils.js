@@ -105,7 +105,7 @@ let authUtils = {
             authUtils.refreshToken()
         }, 1000 * 10)
         refreshIntervalId = setInterval(() => {
-            alert('authUtils.refreshToken()+Date.now()===' + Date.now())
+            // alert('authUtils.refreshToken()+Date.now()===' + Date.now())
             authUtils.refreshToken()
         }, 1000 * 60 * 50) // 30分钟一请求
     },

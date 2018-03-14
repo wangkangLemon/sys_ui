@@ -95,30 +95,30 @@
             <div class="content-list">
                 <div class="search">
                     <section>
-                     <i>题目</i><el-input id="input" v-model="section.course_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                     <i>题目</i><el-input id="input" v-model="section.description" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
-                    <section>
+                    <!-- <section>
                         <i>状态</i>
                         <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
                             <el-option label="全部" value="-1"></el-option>
                             <el-option label="正常" value="0"></el-option>
                             <el-option label="禁用 " value="1"></el-option>
                         </el-select>
-                    </section>   
+                    </section>    -->
                 </div>     
                 
                 <!-- <DateRange title="创建时间" :start="fetchParam.create_start" :end="fetchParam.create_end" @changeStart="val=> fetchParam.create_start=val "
                     @changeEnd="val=> fetchParam.create_end=val" :change="fetchData">
                 </DateRange> -->
                 <el-table v-loading="section.loading" border :data="section.data">
-                    <el-table-column prop="course_name" label="课程名称" width="180"></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" width="180">
+                    <el-table-column prop="description" label="考题" width="200"></el-table-column>
+                    <el-table-column prop="chapter_name" label="绑定栏目" width="250">
                         <!-- <template scope="scope">
                             {{scope.row.category_name || '无'}}
                         </template> -->
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
-                    <el-table-column prop="tags" label="标签" width="150"></el-table-column>
+                    <!-- <el-table-column prop="tags" label="标签" width="150"></el-table-column> -->
                     <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
                         <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                     </el-table-column> -->
@@ -163,6 +163,7 @@
     import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
+    import formUtils from '../../../utils/formUtils'
     export default {
         components: {
             MenuTree,SectionCategoryMenu,ImagEcropperInput
@@ -197,7 +198,7 @@
                 section: {
                     loading: false,
                     data: [],
-                    course_name:'',
+                    description:'',
                     page: 1,
                     pagesize: 10,
                     total: 0,
@@ -208,6 +209,7 @@
                     label: 'name'
                 },
                 SecMenu:[],
+                category_id:1,
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
                 
             }
@@ -222,7 +224,7 @@
             }
         },
         activated () {
-            console.log(this.$router.history.current.path)
+            // console.log(this.$router.history.current.path)
             this.category.loading = true
             this.fetchData()
             this.fetchCourseLists()
@@ -250,7 +252,7 @@
             fetchCourseLists () {
                 this.section.loading = true
                 let params={
-                    course_name:this.section.course_name,
+                    description:this.section.description,
                     status:this.section.status,
                     page: this.section.page,
                     pagesize: this.section.pagesize,
@@ -264,8 +266,8 @@
                 })
             },
             handleDelete (index, row) {
-                xmview.showDialog(`确认要删除课程【<i style="color:red">${row.course_name}</i>】吗？`, () => {
-                    examService.deleteCourse(row.id).then(() => {
+                xmview.showDialog(`确认要删除课程【<i style="color:red">${row.description}</i>】吗？`, () => {
+                    examService.delSubject(row.id).then(() => {
                         xmview.showTip('success', '删除成功')
                         this.fetchCourseLists()
                     }).catch((ret) => {
@@ -275,11 +277,15 @@
             },
            
             update (index, row) {
+                console.log(row)
                 this.$router.push({
                     name:'exam-subject-edit',
                     params:{
                         id:row.id,
+                        category_id:row.category_id,
+                        chapter_id:row.chapter_id,
                         courseInfo:row,
+                        readonly:true,
                     }
                 })
             },

@@ -21,7 +21,7 @@ class examService {
     }
 
 
-    // 搜索
+    // 搜索章节chapter栏目
     getCategory(id) {
         let url = `${urlPre}/chapter/get/${id}`         //传递的地址的id
         return api.get(url, {}, false).then(ret => {
@@ -33,7 +33,7 @@ class examService {
         })
     }
 
-    // 创建
+    // 创建章节chapter栏目
     ChapterCategoryCreate(fetchParam) {
         let url = urlPre + '/chapter/create'
         return api.post(url, fetchParam).then(ret => {
@@ -46,7 +46,7 @@ class examService {
             }
         })
     }
-    // 更新
+    // 更新章节chapter栏目
     ChapterCategoryEdit(fetchParam,id) {
         let url = `${urlPre}/chapter/edit/${id}`
         return api.post(url, fetchParam).then(ret => {
@@ -60,7 +60,7 @@ class examService {
         })
     }
 
-    // 删除
+    // 删除章节chapter栏目
     ChapterCategorydelete(id) {
         let url = `${urlPre}/chapter/delete/${id}`
         // console.log(url)
@@ -84,9 +84,9 @@ class examService {
         })
     }
     //课程列表
-    fetchCourseLists({ pagesize, page, course_name, chapter_id, status}) {
+    fetchCourseLists(params) {
         let url = urlPre + '/course/lists'
-        return api.get(url, { pagesize, page, course_name, chapter_id, status }).then(ret => {
+        return api.get(url, params).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -153,12 +153,24 @@ class examService {
             }
         })
     }
-    //
-    // 添加课程
-    addSubject(fetchParam) {
-        let finalUrl = urlPre + '/subject/create'
-        return api.post(finalUrl, fetchParam).then((ret) => {
-            if (ret.code) {
+    // // 添加课程
+    // addSubject(fetchParam) {
+    //     let finalUrl = urlPre + '/subject/create'
+    //     return api.post(finalUrl, fetchParam).then((ret) => {
+    //         if (ret.code) {
+    //             return Promise.reject(ret)
+    //         }
+    //     })
+    // }
+    // 添加或修改题目
+    addSubject({ category_id, chapter_id, subjects }) {
+        let finalUrl = `${urlPre}/subject/create/${category_id}/${chapter_id}`
+        return api.post(finalUrl, subjects ).then((ret) => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
                 return Promise.reject(ret)
             }
         })
@@ -168,6 +180,18 @@ class examService {
         let finalUrl = `${urlPre}/subject/edit/${id}`
         return api.post(finalUrl, fetchParam).then((ret) => {
             if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    
+    fetchExamCategory(fetchParam) {
+        let url = urlPre + '/chapter/lists'
+        return api.get(url, fetchParam
+        ).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
                 return Promise.reject(ret)
             }
         })
@@ -187,6 +211,72 @@ class examService {
         return api.post(url, {}).then(ret => {
             if (ret.code == 0) {
                 xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //拿到应试种类总列表
+    fetchExamCategory(fetchParam) {
+        let url = urlPre + '/category/lists'
+        return api.get(url, fetchParam
+        ).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+    getExamCategory(id) {
+        let url = `${urlPre}/category/get/${id}`         //传递的地址的id
+        return api.get(url, {}, false).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+    // 创建应试category栏目
+    ExamCategoryCreate(fetchParam) {
+        let url = urlPre + '/category/create'
+        return api.post(url, fetchParam).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 更新应试category栏目
+    ExamCategoryEdit(fetchParam, id) {
+        let url = `${urlPre}/category/edit/${id}`
+        return api.post(url, fetchParam).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+
+    // 删除应试category栏目
+    ExamCategorydelete(id) {
+        let url = `${urlPre}/category/delete/${id}`
+        // console.log(url)
+        return api.post(url, {}).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+
                 return ret.data
             } else {
                 xmview.showTip('error', ret.message)

@@ -51,14 +51,8 @@
                     <el-button :class="{'el-button--primary':type=='C'}" @click="changeType('C')" disabled>移动分类</el-button>
                     <el-button :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" disabled>移动分类下内容</el-button>
                     <el-button type="danger"  @click="del">删除分类</el-button>
-                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='update'}" @click="changeType('update')"><span>修改分类</span></button>                     -->
-                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='P'}" @click="changeType('P')"><span>添加根节点</span></button>                     -->
-                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='S'}" @click="changeType('S')"><span>添加子分类</span></button>                     -->
-                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='C'}" @click="changeType('C')" ><span>移动分类</span></button> -->
-                    <!-- <button type="button" class="el-button" :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" ><span>移动分类下内容</span></button>  -->
-                    <!-- <button type="button" class="el-button el-button--danger" @click="del"><span>删除分类</span></button> -->
                 </div>
-                <ExamChapterCard @handleSave="submit" :data="selectData" :type="type" :category='category' ></ExamChapterCard>
+                <ExamChapterCard @handleSave="submit" :data="selectData" :type="type" :category='category' :chaptertype='chaptertype' ></ExamChapterCard>
             </section>
             <!--{{secMenu}}-->
     </article>
@@ -100,7 +94,7 @@
                 type: 'update',
                 Mult:'true',
                 category:1,
-
+                chaptertype:'1'
             }
         },
 

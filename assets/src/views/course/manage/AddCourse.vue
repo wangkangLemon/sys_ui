@@ -256,6 +256,9 @@ import Experts from '../../component/select/Experts'
 export default {
     name: 'course-manage-addcourse',
     data() {
+
+
+
         return {
             activeTab: 'first',
             uploadDocUrl: '', // 上传文档的url
@@ -508,6 +511,7 @@ export default {
                 }
             }
             xmview.setContentLoading(true)
+            console.log(encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'))
             courseService.addOrEditTesting({
                 course_id: this.fetchParam.contentid,
                 subjects: encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')

@@ -8,6 +8,7 @@ export default {
         })
     },
     children: [
+ 
         //课程学习
         {
             path: 'course/category', 
@@ -112,6 +113,20 @@ export default {
             meta: {
                 title: '试题更新',
                 noback: false
+            }
+        },
+        //总栏目
+        {
+            path: 'category',
+            name: 'exam-category',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/course/ExamCategory.vue'))
+                })
+            },
+            meta: {
+                title: '栏目管理',
+                noback: true
             }
         },
     ]

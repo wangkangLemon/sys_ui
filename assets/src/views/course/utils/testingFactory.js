@@ -22,12 +22,28 @@ class TestingFactory {
     }
 
     /**
-     * 获取题目设置
+     * 获取题目设置 （课程）
      * @param type 0-判断 1-单选 2-多选
      */
     getTestingSet (type) {
         let data = this.getOrignData()
         data.category = type
+        if (type == 0) {
+            delete data.options
+            data.correct = void 0
+            return data
+        } else if (type == 1 || type == 2) {
+            return data
+        }
+    }
+    
+    /**
+     * 获取题目设置 （应试考试）
+     * @param type 0-判断 1-单选 2-多选
+     */
+    getExamSet(type) {
+        let data = this.getOrignData()
+        data.type = type
         if (type == 0) {
             delete data.options
             data.correct = void 0
