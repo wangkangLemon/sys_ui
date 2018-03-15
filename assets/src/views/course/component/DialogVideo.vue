@@ -77,6 +77,9 @@ export default {
             if (this.data.length < 1) this.fetchData()
         }
     },
+    activated () {
+        this.fetchParam.file_name=''
+    },
     methods: {
         fetchData() {
             this.loadingData = true

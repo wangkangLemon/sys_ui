@@ -8,7 +8,7 @@
     }
 </style>
 <template>
-    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" :reqFun="reqFun"
+    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" :reqFun="reqFun" :reqExamCateFun="reqExamCateFun"
         :placeholder="placeholder" @active-item-change="handleItemChange" :clearable="true" @change="setCurrVal">
     </el-cascader>
 </template>
@@ -38,6 +38,7 @@
                 default: ''
             },
             reqFun:Function,
+            reqExamCateFun:Function,
         },
         data() {
             return {
@@ -51,11 +52,18 @@
         watch: {
             'value' (val) {  //点击之后选中的值
                 this.setCurrVal(val)
+                if(this.reqExamCateFun){
+                    this.$store.dispatch('saveExamCategory',val)
+                }
             },
             'currVal' (val, old) { //高亮选中值
                 this.$emit('input', val.length > 0 ? parseInt(val[val.length - 1]) : val)
                 this.onchange && this.onchange(val)
-            }
+            },
+            // '$store.state.index.examCate'(){
+            //    this.fetchCourseLists () 
+            //    this.fetchData()
+            // }    
         },
         mounted() {
             //  alert(this.reqFun)
@@ -66,15 +74,12 @@
                 } else {
                     // this.loading = true //这是在请求数据前打开loading动画2-28打开
                     //获取数据的方法
-                    // let req = cateService.fetchData
-                    // // debugger
-                   
-                    // if(this.req=='sec') req=cateService.fetchData
-                    // else if(this.req=='exam') req=examService.fetchChapterCategory
-                    this.reqFun().then((ret) => {
+                    let req =this.reqExamCateFun||this.reqFun
+                    req().then((ret) => {
+                        // debugger
                         var obj = {};
                         ret.forEach(v => {
-                            if (v.level == 0) {
+                            // if (v.level == 0) {
                                 let t = {
                                     data: v,
                                     label: v.name,
@@ -82,7 +87,7 @@
                                 }
                                 obj[v.id] = t;
                                 this.options.push(t);
-                            }
+                            //}
                         })
                         var arr = {};
                         ret.forEach(v => {
@@ -103,18 +108,6 @@
                         this.loading = false
                         xmview.setContentLoading(false);
                     })
-
-                    // cateService.getCategoryTree({type: this.type, pid:0})
-                        //     .then(ret => {
-                        //         // 不显示未分类那一项
-                        //         if (!this.showNotCat) {
-                        //             ret = ret.filter((item) => {
-                        //                 return item.id != 0
-                        //             })
-                        //         }
-                        //         this.options = treeUtils.arr2Cascader(ret, 0, void 0, void 0, 'name', 'id')
-                        //         this.loading = false
-                        //     })
                 }
             })
         },
@@ -126,11 +119,11 @@
         },
         methods: {
             setCurrVal(val) { //在请求子集时判断设置值
-                console.log(this.currVal)
+                // console.log(this.currVal)
                 if (!val) this.$refs.container.clearValue(new window.Event('click'))
                 if (this.currVal == val || !val) return
                 this.currVal = val
-                console.log(this.currVal)
+                // console.log(this.currVal)
             },
             handleItemChange(val) {
                 // console.log(val)

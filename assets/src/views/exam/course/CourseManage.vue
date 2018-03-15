@@ -37,19 +37,25 @@
             .content-list {
                 padding: 20px;
                 .search{
+                    width:100%;
                     margin-bottom:10px;
                     section{
-                    display: inline;
-                    width: 100%;
-                    .el-select .el-input .el-input__icon{
-                        transform: translateY(-50%) translateX(-50%)rotateZ(180deg);
-                    }
-                     #input{
-                        width: 30%;
-                        display: inline-block;
                         margin-left: 10px;
+                        margin-bottom: 14px;
+                        display: inline-block;
+                        margin-right: 10px;
+                        .el-select .el-input .el-input__icon{
+                            transform: translateY(-50%) translateX(-50%)rotateZ(180deg);
+                        }
+                        #input{
+                            width: 84%;
+                            display: inline-block;
+                            margin-left: 10px;
+                        }
                     }
-                }
+                    .fi{
+                        width:30%;
+                    }
                 }
                 .tag {
                     span {
@@ -94,9 +100,12 @@
             </div>
             <div class="content-list">
                 <div class="search">
-                    <section>
+                    <section class="fi">
                      <i>标题</i><el-input id="input" v-model="section.course_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
+                    <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
+                        @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
+                    </DateRange>
                     <section>
                         <i>状态</i>
                         <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
@@ -104,21 +113,17 @@
                             <el-option label="正常" value="0"></el-option>
                             <el-option label="禁用 " value="1"></el-option>
                         </el-select>
-                    </section>   
+                    </section> 
                 </div>     
-                
-                <!-- <DateRange title="创建时间" :start="fetchParam.create_start" :end="fetchParam.create_end" @changeStart="val=> fetchParam.create_start=val "
-                    @changeEnd="val=> fetchParam.create_end=val" :change="fetchData">
-                </DateRange> -->
                 <el-table v-loading="section.loading" border :data="section.data">
-                    <el-table-column prop="course_name" label="课程名称" width="180"></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" width="180">
+                    <el-table-column prop="course_name" label="课程名称" min-width="230"></el-table-column>
+                    <el-table-column prop="chapter_name" label="绑定栏目" width="190">
                         <!-- <template scope="scope">
                             {{scope.row.category_name || '无'}}
                         </template> -->
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
-                    <el-table-column prop="tags" label="标签" width="150"></el-table-column>
+                    <el-table-column prop="tags" label="标签" width="100"></el-table-column>
                     <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
                         <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                     </el-table-column> -->
@@ -128,8 +133,8 @@
                             <el-tag v-else type="danger">禁用 </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="addate" label="创建时间" width="200"></el-table-column>
-                    <el-table-column prop="operate" label="操作" width="145" fixed="right">
+                    <el-table-column prop="addate" label="创建时间" width="180"></el-table-column>
+                    <el-table-column prop="operate" label="操作" width="150" fixed="right">
                         <template scope="scope">
                             <el-button type="text" size="small" @click="update(scope.$index, scope.row)">
                                 编辑
@@ -153,6 +158,8 @@
                             :total="section.total">
                     </el-pagination>
                 </div>
+
+                 <!-- {{examCateid}} -->
             </div>
         </section>
     </article>
@@ -163,10 +170,10 @@
     import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
+
     export default {
         components: {
-            MenuTree,SectionCategoryMenu,ImagEcropperInput
-            // ,DateRange
+            MenuTree,SectionCategoryMenu,ImagEcropperInput,DateRange
         },
         data () {
             return {
@@ -198,6 +205,8 @@
                     loading: false,
                     data: [],
                     course_name:'',
+                    stime :'',
+                    etime:'',
                     page: 1,
                     pagesize: 10,
                     total: 0,
@@ -209,7 +218,6 @@
                 },
                 SecMenu:[],
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
-                
             }
         },
         watch: {
@@ -219,12 +227,24 @@
             'category.currentData.id'(){
                 this.fetchCourseLists () 
                 // this.$refs.secCategory.handleNodeClick()
-            }
+            },
+           '$store.state.index.examCate'(){
+               this.fetchCourseLists () 
+               this.fetchData()
+               
+            }        
         },
         activated () {
+            console.log(this.$store)
             this.category.loading = true
             this.fetchData()
             this.fetchCourseLists()
+        },
+        computed: {
+            examCateid( ){
+                // alert(111)
+                return this.$store.state.index.examCate //在Vue 工具里检测examCate
+            }
         },
         methods: {
             // 下线 或者上线课程 0为下线，1为上线
@@ -241,7 +261,12 @@
                 })
             },
             fetchData() {//获取左边栏目数据
-                examService.fetchChapterCategory( this.fetchParam).then((ret) => {
+                let param={
+                        category_id: this.examCateid , // 3- 供应商
+                        page: 1,
+                        pagesize: -1,
+                    }
+                examService.fetchChapterCategory( param).then((ret) => {
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     
                     })
@@ -251,9 +276,12 @@
                 let params={
                     course_name:this.section.course_name,
                     status:this.section.status,
+                    stime:this.section.stime ,
+                    etime:this.section.etime,
                     page: this.section.page,
                     pagesize: this.section.pagesize,
-                    chapter_id: this.category.currentData.id
+                    chapter_id: this.category.currentData.id,
+                    category_id:this.$store.state.index.examCate
                 }
                 return examService.fetchCourseLists(params).then((ret) => {
                     this.section.data = ret.data

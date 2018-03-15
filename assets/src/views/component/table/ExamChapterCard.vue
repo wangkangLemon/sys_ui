@@ -1,6 +1,5 @@
 <template>
     <div class="el-card edit-content">
-
         <el-card class="edit-content">
             <el-form label-position="right" label-width="90px" :rules="rules" :model="selectData" ref="form">
                 <el-form-item label="章节名称" prop="name">
@@ -8,9 +7,9 @@
                 </el-form-item>
                 <el-form-item label="章节类型" prop="chapter_type">
                     <el-select v-model="selectData.chapter_type" placeholder="请选择" disabled >
-                        <el-option label="课程章节" :value="'1'"></el-option>
-                        <el-option label="习题章节" :value="'2'"></el-option>
-                        <el-option label="历年真题" :value="'3'"></el-option>
+                        <el-option label="课程章节" :value="1"></el-option>
+                        <el-option label="习题章节" :value="2"></el-option>
+                        <el-option label="历年真题" :value="3"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="栏目图片" prop="image">
@@ -28,7 +27,6 @@
                 </el-form-item>
             </el-form>
         </el-card>
-
     </div>
 </template>
 <script>
@@ -49,7 +47,7 @@
                         {required: true, message: '请输入章节名称', trigger: 'blur'},
                     ],
                     chapter_type: [
-                        {required: true, type:'number',message: '请输入	章节类型', trigger: 'blur'},
+                        {required: true,type:'number', message: '请输入	章节类型', trigger: 'blur'},
                     ],
                     image: [
                         {required: true, message: '请上传图片', trigger: 'blur'}

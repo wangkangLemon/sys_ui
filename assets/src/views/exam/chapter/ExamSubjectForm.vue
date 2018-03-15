@@ -79,10 +79,13 @@
         <!-- <el-tabs v-model="activeTab" class="tab"> -->
             <!-- <el-tab-pane  label="考试题目设置" name="second" class="testing-set"> -->
                 <el-form  class="testing-set"  >
-                    <el-form class="cate" label-width="120px" :model="form"  :rules="rules" ref="ref">
-                        <el-form-item  label="所属栏目" props="chapter_id">
+                    <el-form class="cate" label-width="120px" :model="form"  :rules="rules" ref="cate">
+                        <el-form-item  label="所属栏目" prop="chapter_id">
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
+                        <!-- <el-form-item  label="所属栏目" prop="category_id">
+                            <Section-category-menu :placeholder="form.category_name" :autoClear="true" v-model="form.category_id" :reqCateFun="reqCateFun"></Section-category-menu>
+                        </el-form-item> -->
                     </el-form>
                     <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index">
                         <el-form-item label="" v-if="!readonly">
@@ -173,7 +176,6 @@ export default {
     name: 'exam-subject-form',
     data() {
         return {
-            uploadDocUrl: '', // 上传文档的url
             isShowVideoDialog: false, // 是否显示视频列表弹出框
             courseTags: [],
             rules: {
@@ -185,23 +187,37 @@ export default {
             readonly: false, // 只读模式
             videoUrl: '', // 预览的视频url
             changelist:{},
-            category_id:1,
             form:{
                 chapter_id:'',
-                chapter_name:''
+                chapter_name:'',
+                category_id:'',
+                category_name:'',
             },
             reqFun:()=>{
-                    return examService.fetchChapterCategory({
-                        pid: 0,
-                        // level: 1,
-                        pagesize:-1
-                    })
-                },
-            
+                return examService.fetchChapterCategory({
+                    pid: 0,
+                    // level: 1,
+                    pagesize:-1
+                })
+            },
+            // reqCateFun:()=>{
+            //     return examService.fetchExamCategory({
+            //         pid: 0,
+            //         // level: 1,
+            //         pagesize:-1
+            //     })
+            // },
         }
     },
     activated(){
-        this.uploadDocUrl = courseService.getCourseDocUploadUrl()
+        // alert(this.$store.state.index.examCate)
+        console.log(this.$route,this.$router)
+        console.log(/^\/exam(?:\/(?=$))?/i.test(this.$route.fullPath))
+        this.form={
+                chapter_id:'',
+                chapter_name:''
+            },
+        this.fetchTesting=[]
         this.uploadImgUrl = courseService.commonUploadImage()
         //编辑页面
         // if (this.$route.params.courseInfo) {
@@ -215,7 +231,9 @@ export default {
         // } else 
         if (this.$route.params.id) {
             examService.getExamSubject(this.$route.params.id).then((ret) => {
-                xmview.setContentTile('编辑课程-培训')
+                console.log(ret)
+                xmview.setContentTile('试题查看')
+                this.form.chapter_name=ret.chapter_name
                 var arr = []
                 arr.push(ret)
                 this.fetchTesting = arr
@@ -255,42 +273,45 @@ export default {
                 this.$router.back()
                 return
             }
-            console.log(this.fetchTesting)
-            console.log(requestParam)
-            let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
-            for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
-                // 处理单选题的正确答案选中
-                if (item.type == 1 && typeof item.correct == 'number') {
-                    if(item.options){
-                        item.options.map((itemOptions) => {
-                            delete itemOptions.correct
+            this.$refs.cate.validate((valid) => {
+                if (!valid) {
+                        return false
+                    }
+                console.log(this.fetchTesting)
+                console.log(requestParam)
+                let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
+                for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
+                    // 处理单选题的正确答案选中
+                    if (item.type == 1 && typeof item.correct == 'number') {
+                        if(item.options){
+                            item.options.map((itemOptions) => {
+                                delete itemOptions.correct
+                            })
+                            item.options[item.correct].correct = 1
+                            delete item.correct
+                        }
+                    }
+                    // 修复sort属性
+                    item.sort = i + 1
+                    if (item.options) {
+                        item.options.map((itemOptions, index) => {
+                            itemOptions.sort = index + 1
                         })
-                        item.options[item.correct].correct = 1
-                        delete item.correct
                     }
                 }
-                // 修复sort属性
-                item.sort = i + 1
-                if (item.options) {
-                    item.options.map((itemOptions, index) => {
-                        itemOptions.sort = index + 1
-                    })
-                }
-            }
-            xmview.setContentLoading(true)
-            // requestParam['category_id'] = this.category_id,
-            // requestParam['chapter_id'] = this.chapter_id,
-            console.log(encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'))
-            examService.addSubject({ 
-                category_id:this.category_id,
-                chapter_id:this.form.chapter_id,
-                subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
-            }).then((ret) => {
-                xmview.showTip('success', '操作成功')
-                this.$router.back()
-            }, () => {
-            }).then(() => {
-                xmview.setContentLoading(false)
+                xmview.setContentLoading(true)
+                console.log(encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'))
+                examService.addSubject({ 
+                    category_id:this.$store.state.index.examCate,
+                    chapter_id:this.form.chapter_id,
+                    subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
+                }).then((ret) => {
+                    xmview.showTip('success', '操作成功')
+                    this.$router.back()
+                }, () => {
+                }).then(() => {
+                    xmview.setContentLoading(false)
+                })
             })
         },
     },

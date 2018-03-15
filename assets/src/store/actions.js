@@ -31,6 +31,10 @@ const actions = {
         store.commit(types.INDEX_SET__SAVEGOVRANK, need)
     },
 
+    //应试考试栏目存储id
+    saveExamCategory(store, need) {
+        store.commit(types.INDEX_SET__SAVEEXAMCATEGORY, need)
+    },
     //课程分类存储id name
     // saveCourseCate(store, need){
     //     store.commit(types.INDEX_SET__SETSAVECOURSECATE, need)

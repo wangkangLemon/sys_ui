@@ -66,7 +66,6 @@
             'data' () {
                 //判断是否存在传过来的数据 有则使用无则初始化
                 if (this.data) {
-                    console.log(this.data)
                     this.selectData = Object.assign({}, this.data)
                 }
             }

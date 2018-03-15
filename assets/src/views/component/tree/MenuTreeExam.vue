@@ -1,10 +1,18 @@
 <style lang='scss' rel='stylesheet/scss'>
     @import "../../../utils/mixins/mixins";
     .left-menu-container {
+
         .fa {
             margin-right: 5px;
         }
     }
+    .el-tree-node__label{
+        white-space: nowrap; 
+        text-overflow: ellipsis; 
+        overflow: hidden; 
+        box-sizing: border-box; 
+    }
+    
 </style>
 
 <template>

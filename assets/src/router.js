@@ -4,7 +4,7 @@ import store from './store'
 import action from './store/actions'
 import base from './routers/base'              // 基础模块
 import course from './routers/course'          // 培训模块
-import finance from './routers/finance'        // 财务模块
+// import finance from './routers/finance'        // 财务模块
 import company from './routers/company'        // 企业模块
 import sys from './routers/sys'                // 系统模块
 import section from './routers/section'        // 区块模块
@@ -75,7 +75,7 @@ const routes = [{
             // ============ 培训模块 ==================
             course,
             // ============ 财务模块 ==================
-            finance,
+            // finance,
             // ============ 企业模块 ==================
             ...company,
             // ============ 系统模块 ==================

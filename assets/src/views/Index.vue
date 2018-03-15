@@ -175,6 +175,9 @@
                         display: inline-block;
                     }
                 }
+                .examcate{
+                    display: inline-block;
+                }
             }
         }
     }
@@ -269,8 +272,11 @@
                     {{mainTitle}}
                     <!--asd-->
                     <small>{{subTitle}}</small>
+                    <div v-if="/^\/exam(?:\/(?=$))?/i.test($route.fullPath)" class="examcate"> 
+                        <Section-category-menu :placeholder="examCate.category_name" :autoClear="true" v-model="examCate.category_id" :reqExamCateFun="reqExamCateFun"></Section-category-menu>
+                    </div>
                 </h2>
-
+                
                 <div class="route-content" v-loading="contentLoading">
                     <router-view></router-view>
                 </div>
@@ -284,6 +290,8 @@
     import MenuTree from './component/tree/MenuTree.vue'
     import authUtils from '../utils/authUtils'
     import getMenutree from '../services/base/menutreeService.js'
+    import examService from '../services/exam/examService'
+    import SectionCategoryMenu from './component/select/SectionCategoryMenu.vue'
 
     export default {
         data () {
@@ -292,7 +300,18 @@
                 contentLoading: false,
                 mainTitle: this.$store.state.index.webpathMain,
                 subTitle: this.$store.state.index.webpathSub,
-                isShowBack: false
+                isShowBack: false,
+                examCate:{
+                    category_id:'',
+                    category_name:'乡村全科执业助理医师',  //默认存储category_id :1 的name
+                },
+                reqExamCateFun:()=>{
+                    return examService.fetchExamCategory({
+                        pid: 0,
+                        // level: 1,
+                        pagesize:-1
+                    })
+                },
             }
         },
         computed: {
@@ -306,7 +325,8 @@
             // 激活的菜单选项
             navMenueActive () {
                 return this.$store.state.index.navMenueActive
-            }
+            },
+
         },
         watch: {
             '$store.state.index.webpathMain': function () {
@@ -326,6 +346,7 @@
             xmview.setContentBack = this.showContentBack.bind(this)
             // this.$store.dispatch('setIndexMenuActive', this.$route.path) // 设置选中的菜单
             this.$store.dispatch('setIndexNavMenu', {menu: authUtils.getNavMenu()}) // 获取菜单
+            this.$store.dispatch('saveExamCategory',1)  //默认vuex 存储category_id :1 的id
         },
         mounted () {
             window.onresize = () => {
@@ -406,7 +427,7 @@
             },
         },
         components: {
-            MenuTree
+            MenuTree,SectionCategoryMenu
         }
     }
 </script>

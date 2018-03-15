@@ -59,7 +59,7 @@
 </template>
 
 <script>
-    //这是 主页面
+    //这是 主页面   区别 ：1无子分类 2. ExamChapterCard传递参数  chaptertype:2
     import examService from '../../../services/exam/examService'
     import MenuTree from '../../component/tree/MenuTreeExam.vue'
     import ExamChapterCard from '../../component/table/ExamChapterCard.vue'
@@ -67,13 +67,12 @@
     function getFetchParam() {
         return {
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
-            category: void 0, // 3- 供应商
+            category_id: void 0, // 3- 供应商
             page: 1,
             pagesize: -1,
-            time_start: void 0,
-            time_end: void 0,
-            need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
-            keyword: void 0,
+            stime: void 0,
+            etime: void 0,
+            // need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
            
         }
     }
@@ -93,7 +92,7 @@
                 selectData:{},
                 type: 'update',
                 category:1,
-                chaptertype:'2'
+                chaptertype:2
 
             }
         },
@@ -101,12 +100,15 @@
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份右边card 里面vuex存储的值 
                 // this.selectData.sort=''
-                this.selectData.category_id	= 1
+                this.selectData.category_id	= this.$store.state.index.examCate
                 // console.log(this.$store.state.index.secMenu)
             },
             'type'(){
                 console.log(this.type,this.$store.state.index.secPid)
-            }
+            },
+            '$store.state.index.examCate'(){
+               this.fetchData()
+            }    
         },
         activated() {
             this.loadingData=false
@@ -130,9 +132,12 @@
                 this.fetchData()
             },
             fetchData() {
+                 this.fetchParam.category_id = this.$store.state.index.examCate
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                         this.SecMenu=ret
+                        console.log(ret)
+                        // console.log(typeof(ret.chapter_type))
                         xmview.setContentLoading(false)     
                     })
             },
@@ -193,8 +198,8 @@
                 this.type = type
                 if(type!="update"){
                     this.$store.dispatch('setSecMenu', { //通过清空vuex清空
-                    category_id:void 0,
-                    chapter_type: void 0,
+                    category_id:this.$store.state.index.examCate,
+                    chapter_type: 2,
                     name: '',
                     image: null,
                     remark :'',

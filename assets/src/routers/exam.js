@@ -19,7 +19,7 @@ export default {
                 })
             },
             meta: {
-                title: '栏目管理',
+                title: '栏目管理-课程',
                 noback: true
             }
         },
@@ -72,7 +72,7 @@ export default {
                 })
             },
             meta: {
-                title: '栏目管理',
+                title: '栏目管理-章节',
                 noback: true
             }
         },

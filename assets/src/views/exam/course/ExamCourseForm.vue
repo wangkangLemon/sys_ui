@@ -21,7 +21,7 @@
     <article class="gov-operate-container">
         <section>
             <el-form class="addForm" :model="form" :rules="rules" ref="form" :label-width="formLabelWidth">
-                <el-form-item  label="所属栏目" props="chapter_id">
+                <el-form-item  label="所属栏目" prop="chapter_id">
                     <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                 </el-form-item>
                 <el-form-item prop="course_name" label="课程名称" :label-width="formLabelWidth">
@@ -128,18 +128,26 @@
                 formLabelWidth: '120px',
                 form: clearFormFn(),
                 rules: {
-                    name: [
-                        {required: true, message: '必填项', trigger: 'blur'}
+                    chapter_id: [
+                        {required: true, type:'number',message: '请选择课程类别', trigger: 'change'}
                     ],
-                    concact: [
-                        {message: '必填项', trigger: 'blur'}
+                    course_name: [
+                        {required: true,  message: '请输入课程名称', trigger: 'blur'},
+                        {
+                            min: 1,
+                            max: 40,
+                            message: '长度不得大于 40 个字符'
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的标题'
+                        }
                     ],
                     mobile: [
                         {message: '必填项', trigger: 'blur'},
                         // {validator: validateMobile, trigger: 'blur'}
                     ],
-                    email: [
-                        {message: '必填项', trigger: 'blur'},
+                    image: [
+                        {required: true, message: '请选择图片', trigger: 'blur'},
                         // {validator: validateEmail, trigger: 'blur'}
                     ],
                     material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
@@ -165,6 +173,8 @@
             }
         },
         activated () {
+
+            
             _this = this
             xmview.setContentLoading(false)
             this.getExpertsList()
@@ -182,7 +192,6 @@
                 this.courseId = this.courseId
                 this.form.material_name= this.form.course_name
             })
-
         },
         methods: {
             // 图片裁切成功回调
@@ -260,6 +269,8 @@
                 })
             },
             submit (form) { // 表单提交
+            alert(this.$store.state.index.examCate)
+            this.form.category_id = this.$store.state.index.examCate
             this.form.tags = this.courseTags ? this.courseTags.join(',') : ''
                 this.$refs[form].validate((valid) => {
                     if (valid) {
@@ -272,12 +283,6 @@
                         }else{
                             reqFn = examService.addCourse
                             msg= '添加成功'
-                        }
-                        console.log(this.$route.params.govinfo)
-                        if(this.$route.params.govinfo!=undefined){
-                            this.form.pid = this.$route.params.govinfo.pid
-                        }else{
-                            this.form.pid = this.form.village_id||this.form.town_id|| this.form.area_id||this.form.city_id ||this.form.province_id
                         }
                         console.log(this.form)
                         reqFn(this.form,this.courseId).then(() => {
