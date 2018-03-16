@@ -83,18 +83,6 @@
                         xmview.setContentLoading(false)
                     })
 
-                    // courseService.getCategoryTree({type: this.type, pid:0})
-
-                    //     .then(ret => {
-                    //         // 不显示未分类那一项
-                    //         if (!this.showNotCat) {
-                    //             ret = ret.filter((item) => {
-                    //                 return item.id != 0
-                    //             })
-                    //         }
-                    //         this.options = treeUtils.arr2Cascader(ret, 0, void 0, void 0, 'name', 'id')
-                    //         this.loading = false
-                    //     })
                 }
             })
         },

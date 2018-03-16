@@ -37,65 +37,74 @@
         },
         props: ['data','Mult'],
         created() {
-            var arr = []
-            this.data.forEach(v => {
-                if (v.level == 0) {
-                    arr.push({
-                        id: v.id,
-                        pid: v.pid,
-                        category_id:v.category_id,
-                        chapter_type:v.chapter_type,
-                        name: v.name,
-                        image:v.image,
-                        remark:v.remark,
-                        sort:v.sort,
-                        level:v.level,
-                        children: []
-                    })
-                }
-            })
-            if(this.Mult){
-                this.data.forEach(v => {
-                if (v.level == 1) {
-                    arr.forEach(item => {
-                        if (v.pid == item.id) {
-                            item.children.push({
-                                id: v.id,
-                                pid: v.pid,
-                                category_id:v.category_id,
-                                chapter_type:v.chapter_type,
-                                name: v.name,
-                                image:v.image,
-                                remark:v.remark,
-                                sort:v.sort,
-                                level:v.level,
-                                children: []
-                            })
-                        }
-                    })
-                }
-            })
-            }
-            this.data1 = arr
-            let hasChildCItems = []
-            let leafChildren = []
-            if (this.data.children) {
-                this.data.children.forEach((item) => {
-                    if (item.children != null) {
-                        hasChildCItems.push(item)
-                    } else {
-                        leafChildren.push(item)
-                    }
-                })
-            }
-
-            this.hasChildCItems = hasChildCItems
-            this.leafChildren = leafChildren
+            this.handledata()
         },
         components: {
             MenuTree
         },
+        watch:{
+            'data'(){
+                this.handledata()
+            }
+        },
         methods: {
+             handledata(){
+                  var arr = []
+                this.data.forEach(v => {
+                    if (v.level == 0) {
+                        arr.push({
+                            id: v.id,
+                            pid: v.pid,
+                            category_id:v.category_id,
+                            chapter_type:v.chapter_type,
+                            name: v.name,
+                            image:v.image,
+                            remark:v.remark,
+                            sort:v.sort,
+                            level:v.level,
+                            children: []
+                        })
+                    }
+                })
+                if(this.Mult){
+                    this.data.forEach(v => {
+                    if (v.level == 1) {
+                        arr.forEach(item => {
+                            if (v.pid == item.id) {
+                                item.children.push({
+                                    id: v.id,
+                                    pid: v.pid,
+                                    category_id:v.category_id,
+                                    chapter_type:v.chapter_type,
+                                    name: v.name,
+                                    image:v.image,
+                                    remark:v.remark,
+                                    sort:v.sort,
+                                    level:v.level,
+                                    children: []
+                                })
+                            }
+                        })
+                    }
+                })
+                }
+                this.data1 = arr
+                console.log(this.data1)
+                let hasChildCItems = []
+                let leafChildren = []
+                if (this.data.children) {
+                    this.data.children.forEach((item) => {
+                        if (item.children != null) {
+                            hasChildCItems.push(item)
+                        } else {
+                            leafChildren.push(item)
+                        }
+                    })
+                }
+
+                this.hasChildCItems = hasChildCItems
+                this.leafChildren = leafChildren
+            },
             handleNodeClick(a){
                 if (!a)return
                 if( a.level == 0 ){

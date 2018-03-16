@@ -154,7 +154,7 @@
                             :current-page="section.page"
                             :page-size="section.pagesize"
                             small
-                            layout="prev, pager, next"
+                            layout="total,prev, pager, next"
                             :total="section.total">
                     </el-pagination>
                 </div>
@@ -230,20 +230,17 @@
                 // this.$refs.secCategory.handleNodeClick()
             },
             '$store.state.index.examCate'(){
-               this.fetchCourseLists () 
+               this.fetchCourseLists() 
                this.fetchData()
-               
             }     
         },
         activated () {
-            // console.log(this.$router.history.current.path)
             this.category.loading = true
             this.fetchData()
             this.fetchCourseLists()
         },
          computed: {
             examCateid( ){
-                // alert(111)
                 return this.$store.state.index.examCate //在Vue 工具里检测examCate
             }
         },
@@ -263,12 +260,13 @@
             },
             fetchData() {//获取左边栏目数据
                 let param={
-                            category_id: this.examCateid , // 3- 供应商
+                            category_id: this.$store.state.index.examCate  , // 3- 供应商
                             page: 1,
                             pagesize: -1,
                         }
                 examService.fetchChapterCategory( param).then((ret) => {
                         this.SecMenu=ret
+                        // console.log('this.SecMenu+++++++',param,this.SecMenu)
                         xmview.setContentLoading(false)     
                     })
             },

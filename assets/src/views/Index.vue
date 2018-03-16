@@ -302,7 +302,7 @@
                 subTitle: this.$store.state.index.webpathSub,
                 isShowBack: false,
                 examCate:{
-                    category_id:'',
+                    category_id:1,
                     category_name:'乡村全科执业助理医师',  //默认存储category_id :1 的name
                 },
                 reqExamCateFun:()=>{
@@ -346,7 +346,7 @@
             xmview.setContentBack = this.showContentBack.bind(this)
             // this.$store.dispatch('setIndexMenuActive', this.$route.path) // 设置选中的菜单
             this.$store.dispatch('setIndexNavMenu', {menu: authUtils.getNavMenu()}) // 获取菜单
-            this.$store.dispatch('saveExamCategory',1)  //默认vuex 存储category_id :1 的id
+            this.$store.dispatch('saveExamCategory',this.examCate)  //默认vuex 存储category_id :1 的id
         },
         mounted () {
             window.onresize = () => {

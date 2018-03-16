@@ -19,15 +19,6 @@ class sysService {
             return ret
         })
     }
-    // submitTask (taskData) {
-    //     // taskData.object = JSON.stringify(taskData.object)
-    //     let finalUrl = `${urlPre}`+'/create'
-    //     return api.post(finalUrl, taskData).then(ret => {
-    //         if (ret.code) {
-    //             return Promise.reject(ret)
-    //         }
-    //     })
-    // }
     submitTask({
         title= void 0,          // 标题
         image= void 0,        // 图片地址
@@ -93,7 +84,6 @@ class sysService {
             return ret
         })
     }
-
 
     getTask (task_id) {
         // taskData.object = JSON.stringify(taskData.object)
@@ -178,21 +168,10 @@ class sysService {
  // 获取课程任务模板分列表
     getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1, pagesize=-1}) {
         let finalUrl = urlPre + '/template/category/lists'
-        // alert('进入getData')
         return api.get(finalUrl, { id, name, pagesize}).then((ret) => {
-            // console.log(ret)
             return ret
         })
     }
-
-    // 创建分类
-    // createCategory ({parent_id, name, image, sort}) {
-    //     let finalUrl = urlPre + `/template/category`
-    //     let reqParam = {parent_id, name, image, sort}
-    //     if (parent_id === 0) delete reqParam['parent_id']
-    //     return api.post(finalUrl, reqParam)
-    // }
-    
     create_cate ({parent_id, name, image, sort}) {
         let finalUrl = urlPre + `/template/category/create`
         let reqParam = { name, sort}
@@ -233,11 +212,6 @@ class sysService {
         let finalUrl = urlPre + `/template/category/${id}/move/content`
         return api.post(finalUrl, {to})
     }
-
-
-
-
-
     // 禁用管理员
     offline({id, disabled}) {
         let url = `${urlPre}/edit/${id}`

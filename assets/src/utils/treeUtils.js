@@ -78,6 +78,46 @@ class TreeUtils {
         }
         
     }
+
+
+    /**
+ * 转换树结构
+ * 
+ */
+ dataToTree(arr, id = 'id', pid = 'pid') {
+    if (!arr instanceof Array) {
+        console.error('arr必须是数组!')
+        return
+    }
+
+    let _tree = []
+
+    // 如果pid为0就是根组件
+    function setTreeData(parentArr, currentObj) {
+        if (currentObj[pid] === 0) {
+            parentArr.push(currentObj)
+            return
+        } else {
+            parentArr.forEach(e => {
+                if (currentObj[pid] === e[id]) {
+                    e.children ? e.children.push(currentObj) : e.children = [currentObj]
+                    return
+                } else if (e.children && e.children instanceof Array) {
+                    setTreeData(e.children, currentObj)
+                }
+            })
+        }
+    }
+
+    // 按照pid从大到小排序
+    arr.sort((a, b) => a > b)
+    console.log(JSON.stringify(arr))
+
+    arr.forEach(e => {
+        setTreeData(_tree, e)
+    })
+    return _tree
+}
 }
 
 export default new TreeUtils()

@@ -497,7 +497,6 @@
                     ret.data.forEach(v => {
                         if (v.id == id) {
                             this.form.courseName = v.name;
-                            // alert(this.form.courseName)
                         }
                     })
                 });
@@ -542,15 +541,12 @@
                     if (valid) {
                         let msg = ''
                         let req = ''
-                        // alert('this.form.module_id='+this.form.id)
                         if (this.form.id||this.form.module_id) {
                             console.log(this.form)
-                            // alert('编辑')
                             msg = '修改成功'
                             req = mobileService.updateModule
                             // delete this.form.sort
                         } else {
-                            // alert('新建')
                             console.log(this.resultData[this.currentData.pindex]['items'])
                             console.log(this.resultData[this.currentData.pindex])
                             this.form.sort = this.resultData[this.currentData.pindex]['items'].length + 1
@@ -731,13 +727,10 @@
                     if (valid) {
                         let msg = ''
                         let req = ''
-                        // alert(this.fetchGroup.id)
                         if (this.fetchGroup.id) {
-                            // alert('编辑')
                             msg = '修改成功'
                             req = mobileService.editScheme
                         } else {
-                            // alert('新建')
                             msg = '添加成功'
                             req = mobileService.createScheme
                         }

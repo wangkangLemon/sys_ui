@@ -123,17 +123,11 @@
                 role_list:[],
             }
         },
-        activated () {
-            // alert(this.$route.params.sys_id)
-            
-        },
         created() {
-            // alert(this.$route.params.sys_id)
             xmview.setContentLoading(false);
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
                     sysService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
-                        // this.fetchParam.role_id = ret.course.role_id
                     })
                 }    
             this.getrole()

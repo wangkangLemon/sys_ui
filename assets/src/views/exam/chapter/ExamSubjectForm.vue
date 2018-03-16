@@ -83,9 +83,6 @@
                         <el-form-item  label="所属栏目" prop="chapter_id">
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
-                        <!-- <el-form-item  label="所属栏目" prop="category_id">
-                            <Section-category-menu :placeholder="form.category_name" :autoClear="true" v-model="form.category_id" :reqCateFun="reqCateFun"></Section-category-menu>
-                        </el-form-item> -->
                     </el-form>
                     <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index">
                         <el-form-item label="" v-if="!readonly">
@@ -103,9 +100,6 @@
                             <el-input v-model="item.description" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
-                        <!-- <el-form-item label="分数">
-                            <el-input placeholder="为该题设置分数" :disabled="!item.editable" v-model="item.score"></el-input>
-                        </el-form-item> -->
                         <el-form-item label="配图">
                             <UploadImg :defaultImg="item.image" :url="uploadImgUrl" :disabled="!item.editable" :onSuccess="res => item.image = res.data.url"></UploadImg>
                         </el-form-item>
@@ -193,26 +187,9 @@ export default {
                 category_id:'',
                 category_name:'',
             },
-            reqFun:()=>{
-                return examService.fetchChapterCategory({
-                    pid: 0,
-                    // level: 1,
-                    pagesize:-1
-                })
-            },
-            // reqCateFun:()=>{
-            //     return examService.fetchExamCategory({
-            //         pid: 0,
-            //         // level: 1,
-            //         pagesize:-1
-            //     })
-            // },
         }
     },
     activated(){
-        // alert(this.$store.state.index.examCate)
-        console.log(this.$route,this.$router)
-        console.log(/^\/exam(?:\/(?=$))?/i.test(this.$route.fullPath))
         this.form={
                 chapter_id:'',
                 chapter_name:''
@@ -221,7 +198,6 @@ export default {
         this.uploadImgUrl = courseService.commonUploadImage()
         //编辑页面
         // if (this.$route.params.courseInfo) {
-        //     alert(1)
         //     // this.fetchParam = this.$route.params.courseInfo   //从主页传递信息
         //     for(let i in this.$route.params.courseInfo){
         //          this.fetchTesting[i]=this.$route.params.courseInfo[i]
@@ -245,6 +221,13 @@ export default {
         xmview.setContentLoading(false)
     },
     methods: {
+        reqFun(param){
+            return examService.fetchChapterCategory({
+                pid: 0,
+                pagesize:-1,
+                category_id:this.$store.state.index.examCate
+            })
+        },
         addTesting(type, index) {
             this.fetchTesting.splice(index, 0, testingFactory.getExamSet(type))
         },

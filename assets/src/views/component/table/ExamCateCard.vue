@@ -84,7 +84,6 @@
                 this.selectData  = setSelectData()
             },
             save() {
-                // xmview.showDialog(this.selectData, () => {
                 this.$refs.form.validate((valid) => {
                     if (!valid) {
                         return false
@@ -95,7 +94,6 @@
             // 图片上传完毕
             handleImgUploaded (response) {
                 this.selectData.image = response.data.url
-                // alert( response.data.url)
             },
             // 重置表单
             resetForm () {

@@ -103,11 +103,10 @@ let authUtils = {
         authUtils.clearAuthRefreshToken()
         firstRefreshTimeoutId = setTimeout(() => {
             authUtils.refreshToken()
-        }, 1000 * 10)
+        }, 1000 * 10)  
         refreshIntervalId = setInterval(() => {
-            // alert('authUtils.refreshToken()+Date.now()===' + Date.now())
             authUtils.refreshToken()
-        }, 1000 * 60 * 50) // 30分钟一请求
+        }, 1000 * 60 * 20 ) // 30分钟一请求 
     },
     refreshToken () {
         let userinfo = authUtils.getUserInfo()
@@ -119,6 +118,9 @@ let authUtils = {
             if (xmrouter.history.current.name === 'login') { 
                 return 
             }
+            xmview.showTip('error', message.MESSAGE_AUTH_INVALID)
+            // 记录当前的url
+            xmrouter.push({ name: 'login', query: { returnUrl: window.location.href } })
         }
     },
     clearAuthRefreshToken () { //清除信息刷新token

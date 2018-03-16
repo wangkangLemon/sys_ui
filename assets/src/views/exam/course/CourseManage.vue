@@ -154,7 +154,7 @@
                             :current-page="section.page"
                             :page-size="section.pagesize"
                             small
-                            layout="prev, pager, next"
+                            layout="total,prev, pager, next"
                             :total="section.total">
                     </el-pagination>
                 </div>
@@ -235,14 +235,12 @@
             }        
         },
         activated () {
-            console.log(this.$store)
             this.category.loading = true
             this.fetchData()
             this.fetchCourseLists()
         },
         computed: {
             examCateid( ){
-                // alert(111)
                 return this.$store.state.index.examCate //在Vue 工具里检测examCate
             }
         },
@@ -268,6 +266,7 @@
                     }
                 examService.fetchChapterCategory( param).then((ret) => {
                         this.SecMenu=ret
+                        // console.log('this.SecMenu+++++++',param,this.SecMenu)
                         xmview.setContentLoading(false)     
                     })
             },
@@ -286,6 +285,7 @@
                 return examService.fetchCourseLists(params).then((ret) => {
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
+                    console.log(ret._exts.total)
                     this.section.loading = false
                 })
             },

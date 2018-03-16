@@ -4,51 +4,10 @@ import config from '../../utils/config'
 const urlPre = config.apiHost + '/course'
 
 class CourseService {
-
-    // ============================================= 栏目 开始 ======================================================
-
-
-    // // 获取上传栏目图片的url
-    // getUploadCategoryImgUrl({ govid } = {}) {
-    //     govid = govid || authUtils.getUserInfo().company_id
-    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category/image`
-    //     return finalUrl
-    // }
-
-    // // 添加栏目
-    // addCategory({ govid, parent_id, type, name, image, sort }) {
-    //     alert('addCategory')
-    //     govid = govid || authUtils.getUserInfo().company_id
-    //     let reqParam = { parent_id, type, name, image, sort }
-    //     if (parent_id === 0) delete reqParam['parent_id']
-
-    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category`
-    //     return api.post(finalUrl, reqParam)
-    // }
-
-    // // 修改栏目
-    // updateCategory({ govid, type, name, image, sort, id }) {
-    //     govid = govid || authUtils.getUserInfo().company_id
-    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-    //     return api.post(finalUrl, { type, name, image, sort })
-    // }
-
-    // // 删除栏目
-    // deleteCategory({ govid, id }) {
-    //     govid = govid || authUtils.getUserInfo().company_id
-    //     let finalUrl = `${config.apiHost}/com/${govid}/course/category/${id}`
-    //     return api.post(finalUrl, {})
-    // }
-
-
-
-
     //========================种类数据请求===================================
     getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1, pagesize=-1}) {
         let finalUrl = urlPre + '/category/lists'
-        // alert('进入getData')
         return api.get(finalUrl, { id, filter, type, pid, level, pagesize }).then((ret) => {
-            // console.log(ret)
             return ret
         })
     }
@@ -58,7 +17,6 @@ class CourseService {
         let url = urlPre + '/category/lists'
         return api.get(url, { id, name, category_type, pid, level, ended, disabled, page, pagesize }, false).then(ret => {
             if (ret.code == 0) {
-                // console.log(ret)
                 return ret
             } else {
                 return Promise.reject(ret)
@@ -98,26 +56,13 @@ class CourseService {
         return api.post(finalUrl, { type, name, image, sort })
     }
 
-    //     // 获取上传栏目图片的url
-    // getUploadCategoryImgUrl({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
-    //     // govid = govid || authUtils.getUserInfo().company_id
-    //     let finalUrl = `${config.apiHost}/common/upload/file`
-    //       return api.post(url, {image, alias, biz, extpath}).then((ret) => {
-    //         xmview.showTip('success',ret.message)
-    //         return ret.data
-    //     })
-    // }
-
-    
         // 移动栏目
     moveCategory({ id, to }) {
-        // govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/category/${id}/move`
         return api.post(finalUrl, { to })
     }
         // 移动栏目下内容
     moveCategoryContent({ id, to }) {
-        // govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/category/${id}/move/content`
         return api.post(finalUrl, { to })
     }
@@ -203,12 +148,6 @@ class CourseService {
         return api.post(finalUrl, { status })
     }
 
-    // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个 )
-        // getManageImgUploadUrl({ companyid } = {}) {   //=======commonUploadImageBase 
-        //     companyid = companyid || authUtils.getUserInfo().company_id
-        //     return `${config.apiHost}/com/${companyid}/course/image`
-        // }
-        // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)  =====直接传图
     commonUploadImage() { 
         return `${config.apiHost}/common/upload/file`
     }
@@ -231,16 +170,6 @@ class CourseService {
             return ret.data
         })
     }
-    // // 公共添加编辑课程上传图片  ---传base64
-        // commonUploadImageBase({image, alias = Date.now() + '.jpg', biz='course', extpath}) {
-        //     let url = `${config.apiHost}/common/upload/file`
-        //     return api.post(url, {image, alias, biz, extpath}).then((ret) => {
-        //         xmview.showTip('success',ret.message)
-        //         return ret.data
-        //     })
-        // }
-
-
     // 添加编辑课程上传图片  ---传base64
     uploadCover4addCourse({ image, alias = Date.now() + '.jpg' }) {
         let url = `${config.apiHost}/course/subject/image`
@@ -275,13 +204,6 @@ class CourseService {
         let finalUrl = `${config.apiHost}/com/${govid}/course/batchmove`
         return api.post(finalUrl, { id, catid })
     }
-
-    // // 弹出框请求的视频列表
-    // getVideo4Dialog({ govid, status, keyword, page, pagesize }) {
-    //     govid = govid || authUtils.getUserInfo().company_id
-    //     let finalUrl = `${config.apiHost}/com/${govid}/course/video/search`
-    //     return api.get(finalUrl, { keyword, status, page, pagesize })
-    // }
 
     // 获取文档上传url
     getCourseDocUploadUrl({ govid } = {}) {

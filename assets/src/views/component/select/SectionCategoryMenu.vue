@@ -8,15 +8,16 @@
     }
 </style>
 <template>
-    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" :reqFun="reqFun" :reqExamCateFun="reqExamCateFun"
+    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" 
         :placeholder="placeholder" @active-item-change="handleItemChange" :clearable="true" @change="setCurrVal">
     </el-cascader>
 </template>
 
 <script>
-    import treeUtils from '../../../utils/treeUtils'
     import cateService from '../../../services/section/cateService'
     import examService from '../../../services/exam/examService'
+    import treeUtils from '../../../utils/treeUtils'
+import formUtils from '../../../utils/formUtils';
     export default {
         props: {
             value: [String, Number, Array],
@@ -37,8 +38,9 @@
                 type: String,
                 default: ''
             },
-            reqFun:Function,
-            reqExamCateFun:Function,
+            reqFun:Function, //二级
+            reqExamCateFun:Function,//一级
+
         },
         data() {
             return {
@@ -53,63 +55,20 @@
             'value' (val) {  //点击之后选中的值
                 this.setCurrVal(val)
                 if(this.reqExamCateFun){
-                    this.$store.dispatch('saveExamCategory',val)
+                    this.$store.dispatch('saveExamCategory',Object.assign({},this.$store.state.index.examCate,{category_id:val}))
                 }
             },
             'currVal' (val, old) { //高亮选中值
                 this.$emit('input', val.length > 0 ? parseInt(val[val.length - 1]) : val)
                 this.onchange && this.onchange(val)
             },
-            // '$store.state.index.examCate'(){
-            //    this.fetchCourseLists () 
-            //    this.fetchData()
-            // }    
+            '$store.state.index.examCate'(){
+              this.handleData()
+            }    
         },
         mounted() {
-            //  alert(this.reqFun)
-            this.$refs.container.$el.addEventListener('click', () => {
-                if (this.loading || this.options.length > 0) return
-                if (this.lastData) {
-                    this.options = this.lastData
-                } else {
-                    // this.loading = true //这是在请求数据前打开loading动画2-28打开
-                    //获取数据的方法
-                    let req =this.reqExamCateFun||this.reqFun
-                    req().then((ret) => {
-                        // debugger
-                        var obj = {};
-                        ret.forEach(v => {
-                            // if (v.level == 0) {
-                                let t = {
-                                    data: v,
-                                    label: v.name,
-                                    value: v.id,
-                                }
-                                obj[v.id] = t;
-                                this.options.push(t);
-                            //}
-                        })
-                        var arr = {};
-                        ret.forEach(v => {
-                            if (v.level == 1) {
-                                obj[v.pid].children?
-                                obj[v.pid].children.push({
-                                    data: v,
-                                    label: v.name,
-                                    value: v.id
-                                }):
-                                 obj[v.pid].children = [{
-                                    data: v,
-                                    label: v.name,
-                                    value: v.id
-                                }]
-                            }
-                        })
-                        this.loading = false
-                        xmview.setContentLoading(false);
-                    })
-                }
-            })
+            // let flag,
+            this.handleData()
         },
         deactivated() {
             if (this.autoClear && this.options.length > 0) {
@@ -118,51 +77,63 @@
             }
         },
         methods: {
+            handleData(){
+                this.$refs.container.$el.addEventListener('click', () => {
+                    if (this.reqExamCateFun && this.options.length) return    //在处理exam兼容复用组件 在一级组件请求this.reqExamCateFun后就不再重复请求
+                    //if (this.loading || this.options.length > 0) {return}   // 在处理exam兼容复用组件 在请求了以及组件后 this.options.length>0 也往下走！ 去请求接口处理数据！
+                    if (this.lastData) {
+                        console.log(this.lastData)
+                        this.options = this.lastData
+                    } else {
+                       this.handleDatafun()
+                    }
+                    
+                })
+            },
+            handleDatafun(){
+                 // this.loading = true //这是在请求数据前打开loading动画2-28打开
+                        //获取数据的方法
+                        let req =this.reqExamCateFun||this.reqFun
+                        req().then((ret) => {
+                            this.options=[]
+                            var obj = {}
+                            ret.forEach(v => {
+                                if (v.level == 0 || v.level === undefined) {
+                                    let t = {
+                                        data: v,
+                                        label: v.name,
+                                        value: v.id,
+                                    }
+                                    obj[v.id] = t;
+                                    this.options.push(t);
+                                }
+                            })
+                            var arr = {};
+                            ret.forEach(v => {
+                                if (v.level == 1) {
+                                    obj[v.pid].children?
+                                    obj[v.pid].children.push({
+                                        data: v,
+                                        label: v.name,
+                                        value: v.id
+                                    }):
+                                    obj[v.pid].children = [{
+                                        data: v,
+                                        label: v.name,
+                                        value: v.id
+                                    }]
+                                }
+                            })
+                            this.loading = false
+                            xmview.setContentLoading(false);
+                        })
+            },
             setCurrVal(val) { //在请求子集时判断设置值
-                // console.log(this.currVal)
                 if (!val) this.$refs.container.clearValue(new window.Event('click'))
                 if (this.currVal == val || !val) return
                 this.currVal = val
-                // console.log(this.currVal)
             },
             handleItemChange(val) {
-                // console.log(val)
-                    // if (val.length < 1) return
-                    // // 递归找到该项
-                    // // console.log(val)
-                    // let currItem = treeUtils.findItem(this.options, val, 'value') //拿到当前项 
-
-                    // //if (!currItem.children || (currItem.children.length > 0 && currItem.children[0].value)) return
-                    // var arr = []
-                    // cateService.fetchData({
-                    //     pid: val[val.length - 1],
-                    //     level: -1,
-                    // }).then((ret) => {
-                    //     var arr = ret.map(v => {
-                    //         v.label = v.name
-                    //         v.value = v.id
-                    //         v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组
-                    //         return v
-                    //     })
-
-                    //     // currItem.children = arr
-
-                    //     this.loading = false
-                    //     xmview.setContentLoading(false)
-                    // })
-
-
-                    // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
-                    // cateService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
-                    //     .then(ret => {
-                    //         // 重新组合数据
-                    //         ret.map((item) => {
-                    //             item.label = item.name
-                    //             item.value = item.id
-                    //             item.children = item.has_children ? [{label: '加载中...'}] : null
-                    //         })
-                    //         currItem.children = ret
-                    //     })
             },
             clearData() {
                 this.lastData = this.options

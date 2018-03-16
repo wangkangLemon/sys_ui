@@ -118,9 +118,6 @@
                 uploadImgUrl: '',
             }
         },
-        created () {
-            // this.getDropval()
-        },
         activated () {
             xmview.setContentLoading(false);
              if (this.$route.params.sys_id != undefined) {    //路由id传递
@@ -166,12 +163,8 @@
                     this.fetchParam.tags = this.courseTags.join(',')
                     let req = dataService.create
                     if (this.$route.params.sys_id) req = dataService.edit
-                    // alert(req)
-                    // console.log(this.$route.params.sys_id)
                         console.log(this.fetchParam)
                     req(this.fetchParam).then((ret) => {
-                        // console.log(111111111111)
-                        // console.log(this.fetchParam)
                         // 重置当前数据
                         xmview.showTip('success', '数据提交成功')
                         this.$refs['form'].resetFields();

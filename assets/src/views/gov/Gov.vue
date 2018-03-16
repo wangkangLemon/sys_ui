@@ -273,7 +273,6 @@
                 
                 if(index>0){
                     if(type){ //从后向前获取
-                        console.log(type)
                         // alert('index-1')
                         this.fetchParam.pid = this.fetchParam[arr[index-1]];
                         if(this.fetchParam.name!=''||this.fetchParam.typeSelect!=''){
@@ -287,8 +286,6 @@
                 }else{
                     this.fetchParam.pid = this.finallyVal
                 }
-               
-
                 // if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
                 //     this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
                 //     this.fetchParam.pid = 27

@@ -392,7 +392,6 @@
         activated() {
             this.fetchData() //获取课程栏目数据名称
             this.fetchCate() //获取区块列表数据
-            // this.getDropval() //区块栏目
         },
         watch: {
             'fetchParam.category_id'(){
@@ -411,16 +410,6 @@
                 // 调用 callback 返回建议列表的数据返回建议列表的数据
                 cb(results);
             },
-        //     //获取栏目菜单下拉列表
-            // getDropval() {
-            //     alert(1)
-            //     cateService.fetchData({
-            //         pagesize: -1
-            //     }).then((ret) => {
-            //         console.log(ret.data)
-            //         this.drop_list = ret.data;
-            //     })
-            // },
             submit(form) { // 表单提交
                 // this.form.section_id = this.section.currentID
                 this.form.addate = this.form.addate ? date2Str(this.form.addate) : ''

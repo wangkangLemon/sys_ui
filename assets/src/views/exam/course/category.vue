@@ -99,10 +99,7 @@
         watch: {
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份右边card 里面vuex存储的值 
-                // this.selectData.sort=''
-                alert(this.$store.state.index.examCate)
                 this.selectData.category_id	= this.$store.state.index.examCate
-                // console.log(this.$store.state.index.secMenu)
             },
             'type'(){
                 console.log(this.type,this.$store.state.index.secPid)
@@ -126,7 +123,6 @@
             },
             handleCurrentChange(val) {
                 this.fetchParam.page = val
-                
                 this.fetchData()
             },
             handleSizeChange(val) {
@@ -136,9 +132,7 @@
             fetchData() {
                 this.fetchParam.category_id = this.$store.state.index.examCate
                 console.log(this.fetchParam)
-                
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
-                        // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     
                     })

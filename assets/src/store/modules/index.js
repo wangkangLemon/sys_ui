@@ -22,7 +22,8 @@ const Auth = {
         secMenu:[],
         secPid:0,
         govRank :[],
-        examCate:{}
+        examCate:1,
+        examCateName:'',
         // courseCate:{},
 
     },
@@ -50,8 +51,10 @@ const Auth = {
         [INDEX_SET__SAVEGOVRANK] (state, need) {        //保存部门层级关系的数据
             state.govRank= need
         },
-        [INDEX_SET__SAVEEXAMCATEGORY](state, need) {        //保存部门层级关系的数据
-            state.examCate = need
+        [INDEX_SET__SAVEEXAMCATEGORY](state, { category_id, category_name}) {        //保存部门层级关系的数据
+            state.examCate = category_id
+            state.examCateName = category_name
+
         },
         // [INDEX_SET__SETSAVECOURSECATE] (state, need) {        
         //     state.courseCate = need

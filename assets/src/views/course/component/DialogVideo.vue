@@ -84,6 +84,7 @@ export default {
         fetchData() {
             this.loadingData = true
             console.log((this.fetchParam))
+            // alert('请求视频数据')
             videoService.search(this.fetchParam).then((ret) => {
                 this.data = ret.data
                 this.total = ret._exts.total

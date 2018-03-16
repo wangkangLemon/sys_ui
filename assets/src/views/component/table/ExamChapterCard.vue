@@ -45,6 +45,14 @@
                 rules: {
                     name: [
                         {required: true, message: '请输入章节名称', trigger: 'blur'},
+                        {
+                            min: 1,
+                            max: 16,
+                            message: '长度不得大于 16 个字符'
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的章节名称'
+                        }
                     ],
                     chapter_type: [
                         {required: true,type:'number', message: '请输入	章节类型', trigger: 'blur'},
@@ -98,7 +106,6 @@
             // 图片上传完毕
             handleImgUploaded (response) {
                 this.selectData.image = response.data.url
-                // alert( response.data.url)
             },
             // 重置表单
             resetForm () {

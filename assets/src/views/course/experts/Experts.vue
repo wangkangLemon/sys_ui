@@ -240,43 +240,6 @@ export default {
             this.fetchData()
         },
         fetchData(val) {
-            // let flag = false
-                //     let index
-                //     let arr = ['provinceSelect', 'citySelect', 'areaSelect', 'townSelect', 'villageSelect']
-                //     arr.forEach((v,i) => {
-                //         if (flag) {
-                //             this.fetchParam[v] = null
-                //         }
-                //         if (this.fetchParam[v] == this.finallyVal) {
-                //             flag = true
-                //             index = i
-                //         }
-                //     })
-                    
-                //     if(index>0){
-                //         if(val){
-                //             // this.fetchParam.gov_id = this.fetchParam[arr[index-1]]
-                //             this.fetchParam.gov_id = this.fetchParam[arr[index-1]];
-                //         }else{
-                //             this.fetchParam.gov_id = this.fetchParam[arr[index]];
-                //         }
-                        
-                //     }else{
-                //         this.fetchParam.gov_id = this.finallyVal
-                //     }
-                
-
-                //     if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
-                //         this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
-                //         this.fetchParam.gov_id = -1
-                //     } 
-                //     // alert(this.fetchParam.gov_id) 测试选中的部门
-                // this.loadingData = true
-
-                // //初始化角色提交-1
-                // if(this.fetchParam.hospital_id == null){
-                //         this.fetchParam.hospital_id = -1
-                //     }
             return expertsService.fetchExpertsData(this.fetchParam).then((ret) => {
                 this.data = ret.data
                 this.total = ret._exts.total

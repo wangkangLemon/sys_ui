@@ -7,21 +7,10 @@ class sysService {
  // 获取课程任务模板分列表
     getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1, pagesize=-1, disabled=-1}) {
         let finalUrl = urlPre + '/category/lists'
-        // alert('进入getData')
         return api.get(finalUrl, { id, name, pagesize,disabled}).then((ret) => {
-            // console.log(ret)
             return ret
         })
     }
-
-    // 创建分类
-    // createCategory ({parent_id, name, image, sort}) {
-    //     let finalUrl = urlPre + `/category`
-    //     let reqParam = {parent_id, name, image, sort}
-    //     if (parent_id === 0) delete reqParam['parent_id']
-    //     return api.post(finalUrl, reqParam)
-    // }
-    
     create_cate ({parent_id, name, image, sort, remark, disabled}) {
         let finalUrl = urlPre + `/category/create`
         let reqParam = { name, image, sort, remark, disabled }
@@ -44,7 +33,6 @@ class sysService {
             }
         })
     }
-
     // 获取分类上传图片地址
     getCategoryImageUrl () {
         let finalUrl = urlPre + `/category/image`
@@ -62,11 +50,6 @@ class sysService {
         let finalUrl = urlPre + `/category/${id}/move/content`
         return api.post(finalUrl, {to})
     }
-
-
-
-
-
     // 禁用管理员
     offline({id, pushabled}) {
         let url = `${urlPre}/edit/${id}`

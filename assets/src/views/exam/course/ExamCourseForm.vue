@@ -152,13 +152,13 @@
                     ],
                     material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
                 },
-                reqFun:()=>{
-                    return examService.fetchChapterCategory({
-                        // pid: 0,
-                        // level: -1,
-                        // pagesize:-1
-                    })
-                },
+                // reqFun:()=>{
+                //     return examService.fetchChapterCategory({
+                //         // pid: 0,
+                //         // level: -1,
+                //         // pagesize:-1
+                //     })
+                // },
                 courseTags: [],
                 uploadDocUrl: '', // 上传文档的url
                 isShowVideoDialog: false, // 是否显示视频列表弹出框
@@ -170,15 +170,17 @@
         computed: {
             courseId () {  //传过来的govid
                 return this.$route.params.id
-            }
+            },
         },
+        // watch:{npmn
+        //     '$store.state.index.examCate'(){
+        //        console.log(this.reqFun)
+        //     }    
+        // },
         activated () {
-
-            
             _this = this
             xmview.setContentLoading(false)
             this.getExpertsList()
-            
             this.uploadDocUrl = courseService.getCourseDocUploadUrl()
             this.uploadImgUrl = courseService.commonUploadImage()
             if (this.courseId == undefined) {
@@ -194,6 +196,13 @@
             })
         },
         methods: {
+            reqFun(param){
+                    return examService.fetchChapterCategory({
+                        pid: 0,
+                        pagesize:-1,
+                        category_id:this.$store.state.index.examCate
+                    })
+                },
             // 图片裁切成功回调
             cropperImgSucc(imgData) {
                 courseService.commonUploadImageBase({ image: imgData ,extpath:''}).then((ret) => {
@@ -269,7 +278,6 @@
                 })
             },
             submit (form) { // 表单提交
-            alert(this.$store.state.index.examCate)
             this.form.category_id = this.$store.state.index.examCate
             this.form.tags = this.courseTags ? this.courseTags.join(',') : ''
                 this.$refs[form].validate((valid) => {

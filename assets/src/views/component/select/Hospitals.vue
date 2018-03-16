@@ -39,17 +39,6 @@
             }
         },
         methods: {
-
-            //获取医院下拉列表
-            // getHospitalList(val){
-            //     expertsService.fetchHospitalData({pagesize:-1}).then((ret)=>{
-            //     alert(1111)
-                    
-            //         console.log(ret)
-            //      this.hospital_list=ret;
-            //     })
-            // },
-
             getHospitalList (val, length) {
                 return expertsService.fetchHospitalData({
                     name: val,
