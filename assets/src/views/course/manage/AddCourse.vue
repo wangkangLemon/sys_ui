@@ -400,12 +400,6 @@ export default {
         // 拿到视频名称
         getVideoName(){
             this.isShowVideoDialog=true
-            return videoService.getVideoPreviewUrl(this.fetchParam.material_id).then((ret) => {
-                    this.fetchParam.material_name = ret.file_name
-                    // this.videoUrl = ret.video
-                    // this.row = row
-                    // this.$refs.videoPreview.show(row.file_name)
-                })
         },
         // 下一步按钮点击
         btnNextClick() {
@@ -465,11 +459,15 @@ export default {
         },
         // 删除考试
         deleteTesting(index, item) {
-            console.log(index, item)
             xmview.showDialog(`是否确定删除题目【 <i style="color:red">${item.description || ''}</i> 】?`, () => {
-                courseService.delCourse({course_id:item.course_id,id:item.id}).then((ret) => {
-                        this.fetchTesting.splice(index, 1)
+                if(!item.course_id){
+                     this.fetchTesting.splice(index, 1)
+                }else{
+                     courseService.delCourse({course_id:item.course_id,id:item.id}).then((ret) => {
+                       this.fetchTesting.splice(index, 1)
                     })
+                }
+               
             })
         },
         // 添加多选 单选的选项

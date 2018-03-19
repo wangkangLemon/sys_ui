@@ -42,7 +42,15 @@
                 uploadImgUrl: '',
                 rules: {
                     name: [
-                        {required: true, message: '请输入章节名称', trigger: 'blur'},
+                        {required: true, message: '请输入栏目名称', trigger: 'blur'},
+                        {
+                            min: 1,
+                            max: 16,
+                            message: '长度不得大于 16 个字符'
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的栏目名称'
+                        }
                     ],
                     chapter_type: [
                         {required: true, type:'number',message: '请输入	章节类型', trigger: 'blur'},

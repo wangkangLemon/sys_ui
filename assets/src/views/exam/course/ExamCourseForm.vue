@@ -15,6 +15,9 @@
         .dialog-footer {
             text-align: center;
         }
+        .el-cascader{
+            width:240px
+        }
     }
 </style>
 <template>
@@ -79,6 +82,7 @@
     import DialogVideo from '../../course/component/DialogVideo.vue'
     import Experts from '../../component/select/Experts'
     import VideoPreview from '../../component/dialog/VideoPreview.vue'
+    import {transformParam} from '../../../utils/common'
     function clearFormFn() {
             return  {
                     category_id: 0, //要拿到课程类别
@@ -152,13 +156,6 @@
                     ],
                     material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
                 },
-                // reqFun:()=>{
-                //     return examService.fetchChapterCategory({
-                //         // pid: 0,
-                //         // level: -1,
-                //         // pagesize:-1
-                //     })
-                // },
                 courseTags: [],
                 uploadDocUrl: '', // 上传文档的url
                 isShowVideoDialog: false, // 是否显示视频列表弹出框
@@ -172,11 +169,6 @@
                 return this.$route.params.id
             },
         },
-        // watch:{npmn
-        //     '$store.state.index.examCate'(){
-        //        console.log(this.reqFun)
-        //     }    
-        // },
         activated () {
             _this = this
             xmview.setContentLoading(false)
@@ -198,7 +190,7 @@
         methods: {
             reqFun(param){
                     return examService.fetchChapterCategory({
-                        pid: 0,
+                        // pid: 0,
                         pagesize:-1,
                         category_id:this.$store.state.index.examCate
                     })
@@ -239,12 +231,6 @@
             // 拿到视频名称
             getVideoName(){
                 this.isShowVideoDialog=true
-                return videoService.getVideoPreviewUrl(this.form.material_id).then((ret) => {
-                        this.form.material_name = ret.file_name
-                        // this.videoUrl = ret.video
-                        // this.row = row
-                        // this.$refs.videoPreview.show(row.file_name)
-                    })
             },
             // 处理上传文档
             handleUploadMedia(response) {
@@ -292,6 +278,7 @@
                             reqFn = examService.addCourse
                             msg= '添加成功'
                         }
+                        transformParam(this.form)
                         console.log(this.form)
                         reqFn(this.form,this.courseId).then(() => {
                             xmview.showTip('success', msg)

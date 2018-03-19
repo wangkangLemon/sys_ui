@@ -67,7 +67,6 @@ import formUtils from '../../../utils/formUtils';
             }    
         },
         mounted() {
-            // let flag,
             this.handleData()
         },
         deactivated() {
@@ -93,7 +92,7 @@ import formUtils from '../../../utils/formUtils';
             handleDatafun(){
                  // this.loading = true //这是在请求数据前打开loading动画2-28打开
                         //获取数据的方法
-                        let req =this.reqExamCateFun||this.reqFun
+                        let req =this.reqExamCateFun||this.reqFun||this.onchange
                         req().then((ret) => {
                             this.options=[]
                             var obj = {}

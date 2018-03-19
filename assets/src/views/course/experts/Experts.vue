@@ -86,7 +86,6 @@
                     <el-option label="部门人员" value="0"></el-option>
                 </el-select>
             </section>-->
-     
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>

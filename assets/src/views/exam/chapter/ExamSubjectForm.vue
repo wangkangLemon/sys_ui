@@ -20,23 +20,13 @@
             top: 5px;
         }
     } // 考试题目设置
-    // .testing-set {
-            // max-width: 700px;
-        .cate{
-            i{
-                font-size: 14px;
-            }
-            width: 100%;
-            transform: translateY(15%) translateX(6%);
-            .el-input {
-                display: inline-block;
-                width: 100%;
-                vertical-align: middle;
-            }
-        }
+    .testing-set {
+            max-width: 700px;
+
         .el-form {
             
             padding-top: 17px;
+            // width: 80%;
             &:first-of-type {
                 padding-top: 0;
             }
@@ -64,13 +54,28 @@
                 }
             }
         }
+        .cate{
+            .el-cascader{
+                width: 240px;
+            }
+            i{
+                font-size: 14px;
+            }
+            width: 100%;
+            transform: translateY(15%) translateX(6%);
+            .el-input {
+                display: inline-block;
+                width: 100%;
+                vertical-align: middle;
+            }
+        }
 
         .bottom-btns {
             .submit {
                 float: right;
             }
         }
-    // }
+    }
 }
 </style>
 
@@ -139,7 +144,7 @@
 
                         <hr>
                     </el-form>
-                </el-form>
+                
 
                 <el-form label-width="120px" v-if="!readonly" >
                     <el-form-item label="">
@@ -152,6 +157,8 @@
                 <div class="bottom-btns" v-if="!readonly">
                     <el-button class="submit" type="primary" @click="handleSubmitTesting">发布</el-button>
                 </div>
+
+                </el-form>
             <!-- </el-tab-pane> -->
         <!-- </el-tabs> -->
     </article>
@@ -235,9 +242,9 @@ export default {
         deleteTesting(index, item) {
             console.log(index, item)
             xmview.showDialog(`是否确定删除题目【 <i style="color:red">${item.description || ''}</i> 】?`, () => {
-                courseService.delCourse({course_id:item.course_id,id:item.id}).then((ret) => {
+                // courseService.delCourse({course_id:item.course_id,id:item.id}).then((ret) => {
                         this.fetchTesting.splice(index, 1)
-                    })
+                    // })
             })
         },
         // 添加多选 单选的选项
