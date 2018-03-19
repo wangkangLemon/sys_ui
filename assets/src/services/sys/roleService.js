@@ -65,7 +65,7 @@ class sysService {
     delete(id) {
         let url = `${urlPre}/delete/${id}`
         // console.log(url)
-        return api.get(url, {}).then(ret => {
+        return api.post(url, {}).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }
@@ -186,7 +186,7 @@ class sysService {
     deleteImp(id) {
         let url = `${urlPre_menu}/delete/${id}`
         // console.log(url)
-        return api.get(url, {}).then(ret => {
+        return api.post(url, {}).then(ret => {
             if (ret.code==0) {
                 xmview.showTip('success',ret.message)
                 return ret.data

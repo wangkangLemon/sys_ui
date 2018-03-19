@@ -121,6 +121,7 @@
             clearSelected () {
                 this.selectable = false
             },
-        }
+        },
+        
     }
 </script>

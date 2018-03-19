@@ -111,6 +111,7 @@
             }    
         },
         activated() {
+            this.selectData={}
             this.loadingData=false
             xmview.setLoading(false)
             this.fetchData()

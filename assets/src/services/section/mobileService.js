@@ -93,7 +93,7 @@ class MobileService {
     // 删除导航方案
     deleteScheme ({group_id}) {
         let finalUrl = `${urlPre}/group/delete/${group_id}`
-        return api.get(finalUrl)
+        return api.post(finalUrl)
     }
     // 启用方案
     // activeScheme ({group_id, ios, android}) {
@@ -116,7 +116,7 @@ class MobileService {
     // 删除功能
     deleteModule ({group_id, module_id}) {
         let finalUrl = `${urlPre}/delete/${module_id}`
-        return api.get(finalUrl)
+        return api.post(finalUrl)
     }
     // 获取功能版本
     getModuleVersions () {

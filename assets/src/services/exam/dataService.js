@@ -58,7 +58,7 @@ class dataService {
     // 删除
     delete(id) {
         let url = `${urlPre}/delete/${id}`
-        return api.get(url, {}).then(ret => {
+        return api.post(url, {}).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                  

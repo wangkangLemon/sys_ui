@@ -133,7 +133,7 @@
                 form: clearFormFn(),
                 rules: {
                     chapter_id: [
-                        {required: true, type:'number',message: '请选择课程类别', trigger: 'change'}
+                        {required: true, type:'number',message: '请选择课程栏目', trigger: 'change'}
                     ],
                     course_name: [
                         {required: true,  message: '请输入课程名称', trigger: 'blur'},

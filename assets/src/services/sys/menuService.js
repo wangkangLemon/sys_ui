@@ -57,7 +57,7 @@ class sysService {
     delete(id) {
         let url = `${urlPre}/delete/${id}`
         // console.log(url)
-        return api.get(url, {}).then(ret => {
+        return api.post(url, {}).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

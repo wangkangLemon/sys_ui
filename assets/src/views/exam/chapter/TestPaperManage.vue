@@ -235,6 +235,7 @@
             }     
         },
         activated () {
+            this.category.currentData.id = ''
             this.category.loading = true
             this.fetchData()
             this.fetchCourseLists()

@@ -300,7 +300,7 @@ export default {
             console.log(this.fetchParam)
             // console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
             this.fetchParam.material_name= this.$route.params.courseInfo.course_name
-            this.fetchParam.experts_id = this.$route.params.courseInfo.experts_name
+            // this.fetchParam.experts_id = this.$route.params.courseInfo.experts_name
             
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile('编辑课程-培训')

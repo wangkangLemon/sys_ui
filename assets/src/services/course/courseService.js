@@ -75,7 +75,7 @@ class CourseService {
     delete_cate(id) {
         let url = `${urlPre}/category/delete/${id}`
         // console.log(url)
-        return api.get(url, {}).then(ret => {
+        return api.post(url, {}).then(ret => {
             if (ret.code == 0) {
                 xmview.showTip('success',ret.message)
                 return ret.data

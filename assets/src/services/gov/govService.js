@@ -263,7 +263,7 @@ class govService {
         id
     }) {
         let finalUrl = `${config.apiHost}/user/delete/${id}`
-        return api.get(finalUrl)
+        return api.post(finalUrl)
     }
 
     //拿到数据 
@@ -355,7 +355,7 @@ class govService {
     deleteGov(id) {
         let url = `${urlPre}/delete/${id}`
         // console.log(url)
-        return api.get(url, {}).then(ret => {
+        return api.post(url, {}).then(ret => {
             if (ret.code == 0) {
                  xmview.showTip('success',ret.message)
                 return ret.data
@@ -369,7 +369,7 @@ class govService {
     delete(id) {
         let url = `${urlPre}/delete/${id}`
         // console.log(url)
-        return api.get(url, {}).then(ret => {
+        return api.post(url, {}).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }
