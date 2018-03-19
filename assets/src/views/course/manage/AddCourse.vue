@@ -142,9 +142,9 @@
                     <el-form-item label="考试次数限制">
                         <el-input :disabled="fetchParam.need_testing == 0" placeholder="留空或0位不限制" v-model="fetchParam.limit_repeat"></el-input>
                     </el-form-item>
-                    <el-form-item label="及格分数" prop="score_pass">
+                    <!-- <el-form-item label="及格分数" prop="score_pass">
                         <el-input :disabled="fetchParam.need_testing == 0" v-model="fetchParam.score_pass"></el-input>
-                    </el-form-item>
+                    </el-form-item> -->
 
                     <el-form-item label="" v-if="!readonly">
                         <el-button style="float: right" type="primary" @click="btnNextClick">
@@ -171,9 +171,9 @@
                             <el-input v-model="item.description" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="分数">
+                        <!-- <el-form-item label="分数">
                             <el-input placeholder="为该题设置分数" :disabled="!item.editable" v-model="item.score"></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="配图">
                             <UploadImg :defaultImg="item.image" :url="uploadImgUrl" :disabled="!item.editable" :onSuccess="res => item.image = res.data.url"></UploadImg>
                         </el-form-item>

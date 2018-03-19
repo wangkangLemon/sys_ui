@@ -99,8 +99,8 @@
                     </el-button>
                 </template>
             </el-table-column>
-            <el-table-column width="80" prop="total_score" label="总分数" class="c">
-            </el-table-column>
+            <!-- <el-table-column width="80" prop="total_score" label="总分数" class="c">
+            </el-table-column> -->
             <el-table-column width="108" prop="limit_time" label="限时（分）" class="c">
             </el-table-column>
             <el-table-column width="100" label="状态">
