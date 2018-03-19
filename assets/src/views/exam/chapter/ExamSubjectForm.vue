@@ -196,7 +196,7 @@ export default {
             },
         }
     },
-    activated(){
+    created(){
         this.form={
                 chapter_id:'',
                 chapter_name:''

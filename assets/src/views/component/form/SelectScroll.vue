@@ -69,11 +69,13 @@
             },
             'value' (val) {
                 this.selectVal != val && (this.selectVal = val)
-                if (this.value != null && this.currPlaceholder && this.data.length < 1) {
-                    this.data.push({
-                        id: this.value,
-                        name: this.placeholder
-                    })
+                if(this.data){
+                    if (this.value != null && this.currPlaceholder && this.data.length < 1) {
+                        this.data.push({
+                            id: this.value,
+                            name: this.placeholder
+                        })
+                    }
                 }
             },
             'list' () {

@@ -61,7 +61,7 @@
             <el-form :model="form" :rules="rules" ref="form">
     
                 <el-form-item prop="name" label="医院名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" placeholder="部门人员姓名" auto-complete="off"></el-input>
+                    <el-input v-model="form.name" placeholder="请填写医院姓名" auto-complete="off"></el-input>
                 </el-form-item>
               
             </el-form>

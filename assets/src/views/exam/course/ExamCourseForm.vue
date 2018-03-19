@@ -100,7 +100,6 @@
                     material_name: '选择视频',
                     material_type:void 0,
                     experts_name:'',
-
                 }
     }
     let _this
@@ -108,6 +107,7 @@
         components: {
             Region,SectionCategoryMenu,vTags,CropperImg,UploadFile,DialogVideo,Experts,VideoPreview
         },
+        name:'exam-course-form',
         data () {
             let validateEmail = (rule, value, callback) => {
                 if (!(value || '').match(/^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/)) {
@@ -169,7 +169,10 @@
                 return this.$route.params.id
             },
         },
-        activated () {
+        created () {
+            //  this.form = clearFormFn()
+            //  console.log(this.form )
+            console.log(typeof(this.form.chapter_id),this.form.chapter_id)
             _this = this
             xmview.setContentLoading(false)
             this.getExpertsList()
@@ -209,7 +212,7 @@
                     page: parseInt(length / this.pageSize) + 1
                 }).then((ret) => {
                     this.$emit('changelist', ret)
-                    this.changelist = ret;
+                    this.changelist = ret
                     return ret
                 })
             },
