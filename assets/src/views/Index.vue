@@ -302,8 +302,8 @@
                 subTitle: this.$store.state.index.webpathSub,
                 isShowBack: false,
                 examCate:{
-                    category_id:1,
-                    category_name:'乡村全科执业助理医师',  //默认存储category_id :1 的name
+                    category_id:'',
+                    category_name:'',  //默认存储category_id :1 的name  乡村全科执业助理医师
                 },
                 reqExamCateFun:()=>{
                     return examService.fetchExamCategory({
@@ -341,12 +341,19 @@
                 this.$store.dispatch('setIndexNavMenu',{menu:ret});
              })
 
+            examService.fetchExamCategory({
+                pid: 0,
+                pagesize:-1
+            }).then((ret) => {
+            this.examCate.category_id=ret[0].id
+            this.examCate.category_name=ret[0].name
+            this.$store.dispatch('saveExamCategory',this.examCate)  //默认vuex 存储category_id :1 的id
+        })
             authUtils.authRefreshtoken() // 开启自动更新token
             xmview.setContentLoading = this.setContentLoading.bind(this)
             xmview.setContentBack = this.showContentBack.bind(this)
             // this.$store.dispatch('setIndexMenuActive', this.$route.path) // 设置选中的菜单
             this.$store.dispatch('setIndexNavMenu', {menu: authUtils.getNavMenu()}) // 获取菜单
-            this.$store.dispatch('saveExamCategory',this.examCate)  //默认vuex 存储category_id :1 的id
         },
         mounted () {
             window.onresize = () => {
@@ -357,6 +364,8 @@
             window.onresize = null
         },
         methods: {
+      
+
             handleIsShowMenue (val) {
                 this.isShowMenue = val
             },

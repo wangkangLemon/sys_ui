@@ -17,7 +17,7 @@
     import cateService from '../../../services/section/cateService'
     import examService from '../../../services/exam/examService'
     import treeUtils from '../../../utils/treeUtils'
-import formUtils from '../../../utils/formUtils';
+    import formUtils from '../../../utils/formUtils'
     export default {
         props: {
             value: [String, Number, Array],
