@@ -232,6 +232,7 @@ export default {
             return examService.fetchChapterCategory({
                 pid: 0,
                 pagesize:-1,
+                chapter_type:2,
                 category_id:this.$store.state.index.examCate
             })
         },

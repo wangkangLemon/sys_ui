@@ -263,6 +263,7 @@
                 let param={
                         category_id: this.examCateid , // 3- 供应商
                         page: 1,
+                        chapter_type:1,
                         pagesize: -1,
                     }
                 examService.fetchChapterCategory( param).then((ret) => {

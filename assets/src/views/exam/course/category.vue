@@ -68,6 +68,7 @@
         return {
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
             category_id: void 0, // 3- 供应商
+            chapter_type:1,
             page: 1,
             pagesize: -1,
             stime: void 0,

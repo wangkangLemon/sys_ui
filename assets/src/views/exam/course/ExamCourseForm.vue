@@ -194,6 +194,7 @@
             reqFun(param){
                     return examService.fetchChapterCategory({
                         // pid: 0,
+                        chapter_type:1,
                         pagesize:-1,
                         category_id:this.$store.state.index.examCate
                     })
