@@ -94,6 +94,7 @@
                         //获取数据的方法
                         let req =this.reqExamCateFun||this.reqFun||this.onchange
                         req().then((ret) => {
+                            console.log(ret)
                             this.options=[]
                             var obj = {}
                             ret.forEach(v => {
@@ -107,10 +108,24 @@
                                     this.options.push(t);
                                 }
                             })
-                            var arr = {};
-                            ret.forEach(v => {
+                            ret.forEach((v,i) => {
+                                console.log(v.level+'-------'+ v.id+'-------'+ v.pid+'--------'+i)
+                                
                                 if (v.level == 1) {
-                                    obj[v.pid].children?
+                                    // if(obj[v.pid]=v.id){
+                                    //      obj[v.pid].children.push({
+                                    //         data: v,
+                                    //         label: v.name,
+                                    //         value: v.id
+                                    //     })
+                                    // }else{
+                                    //      obj[v.pid].children = [{
+                                    //         data: v,
+                                    //         label: v.name,
+                                    //         value: v.id
+                                    //     }]
+                                    // }
+                                    obj[v.pid].children?   // id:51 缺失---2018-3-25
                                     obj[v.pid].children.push({
                                         data: v,
                                         label: v.name,
@@ -122,7 +137,10 @@
                                         value: v.id
                                     }]
                                 }
+                                console.log(1)
                             })
+                            console.log(ret)
+                            
                             this.loading = false
                             xmview.setContentLoading(false);
                         })

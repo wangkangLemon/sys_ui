@@ -48,12 +48,12 @@
             <el-form-item label="姓名" prop="name">
                 <el-input v-model.name="fetchParam.name"></el-input>
             </el-form-item>
-            <el-form-item label="性别" prop="sex">
+            <!-- <el-form-item label="性别" prop="sex">
                 <el-radio-group v-model="fetchParam.sex">
                     <el-radio :label="1">男</el-radio>
                     <el-radio :label="2">女</el-radio>
                 </el-radio-group>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="手机号" prop="mobile">
                 <el-input v-model.mobile="fetchParam.mobile"></el-input>
             </el-form-item>
@@ -70,10 +70,9 @@
                 <el-form-item label="密码" prop="password" v-else>
                     <el-input v-model.password="fetchParam.password" auto-complete="off" type="password" key=""  ></el-input>
             </el-form-item>-->
-
-            <el-form-item label="地址" prop="price">
+            <!-- <el-form-item label="地址" prop="price">
                 <el-input v-model.address="fetchParam.address"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="" v-if="this.$route.params.sys_type">
                 <el-button @click="$router.push({ name:'sys-index'})">取消</el-button>
                 <el-button type="primary" @click="btnNextClick">确认</el-button>
@@ -216,9 +215,9 @@
             mobile: '',
             email: '',
             password: '',
-            address: '',
+            // address: '',
             id: 0,
-            sex: 1,
+            // sex: 1,
             avatar:'',
         }
     }

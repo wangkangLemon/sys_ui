@@ -24,7 +24,10 @@
             background: #fff;
 
             .classify-tree {
-                padding: 20px;
+                padding: 1px;
+                .el-tree-node{
+                    overflow: hidden;
+                }
             }
         }
         .right-content {
@@ -292,7 +295,7 @@
                 })
             },
             handleDelete (index, row) {
-                xmview.showDialog(`确认要删除课程【<i style="color:red">${row.description}</i>】吗？`, () => {
+                xmview.showDialog(`确认要删除试题【<i style="color:red">${row.description}</i>】吗？`, () => {
                     examService.delSubject(row.id).then(() => {
                         xmview.showTip('success', '删除成功')
                         this.fetchCourseLists()

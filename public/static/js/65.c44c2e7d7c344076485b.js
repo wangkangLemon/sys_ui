@@ -1,2 +1,0 @@
-webpackJsonp([65],{127:function(e,t,r){var n=r(5)(r(774),r(995),null,null);e.exports=n.exports},774:function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={}},995:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("keep-alive",{attrs:{exclude:" sys-form，section-edit,exam-course-form,exam-subject-form"}},[r("router-view")],1)},staticRenderFns:[]}}});
-//# sourceMappingURL=65.c44c2e7d7c344076485b.js.map

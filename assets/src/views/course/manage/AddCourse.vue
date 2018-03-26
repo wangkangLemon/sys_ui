@@ -256,9 +256,6 @@ import Experts from '../../component/select/Experts'
 export default {
     name: 'course-manage-addcourse',
     data() {
-
-
-
         return {
             activeTab: 'first',
             uploadDocUrl: '', // 上传文档的url

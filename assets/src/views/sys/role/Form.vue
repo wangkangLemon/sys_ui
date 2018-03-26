@@ -20,7 +20,7 @@
                 <el-form-item label="ID" prop="role_id">
                     <el-input v-model.name="fetchParam.id" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="姓名" prop="role_name">
+                <el-form-item label="角色名" prop="role_name">
                     <el-input v-model.name="fetchParam.role_name"></el-input>
                 </el-form-item> 
                 <el-form-item label="添加时间" prop="role_addtime">

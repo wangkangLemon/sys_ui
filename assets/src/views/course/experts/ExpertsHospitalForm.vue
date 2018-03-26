@@ -50,7 +50,7 @@
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
                 
-                <el-form-item label="姓名" prop="name">
+                <el-form-item label="医院名称" prop="name">
                     <el-input v-model.name="fetchParam.name"></el-input>
                 </el-form-item>
         
@@ -70,7 +70,7 @@
                 <el-form-item label="" >
                     <!--<el-button @click="$router.push({ name:'medical-index'})">取消</el-button>-->
                     <div>
-                    <el-button type="primary" @click="btnNextClick">确认</el-button>
+                        <el-button type="primary" @click="btnNextClick">确认</el-button>
                     </div>
                 </el-form-item>
             </el-form>

@@ -171,6 +171,14 @@
                 xmview.setContentLoading(false)
             })
         },
+        watch:{
+            'fetchParam.pid'(){
+                console.log('fetchParam.pid====='+this.fetchParam.pid)
+            },
+            'fetchParam.gov_id'(){
+                console.log('fetchParam.gov_id====='+this.fetchParam.gov_id)
+            }
+        },
         methods: {
             userDetail(index, item){
                 this.$router.push({
@@ -229,12 +237,14 @@
                     }
                     //根据 pid 拿到 gov_id 参数
                     this.fetchParam.pid = this.fetchParam.gov_id=this.fetchParam.villageSelect || this.fetchParam.townSelect || this.fetchParam.areaSelect || this.fetchParam.citySelect || this.fetchParam.provinceSelect
-
                 }
-                if(!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !this.fetchParam.townSelect && !this.fetchParam.villageSelect){
-                    // this.fetchParam.pid= -1
+                // if(!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !this.fetchParam.townSelect && !this.fetchParam.villageSelect){
+                if(!this.fetchParam.provinceSelect ){
+                    this.fetchParam.citySelect =this.fetchParam.areaSelect = this.fetchParam.townSelect = this.fetchParam.villageSelect=''
+                    this.fetchParam.pid= ''
+                    this.fetchParam.level=''
                 }
-
+                console.log('gov_id',this.fetchParam.pid)
                 this.loading = true
                 return govService.getReportUserlogin({
                     page: this.currentPage,

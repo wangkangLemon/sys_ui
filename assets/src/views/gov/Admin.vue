@@ -33,7 +33,7 @@
                 <p><i class="title">所属部门：</i> <span class="value">{{clerkDetail.gov_name}}</span></p>
                 <p><i class="title">手机：</i> <span class="value">{{clerkDetail.mobile}}</span></p>
                 <p><i class="title">昵称：</i> <span class="value">{{clerkDetail.nickname}}</span></p>
-                <p><i class="title">邮箱：</i> <span class="value">{{clerkDetail.email}}</span></p>
+                <!-- <p><i class="title">邮箱：</i> <span class="value">{{clerkDetail.email}}</span></p> -->
                 <p>
                     <i class="title">状态：</i>
                     <span class="value">

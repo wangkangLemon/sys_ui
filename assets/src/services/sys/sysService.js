@@ -40,9 +40,9 @@ class sysService {
     }
 
     // 创建
-    create({ role_id, name, mobile, email, password, sex, avatar, address }) {
+    create({ role_id, name, mobile, email, password}) {
         let url = urlPre + '/create'
-        return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
+        return api.post(url, { role_id, name, mobile, email, password}).then(ret => {
             if (ret.code == 0) {
                 return ret.data
             } else {
@@ -52,9 +52,9 @@ class sysService {
         })
     }
     // 更新
-    update({ id, role_id, name, mobile, email, password, sex, avatar, address }) {
+    update({ id, role_id, name, mobile, email, password}) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, { role_id, name, mobile, email, password, sex, avatar, address }).then(ret => {
+        return api.post(url, { role_id, name, mobile, email, password}).then(ret => {
             if (ret.code) {
                 console.log('update()')
                 return Promise.reject(ret)
@@ -115,7 +115,40 @@ class sysService {
             return ret.data
         })
     }
-  
+    
+    //推送
+    pushMsgCreate(param) {
+        let url = `${config.apiHost}/push/msg/create`
+        return api.post(url, param).then(ret => {
+            if (ret.code == 0) {
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //推送列表
+    pushMsgList(param) {
+        let url = `${config.apiHost}/push/msg/lists`
+        return api.get(url, param).then(ret => {
+            if (ret.code == 0) {
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //删除推送
+    pushMsgDel(id) {
+        let url = `${config.apiHost}/push/msg/delete/${id}`
+        return api.post(url).then(ret => {
+            if (ret.code == 0) {
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
 
 }
 export default new sysService()

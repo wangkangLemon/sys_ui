@@ -37,6 +37,9 @@
                     <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.menu_name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="所属栏目" prop="pid">
+                <MultTreeCategory  :placeholder="fetchParam.parent_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.pid" :reqFun="reqFun"></MultTreeCategory>
+            </el-form-item>
             <!--<el-form-item label="父级菜单" prop="pid">
                 <MenuFatherCategory type="course" :placeholder="fetchParam.menu_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.pid"></MenuFatherCategory>
             </el-form-item>-->
@@ -61,10 +64,10 @@
 <script>
     import menuService from '../../../services/sys/menuService.js'
     import config from '../../../utils/config'
-    // import MenuFatherCategory from '../../component/select/MenuFatherCategory.vue'
+    import MultTreeCategory from '../../component/select/MultCategory.vue'
     export default {
         name: 'sys-form',
-        // components: { MenuFatherCategory },
+        components: { MultTreeCategory },
         data() {
             return {
                 imgUrl: '',
@@ -105,6 +108,11 @@
         },
         methods: {
             //获取父级菜下拉列表
+            reqFun(param){
+                    return menuService.fetchData({
+                        pagesize:-1,pid:0,level:-1
+                    })
+                },
             getDropval(){
                 menuService.fetchData({pagesize:-1}).then((ret)=>{
                  this.drop_list=ret.data;
@@ -152,9 +160,10 @@
             menu_name: '',
             menu_node:'',
             remark:'',
-            sort: 0,
-            pid: null,
+            sort: void 0,
+            pid: void 0,
             level: 0,
+            parent_name:'',
         }
     }
 

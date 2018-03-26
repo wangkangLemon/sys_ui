@@ -24,7 +24,10 @@
             background: #fff;
 
             .classify-tree {
-                padding: 20px;
+                padding: 1px;
+                .el-tree-node{
+                    overflow: hidden;
+                }
             }
         }
         .right-content {

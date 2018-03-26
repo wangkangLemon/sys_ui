@@ -286,10 +286,6 @@
                 }else{
                     this.fetchParam.pid = this.finallyVal
                 }
-                // if (!this.fetchParam.provinceSelect && !this.fetchParam.citySelect && !this.fetchParam.areaSelect && !
-                //     this.fetchParam.townSelect && !this.fetchParam.villageSelect) {
-                //     this.fetchParam.pid = 27
-                // }
                 this.loading = true
                 return govService.getSelectList({
                     pagesize: this.pageSize,

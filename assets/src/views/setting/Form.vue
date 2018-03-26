@@ -26,11 +26,6 @@
         </section>     
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :model="fetchParam" :rules="rules" >
-                <el-form-item  v-if="$route.params.sys_id" label="ID" prop="category">
-                    <el-input v-model="fetchParam.id" disabled></el-input>
-                </el-form-item>
-                 <el-form-item v-else >
-                </el-form-item>
                 <el-form-item label="设置" prop="category">
                     <el-input v-model="fetchParam.category"></el-input>
                 </el-form-item>

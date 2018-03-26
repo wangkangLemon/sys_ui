@@ -136,6 +136,7 @@
             fetchData() {
                 cateService.fetchData( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
+                        console.log(ret)
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     
                     })

@@ -208,6 +208,19 @@ export default {
                 noback: false
             }
         }, 
+        {
+            path: 'push/msg',
+            name: 'push-msg',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/PushMsg.vue'))
+                })
+            },
+            meta: {
+                title: '推送消息',
+                noback: false
+            }
+        }, 
 
     ]
 }

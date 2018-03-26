@@ -299,7 +299,6 @@
                     category_id: null, //栏目id   
                 },
                 drop_list: [],
-                init: false,
                 loadingData: false,
                 data: [], // 表格数据
                 dataCache: [],
@@ -534,14 +533,9 @@
                 this.fetchParam = getFetchParam()
             },
             handleCurrentChange(val) {
-                if (this.init) { //init是true进来 限制fetchData初始化不请求
-                    this.fetchParam.page = val
-                    this.fetchData()
-                } else {
-                    this.init = true
-
-                }
-            },
+                this.fetchParam.page = val
+                this.fetchData()
+        },
             handleSizeChange(val) {dataService.fetchData
                 this.fetchParam.pagesize = val
                 this.fetchData()
@@ -600,6 +594,7 @@
   
             dataCache01() {
                 if (this.dataCache.length > 0 && this.SecCateName) {
+
                     this.dataCache.forEach(v => {
                         v.formdateName = this.getCategory_name(v.category_id)
                     })
