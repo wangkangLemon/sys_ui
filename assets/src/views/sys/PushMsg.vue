@@ -20,7 +20,21 @@
             background: rgb(153, 102, 204);
         }
     }
-
+    .nourl{
+        font-size: 12px;
+    }
+    .show-detail {
+        width:100%;
+        .info{
+            title{
+               word-wrap: break-word; 
+            }
+        }
+        .info{
+            width: 80%;
+        }
+        
+    }
     .search {
         @extend %top-search-container;
     } // 底部的管理按钮
@@ -38,6 +52,20 @@
 
 <template>
     <article id="medical-index-container">
+        <!--详情-->
+        <el-dialog class="show-detail" title="查看推送跳转地址" v-model="showDetail">
+            <div class="info">
+                <p>{{clerkDetail.url?clerkDetail.url:'暂无'}}</p>
+                <!-- <p>
+                    <i class="title">状态：</i>
+                    <span class="value">
+                        <el-tag type="success" v-if="!clerkDetail.disabled">正常</el-tag>
+                        <el-tag type="danger" v-else="clerkDetail.disabled">异常</el-tag>
+                    </span>
+                </p> -->
+                <!-- <p><i class="title">注册时间：</i><span class="value">{{clerkDetail.addate}}</span></p> -->
+            </div>
+        </el-dialog>
          <!--添加/编辑表单-->
         <el-dialog v-model="addForm">
             <el-form :model="form" :rules="rules" ref="form">
@@ -74,6 +102,16 @@
                     @changeEnd="val=> fetchParam.etime=val" :change="fetchData">
                 </DateRange>
             </section>
+            <section>
+                <i>状态</i>
+                <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData" :clearable="true">
+                    <el-option label="全部" :value="-1"></el-option>
+                    <el-option label="未发送" value="0"></el-option>
+                    <el-option label="发送中  " value="1"></el-option>
+                    <el-option label="已发送" value="2"></el-option>
+                    <el-option label="发送失败" value="3"></el-option>
+                </el-select>
+            </section>
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true"  border>
@@ -84,12 +122,24 @@
             </el-table-column>
             <el-table-column min-width="300" prop="content" label="内容">
             </el-table-column>
-            <el-table-column min-width="170" prop="url" label="跳转地址">
+            <el-table-column min-width="100" prop="url" label="跳转地址">
+                 <template scope="scope">
+                    <el-button v-if="scope.row.url" @click="urlDetail(scope.$index, scope.row)" type="text" size="small">地址详情</el-button>
+                    <span class="nourl" v-else>暂无地址</span>
+                </template>
             </el-table-column>
             <el-table-column min-width="170" prop="addate" label="创建时间">
             </el-table-column>
             <el-table-column min-width="80" prop="admin_name" label="发布者">
             </el-table-column>
+            <el-table-column width="100" label="状态">
+                        <template scope="scope">
+                            <el-tag v-if="scope.row.status == 2" type="success">已发送</el-tag>
+                            <el-tag v-if="scope.row.status == 1" type="warning">发送中</el-tag>
+                            <el-tag v-if="scope.row.status == 0" type="gray">未发送</el-tag>
+                            <el-tag v-if="scope.row.status == 3" type="danger">发送失败 </el-tag>
+                        </template>
+                    </el-table-column>
             <el-table-column fixed="right" width="80" label="操作">
                 <template scope="scope">
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
@@ -109,7 +159,7 @@ import DateRange from '../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
     return {
-        status: void 0, //  1-禁用 0-正常
+        status: -1, //  1-禁用 0-正常
         page: 1,
         pagesize: 15,
         title:'',
@@ -187,6 +237,8 @@ export default {
             },
             addForm: false, // 表单弹窗是否显示
             formLabelWidth: '120px', // 表单label的宽度
+            showDetail: false,     // 是否显示详情url
+            clerkDetail:{},
 
         }
     },
@@ -194,6 +246,14 @@ export default {
         this.fetchData()
     },
     methods: {
+        // 查看管理员详情
+        urlDetail (index, row) {
+            this.showDetail = true
+            this.clerkDetail = row
+            // this.clerkDetail.request = row.split(',')
+            // console.log(this.clerkDetail.request)
+            
+        },
         //添加人员
         addAdmin () {
             this.form = clearForm()

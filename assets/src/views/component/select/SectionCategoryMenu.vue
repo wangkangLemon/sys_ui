@@ -103,6 +103,7 @@
                                         data: v,
                                         label: v.name,
                                         value: v.id,
+                                        // children: []
                                     }
                                     obj[v.id] = t;
                                     this.options.push(t);
@@ -110,32 +111,29 @@
                             })
                             ret.forEach((v,i) => {
                                 console.log(v.level+'-------'+ v.id+'-------'+ v.pid+'--------'+i)
-                                
                                 if (v.level == 1) {
-                                    // if(obj[v.pid]=v.id){
-                                    //      obj[v.pid].children.push({
-                                    //         data: v,
-                                    //         label: v.name,
-                                    //         value: v.id
-                                    //     })
-                                    // }else{
-                                    //      obj[v.pid].children = [{
-                                    //         data: v,
-                                    //         label: v.name,
-                                    //         value: v.id
-                                    //     }]
-                                    // }
-                                    obj[v.pid].children?   // id:51 缺失---2018-3-25
-                                    obj[v.pid].children.push({
-                                        data: v,
-                                        label: v.name,
-                                        value: v.id
-                                    }):
-                                    obj[v.pid].children = [{
-                                        data: v,
-                                        label: v.name,
-                                        value: v.id
-                                    }]
+                                    // this.options.forEach(item=>{
+                                    //      if (v.pid == item.id){
+                                    //          item.children.push({
+                                    //             data: v,
+                                    //             label: v.name,
+                                    //             value: v.id
+                                    //          })
+                                    //      }
+                                    // })
+                                    // console.log( this.options)
+                                    
+                                        obj[v.pid].children?   // id:51 缺失---2018-3-25
+                                        obj[v.pid].children.push({
+                                            data: v,
+                                            label: v.name,
+                                            value: v.id
+                                        }):
+                                        obj[v.pid].children = [{
+                                            data: v,
+                                            label: v.name,
+                                            value: v.id
+                                        }]
                                 }
                                 console.log(1)
                             })
