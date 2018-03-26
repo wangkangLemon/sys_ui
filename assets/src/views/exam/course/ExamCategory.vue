@@ -39,7 +39,6 @@
 
 <template>
     <article id="course-index-container">
-            <!--<section class="manage-container"><button type="button" icon="plus" class="el-button el-button--primary"  @click="ExamCategoryCreate"><span>新建分类</span></button></section>-->
             <section class="left-container">
                 <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="examCategory"></MenuTree>
             </section>
@@ -136,30 +135,27 @@
                         xmview.setContentLoading(false)     
                     })
             },
-            ExamCategoryCreate( ) {
-                examService.ExamCategoryCreate().then(() => {
-                        console.log(ret)
-                        this.selectData=null
-                        setTimeout(() => {
-                            this.fetchData() // 重新刷新数据
-                        }, 300)
-                    })
-            },
             //处理保存的数据
             submit( message ) {
                 // if(){
                 //     xmview.showDialog('请先添加要保存的数据')
                 // }else{}
+         
                 transformParam(message)
+                    // 应试考试价格推服务端*100倍（分）
+                    console.log(typeof(message.price))
+                    let lastdata = Object.assign({}, message)
+                    lastdata.price=Number( lastdata.price)*100
+                    console.log(typeof(lastdata.price),lastdata.price)
                 if( this.type == 'P'|| this.type == 'S' ){
+        
                     if(this.type == 'P'){
-                        message.pid=0
+                        lastdata.pid=0
                     } else if( this.type == 'S'){
-                        message.pid=this.$store.state.index.secPid
+                        lastdata.pid=this.$store.state.index.secPid
 
                     }
-                    // console.log(message)
-                    examService.ExamCategoryCreate( message ).then(( ret ) => {
+                    examService.ExamCategoryCreate( lastdata ).then(( ret ) => {
                         this.selectData=null
                         setTimeout(() => {
                             this.selectData = {}  //通过初始化组件传值清空
@@ -171,23 +167,13 @@
                         }
                     )
                 }else {
-                    transformParam(message)
-                    //    console.log(message)
-                    examService.ExamCategoryEdit( message ,message.id).then(( ret ) => {
+                    //    console.log(lastdata)
+                    examService.ExamCategoryEdit( lastdata ,lastdata.id).then(( ret ) => {
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据 
                         }, 300)
                     })
                 }
-            },
-            //编辑
-            ExamCategoryEdit( e ) {
-                examService.ExamCategoryEdit(e).then((ret) => {
-                        setTimeout(() => {
-                            this.fetchData() // 重新刷新数据
-                             this.$forceUpdate()
-                        }, 300)
-                    })
             },
             changeType(type){
                 this.type = type

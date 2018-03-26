@@ -234,6 +234,7 @@
             treeNodeClick (type, data, node, store) {
                 // console.log('===========   node.data.data==========  ')
                 // console.log(node)
+                console.log(this)
                 if (type == 1) { 
                     // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
                     this.nodeParentSelected = node.parent// 记录父节点

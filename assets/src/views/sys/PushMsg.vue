@@ -104,7 +104,7 @@
             </section>
             <section>
                 <i>状态</i>
-                <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData" :clearable="true">
+                <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData">
                     <el-option label="全部" :value="-1"></el-option>
                     <el-option label="未发送" value="0"></el-option>
                     <el-option label="发送中  " value="1"></el-option>

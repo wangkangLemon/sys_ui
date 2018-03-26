@@ -205,7 +205,7 @@ export default {
             },
             meta: {
                 title: '后台操作日志',
-                noback: false
+                noback: true
             }
         }, 
         {
@@ -218,7 +218,7 @@ export default {
             },
             meta: {
                 title: '推送消息',
-                noback: false
+                noback: true
             }
         }, 
 

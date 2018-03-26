@@ -38,7 +38,7 @@
                         // pid: v.pid,
                         // category_id:v.category_id,
                         // chapter_type:v.chapter_type,
-                        price:v.price,
+                        price:Number(v.price)/100,  // //应试考试价格从服务端拿数据除以100倍（分）
                         name: v.name,
                         image:v.image,
                         remark:v.remark,

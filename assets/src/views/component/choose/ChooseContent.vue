@@ -32,7 +32,7 @@
             </section>
             <el-table v-loading="loadingData" border :data="data" :highlight-current-row="true">
                 <el-table-column prop="course_name" label="课程名称"></el-table-column>
-                <el-table-column prop="gov_name" label="部门名称" width="200"></el-table-column>
+                <el-table-column prop="category_name" label="所属栏目" width="100"></el-table-column>
                 <el-table-column prop="material_type" label="课程类别" width="150">
                     <template scope="scope">
                         {{material_type[scope.row.material_type]}}
@@ -72,7 +72,7 @@
             course_name:'',
             type:'',
             page:  1,
-            pagesize: 15,
+            pagesize: 10,
             level: void 0,
             time_start: void 0,
             time_end: void 0,

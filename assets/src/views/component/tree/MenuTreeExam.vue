@@ -16,7 +16,7 @@
 </style>
 
 <template>
-    <el-tree  :data="data1" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="selectable">{{this.data}}</el-tree>
+    <el-tree  :data="data1" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="selectable"></el-tree>
 </template>
 <script>
     //这是 组件   
@@ -35,7 +35,12 @@
                 selectable: true, // 是否可选中
             }
         },
-        props: ['data','Mult'],
+        // props: ['data','Mult'],
+        props: {
+            onNodeClick: Function,
+            data: [Array,Object],
+            Mult: [String]
+        },
         created() {
             this.handledata()
         },
@@ -48,6 +53,7 @@
             }
         },
         methods: {
+
              handledata(){
                   var arr = []
                 this.data.forEach(v => {
@@ -89,7 +95,7 @@
                 })
                 }
                 this.data1 = arr
-                console.log(this.data1)
+                // console.log(this.data1)
                 let hasChildCItems = []
                 let leafChildren = []
                 if (this.data.children) {
@@ -105,14 +111,15 @@
                 this.hasChildCItems = hasChildCItems
                 this.leafChildren = leafChildren
             },
-            handleNodeClick(a){
+            handleNodeClick(a,node, store){
+                this.onNodeClick(1, a, node, store) 
                 if (!a)return
                 if( a.level == 0 ){
                     this.$store.dispatch('savePid',a.id)
                     console.log(this.$store.state.index.secPid)
                 }
-                
                 this.$store.dispatch('setSecMenu',a)   //vuex左边分类存储
+                
                 //  根节点无法被选中 
                 // if ( a.level  == 0) return
                 this.selectable = true

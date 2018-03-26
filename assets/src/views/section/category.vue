@@ -153,33 +153,32 @@
  
             //处理保存的数据
             submit( message ) {
-                // if(){
-                //     xmview.showDialog('请先添加要保存的数据')
-                // }else{}
                 transformParam(message)
             //    if( message.pid == 0 || message.pid == 1 ){
-               if( this.type == 'P'|| this.type == 'S' ){
-                    if(this.type == 'P'){
-                        message.pid=0
-                    } else if( this.type == 'S'){
-                        message.pid=this.$store.state.index.secPid
-                    }
-                    cateService.create( message ).then(( ret ) => {
-                        this.selectData=null
-                        setTimeout(() => {
-                            this.selectData = {}  //通过初始化组件传值清空
-                            this.fetchData() // 重新刷新数据
-                        }, 300)
-                    })
-               }else {
-                   transformParam(message)
-                    cateService.edit( message ).then(( ret ) => {
-                        setTimeout(() => {
-                            this.fetchData() // 重新刷新数据 
-                        }, 300)
-                    })
-               }
-               
+                if( this.type == 'P'|| this.type == 'S' ){
+                        if(this.type == 'P'){
+                            message.pid=0
+                        } else if( this.type == 'S'){
+                            message.pid=this.$store.state.index.secPid
+                        }
+                        cateService.create( message ).then(( ret ) => {
+                            this.selectData=null
+                            setTimeout(() => {
+                                this.selectData = {}  //通过初始化组件传值清空
+                                this.fetchData() // 重新刷新数据
+                            }, 300)
+                        })
+                }else {
+                    transformParam(message)
+                        cateService.edit( message ).then(( ret ) => {
+                            setTimeout(() => {
+                                this.fetchData() // 重新刷新数据 
+                            }, 300)
+                        })
+                }
+                // setTimeout(() => {
+                //     this.$router.go(0)
+                // }, 1000);
             },
             //编辑
             edit( e ) {
@@ -189,17 +188,6 @@
                         }, 300)
                     })
             },
-            // //添加根节点
-            // addP(p){
-            //     this.selectData=null
-            //     this.type = 'P'
-
-            // },
-            // //添加子分类
-            // addS(){
-            //      this.selectData=null
-            //      this.type = 'S'
-            // },
             changeType(type){
                 this.type = type
                 if(type!="update"){
@@ -225,6 +213,9 @@
                         // store.commit('increment', 10)
                         xmview.showTip('success', '操作成功')
                         this.selectData = {}  //通过初始化组件传值清空
+                        // setTimeout(() => {
+                        //     this.$router.go(0)
+                        // }, 1000);
                     })
                 })
                 }else{

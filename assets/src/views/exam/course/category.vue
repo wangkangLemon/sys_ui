@@ -41,7 +41,7 @@
     <article id="course-index-container">
             <!--<section class="manage-container"><button type="button" icon="plus" class="el-button el-button--primary"  @click="ChapterCategoryCreate"><span>新建分类</span></button></section>-->
             <section class="left-container">
-                <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="chapterCategory" :Mult='Mult'></MenuTree>
+                <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="chapterCategory" :Mult='Mult' :onNodeClick="treeNodeClick.bind(this,1)"></MenuTree>
             </section>
             <section class="right-container">
                 <div>
@@ -107,7 +107,7 @@
             },
             '$store.state.index.examCate'(){
                this.fetchData()
-            }     
+            } ,
         },
         activated() {
             this.selectData={}
@@ -116,6 +116,23 @@
             this.fetchData()
         },
         methods: {
+            // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                // console.log('===========   node.data.data==========  ')
+                console.log(this.$parent)
+                this.type='update'
+                console.log(222)
+                if (type == 1) { 
+                //     // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
+                //     this.nodeParentSelected = node.parent// 记录父节点
+                //     this.nodeSelected = node // 记录当前节点
+                //     this.$refs.uploadImg.clearFiles()
+                //     this.fetchParam = Object.assign({},node.data)  //解决左右数据
+                //     this.type = 'P'
+                // } else if (type == 2) {
+                //     this.moveToNode = node
+                }
+            },
             // 清空选中项
             clearSelected () {
                 this.selectable = false
@@ -164,9 +181,8 @@
                     }
                     // console.log(message)
                     examService.ChapterCategoryCreate( message ).then(( ret ) => {
-                        this.selectData=null
+                        this.selectData = getFetchParam() //通过初始化组件传值清空
                         setTimeout(() => {
-                            this.selectData = {}  //通过初始化组件传值清空
                             this.fetchData() // 重新刷新数据
                             this.$forceUpdate()
                         }, 300)

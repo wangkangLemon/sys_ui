@@ -5,13 +5,13 @@
                 <el-form-item label="章节名称" prop="name">
                     <el-input v-model="selectData.name" ></el-input>
                 </el-form-item>
-                <el-form-item label="章节类型" prop="chapter_type">
+                <!-- <el-form-item label="章节类型" prop="chapter_type">
                     <el-select v-model="selectData.chapter_type" placeholder="请选择" disabled >
                         <el-option label="课程章节" :value="1"></el-option>
                         <el-option label="习题章节" :value="2"></el-option>
                         <el-option label="历年真题" :value="3"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="栏目图片" prop="image">
                     <UploadImg ref="uploadImg" :defaultImg="selectData.image" :url="uploadImgUrl"  :onSuccess="handleImgUploaded" :data='uploadextraData'></UploadImg>
                 </el-form-item>
@@ -76,7 +76,6 @@
             'data' () {
                 //判断是否存在传过来的数据 有则使用无则初始化
                 if (this.data) {
-                    console.log(this.data)
                     this.selectData = Object.assign({}, this.data)
                 }
             }

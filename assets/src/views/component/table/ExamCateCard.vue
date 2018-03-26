@@ -7,7 +7,7 @@
                     <el-input v-model="selectData.name" ></el-input>
                 </el-form-item>
                 <el-form-item label="课程价格" prop="price">
-                    <el-input placeholder="最小的排在前面"  v-model="selectData.price"></el-input>
+                    <el-input placeholder="单位（元）"  v-model="selectData.price"></el-input>
                 </el-form-item>
                 <el-form-item label="栏目图片" prop="image">
                     <UploadImg ref="uploadImg" :defaultImg="selectData.image" :url="uploadImgUrl"  :onSuccess="handleImgUploaded" :data='uploadextraData'></UploadImg>

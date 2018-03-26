@@ -112,9 +112,9 @@
                             ret.forEach((v,i) => {
                                 console.log(v.level+'-------'+ v.id+'-------'+ v.pid+'--------'+i)
                                 if (v.level == 1) {
-                                    // this.options.forEach(item=>{
+                                    // this.options.forEach(item=>{ //一级
                                     //      if (v.pid == item.id){
-                                    //          item.children.push({
+                                    //          obj[v.pid].children.push({
                                     //             data: v,
                                     //             label: v.name,
                                     //             value: v.id
