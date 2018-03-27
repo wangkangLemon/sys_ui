@@ -98,13 +98,13 @@
         </section>
         <section class="right-content">
             <div class="content-title">
-                <span v-if="category.title">{{category.title}}-</span>课程列表
-                 <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-course-add'})">添加课程</el-button>
+                <span v-if="category.title">{{category.title}}-</span>菜单列表
+                <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-course-add'})">添加菜单</el-button>
             </div>
             <div class="content-list">
                 <div class="search">
                     <section class="fi">
-                     <i>标题</i><el-input id="input" v-model="section.course_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                     <i>标题</i><el-input id="input" v-model="section.menu_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
                     <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
                         @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
@@ -119,14 +119,15 @@
                     </section> 
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
-                    <el-table-column prop="course_name" label="课程名称" min-width="230"></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" width="190">
+                    <el-table-column prop="menu_name" label="菜单名称" min-width="230"></el-table-column>
+                    <el-table-column prop="parent_name" label="绑定栏目" width="190">
                         <!-- <template scope="scope">
                             {{scope.row.category_name || '无'}}
                         </template> -->
                     </el-table-column>
+                    <el-table-column prop="menu_node" label="菜单标识" width="100"></el-table-column>
+                    
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
-                    <el-table-column prop="tags" label="标签" width="100"></el-table-column>
                     <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
                         <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                     </el-table-column> -->
@@ -168,12 +169,28 @@
     </article>
 </template>
 <script>
-    import sysService from '../../../services/sys/sysService'
+    import sysService from '../../../services/sys/menuService'
     import MenuTree from '../../component/tree/MenuTreeExam.vue'
     import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
-
+    function initSection() {
+        return {
+            status: void 0, //  1-禁用 0-正常
+            page: 1,
+            pagesize: 10, 
+            menu_name:'', //以下几行代码不给disablied传参的话可不写
+            menu_node:'',
+            remark:'',
+            sort: void 0,
+            pid: void 0,
+            level: void 0,
+            disabled: void 0,
+            total: 0,
+            data: [],
+            loading: false,
+        }
+    }
     export default {
         components: {
             MenuTree,SectionCategoryMenu,ImagEcropperInput,DateRange
@@ -190,7 +207,7 @@
                 // 表单相关属性
                 formLabelWidth: '50px', // 表单label的宽度
                 catArr: {
-                    'course': '课程',
+                    'course': '菜单',
                     'article': '资讯',
                     'link': '链接'
                 },
@@ -204,23 +221,13 @@
                         }
                     ]
                 },
-                section: {
-                    loading: false,
-                    data: [],
-                    course_name:'',
-                    stime :'',
-                    etime:'',
-                    page: 1,
-                    pagesize: 10,
-                    total: 0,
-                    status:-1
-                },
+                section: initSection(),
                 defaultProps: {
                     children: 'children',
                     label: 'name'
                 },
                 SecMenu:[],
-                Mult:'true',// 判断左边 课程多级栏目树状标识,
+                Mult:'true',// 判断左边 菜单多级栏目树状标识,
             }
         },
         watch: {
@@ -249,11 +256,11 @@
             }
         },
         methods: {
-            // 下线 或者上线课程 0为下线，1为上线
+            // 下线 或者上线菜单 0为下线，1为上线
             offline(index, row) {
                 let txt = row.status == 0 ? '禁用' : '启用'
                 let finalStatus = row.status == 0 ? 1 : 0
-                xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
+                xmview.showDialog(`你将要${txt}菜单 <span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
                     sysService.offlineCourse({
                         id: row.id,
                         status: finalStatus
@@ -278,14 +285,12 @@
             fetchCourseLists () {
                 this.section.loading = true
                 let params={
-                    course_name:this.section.course_name,
+                    menu_name:this.section.menu_name,
                     status:this.section.status,
                     stime:this.section.stime ,
                     etime:this.section.etime,
                     page: this.section.page,
                     pagesize: this.section.pagesize,
-                    chapter_id: this.category.currentData.id,
-                    category_id:this.$store.state.index.examCate
                 }
                 return sysService.fetchData(params).then((ret) => {
                     this.section.data = ret.data
@@ -295,7 +300,7 @@
                 })
             },
             handleDelete (index, row) {
-                xmview.showDialog(`确认要删除课程【<i style="color:red">${row.course_name}</i>】吗？`, () => {
+                xmview.showDialog(`确认要删除菜单【<i style="color:red">${row.menu_name}</i>】吗？`, () => {
                     sysService.deleteCourse(row.id).then(() => {
                         xmview.showTip('success', '删除成功')
                         this.fetchCourseLists()

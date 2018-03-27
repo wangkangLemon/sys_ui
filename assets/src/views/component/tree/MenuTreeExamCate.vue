@@ -27,7 +27,11 @@
                 selectable: true, // 是否可选中
             }
         },
-        props: ['data','Mult'],
+          props: {
+            onNodeClick: Function,
+            data: [Array,Object],
+            Mult: [String]
+        },
         created() {
             var arr = []
             console.log(this.data)
@@ -90,7 +94,10 @@
             MenuTree
         },
         methods: {
-            handleNodeClick(a){
+            handleNodeClick(a,node, store){
+                if(this.onNodeClick){ //栏目树结构调用改变type：‘update’
+                    this.onNodeClick(1, a, node, store) 
+                }
                 if (!a)return
                 if( a.level == 0 ){
                     this.$store.dispatch('savePid',a.id)

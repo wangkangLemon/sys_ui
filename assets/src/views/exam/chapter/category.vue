@@ -75,6 +75,18 @@
            
         }
     }
+     function getSelectData() {
+        return {
+            category_id: void 0, // 3- 供应商
+            chapter_type:2,
+            name: '',
+            image: null,
+            remark :'',
+            sort:void 0,
+           
+        }
+    }
+
 
     export default {
         components: {
@@ -88,7 +100,7 @@
                 SecMenu:[],
                 total: 0,
                 fetchParam: getFetchParam(),
-                selectData:{},
+                selectData:getSelectData() ,
                 activeTab : 'update',
                 category:1,
                 chaptertype:2
@@ -188,7 +200,7 @@
                     }
                     // console.log(message)
                     examService.ChapterCategoryCreate( message ).then(( ret ) => {
-                        this.selectData = getFetchParam() //通过初始化组件传值清空
+                        this.selectData = getSelectData()  //通过初始化组件传值清空
                         this.selectData.category_id	= this.$store.state.index.examCate
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据

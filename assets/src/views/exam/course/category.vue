@@ -77,6 +77,17 @@
            
         }
     }
+    function getSelectData() {
+        return {
+            category_id: void 0, // 3- 供应商
+            chapter_type:1,
+            name: '',
+            image: null,
+            remark :'',
+            sort:void 0,
+           
+        }
+    }
 
     export default {
         components: {
@@ -90,7 +101,7 @@
                 SecMenu:[],
                 total: 0,
                 fetchParam: getFetchParam(),
-                selectData:{},
+                selectData:getSelectData() ,
                 type: 'update',
                 Mult:'true',
                 category:1,
@@ -150,7 +161,6 @@
             },
             fetchData() {
                 this.fetchParam.category_id = this.$store.state.index.examCate
-                console.log(this.fetchParam)
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     
@@ -165,7 +175,6 @@
                         }, 300)
                     })
             },
- 
             //处理保存的数据
             submit( message ) {
                 // if(){
@@ -177,12 +186,13 @@
                         message.pid=0
                     } else if( this.type == 'S'){
                         message.pid=this.$store.state.index.secPid
-
                     }
                     // console.log(message)
                     examService.ChapterCategoryCreate( message ).then(( ret ) => {
-                        this.selectData = getFetchParam() //通过初始化组件传值清空
+                        this.selectData = getSelectData()  //通过初始化组件传值清空
                         this.selectData.category_id	= this.$store.state.index.examCate
+                        console.log(this)
+                        console.log(this.selectData)
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
                             this.$forceUpdate()

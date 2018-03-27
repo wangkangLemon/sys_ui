@@ -40,7 +40,7 @@
 <template>
     <article id="course-index-container">
             <section class="left-container">
-                <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="examCategory"></MenuTree>
+                <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="examCategory" :onNodeClick="treeNodeClick.bind(this,1)"></MenuTree>
             </section>
             <section class="right-container">
                 <div>
@@ -76,7 +76,15 @@
            
         }
     }
-
+    function getSelectData() {
+        return {
+            name: '',
+            image: null,
+            remark :'',
+            sort:void 0,
+           
+        }
+    }
     export default {
         components: {
             MenuTree,
@@ -89,7 +97,7 @@
                 SecMenu:[],
                 total: 0,
                 fetchParam: getFetchParam(),
-                selectData:{},
+                selectData:getSelectData() ,
                 type: 'update',
                 category:1,
                 chaptertype:'2'
@@ -100,7 +108,6 @@
             '$store.state.index.secMenu'(){
                 this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份右边card 里面vuex存储的值 
                 // this.selectData.sort=''
-                this.selectData.category_id	= 1
                 // console.log(this.$store.state.index.secMenu)
             },
             'type'(){
@@ -113,6 +120,13 @@
             this.fetchData()
         },
         methods: {
+            // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                // console.log('===========   node.data.data==========  ')
+                console.log(this.$parent)
+                this.type='update'
+                console.log(222)
+            },
             // 清空选中项
             clearSelected () {
                 this.selectable = false
@@ -158,9 +172,10 @@
                     examService.ExamCategoryCreate( lastdata ).then(( ret ) => {
                         this.selectData=null
                         setTimeout(() => {
-                            this.selectData = {}  //通过初始化组件传值清空
+                            this.selectData = getSelectData()   //通过初始化组件传值清空
                             this.fetchData() // 重新刷新数据
                             this.$forceUpdate()
+                            console.log('sx')
                         }, 300)
                     }).then(()=>{
                         this.$forceUpdate()
