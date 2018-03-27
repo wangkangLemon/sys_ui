@@ -112,7 +112,9 @@
                 this.leafChildren = leafChildren
             },
             handleNodeClick(a,node, store){
-                this.onNodeClick(1, a, node, store) 
+                if(this.onNodeClick){ //栏目树结构调用改变type：‘update’
+                    this.onNodeClick(1, a, node, store) 
+                }
                 if (!a)return
                 if( a.level == 0 ){
                     this.$store.dispatch('savePid',a.id)

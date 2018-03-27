@@ -45,13 +45,14 @@
 
         <article class="search">
             <section>
+
                 <i>管理员姓名</i>
-                <el-input v-model="keyWord" placeholder="请输入姓名"></el-input>
+                <el-input v-model="fetchParam.name" @keyup.enter.native="fetchData" placeholder="请输入姓名"></el-input>
             </section>
 
         </article>
 
-        <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
+        <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="100" prop="name" label="姓名" v-if="data">
@@ -170,7 +171,7 @@ export default {
         fetchData(val) {
             
             return sysService.fetchData(this.fetchParam).then((ret) => {
-                this.dataCache = ret.data
+                this.data = ret.data
                 console.log(ret)
                 this.total = ret._exts.total
                 this.loadingData = false
@@ -239,14 +240,6 @@ export default {
             console.log(value);
             console.log(row);
             return 
-        }
-    },
-    computed: {
-        tableData(){
-            var arr = this.dataCache.filter(v=>{
-                return v.name.indexOf(this.keyWord)>=0
-            })
-            return arr
         }
     }
 }

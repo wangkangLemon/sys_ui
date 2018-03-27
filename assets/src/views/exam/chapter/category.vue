@@ -189,7 +189,7 @@
                     // console.log(message)
                     examService.ChapterCategoryCreate( message ).then(( ret ) => {
                         this.selectData = getFetchParam() //通过初始化组件传值清空
-                        
+                        this.selectData.category_id	= this.$store.state.index.examCate
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据
                             this.$forceUpdate()

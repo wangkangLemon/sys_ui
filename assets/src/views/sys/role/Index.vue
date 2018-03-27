@@ -46,12 +46,12 @@
         <article class="search">
             <section>
                 <i>角色组名称</i>
-                <el-input v-model="keyWord" placeholder="请输入角色组名称"></el-input>
+                <el-input v-model="fetchParam.role_name" @keyup.enter.native="fetchData" placeholder="请输入角色组名称"></el-input>
             </section>
 
         </article>
 
-        <el-table class="data-table" v-loading="loadingData" :data="tableData" :fit="true" @select="selectRow" @select-all="selectRow" border>
+        <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="50" prop="id" label="ID" v-if="data">
@@ -165,7 +165,7 @@ export default {
             // console.log(2)
             return sysService.fetchData(this.fetchParam).then((ret) => {
                 // console.log(ret.data)
-                this.dataCache = ret.data
+                this.data = ret.data
                 this.total = ret._exts.total
                 this.loadingData = false
                 xmview.setContentLoading(false)     
@@ -231,14 +231,6 @@ export default {
             console.log(value);
             console.log(row);
             return 
-        }
-    },
-    computed: {
-        tableData(){
-            var arr = this.dataCache.filter(v=>{
-                return v.role_name.indexOf(this.keyWord)>=0
-            })
-            return arr
         }
     }
 }

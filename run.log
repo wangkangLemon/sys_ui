@@ -84,3 +84,4 @@ git tag 0.0.0.74; git push --tags
 ERROR:root:version updated : [0.0.0.74] ---> [0.0.0.75]
 ERROR:root:version updated : [0.0.0.75] ---> [0.0.0.76]
 ERROR:root:version updated : [0.0.0.76] ---> [0.0.0.77]
+ERROR:root:version updated : [0.0.0.77] ---> [0.0.0.78]
