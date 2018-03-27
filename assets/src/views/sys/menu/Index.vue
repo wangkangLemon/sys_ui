@@ -48,7 +48,6 @@
                 <i>菜单名称</i>
                 <el-input v-model="fetchParam.menu_name" placeholder="请输入菜单名称" @keyup.enter.native="fetchData"></el-input>
             </section>
-
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="dataCache" :fit="true" @select="selectRow" @select-all="selectRow" border>
