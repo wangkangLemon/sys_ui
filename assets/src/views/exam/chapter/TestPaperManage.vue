@@ -104,16 +104,21 @@
             <div class="content-list">
                 <div class="search">
                     <section class="fi">
-                     <i>题目</i><el-input id="input" v-model="section.description" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
-                    </section>  
-                    <!-- <section>
-                        <i>状态</i>
-                        <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
-                            <el-option label="全部" value="-1"></el-option>
-                            <el-option label="正常" value="0"></el-option>
-                            <el-option label="禁用 " value="1"></el-option>
+                     <i>题目</i><el-input id="input" v-model="section.description" placeholder="请输入标题搜索" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                    </section>
+                    <section class="fi">
+                     <i>题干</i><el-input id="input" v-model="section.title" placeholder="请输入题干搜索" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                    </section>    
+                    <section>
+                        <i>题型</i>
+                        <el-select v-model="section.qtype" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
+                            <el-option label="A1" value="A1"></el-option>
+                            <el-option label="A2" value="A2"></el-option>
+                            <el-option label="A3" value="A3"></el-option>
+                            <el-option label="A4" value="A4"></el-option>
                         </el-select>
-                    </section>    -->
+                    </section> 
+
                     <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
                         @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
                     </DateRange>
@@ -121,30 +126,14 @@
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="description" label="考题" ></el-table-column>
                     <el-table-column prop="chapter_name" label="绑定栏目" width="180">
-                        <!-- <template scope="scope">
-                            {{scope.row.category_name || '无'}}
-                        </template> -->
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
-                    <!-- <el-table-column prop="tags" label="标签" width="150"></el-table-column> -->
-                    <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
-                        <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
-                    </el-table-column> -->
-                    <!-- <el-table-column width="80" label="状态">
-                        <template scope="scope">
-                            <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
-                            <el-tag v-else type="danger">禁用 </el-tag>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="addate" label="创建时间" width="200"></el-table-column>
                     <el-table-column prop="operate" label="操作" width="135" fixed="right">
                         <template scope="scope">
                             <el-button type="text" size="small" @click="update(scope.$index, scope.row)">
                                 查看
                             </el-button>
-                            <!-- <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
-                                <i>{{ scope.row.status == 1 ? '正常 ' : '禁用 ' }}</i>
-                            </el-button> -->
                             <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">
                                 删除
                             </el-button>
@@ -213,7 +202,10 @@
                     page: 1,
                     pagesize: 10,
                     total: 0,
-                    status
+                    status,
+                    title:'',
+                    qtype:'',
+                    deleted:-1,
                 },
                 defaultProps: {
                     children: 'children',
@@ -277,18 +269,10 @@
             },
             fetchCourseLists () {
                 this.section.loading = true
-                let params={
-                    description:this.section.description,
-                    status:this.section.status,
-                    stime:this.section.stime ,
-                    etime:this.section.etime,
-                    page: this.section.page,
-                    pagesize: this.section.pagesize,
-                    chapter_id: this.category.currentData.id,
-                    category_id:this.$store.state.index.examCate,
-                    deleted:-1
-                }
-                return examService.fetchSubjectLists(params).then((ret) => {
+                this.section.chapter_id =this.category.currentData.id
+                this.section.category_id =this.$store.state.index.examCate
+
+                return examService.fetchSubjectLists(this.section).then((ret) => {
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
                     this.section.loading = false

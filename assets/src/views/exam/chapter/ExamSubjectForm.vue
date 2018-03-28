@@ -53,6 +53,7 @@
                     margin-bottom: 0;
                 }
             }
+    
         }
         .cate{
             .el-cascader{
@@ -89,7 +90,7 @@
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
                     </el-form>
-                    <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index">
+                    <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index" :rules="testRules" ref="test">
                         <el-form-item label="" v-if="!readonly">
                             <el-button icon="plus" @click='addTesting(0, index)'>判断题</el-button>
                             <el-button icon="plus" @click='addTesting(1, index)'>单选题</el-button>
@@ -100,6 +101,18 @@
                             <span v-if="item.type == 0">判断题</span>
                             <span v-else-if="item.type == 1">单选题</span>
                             <span v-else>多选题</span>
+                        </el-form-item>
+                        <el-form-item label="题型" props="qtype">
+                            <el-select v-model="item.qtype" placeholder="请选择">
+                                <el-option label="A1" value="A1"></el-option>
+                                <el-option label="A2" value="A2"></el-option>
+                                <el-option label="A3" value="A3"></el-option>
+                                <el-option label="A4" value="A4"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item v-show="item.qtype=='A3'||item.qtype=='A4'" label="题干">
+                            <el-input v-model="item.title" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 1, maxRows: 2}" placeholder="请输入内容">
+                            </el-input>
                         </el-form-item>
                         <el-form-item label="题目">
                             <el-input v-model="item.description" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
@@ -181,6 +194,9 @@ export default {
             courseTags: [],
             rules: {
                     chapter_id: { required: true, type: 'number', message: '请选择试题栏目', trigger: 'change' },
+                },
+            testRules: {
+                    qtype: { required: true, type: 'number', message: '请选择试题题型', trigger: 'change' },
                 },
             accept: '*.doc,*.docx', // 上传的文件格式
             // 考试设置部分
@@ -268,7 +284,14 @@ export default {
                 if (!valid) {
                         return false
                     }
-                console.log(this.fetchTesting)
+                     console.log(this.fetchTesting)
+                // this.fetchTesting.forEach(v => {
+                //     console.log(v.qtype)
+                //     if(!v.qtype){
+                //     xmview.showTip('error', `请先选择【 题型 】,在进行发布操作！`)
+                //     return false
+                // }
+                // });     
                 console.log(requestParam)
                 let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
                 for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {

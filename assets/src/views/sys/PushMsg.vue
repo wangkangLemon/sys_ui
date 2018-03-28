@@ -118,7 +118,7 @@
             
             <!--<el-table-column type="selection"></el-table-column> 左侧选择按钮-->
 
-            <el-table-column min-width="300" prop="title" label="标题	" v-if="data">
+            <el-table-column min-width="200" prop="title" label="标题	" v-if="data">
             </el-table-column>
             <el-table-column min-width="300" prop="content" label="内容">
             </el-table-column>
@@ -142,7 +142,7 @@
                     </el-table-column>
             <el-table-column fixed="right" width="80" label="操作">
                 <template scope="scope">
-                    <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
+                    <el-button  v-show="scope.row.status==0" @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>

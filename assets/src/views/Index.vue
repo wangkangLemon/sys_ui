@@ -287,7 +287,7 @@
 
 <script>
     import * as authService from '../services/base/authService'
-    import MenuTree from './component/tree/MenuTree.vue'
+    import MenuTree from './component/tree/IndexMenuTree.vue'
     import authUtils from '../utils/authUtils'
     import getMenutree from '../services/base/menutreeService.js'
     import examService from '../services/exam/examService'

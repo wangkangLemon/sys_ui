@@ -31,12 +31,13 @@
 <script>
     //这是 组件   
     import MenuTree from './MenuTreeSec.vue'
+   
     export default {
         name: 'MenuTree',
         data() {
             return {
                 leafChildren: null, // 叶子节点
-                hasChildCItems: [], // 有子节点的item
+                hasChildCItems: [], // 有子节点的ite
                 data1: null,
                 defaultProps: {
                     children: 'children',

@@ -1,77 +1,135 @@
-<style lang='scss' rel='stylesheet/scss'>
-    @import "../../../utils/mixins/mixins";
-    .left-menu-container {
-        .fa {
-            margin-right: 5px;
-        }
-    }
-</style>
+<!--课程栏目-->
 
-<template>
-    <el-submenu :index="data.menu_node" v-if="data && data.items != null"> <!-- 最外层 el-submenu -if  ,el-menu-item -else -->
-        <template slot="title">  <!-- 第1层 要用slot-->
-            <i class="fa" :class="data.menu_icon" v-if="data.menu_icon"></i>
-            <i class="fa fa-th-large" v-else></i> {{data.menu_name}}
-        </template>
-        <template>  <!-- 第2层  el-submenu -if  ,el-menu-item -else -->
-            <el-submenu :index="subItem.menu_node" v-for="subItem in data.items" :key="subItem.id" v-if="subItem.items.length!=0">
-                <template slot="title">
-                    <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
-                    <i class="fa fa-circle-o" v-else></i> {{subItem.menu_name}}
-                </template>
-                <template>
-                    <el-menu-item :index="subSubItem.menu_node" v-for="subSubItem in subItem.items"  :key="subSubItem.id">
-                        <!--<template slot="title">-->
-                        <i class="fa" :class="subSubItem.menu_icon" v-if="subSubItem.menu_icon"></i>
-                        <i class="fa fa-circle-o" v-else></i> {{subSubItem.menu_name}}
-                        <!--</template>-->
-                    </el-menu-item>
-                </template>
-            </el-submenu>
-            <el-menu-item :index="subItem.menu_node" v-else>
-                <i class="fa" :class="subItem.menu_icon" v-if="subItem.menu_icon"></i>
-                <i class="fa fa-circle-o" v-else></i> {{subItem.menu_name}}
-            </el-menu-item>
-        </template>
-    </el-submenu>
-    <el-menu-item :index="data.menu_node" v-else>
-        <i class="fa" :class="data.menu_icon" v-if="data.menu_icon"></i>
-        <i class="fa fa-th-large" v-else></i> {{data.menu_name}}
-    </el-menu-item>
+<template> 
+    <!--这是父组件-->
+    <el-tree v-loading="loading" :data="data" :expand-on-click-node="false" @node-click="handleNodeClick" 
+             :highlight-current="selectable">
+    </el-tree>
 </template>
 
 <script>
-    import MenuTree from './MenuTree.vue'
-    export default {
-        name: 'MenuTree',
-        data() {
-            return {
-                leafChildren: [], // 叶子节点
-                hasChildCItems: [], // 有子节点的item
-            }
-        },
-        props: ['data'],
-        created() {
-            if (this.data == null) {
-                this.data = {}
-            }
-            let hasChildCItems = []
-            let leafChildren = []
-            if (this.data.children) {
-                this.data.children.forEach((item) => {
-                    if (item.children != null) {
-                        hasChildCItems.push(item)
-                    } else {
-                        leafChildren.push(item)
-                    }
-                })
-            }
+    import menuService from '../../../services/sys/menuService'
+    import treeUtils from '../../../utils/treeUtils'
 
-            this.hasChildCItems = hasChildCItems
-            this.leafChildren = leafChildren
+    export default{
+        props: {
+            onNodeClick: Function,
+            value: Array,
+            req:Function,
+            mark:Object   // 传{type：‘menu’,name:'name'}
         },
-        components: {
-            MenuTree
-        }
+        data () {
+            return {
+                data: this.value,
+                loading: false,
+                selectable: true, // 是否可选中
+                type:this.type,
+            }
+        },
+        created () {
+             //第一步：处理数据
+                function func(arr) {
+                    arr.forEach(v=>{
+                        if(v.pid != 0){
+                            let t = find(arr,'id',v.pid);
+                            t&&(t.children?t.children.push(v):t.children=[v])
+                        }
+                    });
+                    return arr.filter(v=>{
+                        return v.pid == 0;
+                    })
+                }
+                function find(arr,key,value){
+                    for(let i =0;i<arr.length;i++){
+                        if(arr[i][key]==value){
+                        return arr[i]
+                        }
+                    }
+                    return false;
+                }
+               
+            // 第二步： 替换键值XX_name->label,id>value
+            function transfor(arr,name){
+                arr.forEach(v=>{
+                    v['label']=v[name]
+                    v['value']=v['id']
+                })
+            
+               return arr
+            }
+            this.req({id : 'tree', type :'menu', filter : true , pid :-1 , level:-1, pagesize:-1}).then(ret=>{ 
+                let data=transfor(ret.data,this.mark.name)
+                this.data=func(data)
+                // this.loading = false
+                // xmview.setContentLoading(false)
+            })
+        },
+        methods: {
+            handleNodeClick (data, node, store) { //点击
+                // console.log(node.data)
+                // if (node.data.ended) return
+                    //     let currItem = treeUtils.findItem(this.data, node.data, 'value')   //拿到当前项 
+                    //     var arr = []
+                    //     this.getData({
+                    //         pid: data.data.id, 
+                    //         level:-1,
+                    //     }).then((ret) => {
+                    //         var arr = ret.map(v=>{
+                    //             v.label = v.name
+                    //             v.value = v.id
+                    //             v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组
+                    //             return v
+                    //         })
+                    //         currItem.children = arr
+                    //         this.loading = false
+                    //         xmview.setContentLoading(false)
+                    //    })
+
+                 this.$emit('onNodeClick', {data, node, store})
+                 if(this.onNodeClick) this.onNodeClick(1, data, node, store) 
+
+                //  根节点无法被选中 
+                if (data.value == 0) return
+                this.selectable = true
+            },
+            // 清空选中项
+            clearSelected () {
+                this.selectable = false
+            },
+
+            removeItem (item, parent) {
+                // 父节点没有children 说明当前是根节点
+                if (!parent.data.children) {
+                    this.data = this.data.filter((curr) => {
+                        return curr.value != item.value
+                    })
+                } else {
+                    parent.data.children = parent.data.children.filter((curr) => {
+                        return curr.value != item.value
+                    })
+
+                    if (parent.data.children.length < 1) parent.data.children = null
+                }
+                // 重新给父容器赋值  不然数据不同步
+                this.$emit('input', this.data)
+            },
+
+
+
+            setCurrVal (val) { //给输入框设置值
+                if (val === this.data) return
+                this.data = val
+                this.$emit('input', val)
+            },
+ 
+        },
+    }
+
+      function findItem(arr,key,value){
+        arr.forEach(item=>{
+            if(item[key] == value ){
+                return item
+            }
+        })
     }
 </script>

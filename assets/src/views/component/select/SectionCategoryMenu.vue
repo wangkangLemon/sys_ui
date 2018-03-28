@@ -110,30 +110,30 @@
                                 }
                             })
                             ret.forEach((v,i) => {
-                                console.log(v.level+'-------'+ v.id+'-------'+ v.pid+'--------'+i)
+                                // console.log(v.level+'-------'+ v.id+'-------'+ v.pid+'--------'+i)
                                 if (v.level == 1) {
                                     // this.options.forEach(item=>{ //一级
-                                    //      if (v.pid == item.id){
-                                    //          obj[v.pid].children.push({
-                                    //             data: v,
-                                    //             label: v.name,
-                                    //             value: v.id
-                                    //          })
-                                    //      }
-                                    // })
-                                    // console.log( this.options)
+                                        //      if (v.pid == item.id){
+                                        //          obj[v.pid].children.push({
+                                        //             data: v,
+                                        //             label: v.name,
+                                        //             value: v.id
+                                        //          })
+                                        //      }
+                                        // })
+                                        // console.log( this.options)
                                     
-                                        obj[v.pid].children?   // id:51 缺失---2018-3-25
-                                        obj[v.pid].children.push({
-                                            data: v,
-                                            label: v.name,
-                                            value: v.id
-                                        }):
-                                        obj[v.pid].children = [{
-                                            data: v,
-                                            label: v.name,
-                                            value: v.id
-                                        }]
+                                    obj[v.pid].children?   // id:51 缺失---2018-3-25
+                                    obj[v.pid].children.push({
+                                        data: v,
+                                        label: v.name,
+                                        value: v.id
+                                    }):
+                                    obj[v.pid].children = [{
+                                        data: v,
+                                        label: v.name,
+                                        value: v.id
+                                    }]
                                 }
                                 console.log(1)
                             })

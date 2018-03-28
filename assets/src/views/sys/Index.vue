@@ -45,7 +45,6 @@
 
         <article class="search">
             <section>
-
                 <i>管理员姓名</i>
                 <el-input v-model="fetchParam.name" @keyup.enter.native="fetchData" placeholder="请输入姓名"></el-input>
             </section>

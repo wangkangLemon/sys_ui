@@ -38,7 +38,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="所属栏目" prop="pid">
-                <MultTreeCategory  :placeholder="fetchParam.parent_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.pid" :reqFun="reqFun"></MultTreeCategory>
+                <MultCategory  :placeholder="fetchParam.parent_name" :autoClear="true" :mark = this.mark :showNotCat="false" v-model="fetchParam.pid" :req="req"></MultCategory>
             </el-form-item>
             <!--<el-form-item label="父级菜单" prop="pid">
                 <MenuFatherCategory type="course" :placeholder="fetchParam.menu_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.pid"></MenuFatherCategory>
@@ -64,10 +64,10 @@
 <script>
     import menuService from '../../../services/sys/menuService.js'
     import config from '../../../utils/config'
-    import MultTreeCategory from '../../component/select/MultCategory.vue'
+    import MultCategory from '../../component/select/MultCategory.vue'
     export default {
         name: 'sys-form',
-        components: { MultTreeCategory },
+        components: { MultCategory },
         data() {
             return {
                 imgUrl: '',
@@ -93,6 +93,10 @@
                     level: [
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
+                },
+                mark:{
+                    type:'menu',
+                    name:'menu_name'
                 }
             }
         },
@@ -108,9 +112,9 @@
         },
         methods: {
             //获取父级菜下拉列表
-            reqFun(param){
+            req(param){
                     return menuService.fetchData({
-                        pagesize:-1,pid:0,level:-1
+                        pagesize:-1,pid:-1,level:-1
                     })
                 },
             getDropval(){

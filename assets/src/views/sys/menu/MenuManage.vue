@@ -90,16 +90,16 @@
         <section class="left-content">
             <div class="content-title">
                 所有分类
-                <router-link tag="el-button" :to="{name: 'exam-course-category'}">管理分类</router-link>
+                <router-link tag="el-button" :to="{name: ''}">管理分类</router-link>
             </div>
             <div class="classify-tree">
-                 <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="chapterCategory" :Mult='Mult'></MenuTree>
+                 <MenuTree v-model="SecMenu" :req="req" ref="chapterCategory" :mark = this.mark :onNodeClick="treeNodeClick.bind(this,1)"></MenuTree>
             </div>
         </section>
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>菜单列表
-                <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-course-add'})">添加菜单</el-button>
+                 <el-button type="primary" icon="plus" @click="$router.push({ name:'menu-add', params:{sys_type:'add'}})">添加菜单</el-button>
             </div>
             <div class="content-list">
                 <div class="search">
@@ -109,42 +109,24 @@
                     <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
                         @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
                     </DateRange>
-                    <section>
-                        <i>状态</i>
-                        <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
-                            <el-option label="全部" :value="-1"></el-option>
-                            <el-option label="正常" value="0"></el-option>
-                            <el-option label="禁用 " value="1"></el-option>
-                        </el-select>
-                    </section> 
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="menu_name" label="菜单名称" min-width="230"></el-table-column>
-                    <el-table-column prop="parent_name" label="绑定栏目" width="190">
+                    <el-table-column prop="parent_name" label="绑定栏目" width="100">
                         <!-- <template scope="scope">
                             {{scope.row.category_name || '无'}}
                         </template> -->
                     </el-table-column>
-                    <el-table-column prop="menu_node" label="菜单标识" width="100"></el-table-column>
-                    
+                    <el-table-column prop="menu_node" label="菜单标识" width="200"></el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
                     <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
                         <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                     </el-table-column> -->
-                    <el-table-column width="80" label="状态">
-                        <template scope="scope">
-                            <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
-                            <el-tag v-else type="danger">禁用 </el-tag>
-                        </template>
-                    </el-table-column>
                     <el-table-column prop="addate" label="创建时间" width="180"></el-table-column>
                     <el-table-column prop="operate" label="操作" width="150" fixed="right">
                         <template scope="scope">
-                            <el-button type="text" size="small" @click="update(scope.$index, scope.row)">
-                                编辑
-                            </el-button>
-                            <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
-                                <i>{{ scope.row.status == 1 ? '正常 ' : '禁用 ' }}</i>
+                            <el-button @click="$router.push({name: 'menu-edit', params: {roleInfo: scope.row, sys_id: scope.row.id, sys_type:'edit'}})" type="text" size="small">编辑
+                                <!--a-->
                             </el-button>
                             <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">
                                 删除
@@ -162,16 +144,13 @@
                             :total="section.total">
                     </el-pagination>
                 </div>
-
-                 <!-- {{examCateid}} -->
             </div>
         </section>
     </article>
 </template>
 <script>
-    import sysService from '../../../services/sys/menuService'
-    import MenuTree from '../../component/tree/MenuTreeExam.vue'
-    import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
+    import menuService from '../../../services/sys/menuService'
+    import MenuTree from '../../component/tree/MenuTree.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     function initSection() {
@@ -193,7 +172,7 @@
     }
     export default {
         components: {
-            MenuTree,SectionCategoryMenu,ImagEcropperInput,DateRange
+            MenuTree,ImagEcropperInput,DateRange
         },
         data () {
             return {
@@ -224,10 +203,14 @@
                 section: initSection(),
                 defaultProps: {
                     children: 'children',
-                    label: 'name'
+                    label: 'menu_name'
                 },
                 SecMenu:[],
                 Mult:'true',// 判断左边 菜单多级栏目树状标识,
+                mark:{
+                    type:'menu',
+                    name:'menu_name'
+                }
             }
         },
         watch: {
@@ -250,34 +233,39 @@
             this.fetchData()
             this.fetchCourseLists()
         },
-        computed: {
-            examCateid( ){
-                return this.$store.state.index.examCate //在Vue 工具里检测examCate
-            }
-        },
         methods: {
-            // 下线 或者上线菜单 0为下线，1为上线
-            offline(index, row) {
-                let txt = row.status == 0 ? '禁用' : '启用'
-                let finalStatus = row.status == 0 ? 1 : 0
-                xmview.showDialog(`你将要${txt}菜单 <span style="color:red">${row.menu_name}</span> 确认吗?`, () => {
-                    sysService.offlineCourse({
-                        id: row.id,
-                        status: finalStatus
-                    }).then((ret) => {
-                        row.status = finalStatus
-                    })
+            req(param){
+                return menuService.fetchData({
+                    pid: -1,
+                    level: -1,
+                    pagesize:-1,
                 })
+            },
+            // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                // console.log('===========   node.data.data==========  ')
+                console.log(type, data, node, store)
+                
+                if (type == 1) { 
+                    // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
+                    this.nodeParentSelected = node.parent// 记录父节点
+                    this.nodeSelected = node // 记录当前节点
+                    // this.$refs.uploadImg.clearFiles()
+                    this.fetchParam = Object.assign({},node.data)  //解决左右数据
+                    // this.activeTab = 'edit'
+                } else if (type == 2) {
+                    this.moveToNode = node
+                }
             },
             fetchData() {//获取左边栏目数据
                 let param={
-                        category_id: this.examCateid , // 3- 供应商
-                        page: 1,
-                        chapter_type:1,
+                        pid:-1, // 3- 供应商
+                        page:1,
+                        level: -1,
                         pagesize: -1,
                     }
-                sysService.fetchData( param).then((ret) => {
-                        this.SecMenu=ret
+                menuService.fetchData( param).then((ret) => {
+                        this.SecMenu=ret.data
                         // console.log('this.SecMenu+++++++',param,this.SecMenu)
                         xmview.setContentLoading(false)     
                     })
@@ -292,24 +280,22 @@
                     page: this.section.page,
                     pagesize: this.section.pagesize,
                 }
-                return sysService.fetchData(params).then((ret) => {
+                return menuService.fetchData(params).then((ret) => {
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
-                    console.log(ret._exts.total)
                     this.section.loading = false
                 })
             },
             handleDelete (index, row) {
-                xmview.showDialog(`确认要删除菜单【<i style="color:red">${row.menu_name}</i>】吗？`, () => {
-                    sysService.deleteCourse(row.id).then(() => {
-                        xmview.showTip('success', '删除成功')
-                        this.fetchCourseLists()
-                    }).catch((ret) => {
-                        xmview.showTip('error', ret.message)
-                    })
-                })
+                // xmview.showDialog(`确认要删除菜单【<i style="color:red">${row.menu_name}</i>】吗？`, () => {
+                //     menuService.deleteCourse(row.id).then(() => {
+                //         xmview.showTip('success', '删除成功')
+                //         this.fetchCourseLists()
+                //     }).catch((ret) => {
+                //         xmview.showTip('error', ret.message)
+                //     })
+                // })
             },
-           
             update (index, row) {
                 this.$router.push({
                     name:'exam-course-edit',

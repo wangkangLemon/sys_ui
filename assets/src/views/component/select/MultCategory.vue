@@ -15,7 +15,7 @@
 
 <script>
     import treeUtils from '../../../utils/treeUtils'
-    import courseService from '../../../services/course/courseService.js'
+    import menuService from '../../../services/sys/menuService'
     export default {
         props: {
             value: [String, Number, Array],
@@ -36,7 +36,8 @@
                 type: String,
                 default: ''
             },
-            reqFun:Function, //二级
+            req:Function,
+            mark:Object   // 传{type：‘menu’,name:'name'}
         },
         data() {
             return {
@@ -57,6 +58,36 @@
             }
         },
         mounted() {
+             //第一步：处理数据
+                function func(arr) {
+                    arr.forEach(v=>{
+                        if(v.pid != 0){
+                            let t = find(arr,'id',v.pid);
+                            t&&(t.children?t.children.push(v):t.children=[v])
+                        }
+                    });
+                    return arr.filter(v=>{
+                        return v.pid == 0;
+                    })
+                }
+                function find(arr,key,value){
+                    for(let i =0;i<arr.length;i++){
+                        if(arr[i][key]==value){
+                        return arr[i]
+                        }
+                    }
+                    return false;
+                }
+               
+            // 第二步： 替换键值XX_name->label,id>value
+            function transfor(arr,name){
+                arr.forEach(v=>{
+                    v['label']=v[name]
+                    v['value']=v['id']
+                })
+            
+               return arr
+            }
             this.$refs.container.$el.addEventListener('click', () => {
                 if (this.loading || this.options.length > 0) return
                 if (this.lastData) {
@@ -66,22 +97,24 @@
 
                     this.loading = true
                     //获取数据的方法
-                    this.reqFun({
+                    this.req({
                         pid: 0,
                         level: -1,
                         pagesize:-1
                     }).then((ret) => {
-                        console.log(ret.data)
-                        // this.options = treeUtils.dataToTree(ret.data, id, pid) //拿到当前项
                         console.log(this.options)
-                        ret.data.forEach(v => {
-                            this.options.push({
-                                data: v,
-                                label: v.menu_name,
-                                value: v.id,
-                                children: v.ended ? null : [] //是否最终菜单？
-                            })
-                        })
+                         let data=transfor(ret.data,this.mark.name)
+                        this.options=func(data)
+                        
+
+                        // ret.data.forEach(v => {
+                        //     this.options.push({
+                        //         data: v,
+                        //         label: v.menu_name,
+                        //         value: v.id,
+                        //         children: v.ended ? null : [] //是否最终菜单？
+                        //     })
+                        // })
                         this.loading = false
                         xmview.setContentLoading(false)
                     })
@@ -106,11 +139,10 @@
                 if (val.length < 1) return
                 // 递归找到该项
                 // console.log(val)
-                // let currItem = treeUtils.findItem(this.options, val, 'value') //拿到当前项 
                 let currItem = treeUtils.dataToTree(this.options, val, 'value') //拿到当前项 
 
                 var arr = []
-                this.reqFun({
+                this.req({
                     pid: val[val.length - 1],
                     level: -1,
                     pagesize:-1
