@@ -103,11 +103,11 @@
             </div>
             <div class="content-list">
                 <div class="search">
+                    <!-- <section class="fi"> -->
+                     <!-- <i>题目</i><el-input id="input" v-model="section.description" placeholder="请输入标题搜索" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                    </section> -->
                     <section class="fi">
-                     <i>题目</i><el-input id="input" v-model="section.description" placeholder="请输入标题搜索" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
-                    </section>
-                    <section class="fi">
-                     <i>题干</i><el-input id="input" v-model="section.title" placeholder="请输入题干搜索" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                     <i>题目</i><el-input id="input" v-model="section.title" placeholder="请输入题目或题干关键字" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>    
                     <section>
                         <i>题型</i>
