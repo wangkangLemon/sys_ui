@@ -32,12 +32,12 @@
             <el-form-item label="菜单标识" prop="menu_node">
                 <el-input v-model="fetchParam.menu_node"></el-input>
             </el-form-item>
-            <el-form-item label="父级名称" prop="pid" :fetch-suggestions="querySearch">
+            <!-- <el-form-item label="父级名称" prop="pid" :fetch-suggestions="querySearch">
                 <el-select v-model="fetchParam.pid" placeholder="请输入父级名称">
                     <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.menu_name" :value="item.id"></el-option>
                 </el-select>
-            </el-form-item>
-            <el-form-item label="所属栏目" prop="pid">
+            </el-form-item> -->
+            <el-form-item label="父级栏目" prop="pid">
                 <MultCategory  :placeholder="fetchParam.parent_name" :autoClear="true" :mark = this.mark :showNotCat="false" v-model="fetchParam.pid" :req="req"></MultCategory>
             </el-form-item>
             <!--<el-form-item label="父级菜单" prop="pid">
@@ -47,7 +47,7 @@
                 <el-input v-model.password="fetchParam.level" type="number"></el-input>
             </el-form-item>-->
             <el-form-item label="排序字段" prop="sort">
-                <el-input v-model="fetchParam.sort"></el-input>
+                <el-input type='number' v-model="fetchParam.sort"></el-input>
             </el-form-item>
             <el-form-item label="备注" prop="remark">
                 <el-input v-model="fetchParam.remark"></el-input>
@@ -87,16 +87,17 @@
                     menu_node: [
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
-                    sort: [
-                        {required: true, message: '必须输入', trigger: 'blur'}
-                    ],
+                    // sort: [
+                    //     {required: true, type:'number',message: '必须输入', trigger: 'blur'}
+                    // ],
                     level: [
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
                 },
                 mark:{
                     type:'menu',
-                    name:'menu_name'
+                    name:'menu_name',
+                    changeOnSelect:true
                 }
             }
         },
@@ -104,11 +105,17 @@
             xmview.setContentLoading(false);
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
                     menuService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
-                        this.fetchParam = ret
+                        Number(ret.data.sort)
+                        this.fetchParam = ret.data
                     })
                 }    
             this.loadingData=false;
             this.getDropval()
+        },
+        watch:{
+            'fetchParam.sort'(){
+                console.log(this.fetchParam.sort,typeof(this.fetchParam.sort))
+            }
         },
         methods: {
             //获取父级菜下拉列表

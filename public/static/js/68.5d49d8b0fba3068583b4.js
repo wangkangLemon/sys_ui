@@ -1,2 +1,0 @@
-webpackJsonp([68],{110:function(e,r,t){var s=t(5)(t(756),t(979),null,null);e.exports=s.exports},756:function(e,r,t){"use strict";Object.defineProperty(r,"__esModule",{value:!0}),r.default={}},979:function(e,r){e.exports={render:function(){var e=this,r=e.$createElement,t=e._self._c||r;return t("keep-alive",{attrs:{exclude:"course-form,course-video-add,course-manage-addcourse,course-manage-experts-edit,course-manage-experts-hospital-edit"}},[t("router-view")],1)},staticRenderFns:[]}}});
-//# sourceMappingURL=68.5d49d8b0fba3068583b4.js.map

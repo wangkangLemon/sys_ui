@@ -20,7 +20,7 @@ class sysService {
         let url = `${urlPre}/view/${id}`         //传递的地址的id
         return api.get(url,{},false).then(ret => {
             if (ret.code == 0) {
-                return ret.data
+                return ret
             } else {
                 return Promise.reject(ret)
             }

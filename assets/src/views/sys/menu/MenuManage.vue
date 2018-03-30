@@ -57,7 +57,7 @@
                         }
                     }
                     .fi{
-                        width:30%;
+                        width:55%;
                     }
                 }
                 .tag {
@@ -90,7 +90,7 @@
         <section class="left-content">
             <div class="content-title">
                 所有分类
-                <router-link tag="el-button" :to="{name: ''}">管理分类</router-link>
+                <!-- <router-link tag="el-button" :to="{name: ''}">管理分类</router-link> -->
             </div>
             <div class="classify-tree">
                  <MenuTree v-model="SecMenu" :req="req" ref="chapterCategory" :mark = this.mark :onNodeClick="treeNodeClick.bind(this,1)"></MenuTree>
@@ -104,11 +104,11 @@
             <div class="content-list">
                 <div class="search">
                     <section class="fi">
-                     <i>标题</i><el-input id="input" v-model="section.menu_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                     <i>菜单名称</i><el-input id="input" v-model="section.menu_name" placeholder="请输入菜单名称" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
-                    <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
+                    <!-- <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
                         @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
-                    </DateRange>
+                    </DateRange> -->
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="menu_name" label="菜单名称" min-width="230"></el-table-column>
@@ -153,6 +153,7 @@
     import MenuTree from '../../component/tree/MenuTree.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
+import examService from '../../../services/exam/examService';
     function initSection() {
         return {
             status: void 0, //  1-禁用 0-正常
@@ -162,7 +163,7 @@
             menu_node:'',
             remark:'',
             sort: void 0,
-            pid: void 0,
+            pid: -1,
             level: void 0,
             disabled: void 0,
             total: 0,
@@ -235,7 +236,7 @@
         },
         methods: {
             req(param){
-                return menuService.fetchData({
+                return menuService.fetchData({ //传递方法
                     pid: -1,
                     level: -1,
                     pagesize:-1,
@@ -245,7 +246,9 @@
             treeNodeClick (type, data, node, store) {
                 // console.log('===========   node.data.data==========  ')
                 console.log(type, data, node, store)
-                
+                this.section.pid=node.id
+                this.fetchCourseLists()
+
                 if (type == 1) { 
                     // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
                     this.nodeParentSelected = node.parent// 记录父节点
@@ -272,15 +275,15 @@
             },
             fetchCourseLists () {
                 this.section.loading = true
-                let params={
-                    menu_name:this.section.menu_name,
-                    status:this.section.status,
-                    stime:this.section.stime ,
-                    etime:this.section.etime,
-                    page: this.section.page,
-                    pagesize: this.section.pagesize,
-                }
-                return menuService.fetchData(params).then((ret) => {
+                // let params={
+                //     menu_name:this.section.menu_name,
+                //     status:this.section.status,
+                //     stime:this.section.stime ,
+                //     etime:this.section.etime,
+                //     page: this.section.page,
+                //     pagesize: this.section.pagesize,
+                // }
+                return menuService.fetchData(this.section).then((ret) => {
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
                     this.section.loading = false

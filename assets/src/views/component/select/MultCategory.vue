@@ -8,7 +8,7 @@
     }
 </style>
 <template>
-    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" 
+    <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" :change-on-select="changeOnSelect"
         :placeholder="placeholder" @active-item-change="handleItemChange" :clearable="true" @change="setCurrVal">
     </el-cascader>
 </template>
@@ -46,6 +46,7 @@
                 currVal: this.value,
                 govid: void 0, // 企业id
                 lastData: void 0,
+                changeOnSelect:this.mark.changeOnSelect?this.mark.changeOnSelect:false,
             }
         },
         watch: {
@@ -139,7 +140,7 @@
                 if (val.length < 1) return
                 // 递归找到该项
                 // console.log(val)
-                let currItem = treeUtils.dataToTree(this.options, val, 'value') //拿到当前项 
+                // let currItem = treeUtils.dataToTree(this.options, val, 'value') //拿到当前项 
 
                 var arr = []
                 this.req({

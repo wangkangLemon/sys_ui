@@ -116,25 +116,12 @@ export default {
             }
         },
          //菜单管理
-        {
-            path: 'menu',
-            name: 'menu-index',
-            component: resolve => {
-                require.ensure([], () => {
-                    resolve(require('../views/sys/menu/Index.vue'))
-                })
-            },
-            meta: {
-                title: '菜单管理',
-                noback: true
-            }
-        },
         // {
         //     path: 'menu',
         //     name: 'menu-index',
         //     component: resolve => {
         //         require.ensure([], () => {
-        //             resolve(require('../views/sys/menu/MenuManage.vue'))
+        //             resolve(require('../views/sys/menu/Index.vue'))
         //         })
         //     },
         //     meta: {
@@ -142,6 +129,19 @@ export default {
         //         noback: true
         //     }
         // },
+        {
+            path: 'menu',
+            name: 'menu-index',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/sys/menu/MenuManage.vue'))
+                })
+            },
+            meta: {
+                title: '菜单管理',
+                noback: true
+            }
+        },
         {
             path: 'menu/add',
             name: 'menu-add',
