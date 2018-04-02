@@ -108,6 +108,7 @@ export default {
             },
             meta: {
                 title: '栏目管理-培训',
+                noback: true
             }
         },
         {

@@ -36,20 +36,32 @@
             vertical-align: top;
             background: #fff;
             padding-bottom: 20px;
-
+            section{
+                margin-left: 10px;
+                margin-bottom: 14px;
+                display: inline-block;
+                margin-right: 10px;
+                .el-select .el-input .el-input__icon{
+                    transform: translateY(-50%) translateX(-50%)rotateZ(180deg);
+                }
+            }
+            .content-title{
+                position: relative;
+                section{
+                    opacity:0.1;
+                    height:0;
+                    width:107px;
+                    position: absolute;
+                    top:10px;
+                    right:10px;
+                }
+            }
             .content-list {
                 padding: 20px;
                 .search{
                     width:100%;
                     margin-bottom:10px;
                     section{
-                        margin-left: 10px;
-                        margin-bottom: 14px;
-                        display: inline-block;
-                        margin-right: 10px;
-                        .el-select .el-input .el-input__icon{
-                            transform: translateY(-50%) translateX(-50%)rotateZ(180deg);
-                        }
                         #input{
                             width: 84%;
                             display: inline-block;
@@ -99,7 +111,17 @@
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>考题列表
-                 <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-subject-add'})">添加考题</el-button>
+                 <!-- <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-subject-add'})">添加考题</el-button> -->
+                 <el-button type="primary" icon="plus" >添加考题</el-button>
+                 <section>
+                      <el-select v-model="section.qtype" placeholder="未选择" @change="$router.push({ name:'exam-subject-add',params:{type:section.qtype}})" >
+                            <el-option label="A1" value="A1"></el-option>
+                            <el-option label="A2" value="A2"></el-option>
+                            <el-option label="A3" value="A3"></el-option>
+                            <el-option label="A4" value="A4"></el-option>
+                    </el-select>
+                </section>   
+                
             </div>
             <div class="content-list">
                 <div class="search">
@@ -118,7 +140,6 @@
                             <el-option label="A4" value="A4"></el-option>
                         </el-select>
                     </section> 
-
                     <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
                         @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
                     </DateRange>
@@ -241,6 +262,9 @@
             }
         },
         methods: {
+            dropDown(){
+                console.log(this)
+            },
             // 下线 或者上线课程 0为下线，1为上线
             offline(index, row) {
                 let txt = row.status == 0 ? '禁用' : '启用'

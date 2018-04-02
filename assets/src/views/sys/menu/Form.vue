@@ -47,7 +47,7 @@
                 <el-input v-model.password="fetchParam.level" type="number"></el-input>
             </el-form-item>-->
             <el-form-item label="排序字段" prop="sort">
-                <el-input type='number' v-model="fetchParam.sort"></el-input>
+                <el-input type='number' v-model.number="fetchParam.sort"></el-input>
             </el-form-item>
             <el-form-item label="备注" prop="remark">
                 <el-input v-model="fetchParam.remark"></el-input>
@@ -87,9 +87,9 @@
                     menu_node: [
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
-                    // sort: [
-                    //     {required: true, type:'number',message: '必须输入', trigger: 'blur'}
-                    // ],
+                    sort: [
+                        {required: true, type:'number',message: '必须输入', trigger: 'blur'}
+                    ],
                     level: [
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
@@ -171,7 +171,7 @@
             menu_name: '',
             menu_node:'',
             remark:'',
-            sort: void 0,
+            sort: 0,
             pid: void 0,
             level: 0,
             parent_name:'',

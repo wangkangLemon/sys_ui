@@ -15,11 +15,11 @@ export default {
             name: 'sys-index',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/sys/Index.vue'))
+                    resolve(require('../views/sys/admin/Index.vue'))
                 })
             },
             meta: {
-                title: '系统',
+                title: '管理员',
                 noback: true
             }
         },
@@ -28,11 +28,11 @@ export default {
             name: 'sys-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/sys/Form.vue'))
+                    resolve(require('../views/sys/admin/Form.vue'))
                 })
             },
             meta: {
-                title: '系统添加',
+                title: '管理员添加',
                 noback: false
             }
         },
@@ -41,11 +41,11 @@ export default {
             name: 'sys-edit',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/sys/Form.vue'))
+                    resolve(require('../views/sys/admin/Form.vue'))
                 })
             },
             meta: {
-                title: '系统更新',
+                title: '管理员更新',
                 noback: false
             }
         },
@@ -59,7 +59,7 @@ export default {
                 })
             },
             meta: {
-                title: '系统',
+                title: '角色管理',
                 noback: true
             }
         },

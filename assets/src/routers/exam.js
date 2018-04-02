@@ -8,7 +8,20 @@ export default {
         })
     },
     children: [
- 
+        //总栏目
+        {
+            path: '/manage-exam-category',
+            name: 'exam-category',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/course/ExamCategory.vue'))
+                })
+            },
+            meta: {
+                title: '栏目管理',
+                noback: true
+            }
+        },
         //课程学习
         {
             path: 'course/category', 
@@ -115,19 +128,60 @@ export default {
                 noback: false
             }
         },
-        //总栏目
+        //历年真题栏目
         {
-            path: 'category',
-            name: 'exam-category',
+            path: 'question/category',
+            name: 'exam-question-category',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/exam/course/ExamCategory.vue'))
+                    resolve(require('../views/exam/question/category.vue'))
                 })
             },
             meta: {
-                title: '栏目管理',
+                title: '栏目管理-章节',
                 noback: true
             }
         },
+        //历年真题管理页面
+        {
+            path: 'question/manage',
+            name: 'exam-question-manage',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/question/TestPaperManage.vue'))
+                })
+            },
+            meta: {
+                title: ' 试题管理',
+                noback: true
+            }
+        },
+        {//历年真题添加修改考题表单
+            path: 'subject/add',
+            name: 'exam-subject-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/question/ExamSubjectForm.vue'))
+                })
+            },
+            meta: {
+                title: '试题添加',
+                noback: false
+            }
+        },
+        {
+            path: 'subject/edit/:id',
+            name: 'exam-subject-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/question/ExamSubjectForm.vue'))
+                })
+            },
+            meta: {
+                title: '试题更新',
+                noback: false
+            }
+        },
+     
     ]
 }

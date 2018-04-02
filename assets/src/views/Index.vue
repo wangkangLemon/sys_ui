@@ -337,6 +337,7 @@
             }
         },
         created () {
+            console.log(this.$route)
              getMenutree().then(ret=>{
                 this.$store.dispatch('setIndexNavMenu',{menu:ret});
              })

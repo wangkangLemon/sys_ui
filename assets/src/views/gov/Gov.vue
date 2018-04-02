@@ -141,7 +141,7 @@
         },
         data() {
             return {
-                isInit: false,
+                // isInit: false,
                 govType: ['', '系统', '政府'],
                 types: [ // 部门类型
                     {
@@ -244,10 +244,10 @@
                 this.getData()
             },
             handleCurrentChange(val) {
-                if (!this.isInit) {
-                    this.isInit = true
-                    return
-                }
+                // if (!this.isInit) {
+                //     this.isInit = true
+                //     return
+                // }
                 this.currentPage = val
                 this.getData()
             },

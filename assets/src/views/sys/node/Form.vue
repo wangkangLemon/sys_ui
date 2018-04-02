@@ -86,13 +86,13 @@
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
                     sort: [
-                        {required: true, message: '必须输入', trigger: 'blur'}
+                        {required: true,type:'number',message: '必须输入', trigger: 'blur'}
                     ],
                     pid: [
                         {required: true, type:'number',message: '必须输入', trigger: 'blur'}
                     ],
                     level: [
-                        {required: true, message: '必须输入', trigger: 'blur'}
+                        {required: true,type:'number', message: '必须输入', trigger: 'blur'}
                     ],
                 }
             }
@@ -101,7 +101,10 @@
             xmview.setContentLoading(false);
             console.log('this.$route.params.sys_id='+this.$route.params.sys_id )
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
+                    if(!this.$route.params.sys_type){xmview.setContentTile('查看节点')}
                     nodeService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
+                        // console.log('菜单层级',typeof(ret.level),ret.level)
+                        // console.log('排序字段',typeof(ret.sort),ret.sort)
                         this.fetchParam = ret
                         console.log(ret)
                         // this.fetchParam.role_id = ret.course.role_id

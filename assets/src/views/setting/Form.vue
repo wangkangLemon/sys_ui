@@ -104,6 +104,7 @@
             xmview.setContentLoading(false);
             console.log('this.$route.params.sys_id='+this.$route.params.sys_id )
                 if (this.$route.params.sys_id != undefined) {    //路由id传递
+                    if(!this.$route.params.sys_type){xmview.setContentTile('查看设置')}
                     setService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
                         console.log(ret)

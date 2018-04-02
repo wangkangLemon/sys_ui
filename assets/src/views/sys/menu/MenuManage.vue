@@ -290,14 +290,16 @@ import examService from '../../../services/exam/examService';
                 })
             },
             handleDelete (index, row) {
-                // xmview.showDialog(`确认要删除菜单【<i style="color:red">${row.menu_name}</i>】吗？`, () => {
-                //     menuService.deleteCourse(row.id).then(() => {
-                //         xmview.showTip('success', '删除成功')
-                //         this.fetchCourseLists()
-                //     }).catch((ret) => {
-                //         xmview.showTip('error', ret.message)
-                //     })
-                // })
+                xmview.showDialog(`确认要删除菜单【<i style="color:red">${row.menu_name}</i>】吗？`, () => {
+                    menuService.delete(row.id).then(() => {
+                        xmview.showTip('success', '删除成功')
+                        this.section.data.splice(index, 1)//删除选中项
+                        row.deleted = 1
+                        // this.fetchCourseLists()
+                    }).catch((ret) => {
+                        xmview.showTip('error', ret.message)
+                    })
+                })
             },
             update (index, row) {
                 this.$router.push({

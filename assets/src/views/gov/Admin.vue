@@ -29,7 +29,7 @@
                 <img :src="{url:clerkDetail.avatar, sex: clerkDetail.sex} | defaultAvatar" />
             </div>
             <div class="info">
-                <h2>{{clerkDetail.name}}({{clerkDetail.company}})</h2>
+                <h2>{{clerkDetail.name}}({{clerkDetail.city_name}})</h2>
                 <p><i class="title">所属部门：</i> <span class="value">{{clerkDetail.gov_name}}</span></p>
                 <p><i class="title">手机：</i> <span class="value">{{clerkDetail.mobile}}</span></p>
                 <p><i class="title">昵称：</i> <span class="value">{{clerkDetail.nickname}}</span></p>
@@ -342,9 +342,7 @@
                     if(ret.length== 0){
                         return
                     }
-                        this.total =ret._exts.total
-                    
-                    
+                    this.total =ret._exts.total
                 })
             },
             // 查看店员详情

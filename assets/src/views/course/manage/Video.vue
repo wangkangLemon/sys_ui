@@ -134,8 +134,8 @@
         </div>-->
 
         <el-pagination class="pagin"
-                       @size-change="val => fetchParam.pagesize = val "
-                       @current-change="val => fetchParam.page = val"
+                       @size-change="handleSizeChange" 
+                       @current-change="handleCurrentChange" 
                        :current-page="fetchParam.page"
                        :page-size="fetchParam.pagesize"
                        :page-sizes="[15, 30, 60, 100]"
@@ -253,12 +253,12 @@
             }
         },
         watch: {
-            'fetchParam.pagesize'() {
-                this.fetchData()
-            },
-            'fetchParam.page'() {
-                this.fetchData()
-            }
+            // 'fetchParam.pagesize'() {
+            //     this.fetchData()
+            // },
+            // 'fetchParam.page'() {
+            //     this.fetchData()
+            // }
         },
         created () {
             this.uploadImgUrl = videoService.getUploadCoverUrl()
@@ -269,15 +269,19 @@
             })
         },
         methods: {
-    
+            handleCurrentChange(val) {
+                this.fetchParam.page = val
+                this.fetchData()
+            },
+            handleSizeChange(val) {
+                this.fetchParam.pagesize = val
+                this.fetchData()
+            },
             initFetchParam() {
                 this.fetchParam = getFetchParam()
             },
             fetchData () {
                 this.loadingData = true
-                if(this.fetchParam.file_name){
-                    this.fetchParam.page=1
-                }
                 console.log(this.fetchParam)
                 return videoService.getVideo(this.fetchParam).then((ret) => {
                     this.data = ret.data

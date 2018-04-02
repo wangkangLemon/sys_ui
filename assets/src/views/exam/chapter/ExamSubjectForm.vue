@@ -90,11 +90,11 @@
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
                     </el-form>
-                    <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index" :rules="testRules" ref="test">
+                    <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index" :model="item"  ref="test">
                         <el-form-item label="" v-if="!readonly">
-                            <el-button icon="plus" @click='addTesting(0, index)'>判断题</el-button>
-                            <el-button icon="plus" @click='addTesting(1, index)'>单选题</el-button>
-                            <el-button icon="plus" @click='addTesting(2, index)'>多选题</el-button>
+                            <el-button icon="plus" :class="{'el-button--primary':type==0}" @click='addTesting(0, index)'>判断题</el-button>
+                            <el-button icon="plus" :class="{'el-button--primary':type==1}" @click='addTesting(1, index)' ref="single">单选题</el-button>
+                            <el-button icon="plus" :class="{'el-button--primary':type==2}" @click='addTesting(2, index)'>多选题</el-button>
                             <el-button icon="delete" type="danger" @click='deleteTesting(index, item)'>删除</el-button>
                         </el-form-item>
                         <el-form-item :label="'第' + (index+1) + '题'">
@@ -102,7 +102,7 @@
                             <span v-else-if="item.type == 1">单选题</span>
                             <span v-else>多选题</span>
                         </el-form-item>
-                        <el-form-item label="题型" props="qtype">
+                        <el-form-item label="题型" props="qtype" :rules=" { required: true, type: 'number', message: '请选择试题题型', trigger: 'change' }">
                             <el-select v-model="item.qtype" placeholder="请选择">
                                 <el-option label="A1" value="A1"></el-option>
                                 <el-option label="A2" value="A2"></el-option>
@@ -110,7 +110,7 @@
                                 <el-option label="A4" value="A4"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item v-show="item.qtype=='A3'||item.qtype=='A4'" label="题干">
+                        <el-form-item v-show="item.qtype=='A3'||item.qtype=='A4'" label="题干" :rules=" { required: true, type: 'number', message: '请输入题干', trigger: 'change' }">
                             <el-input v-model="item.title" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 1, maxRows: 2}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
@@ -196,7 +196,7 @@ export default {
                     chapter_id: { required: true, type: 'number', message: '请选择试题栏目', trigger: 'change' },
                 },
             testRules: {
-                    qtype: { required: true, type: 'number', message: '请选择试题题型', trigger: 'change' },
+                    qtype: { required: true, message: '请选择试题题型', trigger: 'blur' },
                 },
             accept: '*.doc,*.docx', // 上传的文件格式
             // 考试设置部分
@@ -210,9 +210,13 @@ export default {
                 category_id:'',
                 category_name:'',
             },
+            type: 1
         }
     },
     created(){
+        // this.$ref.addTesting(1, 0)
+        alert( this.$route.params.type)
+
         this.form={
                 chapter_id:'',
                 chapter_name:''
@@ -253,6 +257,8 @@ export default {
             })
         },
         addTesting(type, index) {
+            this.type=type
+            console.log(type,index)
             this.fetchTesting.splice(index, 0, testingFactory.getExamSet(type))
         },
         // 删除考试
