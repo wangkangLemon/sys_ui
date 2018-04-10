@@ -16,6 +16,9 @@
                 float: right;
                 display: block;
             }
+            .warrant{
+                margin-right: 10px;
+            }
         }
         .left-content {
             display: inline-block;
@@ -99,7 +102,8 @@
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>菜单列表
-                 <el-button type="primary" icon="plus" @click="$router.push({ name:'menu-add', params:{sys_type:'add'}})">添加菜单</el-button>
+                 <el-button type="primary" icon="plus" @click="$router.push({ name:'gov-menu-add', params:{sys_type:'add'}})">添加菜单</el-button>
+                 <el-button type="danger" class="warrant" @click="$router.push({ name:'gov-warrant', params:{sys_type:'add'}})">授权管理</el-button>
             </div>
             <div class="content-list">
                 <div class="search">
@@ -125,7 +129,7 @@
                     <el-table-column prop="addate" label="创建时间" width="180"></el-table-column>
                     <el-table-column prop="operate" label="操作" width="150" fixed="right">
                         <template scope="scope">
-                            <el-button @click="$router.push({name: 'menu-edit', params: {roleInfo: scope.row, sys_id: scope.row.id, sys_type:'edit'}})" type="text" size="small">编辑
+                            <el-button @click="$router.push({name: 'gov-menu-edit', params: {roleInfo: scope.row, sys_id: scope.row.id, sys_type:'edit'}})" type="text" size="small">编辑
                                 <!--a-->
                             </el-button>
                             <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">
@@ -149,7 +153,7 @@
     </article>
 </template>
 <script>
-    import menuService from '../../../services/sys/menuService'
+    import menuService from '../../../services/gov/menuService'
     import MenuTree from '../../component/tree/MenuTree.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'

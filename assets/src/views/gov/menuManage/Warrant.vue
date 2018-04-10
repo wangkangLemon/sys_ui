@@ -1,4 +1,4 @@
-<!--角色组管理-->
+<!--授权管理-->
 <style lang='scss' rel='stylesheet/scss'>
 @import "../../../utils/mixins/common";
 @import "../../../utils/mixins/topSearch";
@@ -38,7 +38,7 @@
 <template>
     <article id="sys-index-container">
         <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'role-add'})">
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'gov-role-add'})">
                 <i>添加角色组</i>
             </el-button>
         </section>
@@ -68,11 +68,11 @@
                     <el-tag v-else>禁用</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" width="305" label="操作">
+            <el-table-column fixed="right" width="250" label="操作">
                 <template scope="scope">
-                    <!--<el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">详情
+                    <!--<el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, warrant_id: scope.row.id}})" type="text" size="small">详情
                     </el-button>-->
-                    <el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, role_id: scope.row.id}})" type="text" size="small">编辑
+                    <el-button @click="$router.push({name: 'gov-role-edit', params: {roleInfo: scope.row, warrant_id: scope.row.id}})" type="text" size="small">编辑
                         <!--a-->
                     </el-button>
                     <el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
@@ -81,10 +81,7 @@
                     <el-button v-else @click="online(scope.$index, scope.row)" type="text" size="small">
                         <i>启用</i>
                     </el-button>
-                    <el-button @click="$router.push({name: 'role_menus', params: {roleInfo: scope.row, role_id: scope.row.id, role_name: scope.row.role_name }})" type="text" size="small">授权菜单
-                        <!--a-->
-                    </el-button>
-                    <el-button @click="$router.push({name: 'role_nodes', params: {roleInfo: scope.row, role_id: scope.row.id, role_name: scope.row.role_name }})" type="text" size="small">授权节点
+                    <el-button @click="$router.push({name: 'role_menus', params: {roleInfo: scope.row, warrant_id: scope.row.id, role_name: scope.row.role_name }})" type="text" size="small">授权菜单
                         <!--a-->
                     </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
@@ -104,7 +101,7 @@
 </template>
 
 <script>
-import sysService from '../../../services/sys/roleService.js'
+import roleService from '../../../services/gov/roleService'
 import DateRange from '../../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
@@ -125,6 +122,7 @@ export default {
             init:false,
             loadingData: false,
             data: [], // 表格数据
+            dataCache:[],
             total: 0,
             keyWord:'',
             dialogVisible: false,
@@ -162,7 +160,7 @@ export default {
         },
         fetchData(val) {
             // console.log(2)
-            return sysService.fetchData(this.fetchParam).then((ret) => {
+            return roleService.fetchData(this.fetchParam).then((ret) => {
                 // console.log(ret.data)
                 this.data = ret.data
                 this.total = ret._exts.total
@@ -183,7 +181,7 @@ export default {
         offline(index, row) {
             xmview.showDialog(`你将要禁用角色组 <span style="color:red">${row.role_name}</span> 确认吗?`, () => {
                 row.disabled = 1
-                sysService.offline(row.role_name,row.id,row.disabled).then((ret) => {
+                roleService.offline(row.role_name,row.id,row.disabled).then((ret) => {
                 })
             })
         },
@@ -191,7 +189,7 @@ export default {
         online(index, row) {
             row.disabled = 0
             xmview.showDialog(`你将要启用角色组<span style="color:red">${row.role_name}</span> 确认吗?`, () => {
-                sysService.online(row.role_name,row.id,row.disabled).then((ret) => {
+                roleService.online(row.role_name,row.id,row.disabled).then((ret) => {
                 })
             })
         },
@@ -199,7 +197,7 @@ export default {
         // // 启用
         // online(index, row) {
         //     xmview.showDialog(`你将要启用角色组<span style="color:red">${row.role_name}</span> 确认吗?`, () => {
-        //         sysService.online(row.id).then((ret) => {
+        //         roleService.online(row.id).then((ret) => {
         //             row.disabled = 0
         //         })
         //     })
@@ -207,7 +205,7 @@ export default {
         // // 单条删除
         del(index, row) {
             xmview.showDialog(`你将要删除角色组 <span style="color:red">${row.role_name}</span>  此操作不可恢复确认吗?`, () => {
-                sysService.delete(row.id).then(() => {
+                roleService.delete(row.id).then(() => {
                     this.data.splice(index, 1)//删除选中项
                     row.deleted = 1
                     xmview.showTip('success', '操作成功')
@@ -217,7 +215,7 @@ export default {
         // 批量删除
         delMulti() {
             xmview.showDialog(`你将要删除选中的项目，操作不可恢复确认吗?`, () => {
-                sysService.deleteMulty(this.selectedIds.join(',')).then(() => {
+                roleService.deleteMulty(this.selectedIds.join(',')).then(() => {
                     xmview.showTip('success', '操作成功')
                     this.dialogTree.isShow = false
                     setTimeout(() => {

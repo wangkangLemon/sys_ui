@@ -115,6 +115,20 @@ export default {
                 noback: false
             }
         },
+        {//导入考题表单
+            path: 'subject/import',
+            name: 'exam-subject-import',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/chapter/ExamSubjectImport.vue'))
+                })
+            },
+            meta: {
+                title: '试题添加',
+                noback: false
+            }
+        },
+
         {
             path: 'subject/edit/:id',
             name: 'exam-subject-edit',

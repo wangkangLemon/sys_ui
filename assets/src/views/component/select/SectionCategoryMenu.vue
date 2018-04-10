@@ -94,7 +94,7 @@
                         //获取数据的方法
                         let req =this.reqExamCateFun||this.reqFun||this.onchange
                         req().then((ret) => {
-                            console.log(ret)
+                            // console.log(ret)
                             this.options=[]
                             var obj = {}
                             ret.forEach(v => {
@@ -135,9 +135,8 @@
                                         value: v.id
                                     }]
                                 }
-                                console.log(1)
                             })
-                            console.log(ret)
+                            // console.log(ret)
                             
                             this.loading = false
                             xmview.setContentLoading(false);

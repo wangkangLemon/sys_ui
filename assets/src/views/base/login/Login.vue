@@ -172,7 +172,7 @@
                         callback(new Error('请输入正确的邮箱'))
                     }
                 } else {
-                    if (!newValue.match(/^1[34578]\d{9}$/)) {
+                    if (!newValue.match(/^1[3456789]\d{9}$/)) {
                         callback(new Error('请输入正确的手机号'))
                     }
                 }

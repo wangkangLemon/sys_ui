@@ -29,8 +29,8 @@ class TestingFactory {
             explain: void 0, // 答案详解
             correct: void 0,
             editable: true,
-            qtype: '', //题型
-            title: '', //A3、A4题型题干
+            // qtype: '', //题型
+            // title: '', //A3、A4题型题干
             options: [{ // 选项
                 sort: 1,
                 description: '',

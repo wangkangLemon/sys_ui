@@ -276,7 +276,30 @@ class examService {
         return api.post(url, {}).then(ret => {
             if (ret.code == 0) {
                 xmview.showTip('success', ret.message)
-
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //上传文件解析接口
+    upload(fetchParam) {
+        let url = `${urlPre}/subject/parse`      
+        return api.post(url, fetchParam).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    //上传文件保存接口
+    subjectSave(param) {
+        let url = `${urlPre}/subject/save`
+        return api.post(url, param).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
                 return ret.data
             } else {
                 xmview.showTip('error', ret.message)

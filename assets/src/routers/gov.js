@@ -198,6 +198,96 @@ export default {
                 noback: true
             }
         },
-
+        {//政府菜单管理首页
+            path: 'menu',
+            name: 'gov-menu-manage',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/menuManage/MenuManage.vue'))
+                })
+            },
+            meta: {
+                title: '政府后台菜单管理',
+                noback: true
+            }
+        },
+        {//政府菜单添加
+            path: 'menu/add',
+            name: 'gov-menu-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/menuManage/MenuForm.vue'))
+                })
+            },
+            meta: {
+                title: '菜单添加',
+                noback: false
+            }
+        },
+        {//政府菜单修改
+            path: 'menu/edit/:sys_id',
+            name: 'gov-menu-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/menuManage/MenuForm.vue'))
+                })
+            },
+            meta: {
+                title: '菜单更新',
+                noback: false
+            }
+        }, 
+        {//政府级别授权列表
+            path: 'warrant',
+            name: 'gov-warrant',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/menuManage/warrant.vue'))
+                })
+            },
+            meta: {
+                title: '授权管理',
+                noback: false
+            }
+        },
+        {//政府级别授权菜单详情
+            path: 'warrant/warrant_menus/:warrant_id',
+            name: 'gov-warrant_menus',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/menuManage/WarrantMenus.vue'))
+                })
+            },
+            meta: {
+                title: '授权菜单',
+                noback: false
+            }
+        },
+        {
+            path: 'role/add',
+            name: 'gov-role-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/menuManage/RoleForm.vue'))
+                })
+            },
+            meta: {
+                title: '角色组添加',
+                noback: false
+            }
+        },
+        {
+            path: 'role/edit/:warrant_id',
+            name: 'gov-role-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/menuManage/RoleForm.vue'))
+                })
+            },
+            meta: {
+                title: '角色组更新',
+                noback: false
+            }
+        },
     ]
 }

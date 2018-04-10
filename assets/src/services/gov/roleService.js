@@ -1,15 +1,15 @@
 import * as api from '../api'
 import config from '../../utils/config'
-const urlPre = config.apiHost + '/role'
+const urlPre = config.apiHost + '/gov/role'
 const urlPre_menu = config.apiHost + '/role_menus'
 const urlPre_node = config.apiHost + '/role_nodes'
 
 class sysService {
     //拿到数据 
-    fetchData(param ) {
+    fetchData(page, pagesize ) {
         let url = urlPre + '/lists'
         return api.get(url, 
-            param
+            page, pagesize
         ).then(ret => {
             if (ret.code == 0) {
                 return ret

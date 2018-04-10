@@ -53,7 +53,7 @@
                 <el-input v-model="fetchParam.remark"></el-input>
             </el-form-item> 
             <el-form-item label=""  v-if="this.$route.params.sys_type">
-                <el-button @click="$router.push({ name:'menu-index'})">取消</el-button>
+                <el-button @click="$router.push({ name:'gov-menu-manage'})">取消</el-button>
                 <el-button type="primary" @click="btnNextClick">确认</el-button>
             </el-form-item>
             </el-form>
@@ -62,11 +62,11 @@
 </template>
 
 <script>
-    import menuService from '../../../services/sys/menuService.js'
+    import menuService from '../../../services/gov/menuService'
     import config from '../../../utils/config'
     import MultCategory from '../../component/select/MultCategory.vue'
     export default {
-        name: 'sys-form',
+        name: 'gov-menu-form',
         components: { MultCategory },
         data() {
             return {
@@ -142,7 +142,7 @@
                         xmview.showTip('success', '数据提交成功')
                         // this.fetchParam=getOriginData(),
                         //如果请求的是create创建成功 就push到角色组授权页面授权this.$router.push({name: 'section-edit')
-                        this.$router.push({'name': 'menu-index'})
+                        this.$router.push({'name': 'gov-menu-manage'})
                         this.$refs['form'].resetFields();
                         this.currentData = {
                             data: [],

@@ -7,6 +7,26 @@
 
     .block-manage {
         @extend %justify;
+            // .manage-container {
+            //     @extend %right-top-btnContainer;
+            //     >* {
+            //         color: #fff;
+            //         border-radius: 5px;
+            //     } // 添加课程
+            //     .add {
+            //         background: rgb(0, 204, 255);
+            //     } // 管理栏目
+            //     .catmange {
+            //         background: rgb(153, 102, 204);
+            //     }
+            // }
+        .topright{
+             @extend %right-top-btnContainer;
+              >* {
+                    color: #fff;
+                    border-radius: 5px;
+                } // 添加课程
+        }
         .content-title {
             padding: 10px 20px;
             background: #f0f3f5;
@@ -15,6 +35,7 @@
             button {
                 float: right;
                 display: block;
+                margin-right: 15px;
             }
         }
         .left-content {
@@ -99,6 +120,10 @@
 </style>
 <template>
     <article class="block-manage">
+        <!-- <section class="topright">
+                <el-button type="danger" icon="plus"  @click="$router.push({ name:'exam-subject-import'})">试题导入</el-button>
+                <el-button type="primary" icon="plus" >添加考题</el-button>
+        </section> -->
         <section class="left-content">
             <div class="content-title">
                 所有分类
@@ -111,10 +136,10 @@
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>考题列表
-                 <!-- <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-subject-add'})">添加考题</el-button> -->
-                 <el-button type="primary" icon="plus" >添加考题</el-button>
-                 <section>
-                      <el-select v-model="section.qtype" placeholder="未选择" @change="$router.push({ name:'exam-subject-add',params:{type:section.qtype}})" >
+                <el-button type="primary" icon="plus" >添加考题</el-button>
+                <el-button type="danger" icon="plus"  @click="$router.push({ name:'exam-subject-import',params:{chapterInfo:category.currentData,qtype:qtype}})">试题导入</el-button>
+                <section>
+                      <el-select v-model="qtype" placeholder="未选择" @change="$router.push({ name:'exam-subject-add',params:{chapterInfo:category.currentData,qtype:qtype}})" >
                             <el-option label="A1" value="A1"></el-option>
                             <el-option label="A2" value="A2"></el-option>
                             <el-option label="A3" value="A3"></el-option>
@@ -182,8 +207,24 @@
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import formUtils from '../../../utils/formUtils'
-
+    function initSection() {
+        return {
+            loading: false,
+            data: [],
+            description:'',
+            stime :'',
+            etime:'',
+            page: 1,
+            pagesize: 10,
+            total: 0,
+            status,
+            title:'',
+            qtype:'',
+            deleted:-1,
+        }
+    }
     export default {
+        name:'exam-subject-manage',
         components: {
             MenuTree,SectionCategoryMenu,ImagEcropperInput
             ,DateRange
@@ -214,20 +255,7 @@
                         }
                     ]
                 },
-                section: {
-                    loading: false,
-                    data: [],
-                    description:'',
-                    stime :'',
-                    etime:'',
-                    page: 1,
-                    pagesize: 10,
-                    total: 0,
-                    status,
-                    title:'',
-                    qtype:'',
-                    deleted:-1,
-                },
+                section:initSection(),
                 defaultProps: {
                     children: 'children',
                     label: 'name'
@@ -235,6 +263,7 @@
                 SecMenu:[],
                 category_id:1,
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
+                qtype:''
             }
         },
         watch: {
@@ -242,6 +271,7 @@
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             },
             'category.currentData.id'(){
+                console.log(this.category.currentData)
                 this.fetchCourseLists () 
                 // this.$refs.secCategory.handleNodeClick()
             },
@@ -250,9 +280,11 @@
                this.fetchData()
             }     
         },
-        activated () {
+        created () {
             this.category.currentData.id = ''
             this.category.loading = true
+            this.qtype=''
+            // this.section=initSection()
             this.fetchData()
             this.fetchCourseLists()
         },

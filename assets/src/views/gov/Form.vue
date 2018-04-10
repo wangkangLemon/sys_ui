@@ -101,7 +101,7 @@
                     role_id: { required: true, message: '请输入角色'},
                     name: { required: true, message: '请输入姓名'},
                     sex: { required: true },
-                    mobile: { pattern: /^1[34578]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
+                    mobile: { pattern: /^1[3456789]\d{9}$/, required: true, type: 'string', message: '请输入正确的手机号', trigger: 'blur' },
                     email: { pattern: /^\w+([-+.]\w+)*@\w+([-+.]\w+)*.\w+([-+.]\w+)*$/, required: true, message: '请输入邮箱地址', trigger: 'blur' },
                     password: {  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,required: true, message: '请输入6-12位包含数字与字母的密码', trigger: 'blur' },
             },

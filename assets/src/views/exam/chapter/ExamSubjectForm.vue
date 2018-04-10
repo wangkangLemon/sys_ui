@@ -21,8 +21,8 @@
         }
     } // 考试题目设置
     .testing-set {
-            max-width: 700px;
-
+            max-width: 900px;
+            height:auto!important; 
         .el-form {
             
             padding-top: 17px;
@@ -46,9 +46,6 @@
                 width: 60%;
                 vertical-align: middle;
             }
-
-            .multy-choose-item {
-                margin: 5px 0;
                 &:last-of-type {
                     margin-bottom: 0;
                 }
@@ -57,7 +54,7 @@
         }
         .cate{
             .el-cascader{
-                width: 240px;
+                width: 420px;
             }
             i{
                 font-size: 14px;
@@ -69,12 +66,26 @@
                 width: 100%;
                 vertical-align: middle;
             }
+
         }
+        .multy-choose-item {
+                margin: 5px 0;
+                .el-input {
+                // display: inline-block;
+                width: 80%;
+                vertical-align: middle;
+            }
 
         .bottom-btns {
             .submit {
                 float: right;
             }
+        }
+    }
+    .addtype{
+        margin-top:22px;
+        .item{
+             margin-top:22px;
         }
     }
 }
@@ -89,31 +100,53 @@
                         <el-form-item  label="所属栏目" prop="chapter_id">
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
+                        <el-form-item v-show="qtype=='A3'" label="题干" :rules=" { required: true, type: 'number', message: '请输入题干', trigger: 'change' }">
+                            <el-input v-model="form.title" type="textarea" :autosize="{ minRows: 2, maxRows: 2}" placeholder="请输入内容">
+                            </el-input>
+                        </el-form-item>
+                          <!--单选|多选的答案部分-->
+                        <el-form-item label="答案选项组" v-show="qtype=='A4'">
+                            <h5>请在正确答案前面打勾</h5>
+                            <div class="multy-choose-item" v-for="(option,indexOption) in options" :key="indexOption">
+                                <el-checkbox v-model="option.correct" :true-label="1"  v-if="type == 2"></el-checkbox>
+                                <el-radio class="radio" v-model="option.correct" :label="indexOption"  v-else>
+                                    <i></i>
+                                </el-radio>
+                                <el-input placeholder="填写描述" v-model="option.description" ></el-input>
+                                <el-button  type="text" @click="options.splice(indexOption, 1)">
+                                    <i>删除</i>
+                                </el-button>
+                            </div>
+                            <div class="multy-choose-item">
+                                <el-button  type="text" @click="addMoreTestingOption(options)">添加更多选项</el-button>
+                            </div>
+                        </el-form-item>
+                        <hr>
                     </el-form>
                     <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index" :model="item"  ref="test">
                         <el-form-item label="" v-if="!readonly">
-                            <el-button icon="plus" :class="{'el-button--primary':type==0}" @click='addTesting(0, index)'>判断题</el-button>
+                            <!-- <el-button icon="plus" :class="{'el-button--primary':type==0}" @click='addTesting(0, index)'>判断题</el-button> -->
                             <el-button icon="plus" :class="{'el-button--primary':type==1}" @click='addTesting(1, index)' ref="single">单选题</el-button>
-                            <el-button icon="plus" :class="{'el-button--primary':type==2}" @click='addTesting(2, index)'>多选题</el-button>
+                            <!-- <el-button icon="plus" :class="{'el-button--primary':type==2}" @click='addTesting(2, index)'>多选题</el-button> -->
                             <el-button icon="delete" type="danger" @click='deleteTesting(index, item)'>删除</el-button>
                         </el-form-item>
-                        <el-form-item :label="'第' + (index+1) + '题'">
-                            <span v-if="item.type == 0">判断题</span>
-                            <span v-else-if="item.type == 1">单选题</span>
-                            <span v-else>多选题</span>
+                        <el-form-item :label="'第' + (index+1) + '题' ">
+                            <span v-if="qtype=='A1'">A1题型</span>
+                            <span v-else-if="qtype == 'A2'">A2题型</span>
+                            <span v-else-if="qtype == 'A3'">A3题型</span>
+                            <span v-else>A4题型</span>
                         </el-form-item>
-                        <el-form-item label="题型" props="qtype" :rules=" { required: true, type: 'number', message: '请选择试题题型', trigger: 'change' }">
+                 
+                      
+                        <!-- <el-form-item label="题型" props="qtype" :rules=" { required: true, type: 'number', message: '请选择试题题型', trigger: 'change' }">
                             <el-select v-model="item.qtype" placeholder="请选择">
                                 <el-option label="A1" value="A1"></el-option>
                                 <el-option label="A2" value="A2"></el-option>
                                 <el-option label="A3" value="A3"></el-option>
                                 <el-option label="A4" value="A4"></el-option>
                             </el-select>
-                        </el-form-item>
-                        <el-form-item v-show="item.qtype=='A3'||item.qtype=='A4'" label="题干" :rules=" { required: true, type: 'number', message: '请输入题干', trigger: 'change' }">
-                            <el-input v-model="item.title" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 1, maxRows: 2}" placeholder="请输入内容">
-                            </el-input>
-                        </el-form-item>
+                        </el-form-item> -->
+                
                         <el-form-item label="题目">
                             <el-input v-model="item.description" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                             </el-input>
@@ -159,11 +192,11 @@
                     </el-form>
                 
 
-                <el-form label-width="120px" v-if="!readonly" >
-                    <el-form-item label="">
-                        <el-button icon="plus" @click='addTesting(0, fetchTesting.length)'>判断题</el-button>
+                <el-form label-width="120px" v-if="!readonly" class="addtype" >
+                    <el-form-item label="" class="item">
+                        <!-- <el-button icon="plus" @click='addTesting(0, fetchTesting.length)'>判断题</el-button> -->
                         <el-button icon="plus" @click='addTesting(1, fetchTesting.length)'>单选题</el-button>
-                        <el-button icon="plus" @click='addTesting(2, fetchTesting.length)'>多选题</el-button>
+                        <!-- <el-button icon="plus" @click='addTesting(2, fetchTesting.length)'>多选题</el-button> -->
                     </el-form-item>
                 </el-form>
 
@@ -209,17 +242,23 @@ export default {
                 chapter_name:'',
                 category_id:'',
                 category_name:'',
+                title:'',
             },
-            type: 1
+            type: 1 ,//判断 单选
+            qtype:'', //A1、A2
+            options:[]
+            
         }
     },
     created(){
-        // this.$ref.addTesting(1, 0)
-        alert( this.$route.params.type)
+
+        this.qtype=this.$route.params.qtype
+        console.log( typeof(this.qtype),this.qtype)
+        console.log( this.$route.params)
 
         this.form={
-                chapter_id:'',
-                chapter_name:''
+                chapter_id:this.$route.params.chapterInfo.id,
+                chapter_name:this.$route.params.chapterInfo.name
             },
         this.fetchTesting=[]
         this.uploadImgUrl = courseService.commonUploadImage()
@@ -258,7 +297,7 @@ export default {
         },
         addTesting(type, index) {
             this.type=type
-            console.log(type,index)
+            // console.log(type,index)
             this.fetchTesting.splice(index, 0, testingFactory.getExamSet(type))
         },
         // 删除考试
@@ -290,14 +329,8 @@ export default {
                 if (!valid) {
                         return false
                     }
-                     console.log(this.fetchTesting)
-                // this.fetchTesting.forEach(v => {
-                //     console.log(v.qtype)
-                //     if(!v.qtype){
-                //     xmview.showTip('error', `请先选择【 题型 】,在进行发布操作！`)
-                //     return false
-                // }
-                // });     
+                    console.log(this.fetchTesting)
+              
                 console.log(requestParam)
                 let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
                 for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
@@ -318,12 +351,17 @@ export default {
                             itemOptions.sort = index + 1
                         })
                     }
+                    item.qtype=this.qtype
+                    item.title=this.form.title
                 }
                 xmview.setContentLoading(true)
+                
                 console.log(encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'))
                 examService.addSubject({ 
                     category_id:this.$store.state.index.examCate,
                     chapter_id:this.form.chapter_id,
+                    qtype:  this.qtype,
+                    title:this.form.title,
                     subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
                 }).then((ret) => {
                     xmview.showTip('success', '操作成功')
