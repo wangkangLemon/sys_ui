@@ -18,13 +18,11 @@
                 <i>{{$route.params.role_name}}角色组</i>
             </el-button>
         </section>
-
         <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;"></div>
         <el-checkbox-group v-model="checkedMenus" @change="handleCheckedMenusChange">
             <el-checkbox v-for="item in dataCache" :label="item.id" :key="item.id" :value="item.id">{{item.menu_name}}</el-checkbox>
         </el-checkbox-group>
-
         <!--底部的批量删除和移动两个按钮-->
         <div class="bottom-manage">
             <el-button @click="createM">提交</el-button>
@@ -34,8 +32,8 @@
 </template>
 
 <script>
-import sysService from '../../../services/sys/menuService.js'
-import roleService from '../../../services/sys/roleService.js'
+import menuService from '../../../services/gov/menuService'
+import roleService from '../../../services/gov/roleService'
 
 function getFetchParam() {
     return {
@@ -59,7 +57,6 @@ export default {
             checkedMenus: [],
             fetchParam: getFetchParam(),
             // fetchParam: getFetchParam(),
-
             }
     },
     activated () {
@@ -80,9 +77,7 @@ export default {
         },
         //总的数据     
         fetchData(val) {
-            return sysService.fetchData(this.fetchParam).then((ret) => {
-                // console.log('全部的菜单======')
-                // console.log(ret.data)
+            return menuService.fetchData(this.fetchParam).then((ret) => {
                 this.dataCache = ret.data 
                 this.loadingData = false
                 this.checkAll = this.checkedMenus.length === this.dataCache.length;
@@ -99,8 +94,6 @@ export default {
                     arr.push(v.menu_id)
                 })
                 this.checkedMenus = arr    
-                // console.log('此角色已授权的菜单有======')
-                // console.log(ret.data)
                 this.checkAll = this.checkedMenus.length === this.dataCache.length;
                 this.loadingData = false
                 xmview.setContentLoading(false)     
@@ -110,6 +103,7 @@ export default {
             let ids=this.checkedMenus.join(',')
             roleService.createM(this.$route.params.warrant_id,ids).then((ret) => {
                 this.fetchParamImp = ret
+                this.$router.push({'name': 'gov-warrant'})
                 console.log(ret)
             })
             this.loadingData=false;

@@ -111,7 +111,7 @@ class sysService {
     //菜单
     //拿到数据 
     fetchDataM ( {id, pagesize}) {
-        let url = urlPre_menu + '/lists'
+        let url = `${config.apiHost}/gov/role_menus/lists`
         return api.get(url,{ role_id : id, pagesize
         }).then(ret => {
             if (ret.code == 0) {
@@ -123,7 +123,7 @@ class sysService {
     }
     // 创建
     createM(id, ids) {
-        let url = urlPre_menu + '/create_multi'
+        let url = `${config.apiHost}/gov/role_menus/create_multi`
         return api.post(url, { role_id:id , menu_ids:ids }).then(ret => {
             if (ret.code == 0) {
                 xmview.showTip('success',ret.message)

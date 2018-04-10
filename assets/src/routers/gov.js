@@ -259,7 +259,7 @@ export default {
                 })
             },
             meta: {
-                title: '授权菜单',
+                title: '角色组授权菜单',
                 noback: false
             }
         },

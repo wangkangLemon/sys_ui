@@ -110,6 +110,7 @@ export default {
             let ids=this.checkedMenus.join(',')
             roleService.createM(this.$route.params.role_id,ids).then((ret) => {
                 this.fetchParamImp = ret
+                this.$router.push({'name': 'role-index'})
                 console.log(ret)
             })
             this.loadingData=false;
