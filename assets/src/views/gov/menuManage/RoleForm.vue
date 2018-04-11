@@ -10,12 +10,19 @@
 </style>
 <template>
     <main id="sys-form">
-            <el-form label-width="120px" ref="form" :model="fetchParam">
+            <el-form label-width="120px" ref="form" :model="fetchParam" :rules="rules">
             <el-form-item label="角色名称" prop="role_name">
                 <el-input v-model="fetchParam.role_name"></el-input>
             </el-form-item>
             <el-form-item label="角色标识" prop="role_node">
-                <el-input v-model="fetchParam.role_node"></el-input>
+                <!-- <el-input v-model="fetchParam.role_node"></el-input> -->
+                <el-select v-model="fetchParam.role_node" placeholder="请选择">
+                    <el-option label="省级" value="province"></el-option>
+                    <el-option label="市级" value="city"></el-option>
+                    <el-option label="区(县)" value="area"></el-option>
+                    <el-option label="乡镇" value="town"></el-option>
+                    <el-option label="村级" value="village"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="">
                 <el-button @click="$router.push({ name:'gov-warrant'})">取消</el-button>
@@ -45,6 +52,18 @@
                 },
                 fetchParam: getOriginData(),
                 resultData: [],
+                rules: {
+                    role_name: [
+                        {required: true, message: '必须输入', trigger: 'blur'},
+                        ,{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的内容'
+                        }
+                    ],
+                    role_node: [
+                        {required: true, message: '请选择', trigger: 'change'},
+                    ]
+                },
             }
         },
         created() {

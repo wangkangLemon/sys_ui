@@ -25,7 +25,7 @@
             <!--<ImagEcropperInput :isRound="true" :aspectRatio="1" :confirmFn="cropperFn" class="upload-btn"></ImagEcropperInput>-->
         </section>     
         <section class="submit-form">   
-            <el-form label-width="120px" ref="form" :model="fetchParam"  :rules="rules">
+            <el-form label-width="120px" ref="form" :model="fetchParam" :rules="rules">
             <el-form-item label="菜单名称" prop="menu_name">
                 <el-input v-model="fetchParam.menu_name"></el-input>
             </el-form-item>
@@ -83,9 +83,17 @@
                 rules: {
                     menu_name: [
                         {required: true, message: '必须输入', trigger: 'blur'},
+                        ,{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的内容'
+                        }
                     ],
                     menu_node: [
-                        {required: true, message: '必须输入', trigger: 'blur'}
+                        {required: true, message: '必须输入', trigger: 'blur'},
+                        ,{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的内容'
+                        }
                     ],
                     sort: [
                         {required: true, type:'number',message: '必须输入', trigger: 'blur'}

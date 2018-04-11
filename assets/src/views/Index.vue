@@ -326,7 +326,6 @@
             navMenueActive () {
                 return this.$store.state.index.navMenueActive
             },
-
         },
         watch: {
             '$store.state.index.webpathMain': function () {
@@ -341,7 +340,6 @@
              getMenutree().then(ret=>{
                 this.$store.dispatch('setIndexNavMenu',{menu:ret});
              })
-
             examService.fetchExamCategory({
                 pid: 0,
                 pagesize:-1

@@ -5,19 +5,11 @@
 
 #sys-index-container {
     @extend %content-container;
-     .manage-container {
-        @extend %right-top-btnContainer;
-    }
 }
 </style>
 
 <template>
     <article id="sys-index-container">
-        <section class="manage-container">
-            <el-button type="primary" >
-                <i>{{$route.params.role_name}}角色组</i>
-            </el-button>
-        </section>
         <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;"></div>
         <el-checkbox-group v-model="checkedMenus" @change="handleCheckedMenusChange">
@@ -60,6 +52,7 @@ export default {
             }
     },
     activated () {
+        xmview.setContentTile(`授权菜单-${this.$route.params.role_name}`)
         this.fetchData()
         this.fetchDataM()
     },
