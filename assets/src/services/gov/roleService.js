@@ -33,9 +33,9 @@ class sysService {
     }
 
     // 创建
-    create({ role_name}) {
+    create({ role_name, role_node}) {
         let url = urlPre + '/create'
-        return api.post(url, {role_name}).then(ret => {
+        return api.post(url, { role_name, role_node}).then(ret => {
             if (ret.code == 0) {
                 xmview.showTip('success',ret.message)
                 return ret.data
@@ -48,9 +48,9 @@ class sysService {
     }
 
     // 更新
-    update({ role_name,id }) {
+    update({ role_name, role_node,id }) {
         let url = `${urlPre}/update/${id}`
-        return api.post(url, { role_name }).then(ret => {
+        return api.post(url, { role_name, role_node }).then(ret => {
             if (!ret.code) {
                  xmview.showTip('success',ret.message)  
             }else {

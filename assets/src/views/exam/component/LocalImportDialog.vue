@@ -195,7 +195,6 @@ Slot:
                 }
                 
                 if (this.onSuccess) {
-               
                     // let param=this.extradata
                     //   var formData = new FormData()
                     // formData.append('input',file)
@@ -207,9 +206,7 @@ Slot:
                     //     input:file
                     // }
                     // this.onSuccess(response.data, file, fileList).then(({success, error, reasons}) => {
-
                     this.onSuccess(response)
-
                 }
                 // if(this.onSave){
                 //      this.onSave({save_sign:response.data.save_sign}).then((ret) => {

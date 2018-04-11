@@ -12,7 +12,10 @@
     <main id="sys-form">
             <el-form label-width="120px" ref="form" :model="fetchParam">
             <el-form-item label="角色名称" prop="role_name">
-                <el-input v-model.name="fetchParam.role_name"></el-input>
+                <el-input v-model="fetchParam.role_name"></el-input>
+            </el-form-item>
+            <el-form-item label="角色标识" prop="role_node">
+                <el-input v-model="fetchParam.role_node"></el-input>
             </el-form-item>
             <el-form-item label="">
                 <el-button @click="$router.push({ name:'gov-warrant'})">取消</el-button>
@@ -77,17 +80,8 @@
 
     function getOriginData() {
         return {
-            role_id: '',
-            role:'',
             role_name:'',
-            category_name: '请选择栏目',
-            name: '',
-            mobile: '',
-            email: '',
-            password: '',
-            address: '',
-            id: 0,
-
+            role_node:'',
         }
     }
 
