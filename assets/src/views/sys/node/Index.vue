@@ -136,7 +136,6 @@ export default {
     },
     data() {
         return {
-            init:false,
             loadingData: false,
             data: [], // 表格数据
             dataCache:[],
@@ -162,13 +161,8 @@ export default {
             this.fetchParam = getFetchParam()
         },
         handleCurrentChange(val) {
-            if(this.init){                 //init是true进来 限制fetchData初始化不请求
                 this.fetchParam.page = val
                 this.fetchData()
-            }else{
-                this.init = true
-                
-            }
         },
         handleSizeChange(val) {
             this.fetchParam.pagesize = val

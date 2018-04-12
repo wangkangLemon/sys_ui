@@ -82,7 +82,6 @@
                     let req = roleService.create
                     if (this.$route.params.warrant_id) req = roleService.update
                     req(this.fetchParam).then((ret) => {
-                        xmview.showTip('success', '数据提交成功')
                         this.$refs['form'].resetFields();
                         this.currentData = {
                             data: [],

@@ -156,6 +156,7 @@
             xmview.setContentLoading(false);
              if (this.$route.params.sys_id != undefined) {    //路由id传递
                     // console.log('进入了编辑')
+                    if(!this.$route.params.sys_type){xmview.setContentTile('数据查看')}
                     dataService.getAdminInfo(this.$route.params.sys_id).then((ret) => {
                         this.fetchParam = ret
                         this.fetchParam.name=ret.category_name

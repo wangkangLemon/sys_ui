@@ -178,7 +178,7 @@ export default {
                 })
             },
             meta: {
-                title: '系统',
+                title: '节点',
                 noback: true
             }
         },

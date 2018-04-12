@@ -54,8 +54,6 @@
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <!--<el-table-column type="selection"></el-table-column>-->
-            <el-table-column min-width="50" prop="id" label="ID" v-if="data">
-            </el-table-column>
             <el-table-column min-width="100" prop="role_name" label="角色名">
             </el-table-column>
             <el-table-column min-width="100" prop="addate" label="添加时间">
@@ -68,21 +66,17 @@
                     <el-tag v-else>禁用</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" width="250" label="操作">
+            <el-table-column fixed="right" width="200" label="操作">
                 <template scope="scope">
-                    <!--<el-button @click="$router.push({name: 'role-edit', params: {roleInfo: scope.row, warrant_id: scope.row.id}})" type="text" size="small">详情
-                    </el-button>-->
                     <el-button @click="$router.push({name: 'gov-role-edit', params: {roleInfo: scope.row, warrant_id: scope.row.id}})" type="text" size="small">编辑
-                        <!--a-->
                     </el-button>
-                    <el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
+                    <!-- <el-button v-if="scope.row.disabled == 0" @click="offline(scope.$index, scope.row)" type="text" size="small">
                         <i>禁用</i>
                     </el-button>
                     <el-button v-else @click="online(scope.$index, scope.row)" type="text" size="small">
                         <i>启用</i>
-                    </el-button>
+                    </el-button> -->
                     <el-button @click="$router.push({name: 'gov-warrant_menus', params: {roleInfo: scope.row, warrant_id: scope.row.id, role_name: scope.row.role_name }})" type="text" size="small">授权菜单
-                        <!--a-->
                     </el-button>
                     <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                 </template>
@@ -119,7 +113,6 @@ export default {
     },
     data() {
         return {
-            init:false,
             loadingData: false,
             data: [], // 表格数据
             dataCache:[],
@@ -146,13 +139,8 @@ export default {
             this.fetchParam = getFetchParam()
         },
         handleCurrentChange(val) {
-            if(this.init){                 //init是true进来 限制fetchData初始化不请求
                 this.fetchParam.page = val
                 this.fetchData()
-            }else{
-                this.init = true
-                
-            }
         },
         handleSizeChange(val) {
             this.fetchParam.pagesize = val
@@ -193,15 +181,6 @@ export default {
                 })
             })
         },
-        // 
-        // // 启用
-        // online(index, row) {
-        //     xmview.showDialog(`你将要启用角色组<span style="color:red">${row.role_name}</span> 确认吗?`, () => {
-        //         roleService.online(row.id).then((ret) => {
-        //             row.disabled = 0
-        //         })
-        //     })
-        // },
         // // 单条删除
         del(index, row) {
             xmview.showDialog(`你将要删除角色组 <span style="color:red">${row.role_name}</span>  此操作不可恢复确认吗?`, () => {

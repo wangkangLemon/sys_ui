@@ -54,8 +54,6 @@
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow" border>
             
             <!--<el-table-column type="selection"></el-table-column>-->
-            <el-table-column min-width="50" prop="id" label="ID" v-if="data">
-            </el-table-column>
             <el-table-column min-width="100" prop="role_name" label="角色名">
             </el-table-column>
             <el-table-column min-width="100" prop="addate" label="添加时间">
@@ -119,7 +117,6 @@ export default {
     },
     data() {
         return {
-            init:false,
             loadingData: false,
             data: [], // 表格数据
             total: 0,
@@ -145,13 +142,8 @@ export default {
             this.fetchParam = getFetchParam()
         },
         handleCurrentChange(val) {
-            if(this.init){                 //init是true进来 限制fetchData初始化不请求
                 this.fetchParam.page = val
                 this.fetchData()
-            }else{
-                this.init = true
-                
-            }
         },
         handleSizeChange(val) {
             this.fetchParam.pagesize = val
