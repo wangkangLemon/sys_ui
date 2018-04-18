@@ -24,12 +24,13 @@ class TestingFactory {
     getExamOrignData() {
         return {
             description: void 0, // 题目
-            score: void 0, // 分数
+            // score: void 0, // 分数
             image: void 0, // 图片
             explain: void 0, // 答案详解
             correct: void 0,
             editable: true,
             // qtype: '', //题型
+            type: 1, //题型
             // title: '', //A3、A4题型题干
             options: [{ // 选项
                 sort: 1,

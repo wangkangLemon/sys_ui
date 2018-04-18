@@ -128,7 +128,6 @@ export default {
                 noback: false
             }
         },
-
         {
             path: 'subject/edit/:id',
             name: 'exam-subject-edit',

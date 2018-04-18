@@ -1,5 +1,4 @@
-<!--添加课程-->
-<!--公开课管理-->
+<!--试题管理-->
 <style lang='scss' rel='stylesheet/scss'>
 @import "../../../utils/mixins/common";
 
@@ -60,7 +59,7 @@
                 font-size: 14px;
             }
             width: 100%;
-            transform: translateY(15%) translateX(6%);
+            // transform: translateY(15%) translateX(6%);
             .el-input {
                 display: inline-block;
                 width: 100%;
@@ -100,25 +99,27 @@
                         <el-form-item  label="所属栏目" prop="chapter_id">
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
-                        <el-form-item v-show="qtype=='A3'" label="题干" :rules=" { required: true, type: 'number', message: '请输入题干', trigger: 'change' }">
+                        <!--A3题干部分-->
+                        <el-form-item v-show="qtype=='A3'"  label="题干" :rules=" { required: true, type: 'number', message: '请输入题干', trigger: 'change' }" >
                             <el-input v-model="form.title" type="textarea" :autosize="{ minRows: 2, maxRows: 2}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
-                          <!--单选|多选的答案部分-->
-                        <el-form-item label="答案选项组" v-show="qtype=='A4'">
-                            <h5>请在正确答案前面打勾</h5>
-                            <div class="multy-choose-item" v-for="(option,indexOption) in options" :key="indexOption">
-                                <el-checkbox v-model="option.correct" :true-label="1"  v-if="type == 2"></el-checkbox>
+                        <!--A4单选|多选的答案选项部分-->
+                        <el-form-item label="答案选项组" v-show="qtype=='A4'" v-if="!readonly" >
+                            <h5 v-if="!readonly" >请在正确答案前面打勾</h5>
+                            <div class="multy-choose-item" v-for="(option,indexOption) in ansoption" :key="indexOption">
+                                <!-- <el-checkbox v-model="option.correct" :true-label="1"  v-if="type == 2"></el-checkbox>
                                 <el-radio class="radio" v-model="option.correct" :label="indexOption"  v-else>
                                     <i></i>
-                                </el-radio>
+                                </el-radio> -->
+                                <span>{{option.opid}}</span>
                                 <el-input placeholder="填写描述" v-model="option.description" ></el-input>
-                                <el-button  type="text" @click="options.splice(indexOption, 1)">
+                                <el-button  type="text" @click="ansoption.splice(indexOption, 1)">
                                     <i>删除</i>
                                 </el-button>
                             </div>
                             <div class="multy-choose-item">
-                                <el-button  type="text" @click="addMoreTestingOption(options)">添加更多选项</el-button>
+                                <el-button v-if="!readonly"  type="text" @click="addMoreTestingOption(ansoption)">添加更多选项</el-button>
                             </div>
                         </el-form-item>
                         <hr>
@@ -165,8 +166,23 @@
                             </el-radio>
                         </el-form-item>
 
+                        
+                        <!--A4单选的选项部分-->
+                        <el-form-item label="选项" v-if="qtype=='A4'&& !readonly" >
+                            <el-radio class="radio" v-for="(option,indexOption) in ansoption" :key="indexOption" :disabled="!item.editable" 
+                                        v-model="item.options" :label="option.opid" :true-label="option.opid" :false-label="0">
+                                <i>{{option.opid}}</i>
+                            </el-radio>
+                        </el-form-item>
+                        <el-form-item label="答案"  v-if="qtype=='A4'&& readonly" >
+                            <i>{{cbA4answer}}</i>
+                        </el-form-item>
+                         <!--A4单选|多选的选项部分-->
+                        <!-- <optionItemA4 :options="ansoption" :item="item" >
+                        </optionItemA4> -->
+
                         <!--单选|多选的答案部分-->
-                        <el-form-item label="选项" v-else>
+                        <el-form-item label="选项"  v-if="qtype!='A4'">
                             <h5>请在正确答案前面打勾</h5>
                             <div class="multy-choose-item" v-for="(option,indexOption) in item.options" :key="indexOption">
                                 <el-checkbox v-model="option.correct" :true-label="1" :disabled="!item.editable" v-if="item.type == 2"></el-checkbox>
@@ -190,7 +206,6 @@
 
                         <hr>
                     </el-form>
-                
 
                 <el-form label-width="120px" v-if="!readonly" class="addtype" >
                     <el-form-item label="" class="item">
@@ -205,6 +220,7 @@
                 </div>
 
                 </el-form>
+
             <!-- </el-tab-pane> -->
         <!-- </el-tabs> -->
     </article>
@@ -218,6 +234,7 @@ import formUtils from '../../../utils/formUtils'
 import {transformParam} from '../../../utils/common'
 import UploadImg from '../../component/upload/UploadImg.vue'
 import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
+import optionItemA4 from '../../component/form/optionItemA4'
 
 export default {
     name: 'exam-subject-form',
@@ -246,20 +263,56 @@ export default {
             },
             type: 1 ,//判断 单选
             qtype:'', //A1、A2
-            options:[]
-            
+            options:[],
+            ansoption:[],
+            ansSelect:["A","B","C","D","E","F","G","H","I","J","K","L","M,","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+            cbA4answer:''
         }
     },
     created(){
-
-        this.qtype=this.$route.params.qtype
-        console.log( typeof(this.qtype),this.qtype)
-        console.log( this.$route.params)
-
-        this.form={
+        // let data
+        // data ={"ansoption":[ {"id": 0,"sort": 0,"description": "a",}, {"id": 0,"sort": 0,"description": "a",}], "qtype": "A4" , "title":"题干",  "allQuestion": [    {"id": 0,"correct": 0,"options": [{"id": 0,"correct": 0,"sort": 0,"description": "a",},{"id": 0,"sort": 0,"description": "b","correct": 1},{"id": 0,"sort": 0,"description": "c","correct": 1},{"id": 0,"sort": 0,"description": "d","correct": 0}]},{"id": 2,"correct": 0,"options": [{"id": 0,"correct": 0,"sort": 0,"description": "e",},{"id": 0,"sort": 0,"description": "b","correct": 1},{"id": 0,"sort": 0,"description": "c","correct": 1},{"id": 0,"sort": 0,"description": "d","correct": 0}]}]      }
+        // console.log(JSON.stringify(data))
+        let _this=this
+        if(this.$route.params.chapter_id){  //编辑
+            examService.getExamSubject(this.$route.params.id).then((ret) => {
+                console.log(ret)
+                xmview.setContentTile('试题查看')
+                this.form.chapter_name=ret.chapter_name
+                this.qtype=ret.qtype
+                var arr = []
+                arr.push(ret)
+                this.fetchTesting = arr
+                if(this.qtype=="A3") this.form.title = ret.ext.title
+                // this.ansoption = ret.options
+                if(this.qtype=="A4"){
+                    ret.options.map(v=>{
+                        if(v.correct==1){
+                            _this.cbA4answer=v.description
+                        }
+                        return
+                    })
+                }
+                
+                console.log(_this.cbA4answer)
+                
+                
+            }).catch((ret) => {
+                xmview.showTip('error', ret.message)
+            })
+        }else{  // 新建
+            this.form={
                 chapter_id:this.$route.params.chapterInfo.id,
                 chapter_name:this.$route.params.chapterInfo.name
-            },
+            }
+            this.qtype=this.$route.params.qtype
+            console.log(this.qtype)
+            if(this.qtype==undefined){
+                xmview.showTip('error', "请点击添加考题按钮 => 选择题型")
+                this.$router.push({'name':'exam-chapter-manage'})
+                return
+            }
+        }
         this.fetchTesting=[]
         this.uploadImgUrl = courseService.commonUploadImage()
         //编辑页面
@@ -271,20 +324,28 @@ export default {
         //     console.log(this.fetchTesting)
         //     xmview.setContentTile('编辑课程-培训')
         // } else 
-        if (this.$route.params.id) {
-            examService.getExamSubject(this.$route.params.id).then((ret) => {
-                console.log(ret)
-                xmview.setContentTile('试题查看')
-                this.form.chapter_name=ret.chapter_name
-                var arr = []
-                arr.push(ret)
-                this.fetchTesting = arr
-            }).catch((ret) => {
-                xmview.showTip('error', ret.message)
-            })
-        }
+
         this.readonly = this.$route.params.readonly
         xmview.setContentLoading(false)
+
+        if(this.qtype=="A4"){
+            this.ansoption=[{
+                    opid:"A",
+                    description: '',
+                },{
+                    opid:"B",
+                    description: '',
+                },{
+                    opid:"C",
+                    description: '',
+                },{
+                    opid:"D",
+                    description: '',
+                },{
+                    opid:"E",
+                    description: '',
+                }]
+        }
     },
     methods: {
         reqFun(param){
@@ -297,24 +358,30 @@ export default {
         },
         addTesting(type, index) {
             this.type=type
-            // console.log(type,index)
             this.fetchTesting.splice(index, 0, testingFactory.getExamSet(type))
         },
         // 删除考试
         deleteTesting(index, item) {
-            console.log(index, item)
             xmview.showDialog(`是否确定删除题目【 <i style="color:red">${item.description || ''}</i> 】?`, () => {
-                // courseService.delCourse({course_id:item.course_id,id:item.id}).then((ret) => {
-                        this.fetchTesting.splice(index, 1)
-                    // })
+                this.fetchTesting.splice(index, 1)
             })
         },
         // 添加多选 单选的选项
         addMoreTestingOption(options) {
-            options.push({
-                description: '',
-                correct: ''
-            })
+            console.log(options.length)
+            if(this.qtype=="A4"){
+                options.push({
+                    opid:this.ansSelect[options.length],
+                    description: '',
+                })
+                console.log(this.options)
+            }else{
+                options.push({
+                    description: '',
+                    correct:0
+                })
+            }
+            
         },
         // 考试题目信息提交
         handleSubmitTesting() {
@@ -329,51 +396,86 @@ export default {
                 if (!valid) {
                         return false
                     }
-                    console.log(this.fetchTesting)
-              
-                console.log(requestParam)
+                console.log(this.fetchTesting)
                 let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
-                for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
+                if(this.qtype!=="A4"){
+                     for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
                     // 处理单选题的正确答案选中
-                    if (item.type == 1 && typeof item.correct == 'number') {
-                        if(item.options){
-                            item.options.map((itemOptions) => {
-                                delete itemOptions.correct
-                            })
-                            item.options[item.correct].correct = 1
-                            delete item.correct
+                        if (item.type == 1 && typeof item.correct == 'number') {
+                            if(item.options){
+                                item.options.map((itemOptions) => {
+                                    delete itemOptions.correct
+                                })
+                                item.options[item.correct].correct = 1
+                                delete item.correct
+                            }
                         }
+                        // 修复sort属性
+                        item.sort = i + 1
+                        if (item.options) {
+                            item.options.map((itemOptions, index) => {
+                                itemOptions.sort = index + 1
+                            })
+                        }
+                        console.log(item.options)
                     }
-                    // 修复sort属性
-                    item.sort = i + 1
-                    if (item.options) {
-                        item.options.map((itemOptions, index) => {
-                            itemOptions.sort = index + 1
-                        })
-                    }
-                    item.qtype=this.qtype
-                    item.title=this.form.title
+                }else{
                 }
                 xmview.setContentLoading(true)
-                
-                console.log(encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'))
-                examService.addSubject({ 
-                    category_id:this.$store.state.index.examCate,
-                    chapter_id:this.form.chapter_id,
-                    qtype:  this.qtype,
-                    title:this.form.title,
-                    subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
-                }).then((ret) => {
-                    xmview.showTip('success', '操作成功')
-                    this.$router.back()
-                }, () => {
-                }).then(() => {
-                    xmview.setContentLoading(false)
-                })
+
+                //传参
+                let params ,data
+                if(this.qtype=="A1"||this.qtype=="A2"){ 
+                    params={ 
+                        category_id:this.$store.state.index.examCate,
+                        chapter_id:this.form.chapter_id,
+                        subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'),
+                    }
+                    examService.addSubjectA1(params).then((ret) => {
+                        xmview.showTip('success', '操作成功')
+                        this.$router.back()
+                    }, () => {
+                    }).then(() => {
+                        xmview.setContentLoading(false)
+                    })
+                }else if(this.qtype=="A3"||this.qtype=="A4"){
+                    if(this.qtype=="A3"){
+                        data ={
+                            "qtype":this.qtype,
+                            "title":this.form.title,
+                            "subjects":requestParam
+                        }
+                    }else{
+                          data ={
+                            "qtype":this.qtype,
+                            "title":this.form.title,
+                            "answeroption":this.ansoption,
+                            "subjects":requestParam,
+                        }
+                    }
+                    
+                    params={ 
+                        category_id:this.$store.state.index.examCate,
+                        chapter_id:this.form.chapter_id,
+                        subjects:JSON.stringify(data),
+                        style:this.qtype.toLowerCase(),
+                        noJson:0  
+                    }
+                    examService.addSubject(params).then((ret) => {
+                        xmview.showTip('success', '操作成功')
+                        this.$router.back()
+                    }, () => {
+                    }).then(() => {
+                        xmview.setContentLoading(false)
+                    })
+                }
+        
             })
-        },
+        }
     },
-    components: { UploadImg,SectionCategoryMenu}
+    components: { UploadImg,SectionCategoryMenu,optionItemA4}
 }
+
+
 
 </script>

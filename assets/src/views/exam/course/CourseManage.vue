@@ -189,11 +189,6 @@
                 },
                 // 表单相关属性
                 formLabelWidth: '50px', // 表单label的宽度
-                catArr: {
-                    'course': '课程',
-                    'article': '资讯',
-                    'link': '链接'
-                },
                 editPlacehoder: '',
                 rules: {
                     name: [

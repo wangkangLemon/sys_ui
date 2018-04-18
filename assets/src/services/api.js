@@ -29,22 +29,22 @@ function getTimeoutPromise (url) {
 
 // 请求完毕的url
 let requestedUrls = {}
-export function get (url, params, needLoading = false) {
-    return sendRequest('GET', url, params, needLoading)
+export function get(url, params, noJson, needLoading = false) {
+    return sendRequest('GET', url, params, noJson, needLoading)
 }
 
-export function post (url, params, needLoading = false) {
-    return sendRequest('POST', url, params, needLoading)
+export function post(url, params, noJson, needLoading = false) {
+    return sendRequest('POST', url, params, noJson, needLoading)
 }
 
-export function put (url, params, needLoading) {
+export function put(url, params, noJson, needLoading) {
     console.log('put()')
-    return sendRequest('PUT', url, params, needLoading)
+    return sendRequest('PUT', url, params, noJson, needLoading)
 }
 
-export function del (url, params, needLoading) {
+export function del(url, params, noJson, needLoading) {
     console.log('del--------------------------------')
-    return sendRequest('DELETE', url, params, needLoading)
+    return sendRequest('DELETE', url, params, noJson, needLoading)
 }
 
 // 下载功能
@@ -82,7 +82,7 @@ export function downLoad (url, params, fileName) {
 }
 
 // 共用的请求数据方法
-function sendRequest (method, url, params, needLoding = false) {
+function sendRequest(method, url, params, noJson,needLoding = false) {
     if (method === 'GET' && params)
         url = url + '?' + processParams(params)
 
@@ -92,12 +92,13 @@ function sendRequest (method, url, params, needLoding = false) {
         // 根据是否有token 添加header
         let headers = {}
         if (authUtils.getAuthToken()) headers['Authorization'] = 'Bearer ' + authUtils.getAuthToken() // 登录凭证
+        if (noJson==0) headers['Content-Type'] = 'application/json' // 在 body 传输
         // if (authUtils.getTwiceToken()) headers['TwoStep'] = `Bearer ` + authUtils.getTwiceToken() // 二次验证的token
         ajax({
             method: method,
             url: url,
             data: method === 'GET' ? {} : params,
-            headers
+            headers,
         }).then((ret, xhr) => {
             resolve(ret, xhr)
         }).catch((err, xhr) => {

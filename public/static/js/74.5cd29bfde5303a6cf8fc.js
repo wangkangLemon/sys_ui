@@ -1,2 +1,0 @@
-webpackJsonp([74],{1076:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("keep-alive",{attrs:{exclude:"sys-form,  user-form,gov-admin,coursetask-template-add,gov-menu-form"}},[r("router-view")],1)},staticRenderFns:[]}},140:function(e,t,r){var n=r(5)(r(809),r(1076),null,null);e.exports=n.exports},809:function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={}}});
-//# sourceMappingURL=74.5cd29bfde5303a6cf8fc.js.map

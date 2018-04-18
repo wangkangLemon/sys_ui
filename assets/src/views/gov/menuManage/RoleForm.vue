@@ -34,16 +34,10 @@
 
 <script>
     import roleService from '../../../services/gov/roleService'
-    import vTags from '../../component/form/Tags.vue'
-    import clone from 'clone'
     export default {
         name: 'sys-form',
-        components: {
-            vTags,
-        },
         data() {
             return {
-                imgUrl: '',
                 loadingData: false,
                 currentData: {
                     data: {},
@@ -51,7 +45,6 @@
                     index: -1
                 },
                 fetchParam: getOriginData(),
-                resultData: [],
                 rules: {
                     role_name: [
                         {required: true, message: '必须输入', trigger: 'blur'},

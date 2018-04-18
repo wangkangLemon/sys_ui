@@ -1,4 +1,4 @@
-<!--区块管理-->
+<!--试题管理-->
 <style lang='scss' rel="stylesheet/scss">
     @import "../../../utils/mixins/mixins";
     @import "../../../utils/mixins/table";
@@ -240,11 +240,6 @@
                 },
                 // 表单相关属性
                 formLabelWidth: '50px', // 表单label的宽度
-                catArr: {
-                    'course': '课程',
-                    'article': '资讯',
-                    'link': '链接'
-                },
                 editPlacehoder: '',
                 rules: {
                     name: [
@@ -261,7 +256,7 @@
                     label: 'name'
                 },
                 SecMenu:[],
-                category_id:1,
+                category_id:void 0,
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
                 qtype:''
             }
@@ -269,6 +264,7 @@
         watch: {
             '$store.state.index.secMenu'(){
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
+                
             },
             'category.currentData.id'(){
                 console.log(this.category.currentData)
@@ -323,11 +319,13 @@
                         xmview.setContentLoading(false)     
                     })
             },
-            fetchCourseLists () {
+            fetchCourseLists () {// 获取右边栏目数据
                 this.section.loading = true
                 this.section.chapter_id =this.category.currentData.id
                 this.section.category_id =this.$store.state.index.examCate
-
+                 delete this.section.data
+                // delete this.section.loading
+                // delete this.section.total
                 return examService.fetchSubjectLists(this.section).then((ret) => {
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
@@ -346,13 +344,15 @@
             },
            
             update (index, row) {
+                console.log(row)
+                
                 this.$router.push({
                     name:'exam-subject-edit',
                     params:{
                         id:row.id,
-                        category_id:row.category_id,
+                        //category_id:row.category_id,
                         chapter_id:row.chapter_id,
-                        courseInfo:row,
+                        subjectInfo:row,
                         readonly:true,
                     }
                 })

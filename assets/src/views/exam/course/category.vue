@@ -148,17 +148,6 @@
             clearSelected () {
                 this.selectable = false
             },
-            initFetchParam() {
-                this.fetchParam = getFetchParam()
-            },
-            handleCurrentChange(val) {
-                this.fetchParam.page = val
-                this.fetchData()
-            },
-            handleSizeChange(val) {
-                this.fetchParam.pagesize = val
-                this.fetchData()
-            },
             fetchData() {
                 this.fetchParam.category_id = this.$store.state.index.examCate
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
@@ -211,15 +200,15 @@
                     })
                 }
             },
-            //编辑
-            ChapterCategoryEdit( e ) {
-                examService.ChapterCategoryEdit(e).then((ret) => {
-                        setTimeout(() => {
-                            this.fetchData() // 重新刷新数据
-                             this.$forceUpdate()
-                        }, 300)
-                    })
-            },
+            // //编辑
+            // ChapterCategoryEdit( e ) {
+            //     examService.ChapterCategoryEdit(e).then((ret) => {
+            //             setTimeout(() => {
+            //                 this.fetchData() // 重新刷新数据
+            //                  this.$forceUpdate()
+            //             }, 300)
+            //         })
+            // },
             // //添加根节点
             // addP(p){
             //     this.selectData=null

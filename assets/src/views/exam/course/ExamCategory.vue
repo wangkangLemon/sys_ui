@@ -131,17 +131,6 @@
             clearSelected () {
                 this.selectable = false
             },
-            initFetchParam() {
-                this.fetchParam = getFetchParam()
-            },
-            handleCurrentChange(val) {
-                this.fetchParam.page = val
-                this.fetchData()
-            },
-            handleSizeChange(val) {
-                this.fetchParam.pagesize = val
-                this.fetchData()
-            },
             fetchData() {
                 examService.fetchExamCategory( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 

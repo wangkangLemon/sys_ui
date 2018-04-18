@@ -164,17 +164,6 @@
             clearSelected () {
                 this.selectable = false
             },
-            initFetchParam() {
-                this.fetchParam = getFetchParam()
-            },
-            handleCurrentChange(val) {
-                this.fetchParam.page = val
-                this.fetchData()
-            },
-            handleSizeChange(val) {
-                this.fetchParam.pagesize = val
-                this.fetchData()
-            },
             fetchData() {
                  this.fetchParam.category_id = this.$store.state.index.examCate
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
@@ -220,19 +209,18 @@
                     })
                 }
             },
-            //编辑
-            ChapterCategoryEdit( e ) {
-                examService.ChapterCategoryEdit(e).then((ret) => {
-                        setTimeout(() => {
-                            this.fetchData()   // 重新刷新数据
-                            this.$forceUpdate()
-                        }, 300)
-                    })
-            },
-            changeType(type){
-                this.type = type
-             
-            },
+            // //编辑
+            // ChapterCategoryEdit( e ) {
+            //     examService.ChapterCategoryEdit(e).then((ret) => {
+            //             setTimeout(() => {
+            //                 this.fetchData()   // 重新刷新数据
+            //                 this.$forceUpdate()
+            //             }, 300)
+            //         })
+            // },
+            // changeType(type){
+            //     this.type = type
+            // },
             // 单条删除
             del() {
                 if( this.selectData.name != undefined ){

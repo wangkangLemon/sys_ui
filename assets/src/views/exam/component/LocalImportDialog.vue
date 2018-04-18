@@ -23,7 +23,7 @@ Slot:
                 width: 300px;
                 margin: 0 auto;
             }
-            .yst-show-response{
+            .show-response{
                 height: 38px;
                 margin-top:75px;
                 text-align: center;
@@ -78,11 +78,11 @@ Slot:
             <div class="el-upload el-upload--text">
                 <div class="el-upload-dragger">
                     <el-progress v-show="uploadStatus == 0" :text-inside="true" :stroke-width="18" :percentage="percent"></el-progress>
-                    <div class="yst-show-response" v-show="uploadStatus == 1">
+                    <div class="show-response" v-show="uploadStatus == 1">
                         <p v-show="response.success > 0"><i class="el-icon-circle-check color-success"></i>&nbsp;成功: {{ response.success }} 条</p>
                         <p v-show="response.error > 0"><i class="el-icon-circle-cross color-error"></i>&nbsp;失败: {{ response.error }}  条</p>
                     </div>
-                    <div class="yst-show-response" v-show="uploadStatus == 2">
+                    <div class="show-response" v-show="uploadStatus == 2">
                         <p style="line-height: 38px"><i class="el-icon-circle-cross color-error"></i>上传失败</p>
                     </div>
                 </div>
@@ -149,7 +149,7 @@ Slot:
                 showUploading: true,
                 isSuccess: true,
                 percent: 0,
-                uploadStatus: 0,
+                uploadStatus: 0, //0：上传前;1：返回值有对有错; 2:上传失败
                 response: {
                     success: 0,
                     error: 0,
@@ -196,7 +196,7 @@ Slot:
                 
                 if (this.onSuccess) {
                     // let param=this.extradata
-                    //   var formData = new FormData()
+                    // var formData = new FormData()
                     // formData.append('input',file)
                     // formData.append('category_id',this.$store.state.index.examCate)
                     // formData.append('chapter_id',110)
@@ -206,13 +206,8 @@ Slot:
                     //     input:file
                     // }
                     // this.onSuccess(response.data, file, fileList).then(({success, error, reasons}) => {
-                    this.onSuccess(response)
+                    this.onSuccess(response) //把子组件的返回值返给父组件
                 }
-                // if(this.onSave){
-                //      this.onSave({save_sign:response.data.save_sign}).then((ret) => {
-                //         alert('上传成功')
-                //     })
-                // }
             },
 
             progress (event) {

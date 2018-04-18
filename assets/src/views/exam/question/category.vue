@@ -65,8 +65,8 @@
     function getFetchParam() {
         return {
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
-            category_id: void 0, // 3- 供应商
-            chapter_type:2,
+            category_id: void 0, // 
+            chapter_type:3,
             page: 1,
             pagesize: -1,
             stime: void 0,
@@ -75,10 +75,10 @@
            
         }
     }
-     function getSelectData() {
+    function getSelectData() {
         return {
-            category_id: void 0, // 3- 供应商
-            chapter_type:2,
+            category_id: void 0, // 
+            chapter_type:3,
             name: '',
             image: null,
             remark :'',
@@ -97,10 +97,10 @@
         data() {
             return {
                 loadingData: false,
-                SecMenu:[],
+                SecMenu:[],//栏目管理左侧数据
                 total: 0,
-                fetchParam: getFetchParam(),
-                selectData:getSelectData() ,
+                fetchParam: getFetchParam(), //左侧数据请求参数
+                selectData:getSelectData() ,  //右边表单的提交数据
                 activeTab : 'update',
                 category:1,
                 chaptertype:2
@@ -122,7 +122,7 @@
                 if(this.activeTab!="update"){
                     this.$store.dispatch('setSecMenu', { //通过清空vuex清空
                     category_id:this.$store.state.index.examCate,
-                    chapter_type: 2,
+                    chapter_type: 3,
                     name: '',
                     image: null,
                     remark :'',
@@ -164,19 +164,8 @@
             clearSelected () {
                 this.selectable = false
             },
-            initFetchParam() {
-                this.fetchParam = getFetchParam()
-            },
-            handleCurrentChange(val) {
-                this.fetchParam.page = val
-                this.fetchData()
-            },
-            handleSizeChange(val) {
-                this.fetchParam.pagesize = val
-                this.fetchData()
-            },
             fetchData() {
-                 this.fetchParam.category_id = this.$store.state.index.examCate
+                this.fetchParam.category_id = this.$store.state.index.examCate
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                         this.SecMenu=ret
@@ -220,19 +209,19 @@
                     })
                 }
             },
-            //编辑
-            ChapterCategoryEdit( e ) {
-                examService.ChapterCategoryEdit(e).then((ret) => {
-                        setTimeout(() => {
-                            this.fetchData()   // 重新刷新数据
-                            this.$forceUpdate()
-                        }, 300)
-                    })
-            },
-            changeType(type){
-                this.type = type
+            // //编辑
+            // ChapterCategoryEdit( e ) {
+            //     examService.ChapterCategoryEdit(e).then((ret) => {
+            //             setTimeout(() => {
+            //                 this.fetchData()   // 重新刷新数据
+            //                 this.$forceUpdate()
+            //             }, 300)
+            //         })
+            // },
+            // changeType(type){
+            //     this.type = type
              
-            },
+            // },
             // 单条删除
             del() {
                 if( this.selectData.name != undefined ){

@@ -1,4 +1,4 @@
-<!--区块管理-->
+<!--真题管理-->
 <style lang='scss' rel="stylesheet/scss">
     @import "../../../utils/mixins/mixins";
     @import "../../../utils/mixins/table";
@@ -7,6 +7,26 @@
 
     .block-manage {
         @extend %justify;
+            // .manage-container {
+            //     @extend %right-top-btnContainer;
+            //     >* {
+            //         color: #fff;
+            //         border-radius: 5px;
+            //     } // 添加课程
+            //     .add {
+            //         background: rgb(0, 204, 255);
+            //     } // 管理栏目
+            //     .catmange {
+            //         background: rgb(153, 102, 204);
+            //     }
+            // }
+        .topright{
+             @extend %right-top-btnContainer;
+              >* {
+                    color: #fff;
+                    border-radius: 5px;
+                } // 添加课程
+        }
         .content-title {
             padding: 10px 20px;
             background: #f0f3f5;
@@ -15,6 +35,7 @@
             button {
                 float: right;
                 display: block;
+                margin-right: 15px;
             }
         }
         .left-content {
@@ -36,20 +57,32 @@
             vertical-align: top;
             background: #fff;
             padding-bottom: 20px;
-
+            section{
+                margin-left: 10px;
+                margin-bottom: 14px;
+                display: inline-block;
+                margin-right: 10px;
+                .el-select .el-input .el-input__icon{
+                    transform: translateY(-50%) translateX(-50%)rotateZ(180deg);
+                }
+            }
+            .content-title{
+                position: relative;
+                section{
+                    opacity:0.1;
+                    height:0;
+                    width:107px;
+                    position: absolute;
+                    top:10px;
+                    right:10px;
+                }
+            }
             .content-list {
                 padding: 20px;
                 .search{
                     width:100%;
                     margin-bottom:10px;
                     section{
-                        margin-left: 10px;
-                        margin-bottom: 14px;
-                        display: inline-block;
-                        margin-right: 10px;
-                        .el-select .el-input .el-input__icon{
-                            transform: translateY(-50%) translateX(-50%)rotateZ(180deg);
-                        }
                         #input{
                             width: 84%;
                             display: inline-block;
@@ -87,6 +120,10 @@
 </style>
 <template>
     <article class="block-manage">
+        <!-- <section class="topright">
+                <el-button type="danger" icon="plus"  @click="$router.push({ name:'exam-subject-import'})">试题导入</el-button>
+                <el-button type="primary" icon="plus" >添加考题</el-button>
+        </section> -->
         <section class="left-content">
             <div class="content-title">
                 所有分类
@@ -99,7 +136,17 @@
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>考题列表
-                 <el-button type="primary" icon="plus"  @click="$router.push({ name:'exam-subject-add'})">添加考题</el-button>
+                <el-button type="primary" icon="plus" >添加考题</el-button>
+                <el-button type="danger" icon="plus"  @click="$router.push({ name:'exam-subject-import',params:{chapterInfo:category.currentData,qtype:qtype}})">试题导入</el-button>
+                <section>
+                      <el-select v-model="qtype" placeholder="未选择" @change="$router.push({ name:'exam-subject-add',params:{chapterInfo:category.currentData,qtype:qtype}})" >
+                            <el-option label="A1" value="A1"></el-option>
+                            <el-option label="A2" value="A2"></el-option>
+                            <el-option label="A3" value="A3"></el-option>
+                            <el-option label="A4" value="A4"></el-option>
+                    </el-select>
+                </section>   
+                
             </div>
             <div class="content-list">
                 <div class="search">
@@ -160,8 +207,24 @@
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import formUtils from '../../../utils/formUtils'
-
+    function initSection() {
+        return {
+            loading: false,
+            data: [],
+            description:'',
+            stime :'',
+            etime:'',
+            page: 1,
+            pagesize: 10,
+            total: 0,
+            status,
+            title:'',
+            qtype:'',
+            deleted:-1,
+        }
+    }
     export default {
+        name:'exam-subject-manage',
         components: {
             MenuTree,SectionCategoryMenu,ImagEcropperInput
             ,DateRange
@@ -177,11 +240,6 @@
                 },
                 // 表单相关属性
                 formLabelWidth: '50px', // 表单label的宽度
-                catArr: {
-                    'course': '课程',
-                    'article': '资讯',
-                    'link': '链接'
-                },
                 editPlacehoder: '',
                 rules: {
                     name: [
@@ -192,27 +250,15 @@
                         }
                     ]
                 },
-                section: {
-                    loading: false,
-                    data: [],
-                    description:'',
-                    stime :'',
-                    etime:'',
-                    page: 1,
-                    pagesize: 10,
-                    total: 0,
-                    status,
-                    title:'',
-                    qtype:'',
-                    deleted:-1,
-                },
+                section:initSection(),
                 defaultProps: {
                     children: 'children',
                     label: 'name'
                 },
                 SecMenu:[],
-                category_id:1,
+                category_id:void 0,
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
+                qtype:''
             }
         },
         watch: {
@@ -220,6 +266,7 @@
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             },
             'category.currentData.id'(){
+                console.log(this.category.currentData)
                 this.fetchCourseLists () 
                 // this.$refs.secCategory.handleNodeClick()
             },
@@ -228,9 +275,11 @@
                this.fetchData()
             }     
         },
-        activated () {
+        created () {
             this.category.currentData.id = ''
             this.category.loading = true
+            this.qtype=''
+            // this.section=initSection()
             this.fetchData()
             this.fetchCourseLists()
         },
@@ -240,6 +289,9 @@
             }
         },
         methods: {
+            dropDown(){
+                console.log(this)
+            },
             // 下线 或者上线课程 0为下线，1为上线
             offline(index, row) {
                 let txt = row.status == 0 ? '禁用' : '启用'
@@ -257,7 +309,7 @@
                 let param={
                             category_id: this.$store.state.index.examCate  , // 3- 供应商
                             page: 1,
-                            chapter_type:2,
+                            chapter_type:3,
                             pagesize: -1,
                         }
                 examService.fetchChapterCategory( param).then((ret) => {
@@ -266,11 +318,13 @@
                         xmview.setContentLoading(false)     
                     })
             },
-            fetchCourseLists () {
+            fetchCourseLists () {// 获取右边栏目数据
                 this.section.loading = true
                 this.section.chapter_id =this.category.currentData.id
                 this.section.category_id =this.$store.state.index.examCate
-
+                 delete this.section.data
+                // delete this.section.loading
+                // delete this.section.total
                 return examService.fetchSubjectLists(this.section).then((ret) => {
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
@@ -289,13 +343,15 @@
             },
            
             update (index, row) {
+                console.log(row)
+                
                 this.$router.push({
                     name:'exam-subject-edit',
                     params:{
                         id:row.id,
-                        category_id:row.category_id,
+                        //category_id:row.category_id,
                         chapter_id:row.chapter_id,
-                        courseInfo:row,
+                        subjectInfo:row,
                         readonly:true,
                     }
                 })

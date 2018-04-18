@@ -163,9 +163,21 @@ class examService {
     //     })
     // }
     // 添加或修改题目
-    addSubject({ category_id, chapter_id, subjects }) {
+    addSubjectA1({ category_id, chapter_id, subjects }) {
         let finalUrl = `${urlPre}/subject/create/${category_id}/${chapter_id}`
-        return api.post(finalUrl, subjects ).then((ret) => {
+        return api.post(finalUrl, subjects).then((ret) => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    addSubject({ category_id, chapter_id, subjects, style, noJson }) {
+        let finalUrl = `${urlPre}/subject/create/${style}/${category_id}/${chapter_id}`
+        return api.post(finalUrl, subjects, noJson ).then((ret) => {
             if (ret.code == 0) {
                 xmview.showTip('success', ret.message)
                 return ret.data

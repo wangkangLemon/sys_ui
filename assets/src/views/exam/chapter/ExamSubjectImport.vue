@@ -63,11 +63,11 @@
 <template>
     <article class="exam-subject-import">
          <article class="temp-container" >
-             <el-form class="cate" label-width="120px" :model="form"  :rules="rules" ref="cate">
-                        <el-form-item  label="所属栏目" prop="chapter_id">
-                            <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
-                        </el-form-item>
-                    </el-form>         
+            <el-form class="cate" label-width="120px" :model="form"  :rules="rules" ref="cate">
+                <el-form-item  label="所属栏目" prop="chapter_id">
+                    <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
+                </el-form-item>
+            </el-form>         
             <section class="temp-item" >
                 <div class="content">
                     <div >
@@ -211,7 +211,7 @@
                 //     formData.append('category_id',this.$store.state.index.examCate)
                 //     formData.append('chapter_id',110)
                 //     examService.upload(formData).then((ret) => {
-                  
+                    console.log(response)
                     let reasons = []
                     if (response.errs) {
                         response.errs.forEach((message) => {
@@ -220,16 +220,19 @@
                             })
                         })
                     }
-                    // return {
-                    //     success: response.success,
-                    //     error: response.failure,
-                    //     reasons: reasons,
-                    // }
+                    return {
+                        success: response.data,
+                        error: response.failure,
+                        reasons: reasons,
+                    }
+                
                 // }).then((ret)=>{
-                    examService.subjectSave({save_sign:response.data.save_sign}).then((ret) => {
-                        // alert('上传成功')
-                    })
+                    // examService.subjectSave({save_sign:response.data.save_sign}).then((ret) => {
+              
+                    //     // alert('上传成功')
+                    // })
                 // })
+                 
             },
             // upload(file){
             //     let params={
