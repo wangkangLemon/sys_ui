@@ -87,7 +87,7 @@ export default {
             }
         },
         {
-            path: 'manage/add-course', // 添加和编辑课程
+            path: 'manage/add-course', // 添加和编辑视频课程
             name: 'course-manage-addCourse',
             component: resolve => {
                 require.ensure([], () => {
@@ -99,8 +99,20 @@ export default {
             }
         },
         {
+            path: 'manage/add-course/herbal', // 添加和编辑中草药课程
+            name: 'course-manage-addCourse-herbal',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/AddHerbal.vue'))
+                })
+            },
+            meta: {
+                title: '添加课程-培训',
+            }
+        },
+        {
             path: 'manage/course-category-manage', // 栏目管理
-            name: 'course-manage-course-category-manage',
+            name: 'course-category-manage',
             component: resolve => {
                 require.ensure([], () => {
                     resolve(require('../views/course/manage/CategoryManage.vue'))

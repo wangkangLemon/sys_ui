@@ -203,7 +203,6 @@
 <script>
     import examService from '../../../services/exam/examService'
     import MenuTree from '../../component/tree/MenuTreeExam.vue'
-    import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import formUtils from '../../../utils/formUtils'
@@ -226,7 +225,7 @@
     export default {
         name:'exam-subject-manage',
         components: {
-            MenuTree,SectionCategoryMenu,ImagEcropperInput
+            MenuTree,ImagEcropperInput
             ,DateRange
         },
         data () {

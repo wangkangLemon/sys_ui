@@ -170,13 +170,12 @@
 <script>
     import examService from '../../../services/exam/examService'
     import MenuTree from '../../component/tree/MenuTreeExam.vue'
-    import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
 
     export default {
         components: {
-            MenuTree,SectionCategoryMenu,ImagEcropperInput,DateRange
+            MenuTree,ImagEcropperInput,DateRange
         },
         data () {
             return {

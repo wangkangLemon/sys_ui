@@ -9,7 +9,7 @@
 </style>
 <template>
     <el-cascader class="course-select-container" ref="container" v-loading="loading" :options='options' :show-all-levels="false" 
-        :placeholder="placeholder" @active-item-change="handleItemChange" :clearable="true" @change="setCurrVal">
+        :placeholder="placeholder" @active-item-change="handleItemChange" :clearable="clearable" @change="setCurrVal">
     </el-cascader>
 </template>
 
@@ -40,7 +40,10 @@
             },
             reqFun:Function, //二级
             reqExamCateFun:Function,//一级
-
+            clearable:{
+                type: Boolean,
+                default: true
+            },
         },
         data() {
             return {
@@ -49,6 +52,7 @@
                 currVal: this.value,
                 govid: void 0, // 企业id
                 lastData: void 0,
+                // clearable:this.clearable?this.clearable:true
             }
         },
         watch: {
@@ -67,6 +71,7 @@
             }    
         },
         mounted() {
+            console.log(this.clearable)
             this.handleData()
         },
         deactivated() {

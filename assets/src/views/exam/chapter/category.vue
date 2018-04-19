@@ -86,8 +86,6 @@
            
         }
     }
-
-
     export default {
         components: {
             MenuTree,
@@ -140,7 +138,7 @@
             this.selectData={}
             this.loadingData=false
             xmview.setLoading(false)
-            this.fetchData()
+            this.fetchData() // 避免初始化多次加载
         },
         methods: {
              // 左边的节点被点击
@@ -148,7 +146,6 @@
                 // console.log('===========   node.data.data==========  ')
                 console.log(this)
                 this.activeTab='update'
-                console.log(222)
                 if (type == 1) { 
                 //     // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
                 //     this.nodeParentSelected = node.parent// 记录父节点
@@ -166,11 +163,11 @@
             },
             fetchData() {
                  this.fetchParam.category_id = this.$store.state.index.examCate
+                 this.fetchParam.chapter_type = 2
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                         this.SecMenu=ret
                         console.log(ret)
-                        // console.log(typeof(ret.chapter_type))
                         xmview.setContentLoading(false)     
                     })
             },

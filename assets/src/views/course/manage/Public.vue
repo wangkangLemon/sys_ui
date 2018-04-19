@@ -43,9 +43,9 @@
 <template>
     <article id="course-manage-public-container">
         <section class="manage-container">
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'course-manage-addCourse'})"><i>添加课程</i>
-            </el-button>
-            <!--<el-button type="warning" icon="menu" @click="$router.push({name:'course-manage-course-category-manage'})">
+            <el-button type="warning" icon="plus" @click="$router.push({ name:'course-manage-addCourse-herbal'})"><i>添加中草药课程</i> </el-button>
+            <el-button type="primary" icon="plus" @click="$router.push({ name:'course-manage-addCourse'})"><i>添加视频课程</i></el-button>
+             <!--<el-button type="warning" icon="menu" @click="$router.push({name:'course-manage-course-category-manage'})">
                 <i>管理栏目</i>
             </el-button>-->
         </section>

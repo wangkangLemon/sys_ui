@@ -211,7 +211,7 @@
                 //     formData.append('category_id',this.$store.state.index.examCate)
                 //     formData.append('chapter_id',110)
                 //     examService.upload(formData).then((ret) => {
-                    console.log(response)
+                    console.log(response.data)
                     let reasons = []
                     if (response.errs) {
                         response.errs.forEach((message) => {
@@ -220,17 +220,18 @@
                             })
                         })
                     }
-                    return {
-                        success: response.data,
-                        error: response.failure,
-                        reasons: reasons,
-                    }
+                    // return {
+                    //     success: response.data,
+                    //     error: response.failure,
+                    //     reasons: reasons,
+                    // }
                 
                 // }).then((ret)=>{
-                    // examService.subjectSave({save_sign:response.data.save_sign}).then((ret) => {
-              
-                    //     // alert('上传成功')
-                    // })
+                    examService.subjectSave({save_sign:response.data.save_sign}).then((ret) => {
+                        xmview.showTip('success', '保存成功')
+
+                        // alert('上传成功')
+                    })
                 // })
                  
             },

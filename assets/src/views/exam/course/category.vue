@@ -124,7 +124,7 @@
             this.selectData={}
             this.loadingData=false
             xmview.setLoading(false)
-            this.fetchData()
+            this.fetchData() // 避免初始化多次请求
         },
         methods: {
             // 左边的节点被点击
@@ -150,6 +150,8 @@
             },
             fetchData() {
                 this.fetchParam.category_id = this.$store.state.index.examCate
+                this.fetchParam.chapter_type = 1
+                console.log(this.fetchParam)
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     

@@ -170,8 +170,8 @@ export default {
             }
         },
         {//历年真题添加修改考题表单
-            path: 'subject/add',
-            name: 'exam-subject-add',
+            path: 'question/add',
+            name: 'exam-question-add',
             component: resolve => {
                 require.ensure([], () => {
                     resolve(require('../views/exam/question/ExamSubjectForm.vue'))
@@ -183,8 +183,8 @@ export default {
             }
         },
         {
-            path: 'subject/edit/:id',
-            name: 'exam-subject-edit',
+            path: 'question/edit/:id',
+            name: 'exam-question-edit',
             component: resolve => {
                 require.ensure([], () => {
                     resolve(require('../views/exam/question/ExamSubjectForm.vue'))

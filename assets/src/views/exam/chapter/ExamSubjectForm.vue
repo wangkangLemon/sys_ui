@@ -273,6 +273,7 @@ export default {
         // let data
         // data ={"ansoption":[ {"id": 0,"sort": 0,"description": "a",}, {"id": 0,"sort": 0,"description": "a",}], "qtype": "A4" , "title":"题干",  "allQuestion": [    {"id": 0,"correct": 0,"options": [{"id": 0,"correct": 0,"sort": 0,"description": "a",},{"id": 0,"sort": 0,"description": "b","correct": 1},{"id": 0,"sort": 0,"description": "c","correct": 1},{"id": 0,"sort": 0,"description": "d","correct": 0}]},{"id": 2,"correct": 0,"options": [{"id": 0,"correct": 0,"sort": 0,"description": "e",},{"id": 0,"sort": 0,"description": "b","correct": 1},{"id": 0,"sort": 0,"description": "c","correct": 1},{"id": 0,"sort": 0,"description": "d","correct": 0}]}]      }
         // console.log(JSON.stringify(data))
+        console.log(this.$route)
         let _this=this
         if(this.$route.params.chapter_id){  //编辑
             examService.getExamSubject(this.$route.params.id).then((ret) => {

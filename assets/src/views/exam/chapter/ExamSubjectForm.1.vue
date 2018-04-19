@@ -359,7 +359,6 @@ export default {
               
                 console.log(requestParam)
                 let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
-                debugger
                 for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
                     // 处理单选题的正确答案选中
                     if (item.type == 1 && typeof item.correct == 'number') {

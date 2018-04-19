@@ -1,4 +1,4 @@
-<!--栏目管理-->
+<!--视频课程栏目管理-->
 <style lang='scss' rel='stylesheet/scss'>
     @import "../../../utils/mixins/common";
     @import "../../../utils/mixins/mixins";
@@ -46,7 +46,6 @@
             <el-button type="primary" @click="addRootCategory">新建栏目</el-button>
         </section>-->
         <section class="left-container">
-            <!--这是view-->
             <CourseCategoryTree v-model="treeData" ref="courseCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseCategoryTree>
         </section>
 
@@ -73,8 +72,11 @@
                     </el-form-item>
                     <el-form-item label="课程类型" prop="category_type">
                         <el-radio-group v-model="fetchParam.category_type" :disabled="fetchParam.pid == null">
-                            <el-radio :label="1">课程栏目</el-radio>
-                            <el-radio :label="2">应试课程栏目</el-radio>
+                            <el-radio :label="1">视频课程栏目</el-radio>
+                            <!-- <el-radio :label="2">应试课程栏目</el-radio> -->
+                            <el-radio :label="3">中药栏目</el-radio>
+                            <el-radio :label="4">方剂栏目</el-radio>
+                            <el-radio :label="5">腧穴栏目</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="栏目排序" prop="sort">

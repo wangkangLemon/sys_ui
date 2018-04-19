@@ -36,6 +36,10 @@ Slot:
             color: #FF4949;
             margin-bottom: 15px;
         }
+        .ok-reason {
+            color: #13CE66;
+            margin-bottom: 15px;
+        }
         .color-success {
             color: #13CE66;
         }
@@ -89,6 +93,13 @@ Slot:
             </div>
         </div>
         <div class="download-template" v-if="templateUrl"><a v-bind:href="templateUrl" target="_blank">下载参考模板</a></div>
+        <article class="ok-reason" v-show="response.result">
+            <h5>上传结果：</h5>
+            <h5>A1题型: {{  response.results.a1cnt }} 条</h5>
+            <h5>A2题型: {{  response.results.a2cnt }} 条</h5>
+            <h5>A3题型: {{  response.results.a3cnt }} 条</h5>
+            <h5>A4题型: {{  response.results.a4cnt}} 条</h5>
+        </article>
         <article class="error-reason" v-show="response.reasons.length > 0">
             <h5>错误原因：</h5>
             <h5 v-for="reason in response.reasons">{{ reason.message }}</h5>
@@ -154,6 +165,13 @@ Slot:
                     success: 0,
                     error: 0,
                     reasons: [],
+                    result:null,
+                    results:{
+                        a1cnt:'',
+                        a2cnt:'',
+                        a3cnt:'',
+                        a4cnt:'',
+                    },
                 },
             }
         },
@@ -182,6 +200,13 @@ Slot:
                     this.response.error = 1
                     this.response.reasons = [{message: response.message}]
                     return
+                }
+                if(response.code == 0){
+                    this.response.success = response.data.total
+                    this.response.results=this.response.result = response.data
+                    console.log(this.response.result.length,this.response.result)
+                    // this.response.error = 0
+                    // this.response.reasons = [{message: response.data}]
                 }
 
                 // this.response.success = response.data.success

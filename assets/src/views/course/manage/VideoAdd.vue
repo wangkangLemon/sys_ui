@@ -103,7 +103,7 @@
             }
         },
         beforeCreate () {
-//            ossSdk = new OssSdk()
+        //  ossSdk = new OssSdk()
             this.user = authUtils.getUserInfo()
         },
         mounted () {

@@ -273,7 +273,7 @@
                     <!--asd-->
                     <small>{{subTitle}}</small>
                     <div v-if="/^\/exam(?:\/(?=$))?/i.test($route.fullPath)" class="examcate"> 
-                        <Section-category-menu :placeholder="examCate.category_name" :autoClear="true" v-model="examCate.category_id" :reqExamCateFun="reqExamCateFun"></Section-category-menu>
+                        <Section-category-menu :placeholder="examCate.category_name" :clearable="false" :autoClear="false" v-model="examCate.category_id" :reqExamCateFun="reqExamCateFun"></Section-category-menu>
                     </div>
                 </h2>
                 

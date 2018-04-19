@@ -130,7 +130,6 @@
                         <el-radio class="radio" v-model="fetchParam.share" :label="1">是</el-radio>
                         <el-radio class="radio" v-model="fetchParam.share" :label="0">否</el-radio>
                     </el-form-item>
-
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
                         <el-radio class="radio" v-model="fetchParam.need_testing" :label="1">需要</el-radio>

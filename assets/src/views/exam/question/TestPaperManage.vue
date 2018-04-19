@@ -127,7 +127,7 @@
         <section class="left-content">
             <div class="content-title">
                 所有分类
-                <router-link tag="el-button" :to="{name: 'exam-chapter-category'}">管理分类</router-link>
+                <router-link tag="el-button" :to="{name: 'exam-question-category'}">管理分类</router-link>
             </div>
             <div class="classify-tree">
                  <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="chapterCategory"></MenuTree>
@@ -139,7 +139,7 @@
                 <el-button type="primary" icon="plus" >添加考题</el-button>
                 <el-button type="danger" icon="plus"  @click="$router.push({ name:'exam-subject-import',params:{chapterInfo:category.currentData,qtype:qtype}})">试题导入</el-button>
                 <section>
-                      <el-select v-model="qtype" placeholder="未选择" @change="$router.push({ name:'exam-subject-add',params:{chapterInfo:category.currentData,qtype:qtype}})" >
+                      <el-select v-model="qtype" placeholder="未选择" @change="$router.push({ name:'exam-question-add',params:{chapterInfo:category.currentData,qtype:qtype}})" >
                             <el-option label="A1" value="A1"></el-option>
                             <el-option label="A2" value="A2"></el-option>
                             <el-option label="A3" value="A3"></el-option>
@@ -171,7 +171,7 @@
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="description" label="考题" ></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" width="180">
+                    <el-table-column prop="chapter_name" label="绑定栏目" min-width="180">
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
                     <el-table-column prop="addate" label="创建时间" width="200"></el-table-column>
@@ -203,7 +203,6 @@
 <script>
     import examService from '../../../services/exam/examService'
     import MenuTree from '../../component/tree/MenuTreeExam.vue'
-    import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import formUtils from '../../../utils/formUtils'
@@ -226,7 +225,7 @@
     export default {
         name:'exam-subject-manage',
         components: {
-            MenuTree,SectionCategoryMenu,ImagEcropperInput
+            MenuTree,ImagEcropperInput
             ,DateRange
         },
         data () {
@@ -346,7 +345,7 @@
                 console.log(row)
                 
                 this.$router.push({
-                    name:'exam-subject-edit',
+                    name:'exam-question-edit',
                     params:{
                         id:row.id,
                         //category_id:row.category_id,

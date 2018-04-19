@@ -57,7 +57,7 @@
 </template>
 
 <script>
-    //这是 主页面   区别 ：1无子分类 2. ExamChapterCard传递参数  chaptertype:2
+    //这是 主页面   区别 ：1无子分类 2. ExamChapterCard传递参数  chaptertype:3
     import examService from '../../../services/exam/examService'
     import MenuTree from '../../component/tree/MenuTreeExam.vue'
     import ExamChapterCard from '../../component/table/ExamChapterCard.vue'
@@ -103,7 +103,7 @@
                 selectData:getSelectData() ,  //右边表单的提交数据
                 activeTab : 'update',
                 category:1,
-                chaptertype:2
+                chaptertype:3
 
             }
         },
@@ -133,14 +133,13 @@
                     console.log(this.$refs.chapterCategory)
                     this.$refs.chapterCategory.clearSelected()
                 }
-          
             }, 
         },
         activated() {
             this.selectData={}
             this.loadingData=false
             xmview.setLoading(false)
-            this.fetchData()
+            this.fetchData() // 避免初始化多次加载
         },
         methods: {
              // 左边的节点被点击
@@ -166,6 +165,7 @@
             },
             fetchData() {
                 this.fetchParam.category_id = this.$store.state.index.examCate
+                this.fetchParam.chapter_type = 3
                 examService.fetchChapterCategory( this.fetchParam).then((ret) => {
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
                         this.SecMenu=ret
