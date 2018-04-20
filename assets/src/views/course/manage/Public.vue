@@ -1,260 +1,338 @@
-<!--公开课管理-->
-<style lang='scss' rel='stylesheet/scss'>
+<!--区块管理-->
+<style lang='scss' rel="stylesheet/scss">
+    @import "../../../utils/mixins/mixins";
+    @import "../../../utils/mixins/table";
     @import "../../../utils/mixins/common";
     @import "../../../utils/mixins/topSearch";
 
-    #course-manage-public-container {
-        @extend %content-container;
-        border: none;
-        .manage-container {
-            @extend %right-top-btnContainer;
-            >* {
-                color: #fff;
-                border-radius: 5px;
-            } // 添加课程
-            .add {
-                background: rgb(0, 204, 255);
-            } // 管理栏目
-            .catmange {
-                background: rgb(153, 102, 204);
+    .block-manage {
+        @extend %justify;
+        .content-title {
+            padding: 10px 20px;
+            background: #f0f3f5;
+            text-align: left;
+            line-height: 35px;
+            button {
+                float: right;
+                display: block;
             }
         }
+        .left-content {
+            display: inline-block;
+            vertical-align: top;
+            width: 25%;
+            background: #fff;
 
-        .search {
-            @extend %top-search-container;
-        } // 底部的管理按钮
-        .data-table{
-            .c{
-                text-align: center;
+            .classify-tree {
+                padding: 1px;
+                .el-tree-node{
+                    overflow: hidden;
+                }
             }
         }
-        .bottom-manage {
-            margin-top: 15px;
-        }
+        .right-content {
+            width: 74%;
+            display: inline-block;
+            vertical-align: top;
+            background: #fff;
+            padding-bottom: 20px;
 
-        .el-dialog__wrapper {
-            padding-top: 15px;
-            background: rgba(0, 0, 0, .5);
-            z-index: 1000;
+            .content-list {
+                padding: 20px;
+                .search{
+                    width:100%;
+                    margin-bottom:10px;
+                    section{
+                        margin-left: 10px;
+                        margin-bottom: 14px;
+                        display: inline-block;
+                        margin-right: 10px;
+                        .el-select .el-input .el-input__icon{
+                            transform: translateY(-50%) translateX(-50%)rotateZ(180deg);
+                        }
+                        #input{
+                            width: 84%;
+                            display: inline-block;
+                            margin-left: 10px;
+                        }
+                    }
+                    .fi{
+                        width:35%;
+                    }
+                }
+                .tag {
+                    span {
+                        padding: 10px;
+                        border: 1px solid #e2e7eb;
+                        background: #fff;
+                        border-right: none;
+                        &:last-of-type {
+                            border-right: 1px solid #e2e7eb;
+                        }
+                        &:hover {
+                            background: #e2e7eb;
+                        }
+                        &.active {
+                            background: #e2e7eb;
+                        }
+                    }
+                }
+            }
+            .el-pagination {
+                float: right;
+                margin-top: 10px;
+            }
         }
     }
 </style>
-
 <template>
-    <article id="course-manage-public-container">
-        <section class="manage-container">
-            <el-button type="warning" icon="plus" @click="$router.push({ name:'course-manage-addCourse-herbal'})"><i>添加中草药课程</i> </el-button>
-            <el-button type="primary" icon="plus" @click="$router.push({ name:'course-manage-addCourse'})"><i>添加视频课程</i></el-button>
-             <!--<el-button type="warning" icon="menu" @click="$router.push({name:'course-manage-course-category-manage'})">
-                <i>管理栏目</i>
-            </el-button>-->
+    <article class="block-manage">
+        <section class="left-content">
+            <div class="content-title">
+                所有分类
+                <router-link tag="el-button" :to="{name: 'course-category-manage'}">管理分类</router-link>
+            </div>
+            <div class="classify-tree">
+                <CourseCategoryTree v-model="treeData" ref="courseCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseCategoryTree>
+                 <!-- <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="chapterCategory" :Mult='Mult'></MenuTree> -->
+            </div>
         </section>
+        <section class="right-content">
+            <div class="content-title">
+                <span v-if="category.title">{{category.title}}-</span>课程列表
+                    <el-button type="primary" icon="plus" @click="$router.push({ name:'course-manage-addCourse'})"><i>添加视频课程</i></el-button>
+                    <el-button type="warning" icon="plus" @click="addHerbal"><i>添加中草药课程</i> </el-button>
+            </div>
+            <div class="content-list">
+                <div class="search">
+                    <section class="fi">
+                     <i>标题</i><el-input id="input" v-model="section.course_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                    </section>  
+                    <DateRange title="创建时间" :start="section.create_start " :end="section.create_end" @changeStart="val=> section.create_start =val "
+                        @changeEnd="val=> section.create_end=val" :change="fetchCourseLists">
+                    </DateRange>
+                    <section>
+                        <i>状态</i>
+                        <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
+                            <el-option label="全部" value="-1"></el-option>
+                            <el-option label="正常" value="0"></el-option>
+                            <el-option label="禁用 " value="1"></el-option>
+                            <el-option label="视频转码中" value="2"></el-option>
+                        </el-select>
+                    </section>
+                    <section><i>栏目</i>
+                        <CourseCategorySelect :onchange="fetchCourseLists" v-model="section.category_id"></CourseCategorySelect>
+                    </section> 
+                </div>     
+                <el-table v-loading="section.loading" border :data="section.data">
+                    <el-table-column prop="course_name" label="课程名称" min-width="230"></el-table-column>
+                    <el-table-column prop="chapter_name" label="绑定栏目" width="190">
+                        <!-- <template scope="scope">
+                            {{scope.row.category_name || '无'}}
+                        </template> -->
+                    </el-table-column>
+                    <el-table-column prop="sort" label="排序" width="70"></el-table-column>
+                    <el-table-column prop="tags" label="标签" width="100"></el-table-column>
+                    <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
+                        <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
+                    </el-table-column> -->
+                    <el-table-column width="80" label="状态">
+                        <template scope="scope">
+                            <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
+                            <el-tag v-else type="danger">禁用 </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="addate" label="创建时间" width="180"></el-table-column>
+                    <el-table-column prop="operate" label="操作" width="150" fixed="right">
+                        <template scope="scope">
+                            <el-button @click="$router.push({name: 'course-manage-addCourse', params: {courseInfo: scope.row}, query: {id: scope.row.contentid}})"
+                                type="text" size="small">编辑
+                                <!--a-->
+                            </el-button>
+                            <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
+                                <i>{{ scope.row.status == 1 ? '正常 ' : '禁用 ' }}</i>
+                            </el-button>
+                            <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
+                            <!-- <el-button v-if="scope.row.subject_num > 0" @click="$router.push({name:'course-manage-course-answer-analysis', params:{id:scope.row.id}})"
+                                type="text" size="small">答案分析
+                            </el-button> -->
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="block">
+                    <el-pagination
+                            @current-change="sectionPageChange"
+                            :current-page="section.page"
+                            :page-size="section.pagesize"
+                            small
+                            layout="total,prev, pager, next"
+                            :total="section.total">
+                    </el-pagination>
+                </div>
 
-        <article class="search">
-            <section>
-                <i>课程名称</i>
-                <el-input v-model="fetchParam.course_name" @keyup.enter.native="fetchData"></el-input>
-            </section>
-
-            <section>
-                <i>状态</i>
-                <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData" :clearable="true">
-                    <el-option label="全部" value="-1"></el-option>
-                    <el-option label="正常" value="0"></el-option>
-                    <el-option label="禁用 " value="1"></el-option>
-                    <el-option label="视频转码中" value="2"></el-option>
-                </el-select>
-            </section>
-
-            <section><i>栏目</i>
-                <CourseCategorySelect :onchange="fetchData" v-model="fetchParam.category_id"></CourseCategorySelect>
-            </section>
-
-            <DateRange title="创建时间" :start="fetchParam.create_start" :end="fetchParam.create_end" @changeStart="val=> fetchParam.create_start=val "
-                @changeEnd="val=> fetchParam.create_end=val" :change="fetchData">
-            </DateRange>
-
-            <!--<section>
-                <i>课后考试</i>
-                <el-select v-model="fetchParam.need_testing" placeholder="未选择" @change="fetchData" :clearable="true">
-                    <el-option label="不需要" value="0"></el-option>
-                    <el-option label="需要" value="1"></el-option>
-                </el-select>
-            </section>-->
-
-        </article>
-
-        <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" @select="selectRow" @select-all="selectRow"
-            border>
-            <!--<el-table-column type="selection"></el-table-column>-->
-            <el-table-column min-width="200" prop="course_name" label="课程">
-            </el-table-column>
-            <el-table-column min-width="200" prop="category_name" label="所属栏目">
-            </el-table-column>
-            <el-table-column width="80" label="题目数">
-                <template scope="scope">
-                    <el-button style="width: 100%" @click="$router.push({name: 'course-manage-addCourse', params: {courseInfo: scope.row, tab:'second'}})"
-                        type="text" size="small">{{scope.row.subject_num}}
-                        <!--a-->
-                    </el-button>
-                </template>
-            </el-table-column>
-            <!-- <el-table-column width="80" prop="total_score" label="总分数" class="c">
-            </el-table-column> -->
-            <el-table-column width="108" prop="limit_time" label="限时（分）" class="c">
-            </el-table-column>
-            <el-table-column width="100" label="状态">
-                <template scope="scope">
-                    <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
-                    <el-tag v-else-if="scope.row.status == 2" type="primary">转码中</el-tag>
-                    <el-tag v-else>已禁用 </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column width="190" prop="addate" label="创建时间">
-            </el-table-column>
-            <el-table-column fixed="right" width="227" label="操作">
-                <template scope="scope">
-                    <!--<el-button @click="preview(scope.$index, scope.row)" type="text" size="small">预览</el-button>-->
-                    <el-button @click="$router.push({name: 'course-manage-addCourse', params: {courseInfo: scope.row}, query: {id: scope.row.contentid}})"
-                        type="text" size="small">编辑
-                        <!--a-->
-                    </el-button>
-                    <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
-                        <i>{{ scope.row.status == 1 ? '正常 ' : '禁用 ' }}</i>
-                    </el-button>
-                    <el-button @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
-                    <el-button v-if="scope.row.subject_num > 0" @click="$router.push({name:'course-manage-course-answer-analysis', params:{id:scope.row.id}})"
-                        type="text" size="small">答案分析
-                        <!--ff-->
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        <el-pagination class="pagin" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="fetchParam.page"
-            :page-size="fetchParam.pagesize" :page-sizes="[15, 30, 60, 100, 130, 160, 200]"  layout="sizes,total, prev, pager, next" :total="total">
-        </el-pagination>
-
-        <!--底部的批量删除和移动两个按钮-->
-        <!--<div class="bottom-manage">
-            <el-button :disabled='selectedIds.length < 1' @click="dialogTree.isShow = true">移动到</el-button>
-            <el-button :disabled='selectedIds.length < 1' @click="delMulti">批量删除</el-button>
-        </div>-->
-
-        <!--移动子栏目的弹出框-->
-        <div class="el-dialog__wrapper" v-show="dialogTree.isShow">
-            <article class="el-dialog el-dialog--tiny">
-                <section class="el-dialog__header">
-                    <i>移动课程到</i>
-                </section>
-                <section class="el-dialog__body">
-                    <CourseCategoryTree node-key="id" :onNodeClick="(data) => dialogTree.selectedId=data.value"></CourseCategoryTree>
-                </section>
-                <section class="el-dialog__footer">
-                    <span class="dialog-footer">
-                          <el-button @click="dialogTree.isShow = false">取 消</el-button>
-                        <el-button type="primary" @click="moveToCat">确 定</el-button>
-                    </span>
-                </section>
-            </article>
-        </div>
+                 <!-- {{examCateid}} -->
+            </div>
+        </section>
     </article>
 </template>
-
 <script>
-    import courseService from '../../../services/course/courseService.js'
-    import DateRange from '../../component/form/DateRangePicker.vue'
-    import CourseCategorySelect from '../../component/select/CourseCategory.vue'
-    // import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
+    import courseService from '../../../services/course/courseService'
     import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
+    import CourseCategorySelect from '../../component/select/CourseCategory.vue'
+    import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
+    import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
+    import DateRange from '../../component/form/DateRangePicker.vue'
 
-    function getFetchParam() {
-        return {
-            gov_id: void 0, // 部门id
-            category_id: void 0, // 栏目id
-            course_name: '',
-            type: '',
-            page: 1,
-            pagesize: 15,
-            level: void 0,
-            create_start: void 0,
-            create_end: void 0,
-            need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
-            status: '', // 2- 视屏转码中 1-下线 0-正常
-        }
-    }
     export default {
-        data() {
+        components: {
+            CourseCategoryTree,SectionCategoryMenu,ImagEcropperInput,DateRange,CourseCategorySelect
+        },
+        data () {
             return {
-                loadingData: false,
-                data: [], // 表格数据
-                total: 0,
-                dialogVisible: false,
-                selectedIds: [], // 被选中的数据id集合
-                fetchParam: getFetchParam(),
-                dialogTree: {
-                    isShow: false,
-                    selectedId: void 0,
+                ratio: 0, // 裁剪的比例
+                category: {
+                    currentData: {},
+                    loading: false,
+                    title: '',
+                    data: [],
                 },
-                status: '',
+                // 表单相关属性
+                formLabelWidth: '50px', // 表单label的宽度
+                editPlacehoder: '',
+                rules: {
+                    name: [
+                        {
+                            required: true,
+                            message: '名称不能为空',
+                            trigger: 'blur'
+                        }
+                    ]
+                },
+                section: {
+                    loading: false,
+                    data: [],
+                    stime :'',
+                    etime:'',
+                    page: 1,
+                    pagesize: 10,
+                    total: 0,
+                    gov_id: void 0, // 部门id
+                    category_id: void 0, // 栏目id
+                    course_name: '',
+                    type: '',
+                    level: void 0,
+                    create_start: void 0,
+                    create_end: void 0,
+                    need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
+                    status:'', // 2- 视屏转码中 1-下线 0-正常
+                },
+                defaultProps: {
+                    children: 'children',
+                    label: 'name'
+                },
+                SecMenu:[],
+                Mult:'true',// 判断左边 课程多级栏目树状标识,
+                treeData: [],
             }
         },
-        activated() {
-            this.fetchData()
-            xmview.setContentLoading(false)
+        watch: {
+            '$store.state.index.secMenu'(){
+                // alert(1)
+                this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
+            },
+            'category.currentData.id'(){
+                // alert(2)
+                this.fetchCourseLists () 
+                // this.$refs.secCategory.handleNodeClick()
+            },
+        //    '$store.state.index.examCate'(){
+        //     // alert(3)
+        //        this.fetchCourseLists () 
+        //        this.fetchData()
+        //     }        
         },
+        activated () {
+            this.category.currentData.id = ''
+            this.category.loading = true
+            // this.fetchData()
+            this.fetchCourseLists()
+        },
+        // computed: {
+        //     examCateid( ){
+        //         return this.$store.state.index.examCate //在Vue 工具里检测examCate
+        //     }
+        // },
         methods: {
-            initFetchParam() {
-                this.fetchParam = getFetchParam()
-            },
-            handleCurrentChange(val) {
-                this.fetchParam.page = val
-                this.fetchData()
-            },
-            handleSizeChange(val) {
-                this.fetchParam.pagesize = val
-                this.fetchData()
-            },
-            fetchData(val) {
-                this.loadingData = true
-                let obj = Object.assign({},this.fetchParam)
-                if(obj.status === ''){
-                    obj.status = -1
-                }
-                return courseService.getPublicCourselist(obj).then((ret) => {
-                    this.data = ret.data
-                    console.log(ret)
-                    this.total = ret._exts.total
-                    // this.total = 2400
-                    this.loadingData = false
-                    xmview.setContentLoading(false)
-                    // this.fetchParam.status = '';
-                    thi
-                })
+            // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                // console.log('===========   node.data.data==========  ')
+                console.log(type, data, node, store)
+                console.log(node.data.id)
+                console.log("category_type============="+node.data.category_type)
 
-            },
-            // 单行被选中
-            selectRow(selection) {
-                let ret = []
-                selection.forEach((item) => {
-                    ret.push(item.id)
-                })
-                this.selectedIds = ret
+                if (type == 1) { 
+                    this.section.category_id=node.data.id
+                    this.section.category_type=node.data.category_type
+                    console.log(this.section.category_type)
+                    // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
+                    this.fetchCourseLists()
+                    this.nodeParentSelected = node.parent// 记录父节点
+                    this.nodeSelected = node // 记录当前节点
+                    this.fetchParam = Object.assign({},node.data)  //解决左右数据
+                } else if (type == 2) {
+                    this.moveToNode = node
+                }
             },
             // 下线 或者上线课程 0为下线，1为上线
             offline(index, row) {
-                let txt = row.status == 0 ? '下线' : '上线'
+                let txt = row.status == 0 ? '禁用' : '启用'
                 let finalStatus = row.status == 0 ? 1 : 0
                 xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
                     courseService.offlineCourse({
-                        course_id: row.contentid,
+                        id: row.id,
                         status: finalStatus
                     }).then((ret) => {
                         row.status = finalStatus
                     })
                 })
             },
-            // 单条删除
+            // fetchData() {//获取左边栏目数据
+            //     let param={
+            //             category_id: this.examCateid , // 3- 供应商
+            //             page: 1,
+            //             chapter_type:1,
+            //             pagesize: -1,
+            //         }
+            //     courseService.fetchChapterCategory( param).then((ret) => {
+            //             this.SecMenu=ret
+            //             // console.log('this.SecMenu+++++++',param,this.SecMenu)
+            //             xmview.setContentLoading(false)     
+            //         })
+            // },
+            fetchCourseLists () { //右边表数据
+                this.section.loading = true
+                // let params={
+                //     course_name:this.section.course_name,
+                //     status:this.section.status,
+                //     stime:this.section.stime ,
+                //     etime:this.section.etime,
+                //     page: this.section.page,
+                //     pagesize: this.section.pagesize,
+                //     chapter_id: this.category.currentData.id,
+                //     category_id:this.$store.state.index.examCate
+                // }
+                 let obj = Object.assign({},this.section)
+                if(obj.status === ''){
+                    obj.status = -1
+                }
+                return courseService.getPublicCourselist(obj).then((ret) => {
+                    xmview.setContentLoading(false)
+                    this.section.data = ret.data
+                    this.section.total = ret._exts.total
+                    this.section.loading = false
+                })
+            },
+              // 单条删除
             del(index, row) {
                 xmview.showDialog(`你将要删除课程 <span style="color:red">${row.course_name}</span> 操作不可恢复确认吗?`, () => {
                     courseService.deleteCourse({
@@ -265,37 +343,29 @@
                     })
                 })
             },
-            moveToCat() {
-                courseService.moveCourseToCategoryMulty({
-                    id: this.selectedIds.join(','),
-                    catid: this.dialogTree.selectedId
-                }).then(() => {
-                    xmview.showTip('success', '操作成功')
-                    this.dialogTree.isShow = false
-                    setTimeout(() => {
-                        this.fetchData() // 重新刷新数据
-                    }, 300)
+           //添加中草药
+           addHerbal(){
+               console.log(this.section.category_type)
+                if(this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5){
+                    this.$router.push({ name:'course-manage-addCourse-herbal',params:{herbalInfo:this.section}})
+                    return
+                }
+                xmview.showTip('error','请先选择中药栏目组最终级栏目添加')
+                return
+           },
+            update (index, row) {
+                this.$router.push({
+                    name:'exam-course-edit',
+                    params:{
+                        id:row.id,
+                        courseInfo:row,
+                    }
                 })
             },
-            // 批量删除
-            delMulti() {
-                xmview.showDialog(`你将要删除选中的课程，操作不可恢复确认吗?`, () => {
-                    courseService.deleteCourseMulty({
-                        id: this.selectedIds.join(',')
-                    }).then(() => {
-                        xmview.showTip('success', '操作成功')
-                        this.dialogTree.isShow = false
-                        setTimeout(() => {
-                            this.fetchData() // 重新刷新数据
-                        }, 300)
-                    })
-                })
-            },
-        },
-        components: {
-            DateRange,
-            CourseCategorySelect,
-            CourseCategoryTree
+            sectionPageChange (val) {
+                this.section.page = val
+                this.fetchCourseLists()
+            }
         }
     }
 </script>

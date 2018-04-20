@@ -107,7 +107,7 @@ export default {
                 })
             },
             meta: {
-                title: '添加课程-培训',
+                title: '添加课程-中草药',
             }
         },
         {

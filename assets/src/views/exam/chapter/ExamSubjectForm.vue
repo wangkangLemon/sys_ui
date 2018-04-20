@@ -135,7 +135,7 @@
                             <span v-if="qtype=='A1'">A1题型</span>
                             <span v-else-if="qtype == 'A2'">A2题型</span>
                             <span v-else-if="qtype == 'A3'">A3题型</span>
-                            <span v-else>A4题型</span>
+                            <span v-else-if="qtype == 'A4'" >A4题型</span>
                         </el-form-item>
                  
                       
@@ -307,6 +307,7 @@ export default {
                 chapter_name:this.$route.params.chapterInfo.name
             }
             this.qtype=this.$route.params.qtype
+            xmview.setContentTile(`试题添加-${this.qtype}题型`)
             console.log(this.qtype)
             if(this.qtype==undefined){
                 xmview.showTip('error', "请点击添加考题按钮 => 选择题型")

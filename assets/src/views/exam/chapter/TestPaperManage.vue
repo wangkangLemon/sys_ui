@@ -74,7 +74,7 @@
                     width:107px;
                     position: absolute;
                     top:10px;
-                    right:10px;
+                    right:23px;
                 }
             }
             .content-list {
@@ -170,8 +170,8 @@
                     </DateRange>
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
-                    <el-table-column prop="description" label="考题" ></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" width="180">
+                    <el-table-column prop="description" label="考题" width="180"></el-table-column>
+                    <el-table-column prop="chapter_name" label="绑定栏目" >
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
                     <el-table-column prop="addate" label="创建时间" width="200"></el-table-column>
@@ -322,6 +322,7 @@
                 this.section.loading = true
                 this.section.chapter_id =this.category.currentData.id
                 this.section.category_id =this.$store.state.index.examCate
+                this.section.chapter_type = 3
                  delete this.section.data
                 // delete this.section.loading
                 // delete this.section.total
