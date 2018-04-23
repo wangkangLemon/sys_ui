@@ -55,7 +55,7 @@
             <!--<el-table-column type="selection"></el-table-column>-->
             <el-table-column min-width="100" prop="id" label="ID" v-if="data">
             </el-table-column>
-            <el-table-column min-width="200" prop="node_name" label="权限节点名称	">
+            <el-table-column min-width="200" prop="node_name" label="权限节点名称">
             </el-table-column>
             <el-table-column min-width="200" prop="node" label="节点标识">
             </el-table-column>

@@ -89,7 +89,7 @@
                             </el-option>
                         </el-select>-->
                         <Experts v-model="fetchParam.experts_id" :placeholder="fetchParam.experts_name"
-                                            v-on:change="val=>fetchParam.experts_id=val" :change="getExpertsList" :list="changelist">
+                            v-on:change="val=>fetchParam.experts_id=val" :change="getExpertsList" :list="changelist">
                         </Experts>
                     </el-form-item>
                     <el-form-item label="课程封面图" prop="image">
@@ -397,7 +397,7 @@ export default {
         getVideoName(){
             this.isShowVideoDialog=true
         },
-        // 下一步按钮点击
+        // 下一步按钮点击保存课程内容
         btnNextClick() {
             this.fetchParam.limit_time && (this.fetchParam.limit_time += '')
             this.fetchParam.score_pass && (this.fetchParam.score_pass += '')
@@ -493,7 +493,6 @@ export default {
                         item.options[item.correct].correct = 1
                         delete item.correct
                     }
-
                 }
 
                 // 修复sort属性

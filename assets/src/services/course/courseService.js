@@ -302,6 +302,37 @@ class CourseService {
             return ret.data.stat
         })
     }
+
+    //中草药录入接口
+    // 创建
+    addHerbal({ category_id, data, noJson }) {
+        let url = `${config.apiHost}/course/herbal/create/${category_id}`
+        return api.post(url,  data, noJson ).then(ret => {
+            if (ret.code == 0) {
+                // console.log(ret)
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 修改课程
+    editHerbal({ category_id, data, noJson,id }) {
+        let url = `${config.apiHost}/course/herbal/edit/${category_id}`
+        return api.post(url, data, noJson ).then((ret) => {
+            if (ret.code == 0) {
+                // console.log(ret)
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+
     
 
 

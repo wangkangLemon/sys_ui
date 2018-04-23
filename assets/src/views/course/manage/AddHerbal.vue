@@ -15,18 +15,60 @@
             max-width: 715px;
             margin: 0 ;
         }
+        .bottom-btns {
+            float: right;
+        }
     }
 </style>
 <template>
     <main id="sys-form">
             <!-- <el-form label-width="120px" ref="form" :model="fetchParam"> -->
-            <el-tabs type="border-card" @tab-click="handleClick" >
-                <el-tab-pane label="概述">
-                    <el-form label-width="120px" v-for="(item,index) in summary" :key="index" :model="item"  ref="test">
+            <el-tabs type="border-card" @tab-click="handleClick"  v-model="activeTab">
+                <el-tab-pane label="课程简介" name="first">
+                    <el-form label-width="120px" ref="formFirst"  :model="fetchParam">
+                        <el-form-item label="课程介绍">
+                            <el-input v-model="fetchParam.description" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="课程封面图" prop="image">
+                            <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
+                            <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
+                        </el-form-item>
+                               <el-form-item label="课程标签">
+                            <vTags v-model="courseTags"></vTags>
+                        </el-form-item>
+                        <!-- <el-form-item label="课程类别" prop="type">
+                            <el-select v-model="fetchParam.type" placeholder="请选择">
+                                <el-option label="私有课程" value="private"></el-option>
+                                <el-option label="公开课程" value="public"></el-option>
+                                <el-option label="工业课程" value="industry"></el-option>
+                                <el-option label="政府课程" value="gov"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="素材类型" prop="material_type">
+                            <el-select v-model="fetchParam.material_type" @change="typeChange" placeholder="请选择" >
+                                <el-option label="视频" value="video"></el-option>
+                                <el-option label="WORD" value="doc"></el-option>
+                                <el-option label="PPT" value="ppt"></el-option>
+                                <el-option label="PDF" value="pdf"></el-option>
+                                <el-option label="PDF" value="text"></el-option>
+                            </el-select>
+                        </el-form-item> -->
+                    </el-form>
+                     <el-button style="float: right" type="primary" @click="btnNextClick">
+                            <i>下一步</i>
+                    </el-button>
+                </el-tab-pane>
+                <el-tab-pane label="概述" name="second">
+                    <el-form label-width="120px" v-for="(item,index) in fetchParam.summary" :key="index" :model="item"  ref="test">
                         <el-form-item :label="item.name" >
-                            </i><el-input  v-model="item.value" placeholder="请填写内容" auto-complete="off"></el-input>
+                            <el-input  v-model="item.value" placeholder="请填写内容" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-form>
+                    <div class="bottom-btns">
+                        <el-button @click="btnPreClick">上一步</el-button>
+                        <el-button style="float: right" type="primary" @click="btnNextClick">下一步</el-button>
+                    </div>
                     <!-- <el-pagination 
                             class="pagin" 
                             @size-change="handleSizeChange" 
@@ -34,38 +76,44 @@
                             :current-page="fetchParam.page" 
                             :page-size="fetchParam.pagesize" 
                             :page-sizes="[10, 20, 30, 50]" layout="sizes,total, prev, pager, next" :total="total">
-                    </el-pagination> -->
+                        </el-pagination> -->
                 </el-tab-pane>
-                <el-tab-pane label="课程简介">
-                       1111
-                </el-tab-pane>
-                <el-tab-pane label="属性" name="second">
-                    <el-form label-width="120px" v-for="(item,index) in attribute" :key="index" :model="item"  ref="test">
+                <el-tab-pane label="属性" name="three">
+                    <el-form label-width="120px" v-for="(item,index) in fetchParam.attribute" :key="index" :model="item"  ref="test">
                         <el-form-item :label="item.name" >
-                            </i><el-input  v-model="item.value" placeholder="请填写内容" auto-complete="off"></el-input>
+                            <el-input  v-model="item.value" placeholder="请填写内容" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-form>
+                     <div class="bottom-btns">
+                        <el-button @click="btnPreClick">上一步</el-button>
+                        <el-button class="submit" type="primary" @click="handleSubmit">发布</el-button>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
-            
-     
-        <el-button @click="a"></el-button>
     </main>
 </template>
 
 <script>
     import govService from '../../../services/gov/govService'
+    import courseService from '../../../services/course/courseService.js'
+    import vTags from '../../component/form/Tags.vue'
+    import CropperImg from '../../component/upload/ImagEcropperInput.vue'
     export default {
         name: 'gov-authority',
+        components: {
+            CropperImg,vTags
+        },
         data() {
             return {
                 loadingData: false,
-                currentData: {
-                    data: {},
-                    pindex: -1,
-                    index: -1
-                },
+                activeTab: 'first',
+                // currentData: {
+                //     data: {},
+                //     pindex: -1,
+                //     index: -1
+                // },
                 fetchParam: getFetchParam(),
+                courseTags: [],
                 onValue:1,
                 offValue:2,
                 summary:[],
@@ -78,9 +126,6 @@
             }
         },
         watch:{
-            'summary'(){
-                console.log(this.summary)
-            }
         },
         created() {
             xmview.setContentLoading(false);
@@ -423,75 +468,84 @@
             // this.summary=this.zy.summary
             // this.attribute=this.zy.attribute
             console.log(this.$route.params)
+            if(!this.$route.params.herbalInfo){
+                xmview.showTip('error', "请先选择中药栏目组最终级栏目添加")
+                this.$router.push({'name':'course-manage-public'})
+                return
+            }
             let t=this.$route.params.herbalInfo.category_type
+            let f=this.fetchParam
             if(t==3){
                 this.category_name='中药'
-                this.summary=this.zy.summary
-                this.attribute=this.zy.attribute
+                f.summary=this.zy.summary
+                f.attribute=this.zy.attribute
             }
             else if(t==4){
                 this.category_name='腧穴'
-                this.summary=this.sx.summary
-                this.attribute=this.sx.attribute
+                f.summary=this.sx.summary
+                f.attribute=this.sx.attribute
             }
             else{
                 this.category_name='方剂'
-                this.summary=this.fj.summary
-                this.attribute=this.fj.attribute
+                f.summary=this.fj.summary
+                f.attribute=this.fj.attribute
             }
             xmview.setContentTile(`添加课程-中草药 ${ this.category_name}`)
-            
-
-            // this.total=this.summary.length
-            // govService.getAuthorize().then((ret) => {
-            //     this.fetchParam=getOriginData()
-            //     ret.map((v,i)=>{
-            //         if(v.access_type==1){this.fetchParam.value1=v.visibled}
-            //         if(v.access_type==2){this.fetchParam.value2=v.visibled}
-            //     })
-            // })
+        
             this.loadingData=false;
         },
         methods: {
-            handleClick(tab, event) {
-                // console.log(tab, event);
-            },
-            a(){
-                 console.log(this.summary)
-            },
-            handleCurrentChange(val) {
-                this.fetchParam.page = val
-                // this.fetchData()
-            },
-            handleSizeChange(val) {
-                this.fetchParam.pagesize = val
-                // this.fetchData()
-            },
-            change($event,num){
-                console.log($event)
-                console.log(num);
-            },
-            changemx($event,num){
-                console.log(name,num,$event)
-                let param={
-                    access_type :num,
-                    visibled :$event
+             // 课程类型改变
+            typeChange(val) {
+                if (val === 'doc') {
+                    this.accept = '.doc,.docx'
+                } else if (val === 'ppt') {
+                    this.accept = '.ppt,pptx'
+                } else if (val === 'pdf') {
+                    this.accept = '.pdf'
                 }
-                  console.log(param)
-                govService.authorize(param).then((ret) => {
-                        this.$refs['form'].resetFields();
-                        // this.fetchParam = {
-                        //     data: [],
-                        //     pindex: -1,
-                        //     index: -1
-                        // }
-                    })
+            },
+            // 图片裁切成功回调
+            cropperImgSucc(imgData) {
+                courseService.commonUploadImageBase({ image: imgData ,extpath:''}).then((ret) => {
+                    this.fetchParam.image = ret.url
+                })
+            },
+            handleClick(tab, event) {
+                console.log(tab, event);
+            },
+            // handleCurrentChange(val) {
+            //     this.fetchParam.page = val
+            //     // this.fetchData()
+            // },
+            // handleSizeChange(val) {
+            //     this.fetchParam.pagesize = val
+            //     // this.fetchData()
+            // },
+            btnPreClick() {
+                if(this.activeTab=='three'){
+                    this.activeTab = 'second' 
+                    return
+                }
+                if(this.activeTab=='second'){
+                    this.activeTab = 'first' 
+                    return
+                }
             },
             btnNextClick() {
-                this.$refs['form'].validate((valid) => {
-                    if (!valid) return
-                    let req = govService.create
-                    if (this.$route.params.warrant_id) req = govService.update
+                if(this.activeTab=='first'){
+                    this.activeTab = 'second' 
+                    return
+                }
+                if(this.activeTab=='second'){
+                    this.activeTab = 'three' 
+                    return
+                }
+                if(this.activeTab=='three') 
+                // this.$refs['form'].validate((valid) => {
+                    // if (!valid) return
+                    // let req = govService.create
+                    // if (this.$route.params.warrant_id) req = govService.update
                     console.log(this.fetchParam)
                     // req(this.fetchParam).then((ret) => {
                     //     this.$refs['form'].resetFields();
@@ -503,15 +557,66 @@
                     //     if (!this.fetchParam.id) this.fetchParam.id = ret.id;
                     //     this.$router.push({'name': 'gov-warrant'})
                     // })
+                // })
+            },
+            handleSubmit(){
+                let f=this.fetchParam
+                f.summary.map(v=>{
+                    console.log(v)
+                    if(v.name=="中文名")  f.course_name=v.value
+                    if(v.name=="拼音名")  f.pinyin=v.value
+                    return
                 })
+                f.thumb=f.image
+                f.tags = this.courseTags ? this.courseTags.join(',') : ''
+                console.log(this.fetchParam) 
+                console.log(JSON.stringify(this.fetchParam))
+                if (this.fetchParam.course_name =='' || this.fetchParam.pinyin ==''|| this.fetchParam.thumb =='') {
+                    this.$router.back()
+                    return
+                }
+                let p,data,cid
+                data=JSON.stringify(this.fetchParam)
+                cid=this.$route.params.herbalInfo.category_id
+                if (this.fetchParam.contentid) {  // 如果是编辑
+                    param.course_id=''
+                    p = courseService.editHerbal({
+                        category_id:cid,
+                        data:data,
+                        noJson:0
+                        }).then((ret) => {
+                        this.$router.push({'name':'course-manage-public'})
+                    })
+                } else {  //新建
+                    p = courseService.addHerbal({
+                        category_id:cid,
+                        data:data,
+                        noJson:0
+                        }).then((ret) => {
+                        this.$router.push({'name':'course-manage-public'})
+                        this.fetchParam.contentid = ret.contentid //?
+                    })
+                }
+                
+
             }
         }
     }
 
     function getFetchParam() {
         return {
-                pagesize:10,
-                page:1,
+                // pagesize:10,
+                // page:1,
+                course_name:'',
+                pinyin:'',
+                thumb:'',
+                image:'',
+                tags:'',
+                description:'',
+                type:'public',
+                material_type:'text',
+                summary:[],
+                attribute:[]
         }
     }
 

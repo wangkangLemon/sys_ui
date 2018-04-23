@@ -169,8 +169,6 @@
                             :total="section.total">
                     </el-pagination>
                 </div>
-
-                 <!-- {{examCateid}} -->
             </div>
         </section>
     </article>
@@ -237,16 +235,13 @@
         },
         watch: {
             '$store.state.index.secMenu'(){
-                // alert(1)
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             },
             'category.currentData.id'(){
-                // alert(2)
                 this.fetchCourseLists () 
                 // this.$refs.secCategory.handleNodeClick()
             },
         //    '$store.state.index.examCate'(){
-        //     // alert(3)
         //        this.fetchCourseLists () 
         //        this.fetchData()
         //     }        
@@ -266,14 +261,14 @@
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
                 // console.log('===========   node.data.data==========  ')
-                console.log(type, data, node, store)
-                console.log(node.data.id)
+                // console.log(type, data, node, store)
+                // console.log(node.data.id)
                 console.log("category_type============="+node.data.category_type)
 
                 if (type == 1) { 
                     this.section.category_id=node.data.id
                     this.section.category_type=node.data.category_type
-                    console.log(this.section.category_type)
+                    // console.log(this.section.category_type)
                     // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
                     this.fetchCourseLists()
                     this.nodeParentSelected = node.parent// 记录父节点
@@ -296,7 +291,7 @@
                     })
                 })
             },
-            // fetchData() {//获取左边栏目数据
+            // fetchData() {//获取左边栏目数据 4-23左边直接在子组件里控制数据在父组件不用写方法
             //     let param={
             //             category_id: this.examCateid , // 3- 供应商
             //             page: 1,
@@ -311,17 +306,7 @@
             // },
             fetchCourseLists () { //右边表数据
                 this.section.loading = true
-                // let params={
-                //     course_name:this.section.course_name,
-                //     status:this.section.status,
-                //     stime:this.section.stime ,
-                //     etime:this.section.etime,
-                //     page: this.section.page,
-                //     pagesize: this.section.pagesize,
-                //     chapter_id: this.category.currentData.id,
-                //     category_id:this.$store.state.index.examCate
-                // }
-                 let obj = Object.assign({},this.section)
+                let obj = Object.assign({},this.section)
                 if(obj.status === ''){
                     obj.status = -1
                 }
