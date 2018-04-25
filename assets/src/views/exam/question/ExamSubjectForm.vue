@@ -101,7 +101,7 @@
                         </el-form-item>
                         <!--A3题干部分-->
                         <el-form-item v-show="qtype=='A3'"  label="题干" :rules=" { required: true, type: 'number', message: '请输入题干', trigger: 'change' }" >
-                            <el-input v-model="form.title" type="textarea" :autosize="{ minRows: 2, maxRows: 2}" placeholder="请输入内容">
+                            <el-input v-model="form.title" type="textarea" :autosize="{ minRows: 2, maxRows: 5}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
                         <!--A4单选|多选的答案选项部分-->
@@ -293,10 +293,7 @@ export default {
                         return
                     })
                 }
-                
                 console.log(_this.cbA4answer)
-                
-                
             }).catch((ret) => {
                 xmview.showTip('error', ret.message)
             })
@@ -427,18 +424,22 @@ export default {
                 //传参
                 let params ,data
                 if(this.qtype=="A1"||this.qtype=="A2"){ 
-                    params={ 
-                        category_id:this.$store.state.index.examCate,
-                        chapter_id:this.form.chapter_id,
-                        subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'),
+                     data ={
+                        "qtype":this.qtype,
+                        "subjects":requestParam
                     }
-                    examService.addSubjectA1(params).then((ret) => {
-                        xmview.showTip('success', '操作成功')
-                        this.$router.back()
-                    }, () => {
-                    }).then(() => {
-                        xmview.setContentLoading(false)
-                    })
+                    // params={ 
+                    //     category_id:this.$store.state.index.examCate,
+                    //     chapter_id:this.form.chapter_id,
+                    //     subjects:encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'),
+                    // }
+                    // examService.addSubjectA1(params).then((ret) => {
+                    //     xmview.showTip('success', '操作成功')
+                    //     this.$router.back()
+                    // }, () => {
+                    // }).then(() => {
+                    //     xmview.setContentLoading(false)
+                    // })
                 }else if(this.qtype=="A3"||this.qtype=="A4"){
                     if(this.qtype=="A3"){
                         data ={
@@ -454,22 +455,21 @@ export default {
                             "subjects":requestParam,
                         }
                     }
-                    
-                    params={ 
-                        category_id:this.$store.state.index.examCate,
-                        chapter_id:this.form.chapter_id,
-                        subjects:JSON.stringify(data),
-                        style:this.qtype.toLowerCase(),
-                        noJson:0  
-                    }
-                    examService.addSubject(params).then((ret) => {
-                        xmview.showTip('success', '操作成功')
-                        this.$router.back()
-                    }, () => {
-                    }).then(() => {
-                        xmview.setContentLoading(false)
-                    })
                 }
+                params={ 
+                    category_id:this.$store.state.index.examCate,
+                    chapter_id:this.form.chapter_id,
+                    subjects:JSON.stringify(data),
+                    style:this.qtype.toLowerCase(),
+                    noJson:0  
+                }
+                examService.addSubject(params).then((ret) => {
+                    xmview.showTip('success', '操作成功')
+                    this.$router.back()
+                }, () => {
+                }).then(() => {
+                    xmview.setContentLoading(false)
+                })
         
             })
         }

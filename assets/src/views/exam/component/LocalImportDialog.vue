@@ -176,6 +176,7 @@ Slot:
             }
         },
         activated () {
+            this.response={}
             console.log(this.extradata)
         },
         methods: {
@@ -186,6 +187,7 @@ Slot:
                 this.response.success = 0
                 this.response.error = 0
                 this.response.reasons = []
+                this.response.result = null
             },
             close () {
                 this.isOpen = false

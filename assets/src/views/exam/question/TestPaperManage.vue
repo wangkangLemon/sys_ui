@@ -276,6 +276,7 @@
         },
         created () {
             this.category.currentData.id = ''
+            this.category.currentData.chapter_type = 3
             this.category.loading = true
             this.qtype=''
             // this.section=initSection()

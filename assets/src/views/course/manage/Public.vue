@@ -108,7 +108,7 @@
                     <section class="fi">
                      <i>标题</i><el-input id="input" v-model="section.course_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
-                    <DateRange title="创建时间" :start="section.create_start " :end="section.create_end" @changeStart="val=> section.create_start =val "
+                    <DateRange title="创建时间" :start="section.create_start" :end="section.create_end" @changeStart="val=> section.create_start =val "
                         @changeEnd="val=> section.create_end=val" :change="fetchCourseLists">
                     </DateRange>
                     <section>
@@ -126,7 +126,7 @@
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="course_name" label="课程名称" min-width="230"></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" width="190">
+                    <el-table-column prop="category_name" label="绑定栏目" width="190">
                         <!-- <template scope="scope">
                             {{scope.row.category_name || '无'}}
                         </template> -->
@@ -147,7 +147,6 @@
                         <template scope="scope">
                             <el-button @click="$router.push({name: 'course-manage-addCourse', params: {courseInfo: scope.row}, query: {id: scope.row.contentid}})"
                                 type="text" size="small">编辑
-                                <!--a-->
                             </el-button>
                             <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
                                 <i>{{ scope.row.status == 1 ? '正常 ' : '禁用 ' }}</i>
@@ -231,6 +230,7 @@
                 SecMenu:[],
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
                 treeData: [],
+                ended:void 0,
             }
         },
         watch: {
@@ -263,11 +263,13 @@
                 // console.log('===========   node.data.data==========  ')
                 // console.log(type, data, node, store)
                 // console.log(node.data.id)
-                console.log("category_type============="+node.data.category_type)
+                console.log("category_type============="+node.data)
+                console.log(node.data)
 
                 if (type == 1) { 
                     this.section.category_id=node.data.id
                     this.section.category_type=node.data.category_type
+                    this.ended=node.data.ended
                     // console.log(this.section.category_type)
                     // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
                     this.fetchCourseLists()
@@ -331,7 +333,7 @@
            //添加中草药
            addHerbal(){
                console.log(this.section.category_type)
-                if(this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5){
+                if( (this.ended==1)&&(this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5)){
                     this.$router.push({ name:'course-manage-addCourse-herbal',params:{herbalInfo:this.section}})
                     return
                 }

@@ -88,7 +88,7 @@
                         <img src="../image/up.png" alt="">
                     </div>
                     <div>
-                        <el-button type="primary" icon="plus"  @click="$refs['localImportDialog'].open()">上传文件</el-button>
+                        <el-button type="primary" icon="plus"  @click="openDailog">上传文件</el-button>
                         <!-- <input type="file" class="upload-demo" name="upload" /> <br /> -->
                         <!-- <el-upload
                             class="upload-demo"
@@ -132,10 +132,11 @@
         components: {
             SectionCategoryMenu,LocalImportDialog
         },
+        name:'exam-subject-import',
         data () {
             return {
                 form:{
-                    chapter_id:'',
+                    chapter_id:void 0,
                     chapter_name:'',
                     // category_id:'',
                     // category_name:'',
@@ -160,18 +161,17 @@
                 name:'input'
             }
         },
-        activated () {
-            // console.log(typeof(this.$route.params.chapterInfo.id),this.$route.params.chapterInfo.id)
+        created () {
+            // console.log(typeof(this.$route.params.chapterInfo.id),this.$route.params.chapterInfo)
             if(this.$route.params.chapterInfo){
                 this.form={
                 chapter_id:this.$route.params.chapterInfo.id,
                 chapter_name:this.$route.params.chapterInfo.name
                 }
             }else{
-                this.form={
-                    chapter_id:'',
-                    chapter_name:'',
-                }
+               xmview.showTip('error', "请先选择试题所属分类")
+                this.$router.back()
+                return
             }
            
             // this.getTaskData().then(() => {
@@ -196,6 +196,16 @@
             }
         },
         methods: {
+            openDailog(){
+                console.log(typeof(this.form.chapter_id),'this.form.chapter_id=============='+this.form.chapter_id)
+                if(typeof(this.form.chapter_id)!=='number'){
+                    xmview.showTip('error', "请先选择试题所属栏目")
+                    return
+                }
+                this.$refs['localImportDialog'].open()
+
+                
+            },
             save(response){
                 let param = {save_sign:response}
                 return examService.subjectSave(param).then((ret) => {
@@ -249,7 +259,7 @@
                 return examService.fetchChapterCategory({
                     pid: 0,
                     pagesize:-1,
-                    chapter_type:2,
+                    chapter_type:this.$route.params.chapterInfo.chapter_type,
                     category_id:this.$store.state.index.examCate
                 })
         },

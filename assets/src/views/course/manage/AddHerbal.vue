@@ -121,7 +121,8 @@
                 zy:{},
                 sx:{},
                 fj:{},
-                category_name:''
+                category_name:'',
+                rules:{},
                 // total: 0,
             }
         },
@@ -481,12 +482,12 @@
                 f.attribute=this.zy.attribute
             }
             else if(t==4){
-                this.category_name='腧穴'
+                this.category_name='方剂'
                 f.summary=this.sx.summary
                 f.attribute=this.sx.attribute
             }
             else{
-                this.category_name='方剂'
+                this.category_name='腧穴'
                 f.summary=this.fj.summary
                 f.attribute=this.fj.attribute
             }
@@ -560,23 +561,110 @@
                 // })
             },
             handleSubmit(){
-                let f=this.fetchParam
+                let f=Object.assign({},this.fetchParam)
                 f.summary.map(v=>{
                     console.log(v)
                     if(v.name=="中文名")  f.course_name=v.value
                     if(v.name=="拼音名")  f.pinyin=v.value
                     return
                 })
+          
                 f.thumb=f.image
                 f.tags = this.courseTags ? this.courseTags.join(',') : ''
                 console.log(this.fetchParam) 
                 console.log(JSON.stringify(this.fetchParam))
-                if (this.fetchParam.course_name =='' || this.fetchParam.pinyin ==''|| this.fetchParam.thumb =='') {
-                    this.$router.back()
+
+                if (f.course_name ==''||f.pinyin =='') {
+                    xmview.showTip('error', "请先填写 ‘概述 - 中文名、拼音名’")
                     return
                 }
+                let fa=f.attribute
+                if(this.category_name=='中药'){
+                    fa.map(v=>{
+                        if(v.name=="性味归经")  this.rules.xwgz=v.value
+                        if(v.name=="功效")  this.rules.gx=v.value
+                        if(v.name=="临床应用")  this.rules.lcyy=v.value
+                        return true
+                    })
+                    console.log(this.rules)
+                    if((this.rules.xwgz==''||this.rules.gx==''||this.rules.lcyy=='')){
+                            xmview.showTip('error', "请先填写 ‘ 属性 - 性味归经、功效、临床应用 ‘")
+                            return 
+                        }
+                }else if(this.category_name=='方剂'){
+                    fa.map(v=>{
+                        if(v.name=="定位")  this.rules.dw=v.value
+                        if(v.name=="取穴")  this.rules.qx=v.value
+                        if(v.name=="操作")  this.rules.cz=v.value
+                        return true
+                    })
+                    console.log(this.rules)
+                    if((this.rules.dw==''||this.rules.qx==''||this.rules.cz=='')){
+                        xmview.showTip('error', "请先填写 ‘ 属性 - 定位、取穴、操作 ‘")
+                        return 
+                    }
+                }else if(this.category_name=='腧穴'){
+                    fa.map(v=>{
+                        if(v.name=="组成")  this.rules.zc=v.value
+                        if(v.name=="临床应用")  this.rules.lcyy=v.value
+                        return true
+                    })
+                    console.log(this.rules)
+                    if((this.rules.dw==''||this.rules.qx==''||this.rules.cz=='')){
+                        xmview.showTip('error', "请先填写 ‘ 属性 - 组成、临床应用 ‘")
+                        return 
+                    }
+
+                }
+               
+                // fa=this.fetchParam.attribute
+                // if(this.category_name=='中药'){
+                //     f.attribute.map(v=>{
+                //         if((v.name=='性味归经'||v.name=='功效'||v.name=='临床应用')&&(v.value=="")){
+                //             xmview.showTip('error', "请先填写 ‘ 属性 - 性味归经、功效、临床应用 ‘")
+                //             return false
+                //         }
+                //     })
+                // }else if(this.category_name=='方剂'){
+                //     f.attribute.map(v=>{
+                //         if((v.name=='定位'||v.name=='取穴'||v.name=='操作')&&(v.value=="")){
+                //             xmview.showTip('error', "请先填写 ‘ 属性 - 定位、取穴、操作 ‘")
+                //             return false
+                //         }
+                //     })
+                // }else if(this.category_name=='腧穴'){
+                //     f.attribute.map(v=>{
+                //         if((v.name=='组成'||v.name=='临床应用')&&(v.value=="")){
+                //             xmview.showTip('error', "请先填写 ‘ 属性 - 组成、临床应用 ‘")
+                //             return false
+                //         }
+                //     })
+                // }
+                let s =f.summary.filter(v=>{
+                    if (v.name =='中文名' || v.name == '拼音名') {
+                        return true
+                    }
+                    return v.value
+                })
+                console.log(JSON.stringify(s))
+                f.summary=s
+
+                let a =f.attribute.filter(v=>{
+                    return v.value
+                })
+                console.log(JSON.stringify(a))
+                // if(this.category_name=='中药'){
+                //     console.log(a)
+                //     if(!a.name=='性味归经'||!a.name=='功效'||!a.name=='临床应用'){
+                //         xmview.showTip('error', "请先填写 ‘ 属性 - 性味归经、功效、临床应用 ‘")
+                //         return false
+                //     }
+                // }
+                f.attribute=a
+
                 let p,data,cid
-                data=JSON.stringify(this.fetchParam)
+                data=JSON.stringify(f)
+                console.log(data)
                 cid=this.$route.params.herbalInfo.category_id
                 if (this.fetchParam.contentid) {  // 如果是编辑
                     param.course_id=''
