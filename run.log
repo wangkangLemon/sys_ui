@@ -104,3 +104,5 @@ ERROR:root:version updated : [0.0.0.92] ---> [0.0.0.93]
 ERROR:root:version updated : [0.0.0.93] ---> [0.0.0.94]
 ERROR:root:version updated : [0.0.0.94] ---> [0.0.0.95]
 ERROR:root:version updated : [0.0.0.95] ---> [0.0.0.96]
+ERROR:root: 'rg' cmd not support!
+ERROR:root:version updated : [0.0.0.96] ---> [0.0.0.97]

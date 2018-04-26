@@ -15,6 +15,7 @@
             button {
                 float: right;
                 display: block;
+                margin-left: 15px;
             }
         }
         .left-content {
@@ -22,12 +23,11 @@
             vertical-align: top;
             width: 25%;
             background: #fff;
-
             .classify-tree {
                 padding: 1px;
-                .el-tree-node{
-                    overflow: hidden;
-                }
+                // .el-tree-node{
+                //     overflow: hidden;
+                // }
             }
         }
         .right-content {
@@ -36,7 +36,6 @@
             vertical-align: top;
             background: #fff;
             padding-bottom: 20px;
-
             .content-list {
                 padding: 20px;
                 .search{
@@ -265,7 +264,9 @@
                 // console.log(node.data.id)
                 console.log("category_type============="+node.data)
                 console.log(node.data)
-
+                if(this.category_name=="方剂"){
+                    
+                }
                 if (type == 1) { 
                     this.section.category_id=node.data.id
                     this.section.category_type=node.data.category_type

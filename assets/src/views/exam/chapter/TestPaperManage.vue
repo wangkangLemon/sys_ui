@@ -323,7 +323,7 @@
                 this.section.loading = true
                 this.section.chapter_id =this.category.currentData.id
                 this.section.category_id =this.$store.state.index.examCate
-                this.section.chapter_type = 3
+                this.section.chapter_type = 2
                  delete this.section.data
                 // delete this.section.loading
                 // delete this.section.total

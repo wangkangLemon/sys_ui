@@ -284,6 +284,14 @@ export default {
                 var arr = []
                 arr.push(ret)
                 this.fetchTesting = arr
+                this.fetchTesting.forEach((item) => {
+                    // if (item.category == 1) {
+                        item.options.forEach((optionItem, index) => {
+                            console.log(item)
+                            if (optionItem.correct == 1) item.correct = index //item是外层题的的数据 ，把内层index 拿出来给外层的item.correct 
+                        })
+                    // }
+                })
                 if(this.qtype=="A3") this.form.title = ret.ext.title
                 // this.ansoption = ret.options
                 if(this.qtype=="A4"){

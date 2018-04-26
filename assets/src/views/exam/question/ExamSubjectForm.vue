@@ -470,13 +470,10 @@ export default {
                 }).then(() => {
                     xmview.setContentLoading(false)
                 })
-        
             })
         }
     },
     components: { UploadImg,SectionCategoryMenu,optionItemA4}
 }
-
-
 
 </script>

@@ -74,8 +74,8 @@
                         <img src="../image/down.png" alt="">
                     </div>
                     <div>
-                        <a href="/ExamExamImportExample.xlsx" target="_blank">
-                             <el-button type="primary" icon="plus" >下载模板 </el-button>
+                        <a href="http://upload.yxt.vodjk.com/import_tpl/exam_import_tpl.xlsx" target="_blank">
+                            <el-button type="primary" icon="plus" >下载模板 </el-button>
                         </a>
                     </div>
                         
