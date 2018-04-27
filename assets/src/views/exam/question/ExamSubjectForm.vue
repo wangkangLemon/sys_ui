@@ -100,12 +100,12 @@
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
                         <!--A3题干部分-->
-                        <el-form-item v-show="qtype=='A3'"  label="题干" :rules=" { required: true, type: 'number', message: '请输入题干', trigger: 'change' }" >
+                        <el-form-item v-show="qtype=='A3'"  label="题干">
                             <el-input v-model="form.title" type="textarea" :autosize="{ minRows: 2, maxRows: 5}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
                         <!--A4单选|多选的答案选项部分-->
-                        <el-form-item label="答案选项组" v-show="qtype=='A4'" v-if="!readonly" >
+                        <el-form-item label="答案选项组" v-show="qtype=='A4'" v-if="!readonly">
                             <h5 v-if="!readonly" >请在正确答案前面打勾</h5>
                             <div class="multy-choose-item" v-for="(option,indexOption) in ansoption" :key="indexOption">
                                 <!-- <el-checkbox v-model="option.correct" :true-label="1"  v-if="type == 2"></el-checkbox>
@@ -270,19 +270,24 @@ export default {
         }
     },
     created(){
-        // let data
-        // data ={"ansoption":[ {"id": 0,"sort": 0,"description": "a",}, {"id": 0,"sort": 0,"description": "a",}], "qtype": "A4" , "title":"题干",  "allQuestion": [    {"id": 0,"correct": 0,"options": [{"id": 0,"correct": 0,"sort": 0,"description": "a",},{"id": 0,"sort": 0,"description": "b","correct": 1},{"id": 0,"sort": 0,"description": "c","correct": 1},{"id": 0,"sort": 0,"description": "d","correct": 0}]},{"id": 2,"correct": 0,"options": [{"id": 0,"correct": 0,"sort": 0,"description": "e",},{"id": 0,"sort": 0,"description": "b","correct": 1},{"id": 0,"sort": 0,"description": "c","correct": 1},{"id": 0,"sort": 0,"description": "d","correct": 0}]}]      }
-        // console.log(JSON.stringify(data))
         let _this=this
         if(this.$route.params.chapter_id){  //编辑
             examService.getExamSubject(this.$route.params.id).then((ret) => {
-                console.log(ret)
+                // console.log(ret)
                 xmview.setContentTile('试题查看')
                 this.form.chapter_name=ret.chapter_name
                 this.qtype=ret.qtype
                 var arr = []
                 arr.push(ret)
                 this.fetchTesting = arr
+                this.fetchTesting.forEach((item) => {
+                    // if (item.category == 1) {
+                        item.options.forEach((optionItem, index) => {
+                            console.log(item)
+                            if (optionItem.correct == 1) item.correct = index //item是外层题的的数据 ，把内层index 拿出来给外层的item.correct 
+                        })
+                    // }
+                })
                 if(this.qtype=="A3") this.form.title = ret.ext.title
                 // this.ansoption = ret.options
                 if(this.qtype=="A4"){
@@ -293,7 +298,6 @@ export default {
                         return
                     })
                 }
-                console.log(_this.cbA4answer)
             }).catch((ret) => {
                 xmview.showTip('error', ret.message)
             })
@@ -304,7 +308,7 @@ export default {
             }
             this.qtype=this.$route.params.qtype
             xmview.setContentTile(`试题添加-${this.qtype}题型`)
-            console.log(this.qtype)
+            // console.log(this.qtype)
             if(this.qtype==undefined){
                 xmview.showTip('error', "请点击添加考题按钮 => 选择题型")
                 this.$router.push({'name':'exam-chapter-manage'})
@@ -322,7 +326,6 @@ export default {
         //     console.log(this.fetchTesting)
         //     xmview.setContentTile('编辑课程-培训')
         // } else 
-
         this.readonly = this.$route.params.readonly
         xmview.setContentLoading(false)
 
@@ -366,13 +369,11 @@ export default {
         },
         // 添加多选 单选的选项
         addMoreTestingOption(options) {
-            console.log(options.length)
             if(this.qtype=="A4"){
                 options.push({
                     opid:this.ansSelect[options.length],
                     description: '',
                 })
-                console.log(this.options)
             }else{
                 options.push({
                     description: '',
@@ -390,13 +391,23 @@ export default {
                 this.$router.back()
                 return
             }
+              console.log(typeof(this.ansoption[0]),this.ansoption[0])
             this.$refs.cate.validate((valid) => {
                 if (!valid) {
                         return false
                     }
-                console.log(this.fetchTesting)
+                // if(this.qtype=="A4"){
+                //     this.ansoption[0].description==''
+                //     xmview.showTip('error', "请先添加答案选项组")
+                //      return false
+                // }
                 let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
                 if(this.qtype!=="A4"){
+                    console.log(this.qtype,this.form.title)
+                    if((this.qtype =="A3")&&(this.form.title ==undefined)){
+                        xmview.showTip('error', "请先添加题干")
+                        return false
+                    }
                      for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
                     // 处理单选题的正确答案选中
                         if (item.type == 1 && typeof item.correct == 'number') {
@@ -418,6 +429,11 @@ export default {
                         console.log(item.options)
                     }
                 }else{
+                    if(this.ansoption[0].description==''){
+                        xmview.showTip('error', "请先添加答案选项组")
+                        return false
+                    }
+                   
                 }
                 xmview.setContentLoading(true)
 

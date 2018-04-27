@@ -71,7 +71,7 @@
             }    
         },
         mounted() {
-            console.log(this.clearable)
+            // console.log(this.clearable)
             this.handleData()
         },
         deactivated() {

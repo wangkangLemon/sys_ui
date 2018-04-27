@@ -39,7 +39,7 @@
                         </el-form-item>
                         <el-form-item label="课程封面图" prop="image">
                             <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
-                            <span class="m">(必须上传)</span>
+                            <span class="m" v-if="this.category_name=='中药'||this.category_name=='腧穴'">(必须上传)</span>
                             <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
                         </el-form-item>
                         <el-form-item label="课程标签">
@@ -78,14 +78,6 @@
                         <el-button @click="btnPreClick">上一步</el-button>
                         <el-button style="float: right" type="primary" @click="btnNextClick">下一步</el-button>
                     </div>
-                    <!-- <el-pagination 
-                            class="pagin" 
-                            @size-change="handleSizeChange" 
-                            @current-change="handleCurrentChange" 
-                            :current-page="fetchParam.page" 
-                            :page-size="fetchParam.pagesize" 
-                            :page-sizes="[10, 20, 30, 50]" layout="sizes,total, prev, pager, next" :total="total">
-                        </el-pagination> -->
                 </el-tab-pane>
                 <el-tab-pane label="属性" name="three">
                     <el-form label-width="120px" v-for="(item,index) in fetchParam.attribute" :key="index" :model="item"  ref="test">
@@ -117,11 +109,6 @@
             return {
                 loadingData: false,
                 activeTab: 'first',
-                // currentData: {
-                //     data: {},
-                //     pindex: -1,
-                //     index: -1
-                // },
                 fetchParam: getFetchParam(),
                 courseTags: [],
                 onValue:1,
@@ -133,7 +120,6 @@
                 fj:{},
                 category_name:'',
                 rules:{},
-                // total: 0,
             }
         },
         watch:{
@@ -549,7 +535,6 @@
                 }
             },
             btnNextClick() {
-                
                 if(this.activeTab=='first'){
                     this.activeTab = 'second' 
                     return
@@ -558,23 +543,6 @@
                     this.activeTab = 'three' 
                     return
                 }
-                if(this.activeTab=='three') 
-                // this.$refs['form'].validate((valid) => {
-                    // if (!valid) return
-                    // let req = govService.create
-                    // if (this.$route.params.warrant_id) req = govService.update
-                    console.log(this.fetchParam)
-                    // req(this.fetchParam).then((ret) => {
-                    //     this.$refs['form'].resetFields();
-                    //     this.currentData = {
-                    //         data: [],
-                    //         pindex: -1,
-                    //         index: -1
-                    //     }
-                    //     if (!this.fetchParam.id) this.fetchParam.id = ret.id;
-                    //     this.$router.push({'name': 'gov-warrant'})
-                    // })
-                // })
             },
             handleSubmit(){
                 let f=Object.assign({},this.fetchParam)
@@ -603,8 +571,9 @@
                         return true
                     })
                     console.log(this.rules)
+                    
                     if((this.rules.xwgz==''||this.rules.gx==''||this.rules.lcyy==''||f.image=='')){
-                        xmview.showTip('error', "请先填写 ‘ 课程简介 - 课程封面图；属性 - 性味归经、功效、临床应用 ‘")
+                        xmview.showTip('error', "请将必填项  ‘ 课程简介 - 课程封面图；属性 - 性味归经、功效、临床应用 ‘ 全部填写")
                         return 
                     }
                 }else if(this.category_name=='方剂'){
@@ -616,7 +585,7 @@
                     })
                     console.log(this.rules)
                     if((this.rules.zc==''||this.rules.lcyy=='')){
-                        xmview.showTip('error', "请先填写 ‘ 属性 - 组成、临床应用 ‘")
+                        xmview.showTip('error', "请请将必填项 ‘ 属性 - 组成、临床应用 ‘ 全部填写")
                         return 
                     }
                 }else if(this.category_name=='腧穴'){
@@ -629,7 +598,7 @@
                     })
                     console.log(this.rules)
                     if((this.rules.dw==''||this.rules.qx==''||this.rules.cz==''||f.image=='')){
-                        xmview.showTip('error', "请先填写 ‘ 课程简介 - 课程封面图；属性 - 定位、取穴、操作 ‘")
+                        xmview.showTip('error', "请将必填项 ‘ 课程简介 - 课程封面图；属性 - 定位、取穴、操作 ‘ 全部填写")
                         return 
                     }
 
