@@ -171,7 +171,7 @@
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="description" label="考题"  min-width="180"></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目">
+                    <el-table-column prop="chapter_name" label="绑定栏目" >
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
                     <el-table-column prop="addate" label="创建时间" width="200"></el-table-column>

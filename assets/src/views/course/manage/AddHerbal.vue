@@ -585,7 +585,7 @@
                     })
                     console.log(this.rules)
                     if((this.rules.zc==''||this.rules.lcyy=='')){
-                        xmview.showTip('error', "请请将必填项 ‘ 属性 - 组成、临床应用 ‘ 全部填写")
+                        xmview.showTip('error', "请将必填项 ‘ 属性 - 组成、临床应用 ‘ 全部填写")
                         return 
                     }
                 }else if(this.category_name=='腧穴'){
