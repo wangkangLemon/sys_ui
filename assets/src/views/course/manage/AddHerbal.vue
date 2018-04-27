@@ -258,10 +258,6 @@
                 ],
                 attribute:[ //属性
                     {
-                        name: "属性",
-                        value: ""
-                    },
-                    {
                         name: "性味归经",
                         value: "",
                         must:1,
@@ -273,14 +269,15 @@
                         must:1,
                     },
                     {
-                        name: "主治",
-                        value: ""
-                    },
-                    {
                         name: "临床应用",
                         value: "",
                         must:1,
                     },
+                    {
+                        name: "主治",
+                        value: ""
+                    },
+                    
                     {
                         name: "用法用量",
                         value: ""
@@ -361,6 +358,11 @@
                         must:1,
                     },
                     {
+                        name: "操作",
+                        value: "",
+                        must:1,
+                    },
+                    {
                         name: "局部解剖",
                         value: ""
                     },
@@ -371,11 +373,6 @@
                     {
                         name: "主治",
                         value: ""
-                    },
-                    {
-                        name: "操作",
-                        value: "",
-                        must:1,
                     },
                     {
                         name: "注意事项",
