@@ -16,6 +16,12 @@
                         color:red;
                     }
                 }
+                .el-form-item__content{
+                    img{
+                        width: 112px;
+                        height: 112px;
+                    }
+                }
             }
         .el-tabs__header{
             max-width: 715px;
@@ -40,7 +46,7 @@
                         <el-form-item label="课程封面图" prop="image">
                             <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
                             <span class="m" v-if="this.category_name=='中药'||this.category_name=='腧穴'">(必须上传)</span>
-                            <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
+                            <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="1/1"></CropperImg>
                         </el-form-item>
                         <el-form-item label="课程标签">
                             <vTags v-model="courseTags"></vTags>
@@ -88,7 +94,7 @@
                     </el-form>
                      <div class="bottom-btns">
                         <el-button @click="btnPreClick">上一步</el-button>
-                        <el-button class="submit" type="primary" @click="handleSubmit">发布</el-button>
+                        <el-button class="submit" type="primary" @click="handleSubmit" :disabled="isDisable">发布</el-button>
                     </div>
                 </el-tab-pane>
             </el-tabs>
@@ -120,6 +126,7 @@
                 fj:{},
                 category_name:'',
                 rules:{},
+                isDisable:false
             }
         },
         watch:{
@@ -402,7 +409,6 @@
                     {
                         name: "拼音名",
                         value: "",
-                        must:1,
                     },
                     {
                         name: "出处",
@@ -555,10 +561,10 @@
                 // console.log(this.fetchParam) 
                 // console.log(JSON.stringify(this.fetchParam))
        
-                if (f.course_name ==''||f.pinyin =='') {
-                    xmview.showTip('error', "请先填写 ‘概述 - 中文名、拼音名’")
-                    return
-                }
+                // if (f.course_name ==''||f.pinyin =='') {
+                //     xmview.showTip('error', "请先填写 ‘概述 - 中文名、拼音名’")
+                //     return
+                // }
                 let fa=f.attribute
                 if(this.category_name=='中药'){
                     fa.map(v=>{
@@ -568,22 +574,28 @@
                         return true
                     })
                     console.log(this.rules)
-                    
-                    if((this.rules.xwgz==''||this.rules.gx==''||this.rules.lcyy==''||f.image=='')){
-                        xmview.showTip('error', "请将必填项  ‘ 课程简介 - 课程封面图；属性 - 性味归经、功效、临床应用 ‘ 全部填写")
-                        return 
+                    if (f.course_name ==''||f.pinyin ==''||f.image=='') {
+                        xmview.showTip('error', "请将必填项 ‘课程简介 - 课程封面图；概述 - 中文名、拼音名’全部填写")
+                        return false
+                    }
+                    if((this.rules.xwgz==''||this.rules.gx==''||this.rules.lcyy=='')){
+                        xmview.showTip('error', "请将必填项  ‘ 属性 - 性味归经、功效、临床应用 ‘ 全部填写")
+                        return false
                     }
                 }else if(this.category_name=='方剂'){
                     fa.map(v=>{
                         if(v.name=="组成")  this.rules.zc=v.value
                         if(v.name=="临床应用")  this.rules.lcyy=v.value
                         return true
-                        
                     })
                     console.log(this.rules)
+                    if (f.course_name =='') {
+                        xmview.showTip('error', "请先填写 ‘概述 - 中文名’")
+                        return false
+                    }
                     if((this.rules.zc==''||this.rules.lcyy=='')){
                         xmview.showTip('error', "请将必填项 ‘ 属性 - 组成、临床应用 ‘ 全部填写")
-                        return 
+                        return false
                     }
                 }else if(this.category_name=='腧穴'){
                     fa.map(v=>{
@@ -591,12 +603,15 @@
                         if(v.name=="取穴")  this.rules.qx=v.value
                         if(v.name=="操作")  this.rules.cz=v.value
                         return true
-                        
                     })
                     console.log(this.rules)
+                    if (f.course_name ==''||f.pinyin ==''||f.image=='') {
+                        xmview.showTip('error', "请将必填项 ‘课程简介 - 课程封面图；概述 - 中文名、拼音名’ 全部填写")
+                        return false
+                    }
                     if((this.rules.dw==''||this.rules.qx==''||this.rules.cz==''||f.image=='')){
-                        xmview.showTip('error', "请将必填项 ‘ 课程简介 - 课程封面图；属性 - 定位、取穴、操作 ‘ 全部填写")
-                        return 
+                        xmview.showTip('error', "请将必填项 ‘ 属性 - 定位、取穴、操作 ‘ 全部填写")
+                        return false
                     }
 
                 }
@@ -619,6 +634,7 @@
                 data=JSON.stringify(f)
                 console.log(data)
                 cid=this.$route.params.herbalInfo.category_id
+                this.isDisable = true
                 if (this.fetchParam.contentid) {  // 如果是编辑
                     param.course_id=''
                     p = courseService.editHerbal({
@@ -626,6 +642,7 @@
                         data:data,
                         noJson:0
                         }).then((ret) => {
+                             this.isDisable = false
                         this.$router.push({'name':'course-manage-public'})
                     })
                 } else {  //新建
@@ -634,8 +651,9 @@
                         data:data,
                         noJson:0
                         }).then((ret) => {
+                             this.isDisable = false
                         this.$router.push({'name':'course-manage-public'})
-                        this.fetchParam.contentid = ret.contentid //?
+                        this.fetchParam.contentid = ret.contentid 
                     })
                 }
             }
