@@ -132,18 +132,6 @@
         watch:{
         },
         created() {
-            let arr1 = [
-  {name:1,value:'aaa'},
-  {name:2,value:'bbb'},
-  {name:5,value:'eee'}
-]
-let arr2 = [
-  {name:1,value:''},
-  {name:2,value:''},
-  {name:3,value:''},
-  {name:4,value:''},
-  {name:5,value:''}
-]
 
 
             xmview.setContentLoading(false);

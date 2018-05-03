@@ -259,8 +259,8 @@
         // },
         methods: {
             edit(row){
-                console.log(row)
-                if(row.category_name=="栏目腧穴"||row.category_name=="栏目方剂"||row.category_name=="栏目中药"){
+                console.log(row.category_type)
+                if(row.category_type==3||row.category_type==4||row.category_type==5){
                     this.$router.push({name: 'course-manage-addCourse-herbal', params: {herbalInfo: row,handle:'edit'}, query: {id: row.contentid}})
                 }
                 else{
