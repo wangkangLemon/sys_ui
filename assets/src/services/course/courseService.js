@@ -141,9 +141,8 @@ class CourseService {
    
 
     // 上下线课程
-    offlineCourse({ govid, course_id, status }) {
-        govid = govid || authUtils.getUserInfo().company_id
-        let finalUrl = `${config.apiHost}/course/edit/${course_id}`
+    offlineCourse({ id, status }) {
+        let finalUrl = `${config.apiHost}/course/edit/${id}`
         // console.log(finalUrl)
         return api.post(finalUrl, { status })
     }
@@ -288,8 +287,8 @@ class CourseService {
     }
 
     // 获取课程信息以及选项列表
-    getCourseSubject({ id }) {
-        let finalUrl = `${urlPre}/${id}/subject/stat`
+    getCourseSubject({ contentid }) {
+        let finalUrl = `${urlPre}/${contentid}/subject/stat`
         return api.get(finalUrl).then((ret) => {
             return ret.data
         })
@@ -318,9 +317,17 @@ class CourseService {
             }
         })
     }
+    //
+    getHerbal({ contentid }) {
+        let finalUrl = `${config.apiHost}/course/herbal/get/${contentid}`
+        return api.get(finalUrl).then((ret) => {
+            console.log(ret)
+            return ret.data
+        })
+    }
     // 修改课程
-    editHerbal({ category_id, data, noJson,id }) {
-        let url = `${config.apiHost}/course/herbal/edit/${category_id}`
+    editHerbal({ category_id, id, data, noJson }) {
+        let url = `${config.apiHost}/course/herbal/edit/${category_id}/${id}`
         return api.post(url, data, noJson ).then((ret) => {
             if (ret.code == 0) {
                 // console.log(ret)

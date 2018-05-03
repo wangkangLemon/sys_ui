@@ -69,9 +69,9 @@
         <el-tabs v-model="activeTab" class="tab">
             <el-tab-pane label="课程信息" name="first">
                 <el-form label-width="120px" ref="formFirst" :rules="rulesFirst" :model="fetchParam">
-                    <el-form-item label="所属栏目" prop="category_id">
+                    <!-- <el-form-item label="所属栏目" prop="category_id">
                         <CourseCategorySelect type="course" :placeholder="fetchParam.category_name" :autoClear="true" :showNotCat="false" v-model="fetchParam.category_id"></CourseCategorySelect>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="课程名称" prop="course_name">
                         <el-input v-model="fetchParam.course_name"></el-input>
                     </el-form-item>
@@ -243,7 +243,7 @@ import UploadImg from '../../component/upload/UploadImg.vue'
 import CropperImg from '../../component/upload/ImagEcropperInput.vue'
 import DialogVideo from '../component/DialogVideo.vue'
 import UploadFile from '../../component/upload/UploadFiles.vue'
-import CourseCategorySelect from '../../component/select/CourseCategory.vue'
+// import CourseCategorySelect from '../../component/select/CourseCategory.vue'
 import CourseAlbumSelect from '../../component/select/CourseAlbum'
 import testingFactory from '../utils/testingFactory'
 import formUtils from '../../../utils/formUtils'
@@ -287,30 +287,35 @@ export default {
 
         //编辑页面
         if (this.$route.params.courseInfo) {
-
+            this.$route.params.courseInfo
             this.activeTab= 'first'
             // this.fetchParam = this.$route.params.courseInfo   //从主页传递信息
             for(let i in this.$route.params.courseInfo){
                  this.fetchParam[i]=this.$route.params.courseInfo[i]
             }
-            console.log(this.fetchParam)
+            console.log(this.$route.params.courseInfo)
             // console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
             this.fetchParam.material_name= this.$route.params.courseInfo.course_name
             // this.fetchParam.experts_id = this.$route.params.courseInfo.experts_name
-            
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
-            xmview.setContentTile('编辑课程-培训')
-        } else if (this.$route.query.contentid) {
+            xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
+        } else if (this.$route.query.contentid) {//编辑页面
             this.activeTab= 'first'
             courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
                 this.fetchParam = ret.course                  // 没拿到信息 获取信息
                 this.fetchParam.course_name= this.$route.params.courseInfo.course_name
                 this.fetchParam.material_name= this.$route.params.courseInfo.course_name
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
-                xmview.setContentTile('编辑课程-培训')
+                 xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
             }).catch((ret) => {
                 xmview.showTip('error', ret.message)
             })
+        }else if(this.$route.params.addcourseInfo){ //添加页面
+            console.log(this.$route.params.addcourseInfo)
+            this.fetchParam.category_name=this.$route.params.addcourseInfo.category_name
+            this.fetchParam.category_id=this.$route.params.addcourseInfo.category_id
+            xmview.setContentTile(`添加课程-${this.fetchParam.category_name}`)
+            console.log(this.fetchParam.category_name)
         }
 
         this.$route.params.tab && (this.activeTab = this.$route.params.tab)
@@ -530,7 +535,7 @@ export default {
             }
         }
     },
-    components: { CropperImg, UploadFile, CourseCategorySelect, CourseAlbumSelect, DialogVideo, UploadImg, vTags ,VideoPreview,Experts}
+    components: { CropperImg, UploadFile, CourseAlbumSelect, DialogVideo, UploadImg, vTags ,VideoPreview,Experts}
 }
 
 function getOrignData() {

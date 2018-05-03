@@ -99,8 +99,9 @@
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>课程列表
-                    <el-button type="primary" icon="plus" @click="$router.push({ name:'course-manage-addCourse'})"><i>添加视频课程</i></el-button>
-                    <el-button type="warning" icon="plus" @click="addHerbal"><i>添加中草药课程</i> </el-button>
+                <!-- <el-button type="primary" icon="plus" @click="$router.push({ name:'course-manage-addCourse'})"><i>添加视频课程</i></el-button>
+                <el-button type="warning" icon="plus" @click="addHerbal"><i>添加中草药课程</i> </el-button> -->
+                <el-button type="primary" icon="plus" @click="addCourse"><i>添加课程</i></el-button>
             </div>
             <div class="content-list">
                 <div class="search">
@@ -144,7 +145,7 @@
                     <el-table-column prop="addate" label="创建时间" width="180"></el-table-column>
                     <el-table-column prop="operate" label="操作" width="150" fixed="right">
                         <template scope="scope">
-                            <el-button @click="$router.push({name: 'course-manage-addCourse', params: {courseInfo: scope.row}, query: {id: scope.row.contentid}})"
+                            <el-button @click="edit(scope.row)"
                                 type="text" size="small">编辑
                             </el-button>
                             <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
@@ -257,6 +258,17 @@
         //     }
         // },
         methods: {
+            edit(row){
+                console.log(row)
+                if(row.category_name=="栏目腧穴"||row.category_name=="栏目方剂"||row.category_name=="栏目中药"){
+                    this.$router.push({name: 'course-manage-addCourse-herbal', params: {herbalInfo: row,handle:'edit'}, query: {id: row.contentid}})
+                }
+                else{
+                    this.$router.push({name: 'course-manage-addCourse', params: {courseInfo: row,handle:'edit'}, query: {id: row.contentid}})
+                    
+                }
+                
+            },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
                 // console.log('===========   node.data.data==========  ')
@@ -264,12 +276,10 @@
                 // console.log(node.data.id)
                 console.log("category_type============="+node.data)
                 console.log(node.data)
-                if(this.category_name=="方剂"){
-                    
-                }
                 if (type == 1) { 
                     this.section.category_id=node.data.id
                     this.section.category_type=node.data.category_type
+                    this.section.category_name=node.data.name
                     this.ended=node.data.ended
                     // console.log(this.section.category_type)
                     // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
@@ -283,11 +293,12 @@
             },
             // 下线 或者上线课程 0为下线，1为上线
             offline(index, row) {
+                console.log(row)
                 let txt = row.status == 0 ? '禁用' : '启用'
                 let finalStatus = row.status == 0 ? 1 : 0
                 xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
                     courseService.offlineCourse({
-                        id: row.id,
+                        id: row.contentid,
                         status: finalStatus
                     }).then((ret) => {
                         row.status = finalStatus
@@ -331,16 +342,41 @@
                     })
                 })
             },
+
+            //添加课程按钮逻辑
+            addCourse(){
+                console.log(this.section.category_type)
+            //  this.$router.push({ name:'course-manage-addCourse'}
+                if(this.ended==1){
+                    if( this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5){
+                        this.$router.push({ name:'course-manage-addCourse-herbal',params:{herbalInfo:this.section,handle:'add'}})
+                        return 
+                    }
+                    else{
+                        this.$router.push({ name:'course-manage-addCourse',params:{addcourseInfo:this.section,handle:'add'}})
+                        return
+                    }
+                }
+                xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
+                return
+            },
            //添加中草药
-           addHerbal(){
-               console.log(this.section.category_type)
-                if( (this.ended==1)&&(this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5)){
-                    this.$router.push({ name:'course-manage-addCourse-herbal',params:{herbalInfo:this.section}})
-                    return
+            addHerbal(){
+            console.log(this.section.category_type)
+            //  this.$router.push({ name:'course-manage-addCourse'}
+                if(this.ended==1){
+                    if( this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5){
+                        this.$router.push({ name:'course-manage-addCourse-herbal',params:{herbalInfo:this.section,handle:'add'}})
+                        return 
+                    }
+                    else{
+                        this.$router.push({ name:'course-manage-addCourse',params:{courseInfo:this.section,handle:'add'}})
+                        return
+                    }
                 }
                 xmview.showTip('error','请先选择中药栏目组最终级栏目添加')
                 return
-           },
+            },
             update (index, row) {
                 this.$router.push({
                     name:'exam-course-edit',

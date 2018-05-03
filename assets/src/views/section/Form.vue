@@ -43,11 +43,6 @@
         </section>     
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :model="fetchParam">
-                <el-form-item v-if="$route.params.sys_id" label="区块id" prop="id">
-                    <el-input v-model.id="fetchParam.id" type="number" disabled></el-input>
-                </el-form-item>
-                <el-form-item v-else >
-                </el-form-item>
                 <el-form-item  label="区块栏目">
                     <Section-category-menu :placeholder="fetchParam.name" :autoClear="true" v-model="fetchParam.category_id" :reqFun="reqFun"></Section-category-menu>
                 </el-form-item>

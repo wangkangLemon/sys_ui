@@ -132,6 +132,20 @@
         watch:{
         },
         created() {
+            let arr1 = [
+  {name:1,value:'aaa'},
+  {name:2,value:'bbb'},
+  {name:5,value:'eee'}
+]
+let arr2 = [
+  {name:1,value:''},
+  {name:2,value:''},
+  {name:3,value:''},
+  {name:4,value:''},
+  {name:5,value:''}
+]
+
+
             xmview.setContentLoading(false);
             this.zy={
                 summary:[ //概述
@@ -480,34 +494,90 @@
                     }
                 ]
             }
-            // this.summary=this.zy.summary
-            // this.attribute=this.zy.attribute
+            
             if(!this.$route.params.herbalInfo){
                 xmview.showTip('error', "请先选择中药栏目组最终级栏目添加")
                 this.$router.push({'name':'course-manage-public'})
-                return
+                return 
             }
-            let t=this.$route.params.herbalInfo.category_type
-            let f=this.fetchParam
-            if(t==3){
-                this.category_name='中药'
-                f.summary=this.zy.summary
-                f.attribute=this.zy.attribute
+            // console.log(this.$route.params)
+                let t=this.$route.params.herbalInfo.category_type
+                let f=this.fetchParam
+                if(t==3){
+                    this.category_name='中药'
+                    f.summary=this.zy.summary
+                    f.attribute=this.zy.attribute
+                }
+                else if(t==4){
+                    this.category_name='方剂'
+                    f.summary=this.fj.summary
+                    f.attribute=this.fj.attribute
+                }
+                else{
+                    this.category_name='腧穴'
+                    f.summary=this.sx.summary
+                    f.attribute=this.sx.attribute
+                }
+                console.log(this.$route.params.handle)
+            if(this.$route.params.handle=='edit'){ //编辑
+                courseService.getHerbal({
+                        contentid:this.$route.params.herbalInfo.contentid
+                        }).then((ret) => {
+                            this.herbalInfo = JSON.parse(ret)
+                            console.log( this.herbalInfo)
+
+                            xmview.setContentTile(`编辑课程-中草药 ${ this.category_name}`)
+                            this.loadingData=false
+                            console.log(this.herbalInfo)
+                            this.fetchParam.description= this.herbalInfo.description
+                            this.fetchParam.image= this.herbalInfo.thumb
+                            // this.fetchParam.image= this.herbalInfo.image
+                            this.courseTags = this.herbalInfo.tags ? this.herbalInfo.tags.split(',') : []
+                            console.log(this.fetchParam.summary)
+                            this.handleArr(this.herbalInfo.summary,this.fetchParam.summary)
+                            this.handleArr(this.herbalInfo.attribute,this.fetchParam.attribute)
+                            // for(let i in this.herbalInfo.summary){
+                            //     this.fetchParam.summary[i]=this.herbalInfo.summary[i]?this.fetchParam.summary[i]=this.herbalInfo.summary[i]:this.fetchParam.summary[i]=""
+                            //     console.log(this.fetchParam.summary[i],this.herbalInfo.summary[i])
+                            // }
+                            // for(let i in this.herbalInfo.attribute){
+                            //     this.fetchParam.attribute[i]=this.herbalInfo.attribute[i]?this.fetchParam.attribute[i]=this.herbalInfo.attribute[i]: this.fetchParam.attribute[i]=""
+                            // }
+                            return false
+                        })
+                // this.herbalInfo={"course_name":"虎口","category_type":5,"pinyin":"hukou","thumb":"http://upload.yxt.vodjk.demo/course/1525245654736265.jpg","image":"http://upload.yxt.vodjk.demo/course/1525245654736265.jpg","tags":"11,22,33","description":"腧穴--001","type":"public","material_type":"text","summary":[{"name":"中文名","value":"虎口","must":1},{"name":"拼音名","value":"hukou","must":1},{"name":"别名","value":"别名"},{"name":"国际编号","value":"国际编号"},{"name":"出处","value":"出处"},{"name":"穴名释疑","value":"穴名释疑"},{"name":"类型","value":"类型"},{"name":"部位","value":"部位"},{"name":"特异性","value":"特异性"}],"attribute":[{"name":"定位","value":"定位1","must":1},{"name":"取穴","value":"取穴1","must":1},{"name":"操作","value":"操作1","must":1},{"name":"局部解剖","value":"局部解剖"},{"name":"功效","value":"功效"},{"name":"主治","value":"主治"},{"name":"注意事项","value":"注意事项"},{"name":"常用配伍","value":"常用配伍"},{"name":"文献摘要","value":"文献摘要"}]}
+            // this.herbalInfo=JSON.parse(this.herbalInfo)
             }
-            else if(t==4){
-                this.category_name='方剂'
-                f.summary=this.fj.summary
-                f.attribute=this.fj.attribute
+            else{//新建
+                xmview.setContentTile(`添加课程-中草药 ${ this.category_name}`)
+                this.loadingData=false
             }
-            else{
-                this.category_name='腧穴'
-                f.summary=this.sx.summary
-                f.attribute=this.sx.attribute
-            }
-            xmview.setContentTile(`添加课程-中草药 ${ this.category_name}`)
-            this.loadingData=false;
         },
         methods: {
+            handleArr(arr1,arr2){ //1  是2 的子集
+                let obj = {}
+                arr1.forEach(v=>{
+                console.log(v)
+                obj[v.name] = v.value
+                })
+                arr2.forEach(v=>{
+                v.value = obj[v.name]
+                })
+          
+                // for(var i=0;i<arr1.length;i++){
+                //     var obj1= arr1[i]
+                //     for(var j=0; j,arr2.length;j++){
+                //         var obj2=arr2[j]
+                //         if(obj1.name == obj2.name){
+                //             obj2.value == obj1.value
+                //         }
+                //     }
+                // }
+
+                console.log(JSON.stringify(arr1))
+                console.log(JSON.stringify(arr2))
+                // console.log(arr2)
+            },
              // 课程类型改变
             typeChange(val) {
                 if (val === 'doc') {
@@ -558,13 +628,7 @@
           
                 f.thumb=f.image
                 f.tags = this.courseTags ? this.courseTags.join(',') : ''
-                // console.log(this.fetchParam) 
-                // console.log(JSON.stringify(this.fetchParam))
        
-                // if (f.course_name ==''||f.pinyin =='') {
-                //     xmview.showTip('error', "请先填写 ‘概述 - 中文名、拼音名’")
-                //     return
-                // }
                 let fa=f.attribute
                 if(this.category_name=='中药'){
                     fa.map(v=>{
@@ -632,13 +696,14 @@
 
                 let p,data,cid
                 data=JSON.stringify(f)
-                console.log(data)
+                console.log(this.$route.params)
                 cid=this.$route.params.herbalInfo.category_id
                 this.isDisable = true
-                if (this.fetchParam.contentid) {  // 如果是编辑
-                    param.course_id=''
+                // if (this.fetchParam.contentid) {  // 如果是编辑
+                if (this.$route.params.handle=='edit') {  // 如果是编辑
                     p = courseService.editHerbal({
                         category_id:cid,
+                        id:this.$route.params.herbalInfo.contentid,
                         data:data,
                         noJson:0
                         }).then((ret) => {
