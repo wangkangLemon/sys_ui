@@ -43,10 +43,8 @@
                             <el-input v-model="fetchParam.description" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="课程封面图" prop="image">
-                            <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
-                            <span class="m" v-if="this.category_name=='中药'||this.category_name=='腧穴'">(必须上传)</span>
-                            <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="1/1"></CropperImg>
+                        <el-form-item label="课程封面图">
+                            <UploadImg :defaultImg="fetchParam.image" :url="uploadImgUrl" :onSuccess="res => fetchParam.image = res.data.url" :data='uploadextraData'></UploadImg>
                         </el-form-item>
                         <el-form-item label="课程标签">
                             <vTags v-model="courseTags"></vTags>
@@ -105,11 +103,11 @@
     import govService from '../../../services/gov/govService'
     import courseService from '../../../services/course/courseService.js'
     import vTags from '../../component/form/Tags.vue'
-    import CropperImg from '../../component/upload/ImagEcropperInput.vue'
+    import UploadImg from '../../component/upload/UploadImg.vue'
     export default {
         name: 'gov-authority',
         components: {
-            CropperImg,vTags
+           vTags,UploadImg
         },
         data() {
             return {
@@ -126,7 +124,11 @@
                 fj:{},
                 category_name:'',
                 rules:{},
-                isDisable:false
+                isDisable:false,
+                uploadextraData:{
+                    biz:'course',
+                    extpath:'cover'
+                }
             }
         },
         watch:{
@@ -482,7 +484,8 @@
                     }
                 ]
             }
-            
+            this.uploadImgUrl = courseService.commonUploadImage()
+
             if(!this.$route.params.herbalInfo){
                 xmview.showTip('error', "请先选择中药栏目组最终级栏目添加")
                 this.$router.push({'name':'course-manage-public'})

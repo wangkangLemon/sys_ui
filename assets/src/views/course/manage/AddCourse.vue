@@ -174,7 +174,7 @@
                             <el-input placeholder="为该题设置分数" :disabled="!item.editable" v-model="item.score"></el-input>
                         </el-form-item> -->
                         <el-form-item label="配图">
-                            <UploadImg :defaultImg="item.image" :url="uploadImgUrl" :disabled="!item.editable" :onSuccess="res => item.image = res.data.url"></UploadImg>
+                            <UploadImg :defaultImg="item.image" :url="uploadImgUrl" :disabled="!item.editable" :onSuccess="res => item.image = res.data.url" :data='uploadextraData'></UploadImg>
                         </el-form-item>
 
                         <!--判断题的正确错误选项-->
@@ -277,7 +277,11 @@ export default {
             readonly: false, // 只读模式
             videoUrl: '', // 预览的视频url
             // experts_list:[],
-            changelist:{}
+            changelist:{},
+            uploadextraData:{
+                biz:'course',
+                extpath:'subject'
+            }
         }
     },
 

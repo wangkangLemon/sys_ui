@@ -4,14 +4,16 @@ import store from './store'
 import action from './store/actions'
 import base from './routers/base'              // 基础模块
 import course from './routers/course'          // 培训模块
-// import finance from './routers/finance'        // 财务模块
+import finance from './routers/finance'        // 财务模块
 import company from './routers/company'        // 企业模块
 import sys from './routers/sys'                // 系统模块
 import section from './routers/section'        // 区块模块
 import setting from './routers/setting'        // 设置模块
 import gov from './routers/gov'                // 政府模块
 import data from './routers/data'              // 数据分析模块
-import exam from './routers/exam' // 应试考试
+import exam from './routers/exam'              // 应试考试
+import review from './routers/review'          // 审核模块
+import vip from './routers/vip'                // 会员模块
 
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
@@ -75,7 +77,7 @@ const routes = [{
             // ============ 培训模块 ==================
             course,
             // ============ 财务模块 ==================
-            // finance,
+            finance,
             // ============ 企业模块 ==================
             ...company,
             // ============ 系统模块 ==================
@@ -90,6 +92,10 @@ const routes = [{
             data,
             // ============ 应试考试模块 ==============
             exam,
+            // ============ 审核模块 ==============
+            review,
+            // ============ 会员模块 ==============
+            vip,
         ]
     },
     { // 登录

@@ -16,6 +16,8 @@ class CommonService {
         })
     }
 // 获取添加编辑课程上传图片的url (与题目里的上传图片的url为同一个)  =====直接传图
+
+    //在父组件要配置:data='uploadextraData' data里定义参数
     commonUploadImage() { 
         return `${config.apiHost}/common/upload/file`
     }
