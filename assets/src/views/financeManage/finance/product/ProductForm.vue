@@ -24,10 +24,11 @@
                     <el-input v-model="fetchParam.name"></el-input>
                 </el-form-item>
                 <el-form-item label="标记" prop="mark" :label-width="formLabelWidth">
-                    <el-radio-group v-model="fetchParam.mark">
+                     <el-input v-model="fetchParam.mark"></el-input>
+                    <!-- <el-radio-group v-model="fetchParam.mark">
                         <el-radio :label="'vip_original'">vip原价</el-radio>
                         <el-radio :label="'vip_discount'">vip打折</el-radio>
-                    </el-radio-group>
+                    </el-radio-group> -->
                 </el-form-item>
                 <el-form-item label="商品金额" prop="price">
                     <el-input type="number" :min="0" v-model="fetchParam.price"></el-input>
@@ -181,7 +182,7 @@
         return {
             name: '',
             description: '',
-            mark: 'vip_original',
+            mark: '',
             price:void 0,
             appleid_origin:'',
             appleid_discount:''

@@ -46,10 +46,11 @@
             <div class="info">
                 <h2>{{clerkDetail.name}}</h2>
                 <p><i class="title">商品名称：</i><span class="value">{{clerkDetail.name }}</span></p>
-                <p><i class="title">标记：</i> 
+                <p><i class="title">标记：</i><span class="value">{{clerkDetail.mark }}</span></p>
+                <!-- <p><i class="title">标记：</i> 
                     <el-tag type="warning" size="medium" v-if="clerkDetail.mark=='vip_discount'">vip打折</el-tag>
                     <el-tag type="primary" size="medium" v-if="clerkDetail.mark=='vip_original'">vip原价</el-tag>
-                </p>
+                </p> -->
                 <p><i class="title">金额：</i> <span class="value">{{clerkDetail.price}}</span></p>
                 <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
                 <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
@@ -77,10 +78,10 @@
             <el-table-column min-width="100" prop="price" label="价格">
             </el-table-column>
             <el-table-column min-width="70" prop="mark" label="标记">
-                <template scope="scope">
+                <!-- <template scope="scope">
                     <el-tag type="warning" size="medium" v-if="scope.row.mark=='vip_discount'">vip打折</el-tag>
                     <el-tag type="primary" size="medium" v-if="scope.row.mark=='vip_original'">vip原价</el-tag>
-                </template>
+                </template> -->
             </el-table-column>
             <el-table-column min-width="150" prop="addate" label="创建时间">
             </el-table-column>
