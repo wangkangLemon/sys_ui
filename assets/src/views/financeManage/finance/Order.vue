@@ -81,11 +81,11 @@
                 </p> -->
                 <p>
                     <i class="title">下单时间：</i>
-                    <span class="value">{{detail.addtime}}</span>
+                    <span class="value">{{detail.addate}}</span>
                 </p>
                 <p>
                     <i class="title">支付时间：</i>
-                    <span class="value">{{detail.uptime}}</span>
+                    <span class="value">{{detail.paydate}}</span>
                 </p>
                 <p>
                     <i class="title">支付方式：</i>
@@ -166,7 +166,9 @@
                     {{payMethods[scope.row.pay_channel]}}
                 </template>
             </el-table-column>
-            <el-table-column min-width="180" prop="addate" label="支付时间">
+            <el-table-column min-width="180" prop="addate" label="下单时间">
+            </el-table-column>
+            <el-table-column min-width="180" prop="paydate" label="支付时间">
             </el-table-column>
             <el-table-column min-width="100" prop="status" label="订单状态">
                 <template scope="scope">
@@ -226,7 +228,7 @@ export default {
     data() {
         return {
             payMethods: ['', '微信','支付宝', '苹果支付'] ,
-            payStatus: ['','未支付', '已支付', '已关闭', '已删除'],
+            payStatus: ['','未支付', '支付成功', '支付失败','过期'],
             init:false,
             loadingData: false,
             data: [], // 表格数据

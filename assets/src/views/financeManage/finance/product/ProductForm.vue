@@ -13,9 +13,6 @@
             .subButton {
                 text-align: center;
             }
-            div{
-                width: 100%;
-            }
     }
     }
 </style>
