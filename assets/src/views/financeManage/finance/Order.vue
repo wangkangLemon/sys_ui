@@ -64,11 +64,11 @@
                 </p>
                 <p>
                     <i class="title">价格：</i>
-                    <span class="value">{{detail.price}} 元</span>
+                    <span class="value">{{detail.price_yuan}} 元</span>
                 </p>
                 <p>
                     <i class="title">实付金额：</i>
-                    <span class="value">{{detail.pay_price}}  元</span>
+                    <span class="value">{{detail.pay_price_yuan}}  元</span>
                 </p>
                 <p>
                     <i class="title">提交订单用户：</i>
@@ -155,9 +155,9 @@
             </el-table-column>
                <el-table-column min-width="100" prop="product_name" label="商品名称" v-if="data">
             </el-table-column>
-            <el-table-column min-width="100" prop="price" label="价格" v-if="data">
+            <el-table-column min-width="100" prop="price_yuan" label="价格(元)" v-if="data">
             </el-table-column>  
-            <el-table-column min-width="100" prop="pay_price" label="实付金额" v-if="data">
+            <el-table-column min-width="120" prop="pay_price_yuan" label="实付金额(元)" v-if="data">
             </el-table-column> 
             <el-table-column min-width="100" prop="user_name" label="下单用户" v-if="data">
             </el-table-column>

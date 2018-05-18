@@ -51,7 +51,7 @@
                     <el-tag type="warning" size="medium" v-if="clerkDetail.mark=='vip_discount'">vip打折</el-tag>
                     <el-tag type="primary" size="medium" v-if="clerkDetail.mark=='vip_original'">vip原价</el-tag>
                 </p> -->
-                <p><i class="title">金额：</i> <span class="value">{{clerkDetail.price}}</span></p>
+                <p><i class="title">价格(元)：</i> <span class="value">{{clerkDetail.price_yuan}}</span></p>
                 <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
                 <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
                 <p><i class="title">苹果原价商品id：</i> <span class="value">{{clerkDetail.appleid_origin}}</span></p>
@@ -75,7 +75,7 @@
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" border>
             <el-table-column min-width="120" prop="name" label="商品名称" v-if="data">
             </el-table-column>
-            <el-table-column min-width="100" prop="price" label="价格">
+            <el-table-column min-width="100" prop="price_yuan" label="价格(元)">
             </el-table-column>
             <el-table-column min-width="70" prop="mark" label="标记">
                 <!-- <template scope="scope">

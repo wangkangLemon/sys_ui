@@ -30,7 +30,7 @@
                         <el-radio :label="'vip_discount'">vip打折</el-radio>
                     </el-radio-group> -->
                 </el-form-item>
-                <el-form-item label="商品金额" prop="price">
+                <el-form-item label="商品金额(分)" prop="price">
                     <el-input type="number" :min="0" v-model="fetchParam.price"></el-input>
                 </el-form-item>
                 <el-form-item label="商品简介" prop="description">
