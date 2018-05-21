@@ -70,13 +70,14 @@
                                    :onSuccess="handleImgUploaded" :before-remove="removeImg">
                         </UploadImg>
                     </el-form-item>
-                    <el-form-item label="课程类型" prop="category_type">
+                    <el-form-item label="课程模型" prop="category_type">
                         <el-radio-group v-model="fetchParam.category_type" :disabled="fetchParam.pid == null">
                             <el-radio :label="1">视频课程栏目</el-radio>
                             <!-- <el-radio :label="2">应试课程栏目</el-radio> -->
                             <el-radio :label="3">中药栏目</el-radio>
                             <el-radio :label="4">方剂栏目</el-radio>
                             <el-radio :label="5">腧穴栏目</el-radio>
+                            <el-radio :label="6">图文栏目</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="栏目排序" prop="sort">
@@ -376,7 +377,7 @@
     function getFetchParam () {
         return {
             pid: void 0, //父级id
-            category_type: void 0,
+            category_type: 1,
             name: '',
             image: void 0,
             sort: '',

@@ -111,6 +111,18 @@ export default {
             }
         },
         {
+            path: 'manage/add-course/imgtxt', // 添加和编辑中草药课程
+            name: 'course-manage-addCourse-imgtxt',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/AddImgtxt.vue'))
+                })
+            },
+            meta: {
+                title: '添加课程-图文系列',
+            }
+        },
+        {
             path: 'manage/course-category-manage', // 栏目管理
             name: 'course-category-manage',
             component: resolve => {

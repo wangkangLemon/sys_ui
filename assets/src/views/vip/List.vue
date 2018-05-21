@@ -56,7 +56,7 @@
                 <i>手机号</i>
                 <el-input v-model="fetchParam.mobile" placeholder="请输入用户手机号码"   @keyup.enter.native="fetchData" ></el-input>
             </section>
-            <DateRange title="到期时间" :start="fetchParam.stime" :end="fetchParam.etime" @changeStart="val=> fetchParam.stime=val "
+            <DateRange title="到期时间" :start="fetchParam.stime" :end="fetchParam.etime" @changeStart="val=> fetchParam.stime=val"
                 @changeEnd="val=> fetchParam.etime=val" :change="fetchData">
             </DateRange>
         </article>
@@ -64,7 +64,7 @@
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" border>
             <el-table-column min-width="100" prop="user_name" label="vip用户" v-if="data">
             </el-table-column>
-            <el-table-column min-width="130" prop="mobile" label="vip用户" v-if="data">
+            <el-table-column min-width="130" prop="mobile" label="手机号" v-if="data">
             </el-table-column>
             <el-table-column min-width="100" prop="province_name" label="省" v-if="data">
             </el-table-column>
@@ -81,6 +81,8 @@
                     {{attr[scope.row.attributes]}}
                 </template>
             </el-table-column>
+            <el-table-column min-width="180" prop="regdate" label="注册时间" v-if="data">
+            </el-table-column>  
             <el-table-column min-width="180" prop="expired_date" label="到期时间" v-if="data">
             </el-table-column>  
             <!-- <el-table-column fixed="right" width="150" label="操作">

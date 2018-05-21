@@ -263,6 +263,10 @@
                 if(row.category_type==3||row.category_type==4||row.category_type==5){
                     this.$router.push({name: 'course-manage-addCourse-herbal', params: {herbalInfo: row,handle:'edit'}, query: {id: row.contentid}})
                 }
+                else if(this.section.category_type==6){
+                    this.$router.push({ name:'course-manage-addCourse-imgtxt',params:{imgtxtInfo:this.section,handle:'add'}})
+                    return 
+                }
                 else{
                     this.$router.push({name: 'course-manage-addCourse', params: {courseInfo: row,handle:'edit'}, query: {id: row.contentid}})
                     
@@ -350,6 +354,10 @@
                 if(this.ended==1){
                     if( this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5){
                         this.$router.push({ name:'course-manage-addCourse-herbal',params:{herbalInfo:this.section,handle:'add'}})
+                        return 
+                    }
+                    else if(this.section.category_type==6){
+                        this.$router.push({ name:'course-manage-addCourse-imgtxt',params:{imgtxtInfo:this.section,handle:'add'}})
                         return 
                     }
                     else{

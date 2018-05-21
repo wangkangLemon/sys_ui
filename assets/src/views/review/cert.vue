@@ -95,11 +95,12 @@
                     {{certType[scope.row.type]}}
                 </template>
             </el-table-column>
-            <el-table-column min-width="100" prop="admin_name"  label="审核人">
-            </el-table-column>
+            
             <el-table-column min-width="100" prop="mobile"  label="手机号">
             </el-table-column>
             <el-table-column min-width="120" prop="addate" label="创建时间">
+            </el-table-column>
+            <el-table-column min-width="100" prop="admin_name"  label="审核人">
             </el-table-column>
             <el-table-column width="100" label="状态">
                 <template scope="scope">

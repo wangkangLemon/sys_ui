@@ -1,2 +1,0 @@
-webpackJsonp([87],{1118:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("keep-alive",{attrs:{exclude:" sys-form，section-edit,exam-course-form,exam-subject-form,exam-subject-manage,exam-subject-import"}},[r("router-view")],1)},staticRenderFns:[]}},135:function(e,t,r){var n=r(5)(r(819),r(1118),null,null);e.exports=n.exports},819:function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={}}});
-//# sourceMappingURL=87.de7c224462bc8fe2613e.js.map

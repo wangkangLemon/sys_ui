@@ -349,6 +349,65 @@ class CourseService {
         })
     }
 
+    //图文系列课程创建入口
+    // 资讯获取
+    getImgTxt(id) {
+        let url = `${urlPre}/get/${id}`         //传递的地址的id
+        return api.get(url).then(ret => {
+            return ret.data
+        })
+    }
+    // 资讯列表
+    fetchImgTxtList(params) {
+        let url = urlPre + '/lists'
+        return api.get(url, params).then(ret => {
+            if (ret.code == 0) {
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 资讯创建
+    createImgTxt(fetchParam) {
+        let url = urlPre + '/create'
+        return api.post(url, fetchParam).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 资讯更新
+    editImgTxt(fetchParam, id) {
+        let url = `${urlPre}/edit/${id}`
+        return api.post(url, fetchParam).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 资讯删除
+    deleteImgTxt(id) {
+        let url = `${urlPre}/delete/${id}`
+        return api.post(url, {}).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+
     
 
 
