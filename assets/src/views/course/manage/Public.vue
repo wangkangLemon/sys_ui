@@ -259,19 +259,17 @@
         // },
         methods: {
             edit(row){
-                console.log(row.category_type)
+                console.log(row,this.section)
                 if(row.category_type==3||row.category_type==4||row.category_type==5){
                     this.$router.push({name: 'course-manage-addCourse-herbal', params: {herbalInfo: row,handle:'edit'}, query: {id: row.contentid}})
                 }
-                else if(this.section.category_type==6){
-                    this.$router.push({ name:'course-manage-addCourse-imgtxt',params:{imgtxtInfo:this.section,handle:'add'}})
+                else if(row.category_type==6){
+                    this.$router.push({ name:'course-manage-addCourse-imgtxt',params:{imgtxtInfo:row,handle:'edit'}})
                     return 
                 }
                 else{
                     this.$router.push({name: 'course-manage-addCourse', params: {courseInfo: row,handle:'edit'}, query: {id: row.contentid}})
-                    
                 }
-                
             },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {

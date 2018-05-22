@@ -20,26 +20,25 @@
     <main id="medical-form">
         <section class="submit-form">   
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam">
-                <el-form-item label="资讯标题" prop="title">
-                    <el-input v-model="fetchParam.title"></el-input>
+                <el-form-item label="课程名称" prop="course_name">
+                    <el-input v-model="fetchParam.course_name"></el-input>
                 </el-form-item>
-                <el-form-item label="作者" prop="author">
-                    <el-input v-model="fetchParam.author"></el-input>
-                </el-form-item>
-                <el-form-item label="简介" prop="info">
-                    <el-input v-model="fetchParam.info" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请输入内容">
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="imgUrl" label="封面" :label-width="formLabelWidth">
+                <el-form-item prop="image" label="封面" :label-width="formLabelWidth">
                     <div class="img-wrap" v-if="fetchParam.image">
-                        <img :src="fetchParam.image | fillImgPath" alt=""/>
+                        <img :src="fetchParam.image | fillImgPath" width="200" height="112" alt=""/>
                     </div>
                     <ImagEcropperInput :isRound="false" :confirmFn="cropperFn"
                                        class="upload-btn"></ImagEcropperInput>
                 </el-form-item>
-                <el-form-item prop="html" label="资讯内容" id="editor" :label-width="formLabelWidth">
-                    <vue-editor v-model="fetchParam.html" @ready="ueReady"></vue-editor>
-                    
+                <el-form-item label="课程标签">
+                    <vTags v-model="courseTags"></vTags>
+                </el-form-item>
+                <el-form-item label="简介" prop="description">
+                    <el-input v-model="fetchParam.description" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请输入内容">
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="content" label="资讯内容" id="editor" :label-width="formLabelWidth">
+                    <vue-editor v-model="fetchParam.content" @ready="ueReady"></vue-editor>
                 </el-form-item>
                 <el-form-item label="" >
                     <!--<el-button @click="$router.push({ name:'medical-index'})">取消</el-button>-->
@@ -57,7 +56,7 @@
     import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
     import VueEditor from '../../component/form/UEditor.vue'
     import commonService from '../../../services/commonService.js'
-    import authUtils from '../../../utils/authUtils' 
+    import vTags from '../../component/form/Tags.vue'
 
 
     function clearFn() {
@@ -74,7 +73,7 @@
     export default {
         name: 'course-manage-addCourse-imgtxt',
         components: {
-            ImagEcropperInput,VueEditor
+            ImagEcropperInput,VueEditor,vTags
         },
         data() {
             return {
@@ -84,6 +83,7 @@
                     pindex: -1,
                     index: -1
                 },
+                courseTags: [],
                 fetchParam: getOriginData(),
                 // passValue: true,
                 role_list:[
@@ -97,16 +97,16 @@
                     },
                 ],
                 rules: {
-                    title:[
+                    course_name:[
                         {required: true, message: '必须输入', trigger: 'blur'},
                         ,{
                             pattern:  /\S$/,
                             message: '请输入非空格或非特殊字符的内容'
                         }
                     ],
-                    author: { required: true, message: '请输入作者姓名',trigger: 'blur'},
-                    info: { required: true, message: '请输入简介内容',trigger: 'blur'},
-                    html: { required: true, message: '请输入资讯内容',trigger: 'blur'},
+                    image: { required: true, message: '请上传封面图',trigger: 'change'},
+                    description: { required: true, message: '请输入简介内容',trigger: 'blur'},
+                    content: { required: true, message: '请输入资讯内容',trigger: 'blur'},
             },
                 multi: {
                     data: [{
@@ -127,18 +127,19 @@
             }
         },
         created() {
+            console.log(this.$route.params.imgtxtInfo)
             xmview.setContentLoading(false)
-            if (this.$route.params.id != undefined) {    //路由id传递
-                // this.passValue = false
-                courseService.getImgTxt(this.$route.params.id).then((ret) => {
-                    console.log(ret)
-                    this.fetchParam = ret
-                    this.fillImgPath = ret.image
-                    // this.fetchParam.html = ret.html
-
-                    // this.fetchParam.role_id = ret.course.role_id
-                })
-            } 
+            if(this.$route.params.handle=='edit'){ //编辑
+                courseService.getImgTxt({
+                    contentid:this.$route.params.imgtxtInfo.contentid
+                    }).then((ret) => {
+                        xmview.setContentTile(`编辑课程-图文系列`)
+                        this.loadingData=false
+                        console.log(this.imgtxtInfo)
+                        this.fetchParam= this.imgtxtInfo=JSON.parse(ret)
+                        this.courseTags = this.imgtxtInfo.tags ? this.imgtxtInfo.tags.split(',') : []
+                    })
+            }
             //暂时不获取角色列表       
             this.loadingData=false
         },
@@ -147,7 +148,6 @@
                 this.editor = ue
             },
              cropperFn (data, ext) {
-                this.govid=authUtils.getUserInfo().gov_id 
                 commonService.commonUploadImageBaseSection({
                     image: data,
                     alias: `${Date.now()}${ext}`,
@@ -174,22 +174,50 @@
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
-                    let req = courseService.createImgTxt
-                    if (this.fetchParam.id) req = courseService.editImgTxt
-                    req(this.fetchParam,this.fetchParam.id).then((ret) => {
-                        // 重置当前数据
-                        //this.$refs[fetchParam].resetFields();//自己加的方法
-                        xmview.showTip('success', '数据提交成功')
-                        // this.fetchParam=getOriginData(),
-                        this.$refs['form'].resetFields();
-                        this.currentData = {
-                            data: [],
-                            pindex: -1,
-                            index: -1
-                        }
-                        if (!this.fetchParam.id) this.fetchParam.id = ret.id;
-                        this.$router.go(-1)
-                    })
+                    let f=Object.assign({},this.fetchParam)
+                    f.tags = this.courseTags ? this.courseTags.join(',') : ''
+                    let p,data,cid
+                    data=JSON.stringify(f)
+                    cid=this.$route.params.imgtxtInfo.category_id
+                    this.isDisable = true
+                    // if (this.fetchParam.contentid) {  // 如果是编辑
+                    if (this.$route.params.handle=='edit') {  // 如果是编辑
+                        p = courseService.editImgTxt({
+                            category_id:cid,
+                            id:this.$route.params.imgtxtInfo.contentid,
+                            data:data,
+                            noJson:0
+                            }).then((ret) => {
+                                this.isDisable = false
+                            this.$router.push({'name':'course-manage-public'})
+                        })
+                    } else {  //新建
+                        p = courseService.createImgTxt({
+                            category_id:cid,
+                            data:data,
+                            noJson:0
+                            }).then((ret) => {
+                                this.isDisable = false
+                            this.$router.push({'name':'course-manage-public'})
+                            this.fetchParam.contentid = ret.contentid 
+                        })
+                    }
+                    // let req = courseService.createImgTxt
+                    // if (cid) req = courseService.editImgTxt
+                    // req(this.fetchParam,this.fetchParam.id).then((ret) => {
+                    //     // 重置当前数据
+                    //     //this.$refs[fetchParam].resetFields();//自己加的方法
+                    //     xmview.showTip('success', '数据提交成功')
+                    //     // this.fetchParam=getOriginData(),
+                    //     this.$refs['form'].resetFields();
+                    //     this.currentData = {
+                    //         data: [],
+                    //         pindex: -1,
+                    //         index: -1
+                    //     }
+                    //     if (!this.fetchParam.id) this.fetchParam.id = ret.id;
+                    //     this.$router.go(-1)
+                    // })
                 })
             }
         }
@@ -197,11 +225,12 @@
 
     function getOriginData() {
         return {
-            title: '',
-            author: '',
-            info:'',
+            course_name: '',
+            description:'',
+            type:'public',
+            material_type:'article',
             image:'',
-            html:''
+            content:''
         }
     }
 

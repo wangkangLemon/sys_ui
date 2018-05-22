@@ -8081,7 +8081,7 @@ UE.Editor.defaultOptions = function(editor){
 
                 var configUrl = me.getActionUrl('config');
                 if(configUrl.indexOf('action=config') > -1) {
-                    configUrl = xmconfig.apiHost + '/api/ueditor/config'
+                    configUrl = xmconfig.apiHost + '/ueditor/config'
                 }
 
                 isJsonp = utils.isCrossDomainUrl(configUrl);

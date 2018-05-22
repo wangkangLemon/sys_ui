@@ -516,7 +516,6 @@
                         }).then((ret) => {
                             this.herbalInfo = JSON.parse(ret)
                             console.log( this.herbalInfo)
-
                             xmview.setContentTile(`编辑课程-中草药 ${ this.category_name}`)
                             this.loadingData=false
                             console.log(this.herbalInfo)
