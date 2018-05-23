@@ -14,6 +14,7 @@ import data from './routers/data'              // 数据分析模块
 import exam from './routers/exam'              // 应试考试
 import review from './routers/review'          // 审核模块
 import vip from './routers/vip'                // 会员模块
+import live from './routers/live'              // 直播模块
 
 import authUtils from './utils/authUtils'
 import * as typeUtils from './utils/typeUtils'
@@ -84,18 +85,20 @@ const routes = [{
             sys,
             // ============ 区块模块 ==================
             section,
-            // ============ 设置模块 ==================设置模块
-            setting,
             // ============ 设置模块 ==================
+            setting,
+            // ============ 政府模块 ==================
             gov,
             // ============ 数据分析模块 ==============
             data,
             // ============ 应试考试模块 ==============
             exam,
-            // ============ 审核模块 ==============
+            // ============ 审核模块 =================
             review,
-            // ============ 会员模块 ==============
+            // ============ 会员模块 =================
             vip,
+            // ============ 直播模块 =================
+            live
         ]
     },
     { // 登录

@@ -37,7 +37,7 @@
                     <el-input v-model="fetchParam.description" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请输入内容">
                     </el-input>
                 </el-form-item>
-                <el-form-item prop="content" label="资讯内容" id="editor" :label-width="formLabelWidth">
+                <el-form-item prop="content" label="课程内容" id="editor" :label-width="formLabelWidth">
                     <vue-editor v-model="fetchParam.content" @ready="ueReady"></vue-editor>
                 </el-form-item>
                 <el-form-item label="" >
@@ -106,7 +106,7 @@
                     ],
                     image: { required: true, message: '请上传封面图',trigger: 'change'},
                     description: { required: true, message: '请输入简介内容',trigger: 'blur'},
-                    content: { required: true, message: '请输入资讯内容',trigger: 'blur'},
+                    content: { required: true, message: '请输入课程内容',trigger: 'blur'},
             },
                 multi: {
                     data: [{
