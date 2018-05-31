@@ -83,8 +83,8 @@ Slot:
                 <div class="el-upload-dragger">
                     <el-progress v-show="uploadStatus == 0" :text-inside="true" :stroke-width="18" :percentage="percent"></el-progress>
                     <div class="show-response" v-show="uploadStatus == 1">
-                        <p v-show="response.success > 0"><i class="el-icon-circle-check color-success"></i>&nbsp;成功: {{ response.success }} 条</p>
-                        <p v-show="response.error > 0"><i class="el-icon-circle-cross color-error"></i>&nbsp;失败: {{ response.error }}  条</p>
+                        <p v-show="response.success >= 0"><i class="el-icon-circle-check color-success"></i>&nbsp;成功: {{ response.success }} 条</p>
+                        <p v-show="response.error >= 0"><i class="el-icon-circle-cross color-error"></i>&nbsp;失败: {{ response.error }}  条</p>
                     </div>
                     <div class="show-response" v-show="uploadStatus == 2">
                         <p style="line-height: 38px"><i class="el-icon-circle-cross color-error"></i>上传失败</p>
@@ -93,12 +93,12 @@ Slot:
             </div>
         </div>
         <div class="download-template" v-if="templateUrl"><a v-bind:href="templateUrl" target="_blank">下载参考模板</a></div>
-        <article class="ok-reason" v-show="response.result">
-            <h5>上传结果：</h5>
-            <!-- <h5>A1题型: {{  response.results.a1cnt }} 条</h5>
-            <h5>A2题型: {{  response.results.a2cnt }} 条</h5>
-            <h5>A3题型: {{  response.results.a3cnt }} 条</h5>
-            <h5>A4题型: {{  response.results.a4cnt}} 条</h5> -->
+        <article class="error-reason" v-show="response.result">
+            <h5>上传失败原因：</h5>
+            {{response.message}}
+            <li v-for="item in response.reasons">
+                {{item}}
+            </li>
         </article>
         <!-- <article class="error-reason" v-show="response.reasons.length > 0">
             <h5>错误原因：</h5>
@@ -109,8 +109,6 @@ Slot:
 </template>
 <script>
     import authUtils from '../../../utils/authUtils'
-    // import NestedDialog from 'components/dialog/NestedDialog.vue'
-
     export default {
         components: {},
         props: {
@@ -164,20 +162,14 @@ Slot:
                 response: {
                     success: 0,
                     error: 0,
-                    reasons: [],
+                    message: '',
                     result:null,
-                    results:{
-                        a1cnt:'',
-                        a2cnt:'',
-                        a3cnt:'',
-                        a4cnt:'',
-                    },
+                    reasons:[],
                 },
             }
         },
         activated () {
             this.response={}
-            console.log(this.extradata)
         },
         methods: {
             open () {
@@ -188,6 +180,7 @@ Slot:
                 this.response.error = 0
                 this.response.reasons = []
                 this.response.result = null
+                this.response.message = ''
             },
             close () {
                 this.isOpen = false
@@ -196,22 +189,15 @@ Slot:
                 // this.$emit('success')
                 this.isSuccess = true
                 this.uploadStatus = 1
-
-                if (response.code !== 0) { //上传失败
-                    this.response.success = 0
-                    this.response.error = 1
-                    this.response.reasons = [{message: response.message}]
-                    return
-                }
                 if(response.code == 0){
-                    this.response.success = response.data.total
-                    this.response.results=this.response.result = response.data
-                    console.log(this.response.result.length,this.response.result)
-                    // this.response.error = 0
-                    // this.response.reasons = [{message: response.data}]
+                    console.log(response);
+                    if(response.data.error_cnt>0){
+                        this.response.result=1
+                        this.response.reasons= response.data.messages
+                    }
+                    this.response.success = response.data.success_cnt
+                    this.response.error = response.data.error_cnt
                 }
-
-                // this.response.success = response.data.success
                 if (response.data.errs) {
                     this.response.error = response.data.failure || 1
                     response.data.errs.forEach((message) => {
