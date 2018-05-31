@@ -74,7 +74,7 @@
                     <i class="title">提交订单用户：</i>
                     <span class="value">{{detail.user_name}}</span>
                 </p>
-                <!--<p><i class="title">手机号：</i> <span class="value">{{detail.user_mobile}}</span></p>-->
+                <p><i class="title">手机号：</i> <span class="value">{{detail.user_mobile}}</span></p>
                 <!-- <p>
                     <i class="title">所属部门：</i>
                     <span class="value">{{detail.gov_name}}</span>
@@ -122,6 +122,13 @@
                 <i>订单标号</i>
                 <el-input v-model="fetchParam.order_no" placeholder="请输入订单标号"   @keyup.enter.native="fetchData" ></el-input>
             </section>
+            <!-- <section>
+                <i>手机号</i>
+                <el-input v-model="fetchParam.user_mobile" placeholder="请输入下单手机号" type="number" :min="0"  @keyup.enter.native="fetchData" ></el-input>
+            </section> -->
+            <DateRange title="支付时间" :start="fetchParam.stime" :end="fetchParam.etime" @changeStart="val=> fetchParam.stime=val "
+                @changeEnd="val=> fetchParam.etime=val" :change="fetchData">
+            </DateRange>
             <section>
                 <i>状态</i>
                 <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData" :clearable="true">
@@ -132,10 +139,6 @@
                     <el-option label="过期" value="4"></el-option>
                 </el-select>
             </section>
-            <DateRange title="支付时间" :start="fetchParam.stime" :end="fetchParam.etime" @changeStart="val=> fetchParam.stime=val "
-                @changeEnd="val=> fetchParam.etime=val" :change="fetchData">
-            </DateRange>
-            
             <!--<section>
                 <i>角色</i>
                 <el-select clearable v-model="fetchParam.role_id" @change="fetchData">
@@ -161,20 +164,23 @@
             </el-table-column> 
             <el-table-column min-width="100" prop="user_name" label="下单用户" v-if="data">
             </el-table-column>
+            <el-table-column min-width="130" prop="user_mobile" label="手机号" v-if="data">
+            </el-table-column>
             <el-table-column min-width="100" prop="pay_channel" label="支付方式">
                  <template scope="scope">
                     {{payMethods[scope.row.pay_channel]}}
+                </template>
+            </el-table-column>
+             <el-table-column min-width="100" prop="status" label="订单状态">
+                <template scope="scope">
+                    {{payStatus[scope.row.status]}}
                 </template>
             </el-table-column>
             <el-table-column min-width="180" prop="addate" label="下单时间">
             </el-table-column>
             <el-table-column min-width="180" prop="paydate" label="支付时间">
             </el-table-column>
-            <el-table-column min-width="100" prop="status" label="订单状态">
-                <template scope="scope">
-                    {{payStatus[scope.row.status]}}
-                </template>
-            </el-table-column>
+           
             <!--<el-table-column width="100" label="状态">
                 <template scope="scope">
                     <el-tag v-if="scope.row.pushabled == 1" type="success">推送</el-tag>
@@ -216,6 +222,7 @@ function getFetchParam() {
         pagesize: 15,
         id:void 0,
         order_no:'',
+        user_mobile: void 0,
         user_id: void 0,
         product_id: void -1,
     }

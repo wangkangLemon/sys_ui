@@ -23,12 +23,8 @@
                 <el-form-item label="商品名称" prop="name">
                     <el-input v-model="fetchParam.name"></el-input>
                 </el-form-item>
-                <el-form-item label="标记" prop="mark" :label-width="formLabelWidth">
+                <el-form-item label="标记" prop="mark">
                      <el-input v-model="fetchParam.mark"></el-input>
-                    <!-- <el-radio-group v-model="fetchParam.mark">
-                        <el-radio :label="'vip_original'">vip原价</el-radio>
-                        <el-radio :label="'vip_discount'">vip打折</el-radio>
-                    </el-radio-group> -->
                 </el-form-item>
                 <el-form-item label="商品金额(分)" prop="price">
                     <el-input type="number" :min="0" v-model="fetchParam.price"></el-input>
@@ -46,10 +42,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="" >
-                    <!--<el-button @click="$router.push({ name:'medical-index'})">取消</el-button>-->
-                    <div>
                     <el-button type="primary" @click="btnNextClick">确认</el-button>
-                    </div>
                 </el-form-item>
             </el-form>
         </section>
@@ -115,7 +108,6 @@
                 },
                 resultData: [],
                 hospital_list:[],
-                formLabelWidth: '120px', // 表单label的宽度
                 changelist:{}
             }
         },

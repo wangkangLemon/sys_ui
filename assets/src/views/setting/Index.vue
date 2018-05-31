@@ -97,7 +97,6 @@
 
 <script>
 import setService from '../../services/setting/setService.js'
-import DateRange from '../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
     return {
@@ -111,9 +110,7 @@ function getFetchParam() {
 }
 
 export default {
-    components: {
-        DateRange
-    },
+   
     data() {
         return {
             loadingData: false,

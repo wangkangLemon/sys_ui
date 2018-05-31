@@ -81,11 +81,11 @@
             'list' () {
                 this.data = this.list.data.slice(0,15);
                 if (this.value && this.currPlaceholder && this.data.length < 1) {
-                this.data.push({
-                    id: this.value,
-                    name: this.placeholder
-                })
-            }
+                    this.data.push({
+                        id: this.value,
+                        name: this.placeholder
+                    })
+                }
             }
 
         },

@@ -73,18 +73,6 @@
                 <i>手机号</i>
                 <el-input v-model="fetchParam.mobile" placeholder="请输入用户手机号码"   @keyup.enter.native="fetchData" ></el-input>
             </section>
-            <!--<section>
-                <i>所属医院</i>
-                <el-input v-model="fetchParam.hospital_id" placeholder="请输入所属医院"   @keyup.enter.native="fetchData" ></el-input>
-            </section>-->
-            <!--<section>
-                <i>医院</i>
-                <el-select clearable v-model="fetchParam.hospital_id" @change="fetchData">
-                    <el-option label="全部" :value="-1"></el-option>
-                    <el-option label="商品" value="1"></el-option>
-                    <el-option label="部门" value="0"></el-option>
-                </el-select>
-            </section>-->
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" border>
@@ -148,7 +136,7 @@ import reviewService from '../../services/reviewService'
 import sysService from '../../services/sys/sysService'
 import DateRange from '../component/form/DateRangePicker.vue'
 import Region from '../component/select/Region.vue'
-import CompanySelect from '../component/select/CommonSearchSelect'
+
 
 function getFetchParam() {
     return {
@@ -165,7 +153,6 @@ export default {
     components: {
         DateRange,
         Region,
-        CompanySelect
     },
     data() {
 
@@ -296,8 +283,6 @@ export default {
             let txt=t==2?'通过':'驳回'
             xmview.showDialog(`你将要${txt}审核 <span style="color:red">${row.user_name}</span> 的申请 确认吗?`, () => {
                 t==2?this.fetchParam.status = 2:this.fetchParam.status = 3
-
-                
                 reviewService.agree({
                     id:row.id,
                     status:this.fetchParam.status

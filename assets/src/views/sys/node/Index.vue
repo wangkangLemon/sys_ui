@@ -113,7 +113,6 @@
 
 <script>
 import sysService from '../../../services/sys/nodeService.js'
-import DateRange from '../../component/form/DateRangePicker.vue'
 
 function getFetchParam() {
     return {
@@ -131,9 +130,7 @@ function getFetchParam() {
 }
 
 export default {
-    components: {
-        DateRange
-    },
+
     data() {
         return {
             loadingData: false,

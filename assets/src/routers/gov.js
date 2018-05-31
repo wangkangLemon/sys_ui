@@ -60,7 +60,6 @@ export default {
                 title: '部门人员',
             }
         },
-
         {
             path: 'user',  // // 部门人员查询
             name: 'user-index',
@@ -72,6 +71,19 @@ export default {
             meta: {
                 title: '医政 - 人员',
                 noback: true
+            }
+        },
+        {//导入考题表单
+            path: 'user/import',
+            name: 'user-import',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/user/PersonImport.vue'))
+                })
+            },
+            meta: {
+                title: '人员添加',
+                noback: false
             }
         },
         // //编辑管理员

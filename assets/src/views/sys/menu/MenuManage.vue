@@ -106,9 +106,6 @@
                     <section class="fi">
                      <i>菜单名称</i><el-input id="input" v-model="section.menu_name" placeholder="请输入菜单名称" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
-                    <!-- <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
-                        @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
-                    </DateRange> -->
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="menu_name" label="菜单名称" min-width="230"></el-table-column>
@@ -152,7 +149,6 @@
     import menuService from '../../../services/sys/menuService'
     import MenuTree from '../../component/tree/MenuTree.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
-    import DateRange from '../../component/form/DateRangePicker.vue'
     function initSection() {
         return {
             status: void 0, //  1-禁用 0-正常
@@ -172,7 +168,7 @@
     }
     export default {
         components: {
-            MenuTree,ImagEcropperInput,DateRange
+            MenuTree,ImagEcropperInput
         },
         data () {
             return {

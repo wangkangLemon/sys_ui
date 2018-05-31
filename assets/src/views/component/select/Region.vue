@@ -128,8 +128,7 @@
             }
         },
         created() {
-
-
+            console.log('111111',typeof(this.provinces),typeof(this.town),typeof(this.village));
         },
         mounted() {
             // 获取数据  按需加载 按需处理数据？  三个独立的选择器

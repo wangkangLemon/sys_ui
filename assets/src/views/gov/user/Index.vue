@@ -123,6 +123,9 @@
             <el-button type="primary" icon="plus" @click="addAdmin">
                 <i>添加人员</i>
             </el-button>
+            <el-button type="danger" icon="plus"  @click="$router.push({ name:'user-import'})">
+                人员导入
+            </el-button>
         </section>
 
         <article class="search">
@@ -214,7 +217,6 @@
 <script>
 import userService from '../../../services/gov/userService.js'
 import govService from '../../../services/gov/govService.js'
-import DateRange from '../../component/form/DateRangePicker.vue'
 import companyUserService from '../../../services/gov/companyUserService.js'
 import Region from '../../component/select/Region.vue'
 
@@ -258,7 +260,6 @@ function getFetchParam() {
     }
 export default {
     components: {
-        DateRange,
         Region
     },
     data() {
@@ -521,14 +522,6 @@ export default {
         },
     },
     computed: {
-        // timeFilter(row, column, cellValue){
-        //      let arr = this.dataCache.map(e=>{
-        //          console.log(e)
-        //        e.addate = e.addate.split(" ")[0]
-        //     //    return v
-        //     })
-        //    return arr
-        // },
         tableData(){
             let arr = this.dataCache.filter(v=>{
                 return v.name.indexOf(this.name)>=0

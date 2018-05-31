@@ -99,7 +99,6 @@
     </article>
 </template>
 <script>
-    import DateRange from '../component/form/DateRangePicker.vue'
     import CompanySelect from '../component/select/IndustryCompany.vue'
     import DepSelect from '../component/select/Department.vue'
     import govService from '../../services/gov/govService.js'
@@ -126,7 +125,6 @@
         components: {
             DepSelect,
             CompanySelect,
-            DateRange,
             Region
         },
         data () {

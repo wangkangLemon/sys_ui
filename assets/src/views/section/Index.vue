@@ -246,7 +246,6 @@
 
 <script>
     import dataService from '../../services/section/dataService.js'
-    import DateRange from '../component/form/DateRangePicker.vue'
     import cateService from '../../services/section/cateService.js'
     import ChooseContent from '../component/choose/ChooseContent'
     import courseService from '../../services/course/courseService.js'
@@ -287,7 +286,6 @@
 
     export default {
         components: {
-            DateRange,
             ChooseContent,
             ImagEcropperInput,
             SectionCategoryMenu

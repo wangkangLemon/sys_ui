@@ -71,7 +71,7 @@
             <section class="temp-item" >
                 <div class="content">
                     <div >
-                        <img src="../image/down.png" alt="">
+                        <img src="../../../assets/images/down.png" alt="">
                     </div>
                     <div>
                         <a href="http://upload.yxt.vodjk.com/import_tpl/exam_import_tpl.xlsx" target="_blank">
@@ -85,7 +85,7 @@
               <section class="temp-item" >
                 <div class="content">
                      <div >
-                        <img src="../image/up.png" alt="">
+                        <img src="../../../assets/images/up.png" alt="">
                     </div>
                     <div>
                         <el-button type="primary" icon="plus"  @click="openDailog">上传文件</el-button>

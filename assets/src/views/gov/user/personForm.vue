@@ -70,12 +70,7 @@
                 <el-form-item label="昵称" prop="price">
                     <el-input v-model="fetchParam.nickname"></el-input>
                 </el-form-item>
-                <!--<el-form-item label="性别" prop="sex">
-                    <el-radio-group v-model="fetchParam.sex">
-                        <el-radio :label="1">男</el-radio>
-                        <el-radio :label="2">女</el-radio>
-                    </el-radio-group>
-                </el-form-item>-->
+         
                 <el-form-item label="手机号" prop="mobile">
                     <el-input v-model="fetchParam.mobile"></el-input>
                 </el-form-item>
@@ -230,9 +225,7 @@
                     req(this.fetchParam).then((ret) => {
                         console.log(111111111111)
                         // 重置当前数据
-                        //this.$refs[fetchParam].resetFields();//自己加的方法
                         xmview.showTip('success', '数据提交成功')
-                        // this.fetchParam=getOriginData(),
                         this.$refs['form'].resetFields();
                         this.currentData = {
                             data: [],
@@ -240,7 +233,6 @@
                             index: -1
                         }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
-                        // this.$router.go(-1)
                         this.$router.push({name: 'user-index'})
                     })
                 })

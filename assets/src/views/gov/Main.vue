@@ -1,5 +1,5 @@
 <template>
-    <keep-alive exclude="sys-form,  user-form,gov-admin,coursetask-template-add,gov-menu-form">
+    <keep-alive exclude="sys-form,  user-form,gov-admin,coursetask-template-add,gov-menu-form,user-import">
         <router-view></router-view>
     </keep-alive>
 </template>

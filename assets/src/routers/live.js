@@ -9,7 +9,7 @@ export default {
         })
     },
     children: [
-        // // 部门人员查询
+        // // 直播查询
         {
             path: 'list',
             name: 'live-list',
@@ -24,7 +24,7 @@ export default {
             }
         },
         {
-            path: 'live/add', // 添加和编辑课程
+            path: 'add', // 添加和编辑课程
             name: 'live-add',
             component: resolve => {
                 require.ensure([], () => {
@@ -36,7 +36,7 @@ export default {
             }
         },
         {
-            path: 'live/edit/:id', // 添加和编辑课程
+            path: 'edit/:id', // 添加和编辑课程
             name: 'live-edit',
             component: resolve => {
                 require.ensure([], () => {
@@ -45,6 +45,45 @@ export default {
             },
             meta: {
                 title: '直播修改',
+            }
+        },
+
+        // // 直播评论查询
+        {
+            path: 'comment/:id',
+            name: 'live-comment',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/live/Comment.vue'))
+                })
+            },
+            meta: {
+                title: '评论查询',
+                noback: false
+            }
+        },
+        {
+            path: 'comment/add', // 添加和编辑课程
+            name: 'live-comment-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/live/CommentForm.vue'))
+                })
+            },
+            meta: {
+                title: '评论新建',
+            }
+        },
+        {
+            path: 'comment/edit/:id', // 添加和编辑课程
+            name: 'live-comment-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/live/CommentForm.vue'))
+                })
+            },
+            meta: {
+                title: '评论修改',
             }
         },
     ]

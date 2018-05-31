@@ -76,6 +76,7 @@
         },
         methods: {
             setCurrVal (type) {
+                // debugger
                 const emitArr = ['changeStart', 'changeEnd']
                 let val = getTimeStr(this.timespan[type])   //this.timespan[type]  ?== this.timespan[0] == this.timespan[this.start]
                 this.$emit(emitArr[type], getTimeStr(val)) 

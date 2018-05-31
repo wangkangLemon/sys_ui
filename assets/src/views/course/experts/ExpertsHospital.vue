@@ -128,7 +128,6 @@
 
 <script>
 import expertsService from '../../../services/course/expertsService.js'
-import DateRange from '../../component/form/DateRangePicker.vue'
 import Region from '../../component/select/Region.vue'
 
 function getFetchParam() {
@@ -142,7 +141,6 @@ function getFetchParam() {
 
 export default {
     components: {
-        DateRange,
         Region
     },
     data() {

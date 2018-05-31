@@ -103,5 +103,15 @@ class sysService {
         })
     }
 
+    //  gov下属部门清空接口
+    delUser(param) {
+        let url = `${config.apiHost}/gov/clean${param}`
+        return api.post(url, {}).then(ret => {
+            if (ret.code) {
+                return Promise.reject(ret)
+            }
+        })
+    }
+
 }
 export default new sysService()

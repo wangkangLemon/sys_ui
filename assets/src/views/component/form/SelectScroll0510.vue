@@ -42,7 +42,7 @@
             changeCb: Function, // 选项改变回调
             value: [String, Number],
             placeholder: {
-                type: String,
+                // type: String,
                 default: '请选择'
             },
             disabled: {
@@ -66,13 +66,15 @@
         },
         watch: {
             'data'(val) {
+                console.log(this.data)
                 if (val.length < 1) this.currPlaceholder = this.placeholder
+                //  console.log('this.isend='+this.isend);
                   if(this.isend==true){
-                            console.log('this.isend='+this.isend);
+                            // console.log('this.isend='+this.isend);
                             this.isShowGetMore= false
                             return false
                         }
-                this.initGetMore()
+                // this.initGetMore() //解决第二页concat两遍 在第三页时 concat三遍
                 this.loading = false
             },
             'placeholder' (val) {
@@ -83,13 +85,26 @@
                 if (this.value != null && this.currPlaceholder && this.data.length < 1) {
                     this.data.push({id: this.value, name: this.placeholder})
                 }
-                console.log(this.data)
+                // console.log(this.data)
+            },
+            'list' (val) {//处理数据只渲染默认一项
+                // this.data=this.list == null ? [] : val
+            
+                // this.data = this.list.slice(0,15)
+                this.data = this.list
+                if (this.value && this.currPlaceholder && this.data.length < 1) {
+                    this.data.push({
+                        id: this.value,
+                        name: this.placeholder
+                    })
+                }
             }
         },
         created () {
-            if (this.value && this.currPlaceholder && this.data.length < 1) {
-                this.data.push({id: this.value, name: this.placeholder})
-            }
+            // console.log(this.list);
+            // if (this.value && this.currPlaceholder && this.data.length < 1) {
+            //     this.data.push({id: this.value, name: this.placeholder})
+            // }
         },
         mounted () {
             this.input = this.$refs.container.$el.querySelector('input')
@@ -107,10 +122,13 @@
             initGetMore () { // 初始化更多按钮  //2
                 let _this = this
                 this.$nextTick(() => {
+                    
                     let option = this.$refs.domLoading.parentNode
                     if (option.loaded) return
                     option.loaded = true
                     option.addEventListener('click', function (e) {
+                
+                        
                         _this.input.focus()
                         _this.loading = true
                         e = e || window.event
@@ -118,6 +136,7 @@
                         e.stopPropagation()
                         // console.log(_this.data.length);
                         _this.requestCb(_this.keyword, _this.data.length).then(ret => {
+                            
                             _this.processRequestRet(ret)
                         })
                         option.loaded = false
@@ -145,17 +164,23 @@
             },
             // 处理请求后的结果 type- 0:追加 1-重新赋值
             processRequestRet (ret, type = 0) {
+                // return 
                 if (type === 0) {
+                    //debugger
                     // 把结果过滤掉当前选中的
-                    ret = ret.filter((item) => {
+                    let t = ret.filter((item) => {
                         return item.id != this.value
                     })
-                    this.data.push(...ret)
-                } else
+                    this.data = this.data.concat(t)
+                    // debugger
+                    console.log(this.data)
+                    
+                } else{
+                    console.log(type);
                     this.data = ret
-
+                }
                 // this.isShowGetMore = this.data.length < ret.total
-                this.isShowGetMore = this.data.length < ret._exts.total
+                // this.isShowGetMore = this.data.length < ret._exts.total
             }
         }
     }
