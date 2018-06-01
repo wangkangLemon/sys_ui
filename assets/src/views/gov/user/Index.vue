@@ -349,6 +349,7 @@ export default {
 
                 this.$router.push({
                 name: 'person-add',
+                
             })
 
 
@@ -466,30 +467,30 @@ export default {
         // 禁用
         offline(index, row) {
             if(row.deleted == 0){
-                xmview.showDialog(`你将要禁用管理员 <span style="color:red">${row.name}</span> 确认吗?`, () => {
+                xmview.showDialog(`你将要禁用 <span style="color:red">${row.name}</span> 确认吗?`, () => {
                     row.disabled = 1
                     userService.offline(row).then((ret) => {
                     })
                 })
             }else{
-                 xmview.showDialog(`管理员 <span style="color:red">${row.name}</span> 已删除，无法禁用！`)
+                 xmview.showDialog(` <span style="color:red">${row.name}</span> 已删除，无法禁用！`)
             }
         },
         // 启用
         online(index, row) {
             if(row.deleted == 0){
-                xmview.showDialog(`你将要启用管理员<span style="color:red">${row.name}</span> 确认吗?`, () => {
+                xmview.showDialog(`你将要启用<span style="color:red">${row.name}</span> 确认吗?`, () => {
                     row.disabled = 0
                     userService.online(row).then((ret) => {
                     })
                 })
             }else{
-                 xmview.showDialog(`管理员 <span style="color:red">${row.name}</span> 已删除，无法启用！`)
+                 xmview.showDialog(` <span style="color:red">${row.name}</span> 已删除，无法启用！`)
             }
         },
         // 单条删除
         del(index, row) {
-            xmview.showDialog(`你将要删除管理员 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除 <span style="color:red">${row.name}</span>  此操作不可恢复确认吗?`, () => {
                 userService.delete(row.id).then(() => {
                     this.dataCache.splice(index, 1)//删除选中项
                     row.deleted = 1

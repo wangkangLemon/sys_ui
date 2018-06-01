@@ -107,7 +107,11 @@ class sysService {
     delUser(param) {
         let url = `${config.apiHost}/gov/clean${param}`
         return api.post(url, {}).then(ret => {
-            if (ret.code) {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
                 return Promise.reject(ret)
             }
         })

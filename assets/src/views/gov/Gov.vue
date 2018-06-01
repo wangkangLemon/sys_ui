@@ -222,10 +222,13 @@
                 })
             },
             adminPage(index, item) {
+                console.log(item);
+                
                 this.$router.push({
                     name: 'gov-admin',
                     params: {
-                        gov_id: item.id || 1
+                        gov_id: item.id || 1,
+                        govInfo:item,
                     },
                     query: {
                         // category: item.category

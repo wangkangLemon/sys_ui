@@ -46,6 +46,10 @@ Slot:
         .color-error {
             color: #FF4949;
         }
+        .message{
+          color:#E6A23C;
+  
+        }
         .download-template{
             a{
                 color: #20a0ff;
@@ -83,6 +87,7 @@ Slot:
                 <div class="el-upload-dragger">
                     <el-progress v-show="uploadStatus == 0" :text-inside="true" :stroke-width="18" :percentage="percent"></el-progress>
                     <div class="show-response" v-show="uploadStatus == 1">
+                        <p v-show="response.message" class="message">{{response.message}}</p>
                         <p v-show="response.success >= 0"><i class="el-icon-circle-check color-success"></i>&nbsp;成功: {{ response.success }} 条</p>
                         <p v-show="response.error >= 0"><i class="el-icon-circle-cross color-error"></i>&nbsp;失败: {{ response.error }}  条</p>
                     </div>
@@ -95,8 +100,7 @@ Slot:
         <div class="download-template" v-if="templateUrl"><a v-bind:href="templateUrl" target="_blank">下载参考模板</a></div>
         <article class="error-reason" v-show="response.result">
             <h5>上传失败原因：</h5>
-            {{response.message}}
-            <li v-for="item in response.reasons">
+            <li v-for="item in response.reasons" :key="item.id">
                 {{item}}
             </li>
         </article>
@@ -162,9 +166,9 @@ Slot:
                 response: {
                     success: 0,
                     error: 0,
-                    message: '',
+                    message: null,
                     result:null,
-                    reasons:[],
+                    reasons:[]
                 },
             }
         },
@@ -176,11 +180,13 @@ Slot:
                 this.uploadStatus = 0
                 this.showUploading = true
                 this.isOpen = true
-                this.response.success = 0
-                this.response.error = 0
-                this.response.reasons = []
-                this.response.result = null
-                this.response.message = ''
+                this.response={
+                    success: 0,
+                    error: 0,
+                    message: null,
+                    result:null,
+                    reasons:[],
+                }
             },
             close () {
                 this.isOpen = false
@@ -197,7 +203,13 @@ Slot:
                     }
                     this.response.success = response.data.success_cnt
                     this.response.error = response.data.error_cnt
+                    this.response.message = response.message
+                }else if(response.code == 1){
+                    this.response.success = -1
+                    this.response.error = -1
+                    this.response.message = response.message
                 }
+
                 if (response.data.errs) {
                     this.response.error = response.data.failure || 1
                     response.data.errs.forEach((message) => {
@@ -208,17 +220,6 @@ Slot:
                 }
                 
                 if (this.onSuccess) {
-                    // let param=this.extradata
-                    // var formData = new FormData()
-                    // formData.append('input',file)
-                    // formData.append('category_id',this.$store.state.index.examCate)
-                    // formData.append('chapter_id',110)
-                    // // {
-                    //     category_id:this.$store.state.index.examCate,
-                    //     chapter_id:110,
-                    //     input:file
-                    // }
-                    // this.onSuccess(response.data, file, fileList).then(({success, error, reasons}) => {
                     this.onSuccess(response) //把子组件的返回值返给父组件
                 }
             },

@@ -41,8 +41,6 @@
                         <el-tag type="danger" v-else="clerkDetail.disabled">异常</el-tag>
                     </span>
                 </p>
-                <!--<p><i class="title">性别：</i> <span class="value">{{clerkDetail.sex ? '男' : '女'}}</span></p>-->
-                <p><i class="title">生日：</i> <span class="value">{{clerkDetail.birthday}}</span></p>
                 <p><i class="title">地址：</i> <span class="value">{{clerkDetail.address}}</span></p>
                 <p><i class="title">注册时间：</i><span class="value">{{clerkDetail.addate}}</span></p>
             </div>
@@ -77,6 +75,7 @@
                 <!--<el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
                     <el-date-picker type="date" v-model="form.birthday"></el-date-picker>
                 </el-form-item>-->
+
                 
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -175,7 +174,6 @@
     import govService from '../../services/gov/govService.js'
     import departmentService from '../../services/gov/departmentService.js'
     import departmentSelect from '../component/select/CompanyDepartment.vue'
-    import * as timeUtils from '../../utils/timeUtils'
     import companyUserService from '../../services/gov/companyUserService'
     import {defaultAvatar} from '../../utils/filterUtils'
     export default {
@@ -213,7 +211,6 @@
                     pass: '',          // 密码
                     address: '',       // 地址
                     sex: 0,            // 性别
-                    birthday: '',          // 生日
                     create_time_name: ''
                 },
                 departmentData: [],
@@ -265,6 +262,8 @@
             }
         },
         created () {
+            console.log(this.$route.params);
+            
             this.total=null   
              xmview.setContentLoading(false)
             this.getData().then(() => {
@@ -366,8 +365,16 @@
             submit (form) {
                 this.$refs[form].validate((valid) => {
                     if (valid) {
-                        this.form.gov_id = this.companyID
-                        this.form.birthday = timeUtils.date2Str(this.form.birthday)
+                        let p=this.$route.params
+                            this.form.gov_id =this.companyID
+                            this.form.province_id= p.govInfo.province_id 
+                            this.form.city_id= p.govInfo.city_id
+                            this.form.area_id= p.govInfo.area_id
+                            this.form.town_id= p.govInfo.town_id
+                            this.form.village_id=p.govInfo.village_id
+                        
+                        console.log(this.form);
+                        
                         govService.addGovAdmin(this.form).then((ret) => {
                             xmview.showTip('success', '添加成功')
                         }).then(() => {
@@ -406,7 +413,6 @@
                     nickname: '',
                     // address: '',       // 地址
                     // sex: 0,            // 性别
-                    // birthday: ''       // 生日
                 }
     }
 

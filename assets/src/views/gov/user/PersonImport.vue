@@ -18,7 +18,7 @@
         .temp-container{
             width:100%;
             height:100%;
-            padding: 10% 10%;
+            padding: 5% 10% 10%;
             .cate{
                 .region-container{
                     float: left;
@@ -28,13 +28,14 @@
                 }
             }
             .temp-item {
-                width:44%;
+                // width:44%;
                 display: inline-block;
                 border: 1px solid #ededed;
                 border-radius: 10px;
                 height: 50%;
                  &:first-of-type {
-                            margin-right: 10%;
+                            margin-left: 10%;
+                            margin-top: 3%;
                         }
                 .content {
                     padding: 20px 40px 0;
@@ -71,10 +72,7 @@
 <template>
     <article class="exam-subject-import">
          <article class="temp-container" >
-            <el-form class="cate" label-width="120px" :model="form"  :rules="rules" ref="cate">
-                <!-- <el-form-item  label="所属栏目" prop="chapter_id">
-                    <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
-                </el-form-item> -->
+            <el-form class="cate" label-width="120px" :model="form"  ref="cate">
                 <el-form-item label="部门"  prop="province_id">
                     <Region :province="form.province_id" v-model="form.province_id"
                             :city="form.city_id"
@@ -88,7 +86,7 @@
                     <el-button type="danger" icon="minus" class="delUser" @click="delUser">清空下属部门</el-button>
                 </el-form-item> 
             </el-form>         
-            <section class="temp-item" >
+            <!-- <section class="temp-item" >
                 <div class="content">
                     <div >
                         <img src="../../../assets/images/down.png" alt="">
@@ -101,7 +99,7 @@
                         
                 </div>
                 <br/>
-            </section>
+            </section> -->
               <section class="temp-item" >
                 <div class="content">
                      <div >
@@ -109,15 +107,6 @@
                     </div>
                     <div>
                         <el-button type="primary" icon="plus"  @click="openDailog">上传文件</el-button>
-                        <!-- <input type="file" class="upload-demo" name="upload" /> <br /> -->
-                        <!-- <el-upload
-                            class="upload-demo"
-                            drag
-                            :multiple="false"
-                            :headers="headers"
-                            :show-file-list="false"
-                            :on-success="success">
-                        </el-upload> -->
                     </div>
                 </div>
                 <br/>
@@ -125,7 +114,6 @@
         </article>
          <LocalImportDialog
                 :onSuccess="importQuestion"
-                :onSave="save"
                 :multiple="false"
                 ref="localImportDialog"
                 title="导入试题"
@@ -158,23 +146,13 @@
         data () {
             return {
                 form:{
-                    chapter_id:void 0,
-                    chapter_name:'',
                     province_id : '', // 省
                     city_id: '',  // 市
                     area_id: '',  // 区
                     pid: void -1,
-                    // category_id:'',
-                    // category_name:'',
-                },
-                rules: {
-                    chapter_id: { required: true, type: 'number', message: '请选择试题栏目', trigger: 'change' },
                 },
                 showUploading: true,
                 isSuccess: true,
-                percent: 0,
-                uploadStatus: 0,
-                // uploadUrl: config.apiHost+`/${this.form.province_id}/${this.form.city_id}/${this.form.area_id}`,
                 uploadUrl: config.apiHost+'/user/import',
                 uploadUrlParams:'',
                 response: {
@@ -190,42 +168,20 @@
             }
         },
         created () {
-            // console.log(typeof(this.$route.params.chapterInfo.id),this.$route.params.chapterInfo)
-            if(this.$route.params.chapterInfo){
-                this.form={
-                chapter_id:this.$route.params.chapterInfo.id,
-                chapter_name:this.$route.params.chapterInfo.name
-                }
-            }
-            // else{
-            //    xmview.showTip('error', "请先选择试题所属分类")
-            //     this.$router.back()
-            //     return
-            // }
-           
-            // this.getTaskData().then(() => {
                 xmview.setContentLoading(false)
-            // })
         },
         watch:{
-            // '$store.state.index.examCate'(){
-            //     this.params={
-            //         category_id:this.$store.state.index.examCate,
-            //         chapter_id:this.form.chapter_id,
-            //         }
-            //         console.log(this.params)
-            // },
             'form.province_id'(){
                 this.uploadUrlParams=`/${this.form.province_id}`
-                 this.uploadUrl=config.apiHost+'/user/import'+this.uploadUrlParams
+                this.uploadUrl=config.apiHost+'/user/import'+this.uploadUrlParams
             },
             'form.city_id'(){
                 this.uploadUrlParams=`/${this.form.province_id}/${this.form.city_id}`
-                  this.uploadUrl=config.apiHost+'/user/import'+this.uploadUrlParams
+                this.uploadUrl=config.apiHost+'/user/import'+this.uploadUrlParams
             },
             'form.area_id'(){
                 this.uploadUrlParams=`/${this.form.province_id}/${this.form.city_id}/${this.form.area_id}`
-                  this.uploadUrl=config.apiHost+'/user/import'+this.uploadUrlParams
+                this.uploadUrl=config.apiHost+'/user/import'+this.uploadUrlParams
             }
         },
         methods: {
@@ -236,41 +192,19 @@
                 }
                  xmview.showDialog(`你将要清空选择项的 <span style="color:red">下属部门</span> 确认吗?`, () => {
                 let param=this.uploadUrl
-                userService.delUser(this.uploadUrlParams).then((ret) => {
-                        xmview.showTip('success', '保存成功')
-                    })
+                userService.delUser(this.uploadUrlParams)
                })
 
             },
             openDailog(){
-                 console.log(this.form.area_id,this.form.city_id,this.form.area_id)
-                console.log(typeof(this.form.area_id),'this.form.area_id=============='+this.form.area_id)
                 if(typeof(this.form.area_id)!=='number'){
                     xmview.showTip('error', "请先选择三级所属部门")
                     return
                 }
                 this.uploadUrlParams=`/${this.form.province_id}/${this.form.city_id}/${this.form.area_id}`
-                console.log(this.uploadUrl);
                 this.$refs['localImportDialog'].open()
-
-                
-            },
-            save(response){
-                let param = {save_sign:response}
-                return examService.subjectSave(param).then((ret) => {
-                    // alert('试题批量导入保存')
-                })
             },
             importQuestion (response) {
-                // return false
-                // console.log('importQuestion')
-                // console.log(file)
-                //    var formData = new FormData()
-                //     formData.append('input',file)
-                //     formData.append('category_id',this.$store.state.index.examCate)
-                //     formData.append('chapter_id',110)
-                //     examService.upload(formData).then((ret) => {
-                    console.log(response.data)
                     let reasons = []
                     if (response.errs) {
                         response.errs.forEach((message) => {
@@ -279,36 +213,7 @@
                             })
                         })
                     }
-                    // return {
-                    //     success: response.data,
-                    //     error: response.failure,
-                    //     reasons: reasons,
-                    // }
-                
-                // }).then((ret)=>{
-                   
-                // })
-                 
             },
-            // upload(file){
-            //     let params={
-            //         category_id:this.$store.state.index.examCate,
-            //         chapter_id:this.form.chapter_id,
-            //         input:file
-            //     }
-
-            //     examService.upload(params)
-                
-            // },
-            reqFun(param){
-                return examService.fetchChapterCategory({
-                    pid: 0,
-                    pagesize:-1,
-                    chapter_type:this.$route.params.chapterInfo.chapter_type,
-                    category_id:this.$store.state.index.examCate
-                })
-        },
-      
         }
     }
 </script>
