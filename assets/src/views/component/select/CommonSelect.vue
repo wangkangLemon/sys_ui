@@ -34,9 +34,6 @@
                 isend:false,
             }
         },
-        created () {
-            // console.log(this.reqFun);
-        },
         watch: {
             'value'(val, oldValue) {
                 this.currVal !== val && (this.currVal = val)
@@ -46,14 +43,11 @@
             fetchData (val, length) {
                 return this.change(val, length).then((ret) => {
                     // this.$emit('changelitc', ret.data)
-                    console.log('111111111',length,ret._exts.total);
                     if(length+15 >= ret._exts.total){this.isend=true} //判断子组件是否显示加载更多按钮
                     return ret.data
                 })
             },
             handleChange(val) {
-                console.log(val);
-                
                 this.currVal = val
                 this.$emit('input', val)
                 this.$emit('change', val)

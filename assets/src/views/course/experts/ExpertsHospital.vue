@@ -40,9 +40,9 @@
     <article id="medical-index-container">
         <!--详情-->
         <el-dialog class="show-detail" title="查看医院" v-model="showDetail">
-            <div class="avatar">
-                <!--<img :src="{url:clerkDetail.avatar, sex: clerkDetail.sex} | defaultAvatar" />-->
-            </div>
+            <!-- <div class="avatar">
+                <img :src="{url:clerkDetail.avatar, sex: clerkDetail.sex} | defaultAvatar" />
+            </div> -->
             <div class="info">
                 <h2>{{clerkDetail.name}}</h2>
                 <p>

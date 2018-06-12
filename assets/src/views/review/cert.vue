@@ -157,7 +157,7 @@ export default {
     data() {
 
         return {
-            certType: ['', '职业医师'] ,
+            certType: ['', '执业医师'] ,
             loadingData: false,
             data: [], // 表格数据
             total: 0,

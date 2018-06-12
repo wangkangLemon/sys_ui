@@ -293,6 +293,7 @@
                     // this.form.etime =  ret.data.end_date.split(' ')[0]
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
+                     xmview.setContentTile('编辑课程任务模板 ')
                     this.form.course = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v
@@ -306,7 +307,7 @@
                     else if(ret.data.users.length!==0){
                         this.pushTypeDialog.selectedData[this.pushTypeDialog.type] = this.generatorList(ret.data.users || [])
                     }
-                    xmview.setContentTile('编辑课程任务 ')
+                   
                     xmview.setContentLoading(false)
                 })
             }

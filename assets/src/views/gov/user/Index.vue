@@ -222,7 +222,7 @@ import Region from '../../component/select/Region.vue'
 
 function getFetchParam() {
     return {
-        status: void 0, //  1-禁用 0-正常
+        status: -1, //  1-禁用 0-正常
         page: 1,
         pagesize: 15,
         disabled:0,
@@ -241,6 +241,7 @@ function getFetchParam() {
         town_id: '',
         village_id: '',
         active: -1,
+        no_empty_gov_id: 1,
     }
 }
  function clearFormFn() {

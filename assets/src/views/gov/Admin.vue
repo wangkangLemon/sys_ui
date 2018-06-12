@@ -76,7 +76,7 @@
                     <el-date-picker type="date" v-model="form.birthday"></el-date-picker>
                 </el-form-item>-->
 
-                
+
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addForm = false">取 消</el-button>
@@ -373,7 +373,7 @@
                             this.form.town_id= p.govInfo.town_id
                             this.form.village_id=p.govInfo.village_id
                         
-                        console.log(this.form);
+                        console.log(this.form)
                         
                         govService.addGovAdmin(this.form).then((ret) => {
                             xmview.showTip('success', '添加成功')

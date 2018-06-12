@@ -57,19 +57,22 @@
                     </el-option>
                 </el-select>
             </section>
-            <Region :province="fetchParam.provinceSelect" :city="fetchParam.citySelect" :area="fetchParam.areaSelect" :town="fetchParam.townSelect"
-                :village="fetchParam.villageSelect" title="部门" v-on:provinceChange="val => {fetchParam.provinceSelect = val;finallyVal = val}"
-                v-on:cityChange="val => {fetchParam.citySelect = val;finallyVal = val}" v-on:areaChange="val => {fetchParam.areaSelect = val;finallyVal = val}"
-                v-on:townChange="val => {fetchParam.townSelect = val;finallyVal = val}" v-on:villageChange="val => {fetchParam.villageSelect = val;finallyVal = val}"
-                :change="getData">
+            <Region :province="fetchParam.provinceSelect" 
+                    :city="fetchParam.citySelect" 
+                    :area="fetchParam.areaSelect" 
+                    :town="fetchParam.townSelect"
+                    :village="fetchParam.villageSelect" title="部门" 
+                    v-on:provinceChange="val => {fetchParam.provinceSelect = val;finallyVal = val}"
+                    v-on:cityChange="val => {fetchParam.citySelect = val;finallyVal = val}" 
+                    v-on:areaChange="val => {fetchParam.areaSelect = val;finallyVal = val}"
+                    v-on:townChange="val => {fetchParam.townSelect = val;finallyVal = val}" 
+                    v-on:villageChange="val => {fetchParam.villageSelect = val;finallyVal = val}"
+                    :change="getData">
             </Region>
             <section>
                 <i>名称：</i>
                 <el-input @keyup.enter.native="getData()" v-model="fetchParam.name" auto-complete="off"></el-input>
             </section>
-            <DateRange title="创建时间" :start="fetchParam.addate" :end="fetchParam.update" v-on:changeStart="val=> fetchParam.addate = val"
-                v-on:changeEnd="val=> fetchParam.update = val" :change="getData">
-            </DateRange>
         </section>
         <el-table v-loading="loading" border :data="govData" stripe style="width: 100%">
             <el-table-column prop="name" label="名称" min-width="200">
@@ -84,7 +87,6 @@
             </el-table-column>
             <el-table-column width="150" prop="mobile" label="手机">
             </el-table-column>
-
             <el-table-column width="170" prop="addate" label="创建时间">
             </el-table-column>
             <el-table-column prop="operate" label="操作" width="200">
@@ -118,7 +120,6 @@
 </template>
 <script>
     import govService from '../../services/gov/govService.js'
-    import DateRange from '../component/form/DateRangePicker.vue'
     import Region from '../component/select/Region.vue'
 
     function clearFn() {
@@ -136,7 +137,6 @@
     
     export default {
         components: {
-            DateRange,
             Region
         },
         data() {
@@ -161,8 +161,6 @@
                 pageSize: 15,
                 govData: [],
                 fetchParam: {
-                    addate: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
-                    update: this.$route.query.yesterday == undefined ? '' : this.$route.query.yesterday,
                     typeSelect: '',
                     provinceSelect: '',
                     citySelect: '',
@@ -182,7 +180,7 @@
         },
         watch: {
             'fetchParam.name': function () {
-                if (this.fetchParam.pid == undefined) {0
+                if (this.fetchParam.pid == undefined) {
                     this.fetchParam.pid = -1
                 }
             }
@@ -268,6 +266,7 @@
                     if (flag) {
                         this.fetchParam[v] = null
                     }
+                     console.log(this.fetchParam.provinceSelect,this.fetchParam.citySelect ,this.fetchParam.areaSelect,this.fetchParam.townSelect, this.fetchParam.villageSelect);
                     if (this.fetchParam[v] == this.finallyVal) {
                         flag = true
                         index = i
@@ -296,8 +295,6 @@
                     pid: this.fetchParam.pid,
                     category: this.fetchParam.typeSelect,
                     name: this.fetchParam.name,
-                    time_start: this.fetchParam.addate,
-                    time_end: this.fetchParam.update,
                     province_id: this.fetchParam.provinceSelect,
                     city_id: this.fetchParam.citySelect,
                     area_id: this.fetchParam.areaSelect,

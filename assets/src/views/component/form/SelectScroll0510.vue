@@ -66,11 +66,8 @@
         },
         watch: {
             'data'(val) {
-                console.log(this.data)
                 if (val.length < 1) this.currPlaceholder = this.placeholder
-                //  console.log('this.isend='+this.isend);
                   if(this.isend==true){
-                            // console.log('this.isend='+this.isend);
                             this.isShowGetMore= false
                             return false
                         }
@@ -85,7 +82,6 @@
                 if (this.value != null && this.currPlaceholder && this.data.length < 1) {
                     this.data.push({id: this.value, name: this.placeholder})
                 }
-                // console.log(this.data)
             },
             'list' (val) {//处理数据只渲染默认一项
                 // this.data=this.list == null ? [] : val
@@ -101,7 +97,6 @@
             }
         },
         created () {
-            // console.log(this.list);
             // if (this.value && this.currPlaceholder && this.data.length < 1) {
             //     this.data.push({id: this.value, name: this.placeholder})
             // }
@@ -134,7 +129,6 @@
                         e = e || window.event
                         e.preventDefault()
                         e.stopPropagation()
-                        // console.log(_this.data.length);
                         _this.requestCb(_this.keyword, _this.data.length).then(ret => {
                             
                             _this.processRequestRet(ret)
@@ -172,11 +166,7 @@
                         return item.id != this.value
                     })
                     this.data = this.data.concat(t)
-                    // debugger
-                    console.log(this.data)
-                    
                 } else{
-                    console.log(type);
                     this.data = ret
                 }
                 // this.isShowGetMore = this.data.length < ret.total

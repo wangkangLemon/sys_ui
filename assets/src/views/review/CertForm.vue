@@ -74,7 +74,7 @@
             <el-form label-width="120px" ref="form" :rules="rules" :model="fetchParam" >
                 <el-form-item label="资格证书类型" prop="type" :label-width="formLabelWidth">
                     <el-select v-model="fetchParam.type" placeholder="请选择">
-                        <el-option label="职业医师" :value="1"></el-option>
+                        <el-option label="执业医师" :value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="用户" prop="user_name" :label-width="formLabelWidth">
@@ -154,7 +154,7 @@
                 formLabelWidth: '120px', // 表单label的宽度
                 changelist:{},
                 showDetail: false,     // 是否显示详情对话框
-                certType: ['', '职业医师'] ,
+                certType: ['', '执业医师'] ,
             }
         },
         created() {

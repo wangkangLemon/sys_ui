@@ -196,7 +196,7 @@ export default {
                 })
             },
             meta: {
-                title: ' 资料管理',
+                title: ' 医院管理',
                 noback: true
             }
         },

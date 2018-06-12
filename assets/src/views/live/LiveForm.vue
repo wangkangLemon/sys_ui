@@ -156,8 +156,6 @@
                 pickerOptionsed2: {
                     disabledDate :(time)=> {
                         let beginDate=this.form.starttime
-                        console.log(time.getTime(),Date.now() - 8.64e7)
-                        console.log(this.form.starttime)
                         return time.getTime() < beginDate - 8.64e7
                     }
                 },
@@ -166,7 +164,7 @@
         watch:{
             'form.base_user_cnt'(){
                 this.form.base_user_cnt=Number(this.form.base_user_cnt)
-            }
+            },
         },
         created() {
             xmview.setContentLoading(false)
@@ -180,7 +178,6 @@
                         this.form.starttime = ret.startdate
                         this.form.endtime = ret.enddate
                         this.form.product_name = ret.product.name
-                        // console.log(this.form);
                     })
             }
             //暂时不获取角色列表       
@@ -197,12 +194,18 @@
                 let _this=this
                 return financeService.fetchProductList(param)
                 .then((ret)=>{
-                     _this.$emit('changelistc', ret.data)
+                    console.log('param=',typeof(param.page));
+                    console.log(ret.data);
+                    if(param.page==1){
+                        ret.data=[{id:0,name:'免费直播'}].concat(ret.data)
+                        console.log(ret.data);
+                        _this.$emit('changelistc', ret.data)
+                    }else{
+                        _this.$emit('changelistc', ret.data)
+                    }
                     // _this.$refs.Product.fetchData()
-                    
                      //到父组件 这个就是 后面依次是子组件 孙组件
                      //问题?在父组件change 因为现在编辑页默认有了ID 就不加载全部列表 只显示默认的ID对应的值 列表只有一项
-
                     // _this.changelistc = ret.data //会改变数据 让列表显示当前
                     return ret
                 })
@@ -241,8 +244,6 @@
             btnNextClick() {
                 this.$refs['form'].validate((valid) => {
                     if (!valid) return
-                    // console.log('this.form.starttime',typeof(this.form.endtime),this.form.starttime)
-                    // console.log('this.form.endtime',typeof(this.form.endtime),this.form.endtime)
                     if(typeof(this.form.starttime)=='undefined'||typeof(this.form.endtime)=='undefined') {
                          xmview.showTip('error', "请先完善直播时间再提交数据")
                         return false

@@ -57,6 +57,7 @@
                     }
                     .fi{
                         width:35%;
+                        white-space:nowrap;
                     }
                 }
                 .tag {
@@ -108,9 +109,9 @@
                     <section class="fi">
                      <i>标题</i><el-input id="input" v-model="section.course_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
-                    <DateRange title="创建时间" :start="section.create_start" :end="section.create_end" @changeStart="val=> section.create_start =val "
+                    <!-- <DateRange title="创建时间" :start="section.create_start" :end="section.create_end" @changeStart="val=> section.create_start =val "
                         @changeEnd="val=> section.create_end=val" :change="fetchCourseLists">
-                    </DateRange>
+                    </DateRange> -->
                     <section>
                         <i>状态</i>
                         <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">

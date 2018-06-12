@@ -56,11 +56,12 @@
                             :town="fetchParam.town_id"
                             :village="fetchParam.village_id"
                             title=""
-                            v-on:provinceChange="val => fetchParam.province_id = val"
-                            v-on:cityChange="val => fetchParam.city_id = val"
-                            v-on:areaChange="val => fetchParam.area_id = val"
-                            v-on:townChange="val => fetchParam.town_id = val"
-                            v-on:villageChange="val => fetchParam.village_id = val"
+                            v-on:provinceChange="val => {fetchParam.province_id = val;finallyVal = val}"
+                            v-on:cityChange="val => {fetchParam.city_id = val;finallyVal = val}"
+                            v-on:areaChange="val => {fetchParam.area_id = val;finallyVal = val}"
+                            v-on:townChange="val => {fetchParam.town_id = val;finallyVal = val}"
+                            v-on:villageChange="val => {fetchParam.village_id = val;finallyVal = val}"
+                            :change="changeR"
                             >
                     </Region>
                 </el-form-item>    
@@ -70,11 +71,9 @@
                 <el-form-item label="昵称" prop="price">
                     <el-input v-model="fetchParam.nickname"></el-input>
                 </el-form-item>
-         
                 <el-form-item label="手机号" prop="mobile">
                     <el-input v-model="fetchParam.mobile"></el-input>
                 </el-form-item>
-
                 <el-form-item label="角色" prop="role_id" :fetch-suggestions="querySearch">
                     <el-select class="select" v-model="fetchParam.role_id" placeholder="请输入角色">
                         <el-option  v-for="item in  role_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -172,6 +171,7 @@
                 },
                 resultData: [],
                 gov_list:[],
+                noinit:false,
             }
         },
         created() {
@@ -185,11 +185,18 @@
             console.log('this.$route.params.id='+this.$route.params.id)
             userService.getAdminInfo(this.$route.params.id).then((ret) => {
                 this.fetchParam = ret
+                // this.noinit=true
                 console.log(1111111111111111111111111)
                 console.log(this.fetchParam)
                 console.log(222222222222)
             })
+
             this.loadingData=false;
+            setTimeout(() => {
+                this.noinit=true
+            }, 500);
+                // this.noinit=true
+            
         },
         // activated () {
         //     this.getrole()
@@ -202,6 +209,28 @@
             },
         },
         methods: {
+            changeR(type){
+                console.log(type)
+                  console.log(1,this.fetchParam.province_id,this.fetchParam.city_id ,this.fetchParam.area_id,this.fetchParam.town_id, this.fetchParam.village_id);
+                  let level_pid=this.fetchParam.village_pid || this.fetchParam.town_pid || this.fetchParam.area_pid || this.fetchParam.city_pid || this.fetchParam.province_pid
+                let flag = false
+                let index
+                let arr = ['province_id', 'city_id', 'area_id', 'town_id', 'village_id']
+                arr.forEach((v,i) => {
+                    console.log('flag='+flag);
+                    console.log('this.noinit='+this.noinit);
+                    if (flag&&this.noinit) {//刚进来会走一遍这个导致数据清掉，初始化我给了false，阻止进来，可是不知道在哪改成true
+                        // alert(222222)
+                        this.fetchParam[v] = ''
+                    }
+                    if (this.fetchParam[v] == this.finallyVal) {
+                        flag = true
+                        index = i
+                    }
+                })
+                // this.noinit=true
+                 console.log(this.fetchParam.province_id,this.fetchParam.city_id ,this.fetchParam.area_id,this.fetchParam.town_id, this.fetchParam.village_id);
+            },
             // 裁切后的回调
             cropperFn(data, ext) {
                 mineService.uploadAvatar({

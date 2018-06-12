@@ -69,10 +69,10 @@
         },
         watch: {
             'start'(val) {
-                // debugger
+                console.log(this.timespan[0]);
                 console.log(this.start);
                  console.log(this.defaultStart,this.defaultEnd);
-                 if(this.defaultStart)val=this.defaultStart
+                //  if(this.defaultStart)val=this.defaultStart
                 if (getTimeStr(this.timespan[0]) != val) {
                     // if(this.defaultStart){
                     //     this.timespan[0]=this.defaultStart
@@ -85,7 +85,7 @@
             },
             'end'(val) {
                  console.log(this.end);
-                  if(this.defaultEnd)val=this.defaultEnd
+                //   if(this.defaultEnd)val=this.defaultEnd
                 if (getTimeStr(this.timespan[1]) != val) {
                     // if(this.defaultEnd){
                     //     this.timespan[1]=this.defaultEnd
@@ -107,6 +107,7 @@
         // },
         methods: {
             setCurrVal (type) {
+                
                 const emitArr = ['changeStart', 'changeEnd']
                 let val = getTimeStr(this.timespan[type])   //this.timespan[type]  ?== this.timespan[0] == this.timespan[this.start]
                 this.$emit(emitArr[type], getTimeStr(val)) 
@@ -117,6 +118,6 @@
 
     function getTimeStr (val) {
         if (!val) return val
-        return timeUtils.date2Str(new Date(val),1) //1是传参hashour = true,
+        return timeUtils.time2String(new Date(val),1) //1是传参hashour = true,
     }
 </script>

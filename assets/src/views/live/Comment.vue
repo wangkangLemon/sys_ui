@@ -59,7 +59,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addForm = false">取 消</el-button>
-                <el-button type="primary" @click="submit('form')">确 定</el-button>
+                <el-button type="primary" @click="submit('form')" :disabled="isDisable">确 定</el-button>
             </div>
         </el-dialog>
         <section class="manage-container">
@@ -85,8 +85,10 @@
              <el-table-column min-width="200" prop="content" label="评论" v-if="data">
             </el-table-column>
              <el-table-column min-width="80" prop="user_name" label="评论者" v-if="data">
-            </el-table-column>   
-            <el-table-column min-width="90" prop="addate" label="评论时间" v-if="data">
+            </el-table-column> 
+            <el-table-column min-width="80" prop="mobile" label="手机号" v-if="data">
+            </el-table-column>    
+            <el-table-column min-width="100" prop="addate" label="评论时间" v-if="data">
             </el-table-column>  
             <el-table-column width="100" label="状态">
                 <template scope="scope">
@@ -140,6 +142,7 @@ export default {
     },
     data() {
         return {
+            isDisable:false,
             loadingData: false,
             data: [], // 表格数据
             total: 0,
@@ -150,10 +153,11 @@ export default {
             // 查看管理员详情
             formLabelWidth: '120px', // 表单label的宽度
             rules: {
-                content: [{
-                    required: true,
-                    message: '必须填写'
-                }],
+                content: [ {required: true, message: '必须输入', trigger: 'blur'},
+                        ,{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的内容'
+                        }],
             }, 
             addForm: false, // 表单弹窗是否显示
             livename:''
@@ -191,7 +195,7 @@ export default {
         // 单条删除
         del(index, row) {
             console.log(row)
-            xmview.showDialog(`你将要删除直播 <span style="color:red">${row.title}</span>,  此操作不可恢复确认吗?`, () => {
+            xmview.showDialog(`你将要删除评论 <span style="color:red">${row.content}</span>,  此操作不可恢复确认吗?`, () => {
                 liveService.deleteCommt(row.id).then(() => {
                     this.data.splice(index, 1) //删除选中项
                     row.deleted = 1
@@ -203,9 +207,11 @@ export default {
             submit (form) {
                 this.$refs[form].validate((valid) => {
                     if (valid) {
+                        this.isDisable = true
                         liveService.createCommt(this.form,this.$route.params.id).then((ret) => {
                             xmview.showTip('success', '添加成功')
                         }).then(() => {
+                            this.isDisable = false
                             this.addForm = false
                             this.fetchData()
                             this.page = 1
