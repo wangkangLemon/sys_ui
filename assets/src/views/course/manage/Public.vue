@@ -121,9 +121,6 @@
                             <el-option label="视频转码中" value="2"></el-option>
                         </el-select>
                     </section>
-                    <section><i>栏目</i>
-                        <CourseCategorySelect :onchange="fetchCourseLists" v-model="section.category_id"></CourseCategorySelect>
-                    </section> 
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="course_name" label="课程名称" min-width="230"></el-table-column>
@@ -176,14 +173,13 @@
 <script>
     import courseService from '../../../services/course/courseService'
     import CourseCategoryTree from '../../component/tree/CourseCategory.vue'
-    import CourseCategorySelect from '../../component/select/CourseCategory.vue'
     import SectionCategoryMenu from '../../component/select/SectionCategoryMenu.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
 
     export default {
         components: {
-            CourseCategoryTree,SectionCategoryMenu,ImagEcropperInput,DateRange,CourseCategorySelect
+            CourseCategoryTree,SectionCategoryMenu,ImagEcropperInput,DateRange,
         },
         data () {
             return {
