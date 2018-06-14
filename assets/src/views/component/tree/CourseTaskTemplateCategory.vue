@@ -10,12 +10,14 @@
 </template>
 <script>
     import courseTaskService from '../../../services/gov/courseTaskService.js'
+    // import examTaskService from '../../../services/gov/examTaskService.js'
     import treeUtils from '../../../utils/treeUtils'
 
     export default{
         props: {
             onNodeClick: Function,
             value: Array,
+            treeType:String,
         },
         data () {
             return {
@@ -25,6 +27,8 @@
             }
         },
         created () {
+            console.log(this.treeType);
+            
             // this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1}).then(ret=>{ 
             this.getData({ id:'', name, pagesize:-1 }).then(ret=>{ 
                  this.data = ret.data.map(v=>{
@@ -33,18 +37,6 @@
                         v.value=v.id
                         return v
                     }) 
-            //    ret.data.forEach(v => {
-            //         this.data.push({
-            //             data: v,
-            //             label: v.name,
-            //             value: v.id,
-            //             children: v.ended ? null : [{  //暂无下级添加
-            //                 label: '正在加载',
-            //                 value: -1,
-            //             }]  //是否最终菜单？点箭头触发请求
-            //         })
-            //    })
-              
                this.loading = false
                xmview.setContentLoading(false)
             })
@@ -54,29 +46,14 @@
         methods: {
             // 给子元素获取数据的方法
             getData (params) {
-                return courseTaskService.getCategoryTree(params)
+                 alert(this.treeType)
+                
+                // if(this.treeType=='course'){
+                    return courseTaskService.getCategoryTree(params)
+                // }else if(this.treeType=='exam'){
+                //     return courseTaskService.getCategoryTree(params)
+                // }
             },  
-            // handleNodeExpand (data, node, nodeDom) {                           //点下拉箭头    //暂无下级添加
-            //     // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
-            //     // this.getData({id : 'tree', type :'course', filter : true , pid :node.data.value , level:-1, pagesize:-1}).then(ret=>{
-            //     this.getData({ id, name }).then(ret=>{
-            //         let arr = []
-            //         ret.data.forEach(v => {
-            //             arr.push({
-            //                 data: v,
-            //                 label: v.name,
-            //                 value: v.id,
-            //                 children: v.ended ? null : [{ 
-            //                     label: '正在加载',
-            //                     value: -1,
-            //                 }]  //是否最终菜单？
-            //             })
-            //     })
-            //     node.data.children = arr
-            //     this.loading = false
-            //     xmview.setContentLoading(false)
-            //     })
-            // },
             handleNodeClick (data, node, store) { //点击
                  // this.$emit('onNodeClick', {data, node, store})
                 this.onNodeClick(1, data, node, store) 

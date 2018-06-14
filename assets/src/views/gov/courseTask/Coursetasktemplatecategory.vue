@@ -97,7 +97,7 @@
                     </span> <i>】到</i>
                 </section>
                 <section class="el-dialog__body">
-                    <CourseTaskTemplateCategoryTree v-model="treeData" node-key="id" :onNodeClick="treeNodeClick.bind(this,2)"></CourseTaskTemplateCategoryTree>
+                    <CourseTaskTemplateCategoryTree v-model="treeData" node-key="id" :treeType="treeType" :onNodeClick="treeNodeClick.bind(this,2)"></CourseTaskTemplateCategoryTree>
                 </section>
 
                 <section class="el-dialog__footer">
@@ -155,7 +155,8 @@
                         message: '请输入分类名称',
                         trigger: 'blur'
                     }],
-                }
+                },
+                treeType:''
             }
         },
         watch: {
@@ -170,8 +171,17 @@
             // }
         },
         activated() {
+            this.fetchParam={}
+            console.log(this.$route.path);
+            if(this.$route.path=='/gov/coursetask/template/category'){
+                this.treeType='course'
+                this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
+            }
+            else if(this.$route.path=='/gov/examtask/template/category'){
+                this.treeType='exam'
+                console.log(22222)
+            }
             xmview.setContentLoading(false)
-            this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
         },
         methods: {
             // 删除分类

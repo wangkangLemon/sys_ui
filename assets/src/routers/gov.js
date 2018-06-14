@@ -128,20 +128,7 @@ export default {
             }
         },
 
-        {
-            path: 'coursetask',
-            name: 'gov-coursetask',
-            component: resolve => {
-                require.ensure([], () => {
-                    resolve(require('../views/gov/courseTask/Coursetask.vue'))
-                })
-            },
-            meta: {
-                title: '课程任务',
-                noback: true
-            }
-        },
- 
+// 课程任务
         // 课程任务模板
         {
             path: 'coursetask/template',
@@ -183,20 +170,50 @@ export default {
                 noback: true
             }
         },
-        // // 公告列表
-            // {
-            //     path: 'announce/list',
-            //     name: 'gov-announce-category',
-            //     component: resolve => {
-            //         require.ensure([], () => {
-            //             resolve(require('../views/gov/courseTask/Coursetasktemplate.vue'))
-            //         })
-            //     },
-            //     meta: {
-            //         title: '公告列表',
-            //         noback: true
-            //     }
-            // },
+// 考试任务
+        // 考试任务模板
+        {
+            path: 'examtask/template',
+            name: 'gov-examtasktemplate',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/Coursetasktemplate.vue'))
+                })
+            },
+            meta: {
+                title: '考试任务模板',
+                noback: true
+            }
+        },
+        // 添加修改考试任务模板
+        {
+            path: 'examtask/template/add',
+            name: 'examtask-template-add',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/AddCoursetasktemplate.vue'))
+                })
+            },
+            meta: {
+                title: '添加考试任务模板',
+            }
+        },
+        // 考试任务模板栏目
+        {
+            path: 'examtask/template/category',
+            name: 'company-examtasktemplate-category',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/gov/courseTask/Coursetasktemplatecategory.vue'))
+                })
+            },
+            meta: {
+                title: '考试任务模板分类',
+                noback: true
+            }
+        },
+
+//公告栏目管理
         {
             path: 'announce/category',
             name: 'gov-announce-category-manage',
