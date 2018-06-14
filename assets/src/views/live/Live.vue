@@ -71,7 +71,7 @@
             </el-table-column> -->
             <el-table-column min-width="120" label="关联商品" v-if="data">
                  <template scope="scope">
-                    <p > {{ scope.row.product_id!==0?scope.row.product.name: '免费直播' }}</p>
+                    <p  v-if="scope.row.product"> {{ scope.row.product_id!==0?scope.row.product.name: '免费直播' }}</p>
                 </template>
             </el-table-column>
             <el-table-column min-width="120" label="专家" v-if="data">
