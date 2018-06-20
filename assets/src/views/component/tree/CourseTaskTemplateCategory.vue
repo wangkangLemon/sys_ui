@@ -27,10 +27,39 @@
             }
         },
         created () {
-            console.log(this.treeType);
-            
+            if(this.treeType==undefined){
+                return false
+            }
+            console.log('this.treeType=',this.treeType);
+            this.getData(this.treeType)
+            xmview.setContentLoading(false)
             // this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1}).then(ret=>{ 
-            this.getData({ id:'', name, pagesize:-1 }).then(ret=>{ 
+            // this.getData({ id:'', name, pagesize:-1 }).then(ret=>{ 
+            //      this.data = ret.data.map(v=>{
+            //             v.data=v
+            //             v.label = v.name
+            //             v.value=v.id
+            //             return v
+            //         }) 
+            //    this.loading = false
+            //    xmview.setContentLoading(false)
+            // })
+        },
+        watch: {
+            treeType(){
+                console.log('this.treeType',this.treeType)
+                this.getData(this.treeType)
+            }
+        },
+        methods: {
+            // 给子元素获取数据的方法
+            getData (type) {  
+                // alert(this.treeType)
+                let param
+                if(type=='course')param={ id:'', name, pagesize:-1 }
+                else if(type=='exam')param={ id:'', name, pagesize:-1,type:2 }
+                if(!param)return
+                courseTaskService.getCategoryTree(param).then(ret=>{ 
                  this.data = ret.data.map(v=>{
                         v.data=v
                         v.label = v.name
@@ -40,22 +69,8 @@
                this.loading = false
                xmview.setContentLoading(false)
             })
-        },
-        watch: {
-        },
-        methods: {
-            // 给子元素获取数据的方法
-            getData (params) {
-                 alert(this.treeType)
-                
-                // if(this.treeType=='course'){
-                    return courseTaskService.getCategoryTree(params)
-                // }else if(this.treeType=='exam'){
-                //     return courseTaskService.getCategoryTree(params)
-                // }
             },  
             handleNodeClick (data, node, store) { //点击
-                 // this.$emit('onNodeClick', {data, node, store})
                 this.onNodeClick(1, data, node, store) 
                 //  根节点无法被选中 
                 if (data.value == 0) return

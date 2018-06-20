@@ -46,7 +46,7 @@
         </section>-->
 
         <section class="left-container">
-            <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
+            <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :treeType="treeType" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
         </section>
 
         <section class="right-container">
@@ -70,7 +70,7 @@
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl" :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>-->
                     <el-form-item label="分类排序" prop="sort">
-                        <el-input  type="number" :placeholder="placeholder" v-model.sort="fetchParam.sort"></el-input>
+                        <el-input  type="number" :placeholder="placeholder" v-model="fetchParam.sort"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button  type="info" @click="submitForm">保存</el-button>
@@ -97,7 +97,7 @@
                     </span> <i>】到</i>
                 </section>
                 <section class="el-dialog__body">
-                    <CourseTaskTemplateCategoryTree v-model="treeData" node-key="id" :treeType="treeType" :onNodeClick="treeNodeClick.bind(this,2)"></CourseTaskTemplateCategoryTree>
+                    <CourseTaskTemplateCategoryTree v-model="treeData" node-key="id"  :onNodeClick="treeNodeClick.bind(this,2)"></CourseTaskTemplateCategoryTree>
                 </section>
 
                 <section class="el-dialog__footer">
@@ -141,7 +141,8 @@
                     name: void 0,
                     image: void 0,
                     sort: '',
-                    id: 0
+                    id: 0,
+                    type:1,
                 },
                 rules: {
                     // sort: [{
@@ -171,16 +172,9 @@
             // }
         },
         activated() {
-            this.fetchParam={}
             console.log(this.$route.path);
-            if(this.$route.path=='/gov/coursetask/template/category'){
                 this.treeType='course'
                 this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
-            }
-            else if(this.$route.path=='/gov/examtask/template/category'){
-                this.treeType='exam'
-                console.log(22222)
-            }
             xmview.setContentLoading(false)
         },
         methods: {
@@ -289,57 +283,6 @@
             resetForm() {
                 this.$refs.form.resetFields()
             },
-            // 移动子分类点击
-            moveSubCategory() {
-                if (!this.nodeSelected) {
-                    xmview.showTip('warning', '请先选中一个分类')
-                    return
-                }
-                this.dialogTree.isShow = true
-                this.dialogTree.confirmClick = () => {
-                    let id = this.nodeSelected.value
-                    let to = this.moveToNode.data.value
-                    if (id === to) {
-                        xmview.showTip('warning', '请选择不同的分类')
-                        return
-                    }
-                    courseTaskService.moveCategory({id,to}).then((ret) => {
-                        // 重新渲染树节点
-                        if (ret.code === 0) {
-                            xmview.showTip('success', '操作成功!')
-                            this.$refs.courseTaskTemplateCategory.initData()
-                            this.dialogTree.isShow = false
-                        } else if (ret.code === 1) {
-                            xmview.showTip('error', ret.message)
-                        }
-                    })
-                }
-            },
-            // 移动分类下的内容
-            moveSubCategoryContent() {
-                if (!this.nodeSelected) {
-                    xmview.showTip('warning', '请先选中一个分类')
-                    return
-                }
-                this.dialogTree.isShow = true
-                this.dialogTree.confirmClick = () => {
-                    let id = this.nodeSelected.value
-                    let to = this.moveToNode.data.value
-                    if (id === to) {
-                        xmview.showTip('warning', '请选择不同的分类')
-                        return
-                    }
-                    courseTaskService.moveCategoryContent({id,to}).then((ret) => {
-                        // 重新渲染树节点
-                        if (ret.code === 0) {
-                            xmview.showTip('success', '操作成功!')
-                            this.dialogTree.isShow = false
-                        } else if (ret.code === 1) {
-                            xmview.showTip('error', ret.message)
-                        }
-                    })
-                }
-            }
         },
         components: {
             CourseTaskTemplateCategoryTree,UploadImg}

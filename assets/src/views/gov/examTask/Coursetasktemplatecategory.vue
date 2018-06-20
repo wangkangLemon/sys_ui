@@ -46,21 +46,18 @@
         </section>-->
 
         <section class="left-container">
-            <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
+            <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :treeType="treeType" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
         </section>
 
         <section class="right-container">
             <div>
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改分类</el-button>
                 <el-button :class="{'btn-selected': activeTab == 'root'}" @click="addRootCategory">新建分类</el-button>
-                <!--<el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子分类</el-button>-->
+                <!-- <el-button :class="{'btn-selected': activeTab == 'add'}" @click="activeTab = 'add'">添加子分类</el-button> -->
                 <!--<el-button @click="moveSubCategory" disabled>移动分类</el-button>-->
                 <!--<el-button @click="moveSubCategoryContent" disabled>移动分类下内容</el-button>-->
                 <el-button type="danger" @click="deleteCategory">删除分类</el-button>
             </div>
-            <!--<div v-if="fetchParam.parent_id === 0">
-                <el-button type="primary">添加根节点</el-button>
-            </div>-->
             <el-card class="edit-content">
                 <el-form label-position="right" label-width="90px" :rules="rules" :model="fetchParam" ref="form">
                     <el-form-item label="分类名称" prop="name">
@@ -70,7 +67,7 @@
                         <UploadImg ref="uploadImg" :defaultImg="fetchParam.image" :url="uploadImgUrl" :onSuccess="handleImgUploaded"></UploadImg>
                     </el-form-item>-->
                     <el-form-item label="分类排序" prop="sort">
-                        <el-input  type="number" :placeholder="placeholder" v-model.sort="fetchParam.sort"></el-input>
+                        <el-input  type="number" :placeholder="placeholder" v-model="fetchParam.sort"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button  type="info" @click="submitForm">保存</el-button>
@@ -115,7 +112,7 @@
     import courseTaskService from '../../../services/gov/courseTaskService.js'
     import treeUtils from '../../../utils/treeUtils'
     import CourseTaskTemplateCategoryTree from '../../component/tree/CourseTaskTemplateCategory.vue'
-    import UploadImg from '../../component/upload/UploadImg.vue'
+    // import UploadImg from '../../component/upload/UploadImg.vue'
 
     export default {
         data() {
@@ -141,7 +138,8 @@
                     name: void 0,
                     image: void 0,
                     sort: '',
-                    id: 0
+                    id: 0,
+                    type:2,
                 },
                 rules: {
                     // sort: [{
@@ -155,7 +153,8 @@
                         message: '请输入分类名称',
                         trigger: 'blur'
                     }],
-                }
+                },
+                treeType:''
             }
         },
         watch: {
@@ -170,8 +169,10 @@
             // }
         },
         activated() {
+            console.log(this.$route.path);
+                this.treeType='exam'
+                this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
             xmview.setContentLoading(false)
-            this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
         },
         methods: {
             // 删除分类
@@ -233,7 +234,6 @@
             submitForm() {
                 this.$refs.form.validate((ret) => {
                     if (!ret) return
-
                     let p 
                     if (this.activeTab === 'add'){
                         this.fetchParam.pid =this.fetchParam.id  
@@ -263,7 +263,6 @@
                             }
                             this.resetForm()
                             this.fetchParam = getFetchParam()
-
                             this.$forceUpdate()
                             // 如果是添加的根节点
                             if (this.activeTab === 'root') {this.treeData.push(addedItem)} 
@@ -279,59 +278,9 @@
             resetForm() {
                 this.$refs.form.resetFields()
             },
-            // 移动子分类点击
-            moveSubCategory() {
-                if (!this.nodeSelected) {
-                    xmview.showTip('warning', '请先选中一个分类')
-                    return
-                }
-                this.dialogTree.isShow = true
-                this.dialogTree.confirmClick = () => {
-                    let id = this.nodeSelected.value
-                    let to = this.moveToNode.data.value
-                    if (id === to) {
-                        xmview.showTip('warning', '请选择不同的分类')
-                        return
-                    }
-                    courseTaskService.moveCategory({id,to}).then((ret) => {
-                        // 重新渲染树节点
-                        if (ret.code === 0) {
-                            xmview.showTip('success', '操作成功!')
-                            this.$refs.courseTaskTemplateCategory.initData()
-                            this.dialogTree.isShow = false
-                        } else if (ret.code === 1) {
-                            xmview.showTip('error', ret.message)
-                        }
-                    })
-                }
-            },
-            // 移动分类下的内容
-            moveSubCategoryContent() {
-                if (!this.nodeSelected) {
-                    xmview.showTip('warning', '请先选中一个分类')
-                    return
-                }
-                this.dialogTree.isShow = true
-                this.dialogTree.confirmClick = () => {
-                    let id = this.nodeSelected.value
-                    let to = this.moveToNode.data.value
-                    if (id === to) {
-                        xmview.showTip('warning', '请选择不同的分类')
-                        return
-                    }
-                    courseTaskService.moveCategoryContent({id,to}).then((ret) => {
-                        // 重新渲染树节点
-                        if (ret.code === 0) {
-                            xmview.showTip('success', '操作成功!')
-                            this.dialogTree.isShow = false
-                        } else if (ret.code === 1) {
-                            xmview.showTip('error', ret.message)
-                        }
-                    })
-                }
-            }
+
         },
         components: {
-            CourseTaskTemplateCategoryTree,UploadImg}
+            CourseTaskTemplateCategoryTree}
     }
 </script>

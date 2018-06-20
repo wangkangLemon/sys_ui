@@ -42,6 +42,8 @@
             Mult: [String]
         },
         created() {
+            console.log(this.data);
+            
             this.handledata()
         },
         components: {
@@ -53,9 +55,8 @@
             }
         },
         methods: {
-
-             handledata(){
-                  var arr = []
+            handledata(){
+                var arr = []
                 this.data.forEach(v => {
                     if (v.level == 0) {
                         arr.push({

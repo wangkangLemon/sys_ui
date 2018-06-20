@@ -8,7 +8,6 @@
 </template>
 
 <script>
-    import menuService from '../../../services/sys/menuService'
     import treeUtils from '../../../utils/treeUtils'
 
     export default{

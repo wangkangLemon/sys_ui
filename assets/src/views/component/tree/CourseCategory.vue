@@ -2,7 +2,7 @@
 
 <template> 
     <!--这是父组件-->
-    <el-tree v-loading="loading" :data="data" :expand-on-click-node="false" @node-click="handleNodeClick"
+    <el-tree v-loading="loading" :data="data" :show-checkbox="checkbox" :expand-on-click-node="false" @node-click="handleNodeClick"  ref="tree"
              @node-expand="handleNodeExpand" :highlight-current="selectable">
     </el-tree>
 </template>
@@ -15,6 +15,7 @@
         props: {
             onNodeClick: Function,
             value: Array,
+            checkbox:false
         },
         data () {
             return {
@@ -116,6 +117,7 @@
                     //    })
 
                  // this.$emit('onNodeClick', {data, node, store})
+                if(!this.onNodeClick)return
                 this.onNodeClick(1, data, node, store) 
 
                 //  根节点无法被选中 

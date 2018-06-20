@@ -270,18 +270,12 @@
             },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
-                // console.log('===========   node.data.data==========  ')
-                // console.log(type, data, node, store)
-                // console.log(node.data.id)
-                console.log("category_type============="+node.data)
                 console.log(node.data)
                 if (type == 1) { 
                     this.section.category_id=node.data.id
                     this.section.category_type=node.data.category_type
                     this.section.category_name=node.data.name
                     this.ended=node.data.ended
-                    // console.log(this.section.category_type)
-                    // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
                     this.fetchCourseLists()
                     this.nodeParentSelected = node.parent// 记录父节点
                     this.nodeSelected = node // 记录当前节点

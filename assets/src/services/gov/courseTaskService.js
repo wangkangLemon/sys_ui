@@ -109,6 +109,7 @@ class sysService {
     // 课程任务模板管理
     getCourseTaskTemplateList ({
                                    category_id,
+                                   category_type,
                                    title,
                                    deleted="-1",
                                    status="-1",
@@ -116,7 +117,7 @@ class sysService {
                                    pagesize
                                }) {
         let finalUrl = urlPre + '/template/lists'
-        return api.get(finalUrl, {category_id, title, deleted, status, page, pagesize}).then((ret) => {
+        return api.get(finalUrl, { category_id, category_type,title, deleted, status, page, pagesize}).then((ret) => {
             return ret
         })
     }
@@ -168,13 +169,13 @@ class sysService {
  // 获取课程任务模板分列表
     getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1, pagesize=-1}) {
         let finalUrl = urlPre + '/template/category/lists'
-        return api.get(finalUrl, { id, name, pagesize}).then((ret) => {
+        return api.get(finalUrl, { id, name, pagesize, type}).then((ret) => {
             return ret
         })
     }
-    create_cate ({parent_id, name, image, sort}) {
+    create_cate ({parent_id, name, image, sort,type}) {
         let finalUrl = urlPre + `/template/category/create`
-        let reqParam = { name, sort}
+        let reqParam = { name, sort, type}
         // if (parent_id === 0) delete reqParam['parent_id']
         return api.post(finalUrl, reqParam)
     }

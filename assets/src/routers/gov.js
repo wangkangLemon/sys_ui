@@ -177,7 +177,7 @@ export default {
             name: 'gov-examtasktemplate',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/courseTask/Coursetasktemplate.vue'))
+                    resolve(require('../views/gov/examTask/ExamManage.vue'))
                 })
             },
             meta: {
@@ -191,7 +191,7 @@ export default {
             name: 'examtask-template-add',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/courseTask/AddCoursetasktemplate.vue'))
+                    resolve(require('../views/gov/examTask/AddCoursetasktemplate.vue'))
                 })
             },
             meta: {
@@ -201,10 +201,10 @@ export default {
         // 考试任务模板栏目
         {
             path: 'examtask/template/category',
-            name: 'company-examtasktemplate-category',
+            name: 'examtask-examtasktemplate-category',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/gov/courseTask/Coursetasktemplatecategory.vue'))
+                    resolve(require('../views/gov/examTask/Coursetasktemplatecategory.vue'))
                 })
             },
             meta: {

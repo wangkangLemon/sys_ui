@@ -86,7 +86,6 @@
                     <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-
            <el-form-item prop="title" label="标题">
                 <el-input v-model="form.title" auto-complete="off"></el-input>
             </el-form-item>
@@ -97,7 +96,6 @@
                 <div class="img-wrap" v-if="form.image">
                     <img :src="form.image | fillImgPath" alt=""/>
                 </div>
-                <!--<ImagEcropperInput :isRound="false" :aspectRatio="2.15" :confirmFn="cropperFn"-->
                 <ImagEcropperInput :isRound="false" :confirmFn="cropperFn"
                                    class="upload-btn"></ImagEcropperInput>
             </el-form-item>
@@ -110,6 +108,16 @@
                     {{c.course_name}}
                 </el-tag>
                 <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
+            </el-form-item>
+            <el-form-item prop="course" label="选择栏目">
+                <el-tag style="margin-right: 3px"
+                        v-for="(c,index) in form.course" :key="index"
+                        :closable="true"
+                        @close="form.course.splice(index,1)"
+                        type="success">
+                    {{c.course_name}}
+                </el-tag>
+                <el-button type="primary" @click="dialogTree.isShow=true" size="small">选择栏目</el-button>
             </el-form-item>
             <el-form-item prop="sort" label="排序">
                 <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
@@ -148,14 +156,30 @@
         </el-form>
 
         <!-- 选择课程弹窗 -->
-        <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
+        <!-- <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
                           :selectedList="form.course" @changeSelected="val=>form.course=val"  item-key="contentid">
             <div slot="search" class="course-search">
                 <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
                           icon="search"
                           placeholder="请输入关键字搜索"></el-input>
             </div>
-        </dialogSelectData>
+        </dialogSelectData> -->
+
+        <!-- 选择栏目弹窗----------------------- -->
+        <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" :getData="fetchCourseTree" title="选择栏目"
+                          :selectedList="form.course" @changeSelected="val=>form.course=val"  item-key="contentid">
+            <div slot="search" class="course-search">
+                <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
+                          icon="search"
+                          placeholder="请输入关键字搜索"></el-input>
+            </div>
+            <CourseTree v-model="treeData" ref="courseCategory" :checkbox="true" ></CourseTree>
+            <span slot="footer">
+                <el-button type="primary" @click="getCheckedNodes">确定</el-button>
+            </span>
+        </el-dialog >
+
+
         <!-- 发布对象弹窗 -->
         <el-dialog
             :title="pushTypeDialog.title"
@@ -181,7 +205,6 @@
                 <el-button type="primary" @click="transferConfirmFn">确 定</el-button>
             </span>
         </el-dialog>
-
     </article>
 </template>
 
@@ -194,6 +217,8 @@
     import govService from '../../../services/gov/govService.js'
     import userService from '../../../services/gov/userService.js'
     import dialogSelectData from '../../component/dialog/SelectData4table.vue'
+    import dialogTree from '../../component/dialog/dialogTree'
+    import CourseTree from '../../component/tree/CourseCategory.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import DepSelect from '../../component/select/Department.vue'
 
@@ -224,6 +249,7 @@
                     type:void 0,       // 任务类型
                     stime:'',
                     etime:'',
+                    
                 },
                 rules: {
                     title:  [
@@ -248,6 +274,11 @@
                     isShow: false,
                     course_name: void 0,
                 },
+                dialogTree:{
+                    loading: false,
+                    isShow: false,
+                    course_name: void 0,
+                },
                 pushTypeDialog: { //发布对象数据模型
                     fetchParam: {
                         gov_id: '',
@@ -267,7 +298,8 @@
                     pagesize: 15,
                     total: 0,
                 },
-                category_list:[]
+                category_list:[],
+                treeData: [],
             }
         },
         watch:{
@@ -316,7 +348,25 @@
             this.getCategory()
         },
         methods: {
-            
+            getCheckedNodes(){
+                console.log(this.$refs.courseCategory);
+            },
+             // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                // console.log('===========   node.data.data==========  ')
+                // console.log(node)
+                console.log(this)
+                if (type == 1) { 
+                    // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
+                    this.nodeParentSelected = node.parent// 记录父节点
+                    this.nodeSelected = node // 记录当前节点
+                    // this.$refs.uploadImg.clearFiles()
+                    this.fetchParam = Object.assign({},node.data)  //解决左右数据
+                    this.activeTab = 'edit'
+                } else if (type == 2) {
+                    this.moveToNode = node
+                }
+            },
              //获取部门组下拉列表
             getCategory(val){
                 courseTaskService.getCategoryTree({pagesize:-1}).then((ret)=>{
@@ -421,6 +471,9 @@
                 // { course_name = '', status, category_id , time_start, time_end, page, pagesize}
                 return courseService.getPublicCourselist(Object.assign({}, this.dialogCourse, params))
             },
+            fetchCourseTree(params){
+                return courseService.getPublicCourselist(Object.assign({}, this.dialogCourse, params))
+            },
             submit(s) {
                 this.$refs.form.validate((valid) => {
                     if (!valid) {
@@ -471,6 +524,6 @@
                 })
             }
         },
-        components: {DateRange,ImagEcropperInput, dialogSelectData, Transfer, DepSelect }
+        components: {DateRange,ImagEcropperInput, dialogSelectData, Transfer, DepSelect,CourseTree }
     }
 </script>

@@ -202,26 +202,6 @@
                     })
                 }
             },
-            // //编辑
-            // ChapterCategoryEdit( e ) {
-            //     examService.ChapterCategoryEdit(e).then((ret) => {
-            //             setTimeout(() => {
-            //                 this.fetchData() // 重新刷新数据
-            //                  this.$forceUpdate()
-            //             }, 300)
-            //         })
-            // },
-            // //添加根节点
-            // addP(p){
-            //     this.selectData=null
-            //     this.type = 'P'
-
-            // },
-            // //添加子分类
-            // addS(){
-            //      this.selectData=null
-            //      this.type = 'S'
-            // },
             changeType(type){
                 this.type = type
                 if(type!="update"){
