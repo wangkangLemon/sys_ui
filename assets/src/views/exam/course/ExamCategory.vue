@@ -124,8 +124,9 @@
             treeNodeClick (type, data, node, store) {
                 // console.log('===========   node.data.data==========  ')
                 console.log(this.$parent)
+                console.log('node',node);
+                
                 this.type='update'
-                console.log(222)
             },
             // 清空选中项
             clearSelected () {
@@ -133,7 +134,10 @@
             },
             fetchData() {
                 examService.fetchExamCategory( this.fetchParam).then((ret) => {
+                        console.log('this.fetchParam='+this.fetchParam)
                         // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
+                        console.log('examService.fetchExamCategory-ret====',ret);
+                        
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     
                     })
@@ -147,6 +151,7 @@
                 transformParam(message)
                     // 应试考试价格推服务端*100倍（分）
                     console.log(typeof(message.price))
+
                     let lastdata = Object.assign({}, message)
                     lastdata.price=Number( lastdata.price)*100
                     console.log(typeof(lastdata.price),lastdata.price)
@@ -189,6 +194,8 @@
                     image: null,
                     remark :'',
                     sort:void 0,
+                    product_id:void 0,
+                    product_name:'',
                 });
                 }
                 if(type == 'p'){

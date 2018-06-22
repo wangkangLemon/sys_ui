@@ -154,7 +154,7 @@
                     this.currSelectedList.splice(this.currSelectedList.indexOf(row), 1)
 
                 this.$emit('changeSelected', this.currSelectedList)
-                // console.log(this.currSelectedList)
+                console.log(this.currSelectedList)
             },
             delItem (row) {
                 this.currSelectedList.splice(this.currSelectedList.findIndex(item => {

@@ -95,6 +95,65 @@ class FinanceService {
             }
         })
     }
+
+    // 优惠券管理
+    // 优惠券获取
+    getCoupon(id) {
+        let url = `${urlPre}/discount/get/${id}`         //传递的地址的id
+        return api.get(url).then(ret => {
+            return ret.data
+        })
+    }
+    // 优惠券列表
+    fetchCouponList(params) {
+        let url = urlPre + '/discount/lists'
+        return api.get(url, params).then(ret => {
+            if (ret.code == 0) {
+                return ret
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 优惠券创建
+    createCoupon(fetchParam) {
+        let url = urlPre + '/discount/create'
+        return api.post(url, fetchParam).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 优惠券更新
+    editCoupon(fetchParam, id) {
+        let url = `${urlPre}/discount/edit/${id}`
+        return api.post(url, fetchParam).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
+    // 优惠券删除
+    deleteCoupon(id) {
+        let url = `${urlPre}/discount/delete/${id}`
+        return api.post(url, {}).then(ret => {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
+                return Promise.reject(ret)
+            }
+        })
+    }
 }
 
 export default new FinanceService()

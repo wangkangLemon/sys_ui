@@ -13,6 +13,9 @@
                 width: 35%;
                 // height: 50%
             }
+            .shortInput{
+                width:40%
+            }
         }
         /*.search {
             @extend %top-search-container;
@@ -80,80 +83,120 @@
 
 <template>
     <article class="create-course-task">
-        <el-form :model="form" :rules="rules" label-position="right" ref="form" label-width="120px" style="width: 60%">
-            <el-form-item  label="分类" prop="category_id" :fetch-suggestions="querySearch">
-                <el-select clearable class="select" v-model="form.category_id" placeholder="请选择部门">
-                    <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-           <el-form-item prop="title" label="标题">
-                <el-input v-model="form.title" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item prop="description" label="描述">
-                <el-input v-model="form.description" auto-complete="off" :rows="6" type="textarea"></el-input>
-            </el-form-item>
-            <el-form-item prop="image" label="任务封面图">
-                <div class="img-wrap" v-if="form.image">
-                    <img :src="form.image | fillImgPath" alt=""/>
-                </div>
-                <ImagEcropperInput :isRound="false" :confirmFn="cropperFn"
-                                   class="upload-btn"></ImagEcropperInput>
-            </el-form-item>
-            <el-form-item prop="course" label="选择课程">
-                <el-tag style="margin-right: 3px"
-                        v-for="(c,index) in form.course" :key="index"
-                        :closable="true"
-                        @close="form.course.splice(index,1)"
-                        type="success">
-                    {{c.course_name}}
-                </el-tag>
-                <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
-            </el-form-item>
-            <el-form-item prop="course" label="选择栏目">
-                <el-tag style="margin-right: 3px"
-                        v-for="(c,index) in form.course" :key="index"
-                        :closable="true"
-                        @close="form.course.splice(index,1)"
-                        type="success">
-                    {{c.course_name}}
-                </el-tag>
-                <el-button type="primary" @click="dialogTree.isShow=true" size="small">选择栏目</el-button>
-            </el-form-item>
-            <el-form-item prop="sort" label="排序">
-                <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
-            </el-form-item>
+         <el-tabs type="border-card" v-model="activeTab">
+            <el-tab-pane label="题库简介" name="first">
+                <el-form :model="form" :rules="rules" label-position="right" ref="form" label-width="120px" style="width: 60%">
+                    <!-- <el-form label-width="120px" ref="formFirst" :model="fetchParam"> -->
+                    <el-form-item  label="分类" prop="category_id" :fetch-suggestions="querySearch">
+                        <el-select clearable class="select" v-model="form.category_id" placeholder="请选择部门">
+                            <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item prop="title" label="标题">
+                        <el-input v-model="form.title" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="description" label="描述">
+                        <el-input v-model="form.description" auto-complete="off" :rows="6" type="textarea"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="image" label="任务封面图">
+                        <div class="img-wrap" v-if="form.image">
+                            <img :src="form.image | fillImgPath" alt=""/>
+                        </div>
+                        <ImagEcropperInput :isRound="false" :confirmFn="cropperFn"
+                                        class="upload-btn"></ImagEcropperInput>
+                    </el-form-item>
+                    <!-- <el-form-item prop="course" label="选择课程">
+                        <el-tag style="margin-right: 3px"
+                                v-for="(c,index) in form.course" :key="index"
+                                :closable="true"
+                                @close="form.course.splice(index,1)"
+                                type="success">
+                            {{c.course_name}}
+                        </el-tag>
+                        <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
+                    </el-form-item> -->
+                   
+                    <!-- <el-form-item prop="sort" label="排序">
+                        <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
+                    </el-form-item> -->
 
-            <!--<el-form-item label="时间">
-                <DateRange :start="form.stime" :end="form.etime" @changeStart="val=> form.stime=val"
-                    @changeEnd="val=> form.etime=val" :defaultStart="form.stime" :defaultEnd="form.etime">
-                </DateRange>
-            </el-form-item>
-            <el-form-item label="发布对象" prop="type">
-                <el-select clearable v-model="form.type" @change="choosePushType" placeholder="请选择指定人员或部门">
-                    <el-option label="部门任务" :value="1"></el-option>
-                    <el-option label="个人任务" :value="2"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item
-                :label="pushTypeDialog.title"
-                v-if="form.type && form.type==pushTypeDialog.type">
-                <div class="collection" @click="openPushTypeDialog">
-                    <el-tag
-                        class="u-course-tag"
-                        v-for="item in pushTypeDialog.selectedData[this.pushTypeDialog.type]"
-                        :key="item.id">
-                        {{item.name}}
-                    </el-tag>
-                </div>
-            </el-form-item>-->
-            <el-form-item label="可得学分">
-                <el-input style="width: auto;" v-model.number="form.score" type="number"  placeholder="请输入可获得学分值"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submit(0)">提交</el-button>
-                <!--<el-button type="warning" @click="submit(1)">存草稿</el-button>-->
-            </el-form-item>
-        </el-form>
+                    <!--<el-form-item label="时间">
+                        <DateRange :start="form.stime" :end="form.etime" @changeStart="val=> form.stime=val"
+                            @changeEnd="val=> form.etime=val" :defaultStart="form.stime" :defaultEnd="form.etime">
+                        </DateRange>
+                    </el-form-item>
+                    <el-form-item label="发布对象" prop="type">
+                        <el-select clearable v-model="form.type" @change="choosePushType" placeholder="请选择指定人员或部门">
+                            <el-option label="部门任务" :value="1"></el-option>
+                            <el-option label="个人任务" :value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item
+                        :label="pushTypeDialog.title"
+                        v-if="form.type && form.type==pushTypeDialog.type">
+                        <div class="collection" @click="openPushTypeDialog">
+                            <el-tag
+                                class="u-course-tag"
+                                v-for="item in pushTypeDialog.selectedData[this.pushTypeDialog.type]"
+                                :key="item.id">
+                                {{item.name}}
+                            </el-tag>
+                        </div>
+                    </el-form-item>-->
+                    <!-- <el-form-item label="可得学分">
+                        <el-input style="width: auto;" v-model.number="form.score" type="number"  placeholder="请输入可获得学分值"></el-input>
+                    </el-form-item> -->
+                    <el-form-item>
+                        <el-button style="float: right" type="primary" @click="btnNextClick">下一步</el-button>
+                    </el-form-item>
+                </el-form>
+                
+            </el-tab-pane>
+            <el-tab-pane label="抽题设置" name="second">
+                <el-form label-width="120px" ref="form" :model="form">
+                    <el-form-item label="试题总数">
+                        <p>100个</p>
+                        <!-- <el-input v-model="form.title" auto-complete="off"></el-input> -->
+                    </el-form-item>
+                    <el-form-item label="试卷总分">
+                        <p>100分</p>
+                    </el-form-item>
+                    <el-form-item prop="pass_score" label="及格分数">
+                        <el-input-number v-model="form.pass_score" auto-complete="off"></el-input-number>
+                    </el-form-item>
+                     <el-form-item prop="range" label="选择范围">
+                        <el-tag style="margin-right: 3px"
+                                v-for="(c,index) in form.range" :key="index"
+                                :closable="true"
+                                @close="form.range.splice(index,1)"
+                                type="success">
+                            {{c.label}}
+                        </el-tag>
+                        <el-button type="primary" @click="dialogTree.isShow=true" size="small">选取范围</el-button>
+                    </el-form-item>
+                    <el-form-item style="color:red">
+                        <i>出题数目范围 ：</i>
+                        <span>单选题 60 个 ，</span><span>多选题 30 个 ，</span><span>判断题 20 个</span>
+                    </el-form-item> 
+                    <el-form-item prop="single_score" label="单选题">
+                        <el-input v-model="form.single_num" auto-complete="off" class="shortInput"></el-input> 个，
+                        每题 <el-input class="shortInput" v-model="form.single_score" auto-complete="off"></el-input> 分
+                    </el-form-item>
+                    <el-form-item prop="multi_score" label="多选题">
+                        <el-input v-model="form.multi_num" auto-complete="off" class="shortInput"></el-input> 个，
+                        每题 <el-input class="shortInput" v-model="form.multi_score" auto-complete="off"></el-input> 分
+                    </el-form-item>
+                    <el-form-item prop="judgment_score" label="判断题">
+                        <el-input v-model="form.judgment_num" auto-complete="off" class="shortInput"></el-input> 个，
+                        每题 <el-input class="shortInput" v-model="form.judgment_score" auto-complete="off"></el-input> 分
+                    </el-form-item>   
+                    <el-form-item>
+                            <el-button type="primary" @click="submit(0)">提交</el-button>
+                            <!--<el-button type="warning" @click="submit(1)">存草稿</el-button>-->
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+        </el-tabs>
 
         <!-- 选择课程弹窗 -->
         <!-- <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
@@ -165,16 +208,18 @@
             </div>
         </dialogSelectData> -->
 
-        <!-- 选择栏目弹窗----------------------- -->
-        <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" :getData="fetchCourseTree" title="选择栏目"
-                          :selectedList="form.course" @changeSelected="val=>form.course=val"  item-key="contentid">
-            <div slot="search" class="course-search">
+        <!-- 选取范围弹窗----------------------- -->
+        <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" title="选取范围"
+                          @changeSelected="val=>form.range=val"  item-key="contentid">
+            <!-- <div slot="search" class="course-search">
                 <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
                           icon="search"
                           placeholder="请输入关键字搜索"></el-input>
-            </div>
-            <CourseTree v-model="treeData" ref="courseCategory" :checkbox="true" ></CourseTree>
+            </div> -->
+            <!-- <CourseTree v-model="treeData" ref="courseCategory" :checkbox="true" ></CourseTree> -->
+            <CourseTree v-model="treeData" :req="req" ref="courseCategory" :change="val=>form.range=val" :checkbox="true" :mark = this.mark ></CourseTree>
             <span slot="footer">
+                <!-- <el-button type="warning" @click="resetChecked">清空</el-button> -->
                 <el-button type="primary" @click="getCheckedNodes">确定</el-button>
             </span>
         </el-dialog >
@@ -218,7 +263,7 @@
     import userService from '../../../services/gov/userService.js'
     import dialogSelectData from '../../component/dialog/SelectData4table.vue'
     import dialogTree from '../../component/dialog/dialogTree'
-    import CourseTree from '../../component/tree/CourseCategory.vue'
+    import CourseTree from '../../component/tree/MenuTree.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import DepSelect from '../../component/select/Department.vue'
 
@@ -232,6 +277,7 @@
         },
         data () {
             return {
+                activeTab: 'second',
                 selectData:[],
                 form: {                // 表单属性值
                     id: void 0,
@@ -239,35 +285,44 @@
                     category_id: void 0,       // 分类
                     image: void 0,        // 图片地址
                     description: void 0,  // 简介
-                    sort: void 0,         // 排序
-                    course_ids: [],     // 课程
+                    // sort: void 0,         // 排序
+                    // course_ids: [],     // 课程
                     // gov_ids: void 0,     // 部门
                     // user_ids: void 0,     // 用户
+                    category_ids: [],     // 栏目范围
                     // status: void 0,       // 状态
-                    course: [],
-                    score: 0,     // 可获得学分
-                    type:void 0,       // 任务类型
-                    stime:'',
-                    etime:'',
-                    
+                    range: [],
+                    // score: 0,     // 可获得学分
+                    // type:void 0,       // 发送任务类型  ---要改名
+                    // stime:'',
+                    // etime:'',
+                    total_subject:100,
+                    total_score:100,
+                    pass_score:void 0,
+                    single_num:void 0,
+                    single_score:void 0,
+                    multi_num:void 0,
+                    multi_score:void 0,
+                    judgment_num:void 0,
+                    judgment_score:void 0,
                 },
                 rules: {
-                    title:  [
-                        {required: true,  message: '请输入任务标题', trigger: 'blur'},
-                        {
-                            min: 1,
-                            max: 40,
-                            message: '长度不得大于 40 个字符'
-                        },{
-                            pattern:  /\S$/,
-                            message: '请输入非空格或非特殊字符的标题'
-                        }
-                    ],
-                    description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
-                    image: [{required: true, message: '必须填写', trigger: 'blur'}],
-                    sort: [{required: true, message: '必须填写'}],
-                    course: [{ required: true, message: '必须填写'}],
-                    category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
+                    // title:  [
+                    //     {required: true,  message: '请输入任务标题', trigger: 'blur'},
+                    //     {
+                    //         min: 1,
+                    //         max: 40,
+                    //         message: '长度不得大于 40 个字符'
+                    //     },{
+                    //         pattern:  /\S$/,
+                    //         message: '请输入非空格或非特殊字符的标题'
+                    //     }
+                    // ],
+                    // description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
+                    // image: [{required: true, message: '必须填写', trigger: 'blur'}],
+                    // sort: [{required: true, message: '必须填写'}],
+                    // course: [{ required: true, message: '必须填写'}],
+                    // category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
                 },
                 dialogCourse: {
                     loading: false,
@@ -300,6 +355,10 @@
                 },
                 category_list:[],
                 treeData: [],
+                mark:{
+                    type:'menu',
+                    name:'name'
+                }
             }
         },
         watch:{
@@ -310,14 +369,18 @@
                     this.form.gov_ids= ''
                 }
             },
-            'form.course'(){
-                // console.log(this.form.course) 
+            'form.range'(){
+                console.log(this.form.range) 
+            },
+            '$refs.courseCategory.$refs.tree'(){
+                console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
+
             }
+
         },
         created () {
-
             xmview.setContentLoading(false)
-            console.log(this.$route.params.coursetaskInfo)
+            // console.log(this.$route.params.coursetaskInfo)
             if (this.$route.params.coursetaskInfo) {
                 courseTaskService.getCourseTaskTemplateEditDetail(this.$route.query.id).then((ret) => {
                     this.form = Object.assign(this.form, ret.data)
@@ -325,12 +388,12 @@
                     // this.form.etime =  ret.data.end_date.split(' ')[0]
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
-                     xmview.setContentTile('编辑课程任务模板 ')
-                    this.form.course = ret.data.courses.map(v=>{
-                        v.contentid = v.course_id
+                    xmview.setContentTile('编辑课程任务模板 ')
+                    this.form.range = ret.data.category_ids.map(v=>{
+                        v.contentid = v.category_ids
                         return v
                     }) 
-                    console.log('selectedData : ', this.form.course)
+                    console.log('selectedData : ', this.form.range)
                     this.$refs.dialogSelect.setSelected()
                     this.choosePushType()
                     if(ret.data.govs.length!==0){
@@ -348,31 +411,78 @@
             this.getCategory()
         },
         methods: {
-            getCheckedNodes(){
-                console.log(this.$refs.courseCategory);
-            },
-             // 左边的节点被点击
-            treeNodeClick (type, data, node, store) {
-                // console.log('===========   node.data.data==========  ')
-                // console.log(node)
-                console.log(this)
-                if (type == 1) { 
-                    // if (this.nodeSelected && this.nodeSelected.value === data.value) return  
-                    this.nodeParentSelected = node.parent// 记录父节点
-                    this.nodeSelected = node // 记录当前节点
-                    // this.$refs.uploadImg.clearFiles()
-                    this.fetchParam = Object.assign({},node.data)  //解决左右数据
-                    this.activeTab = 'edit'
-                } else if (type == 2) {
-                    this.moveToNode = node
+             btnNextClick() {
+                if(this.activeTab=='first'){
+                    this.activeTab = 'second' 
+                    return
                 }
             },
-             //获取部门组下拉列表
+            req(param){
+                return courseService.getCategoryTree({ //传递方法
+                    pid: -1,
+                    level: -1,
+                    pagesize:-1,
+                })
+            },
+            // fetchCourseTree(params){
+            //     return courseService.getPublicCourselist(Object.assign({}, this.dialogCourse, params))
+            // },
+            fetchCourseTree(){
+                let param={
+                        pid:-1, // 3- 供应商
+                        page:1,
+                        level: -1,
+                        pagesize: -1,
+                    }
+                return courseService.getCategoryTree(params).then((ret) => {
+                        this.SecMenu=ret.data
+                        // console.log('this.SecMenu+++++++',param,this.SecMenu)
+                        xmview.setContentLoading(false)     
+                    })
+            },
+            resetChecked(){
+                console.log(this.$refs.courseCategory.$refs.tree);
+                this.$refs.courseCategory.$refs.tree.setCheckedKeys([]);
+            },
+            getCheckedNodes(){
+                this.dialogTree.isShow=false
+                // console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
+                let arr=this.$refs.courseCategory.$refs.tree.getCheckedNodes()
+                    //数组筛选ended==1
+                    function func(arr, lable, box) {
+                        arr.forEach(v => {
+                            if (v.ended == 0) {
+                                func(v.children, lable, box)
+                            } else {
+                                box.push(v)
+                            }
+                        })
+                    }
+                    let t = []
+                    console.log(11111111111,arr);
+                    console.log(11111111111,JSON.stringify(arr));
+                    func(arr, 'children', t)
+                    //数组去重
+                    function format(t){
+                        let obj = {};
+                        let result = [];
+                        t.forEach(v => {
+                            obj[v.id] = v
+                        });
+                        for(let k in obj){
+                            result.push(obj[k])
+                        };
+                        return result
+                    }
+                    console.log(11111111111,format(t))
+                    this.form.range=format(t)
+            },
             getCategory(val){
-                courseTaskService.getCategoryTree({pagesize:-1}).then((ret)=>{
+                courseTaskService.getCategoryTree({pagesize:-1,type:2}).then((ret)=>{
                  this.category_list = ret.data;
                 })
             },
+            
             //拿到部门组
             querySearch(queryString, cb) {
                 var restaurants = this.restaurants;
@@ -471,9 +581,7 @@
                 // { course_name = '', status, category_id , time_start, time_end, page, pagesize}
                 return courseService.getPublicCourselist(Object.assign({}, this.dialogCourse, params))
             },
-            fetchCourseTree(params){
-                return courseService.getPublicCourselist(Object.assign({}, this.dialogCourse, params))
-            },
+            
             submit(s) {
                 this.$refs.form.validate((valid) => {
                     if (!valid) {
@@ -484,27 +592,26 @@
                     // this.form.course.forEach((c) => {
                     //     this.form.course_ids.push(c.id)
                     // })
-                    console.log(this.form.course)  //这里数据都没错
-                      this.form.course.forEach((c) => {
-                        this.form.course_ids.push(c.contentid||c.course_id) //开始出错
+                    console.log(this.form.range)  //这里数据都没错
+                    console.log(this.form.category_ids)  //这里数据都没错
+                      this.form.range.forEach((c) => {
+                        this.form.category_ids.push(c.contentid||c.id) //开始出错
                         // console.log(this.form.course_ids)
                     })
-                    this.form.course_ids = this.form.course_ids.join(',')
+                    this.form.category_ids = this.form.category_ids.join(',')
+                    console.log(this.form)
 
-
-                    if(this.form.type==1){
-                        // 处理govids
-                        this.form.gov_ids = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
-                        return item.id
-                        }).join(',')
-                    }else{
-                        // 处理userids
-                        this.form.user_ids = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
-                        return item.id
-                        }).join(',')
-                    }
-
-
+                    // if(this.form.type==1){
+                    //     // 处理govids
+                    //     this.form.gov_ids = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
+                    //     return item.id
+                    //     }).join(',')
+                    // }else{
+                    //     // 处理userids
+                    //     this.form.user_ids = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
+                    //     return item.id
+                    //     }).join(',')
+                    // }
                     // this.fetchParam.end_time = this.timeFormatter(this.fetchParam.end_time, true)
 
                     if (s > 0) { //存草稿箱
@@ -514,13 +621,13 @@
                     if (this.form.id) {
                         reqFn = courseTaskService.updateCourseTaskTemplate
                     }
-                    console.log(this.form)
-                    reqFn(this.form).then((ret) => {
-                        xmview.showTip('success', '保存成功')
-                        this.$router.back()
-                    }).catch((ret) => {
-                        xmview.showTip('error', ret.message)
-                    })
+                    // console.log(this.form)
+                    // reqFn(this.form).then((ret) => {
+                    //     xmview.showTip('success', '保存成功')
+                    //     this.$router.back()
+                    // }).catch((ret) => {
+                    //     xmview.showTip('error', ret.message)
+                    // })
                 })
             }
         },

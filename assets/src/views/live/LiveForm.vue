@@ -28,7 +28,7 @@
                             v-on:change="val=>form.experts_id=val" :change="getExpertsList" :list="changelist">
                     </Experts>
                 </el-form-item>
-                <el-form-item  label="关联商品" prop="product_id" :fetch-suggestions="querySearch">
+                <el-form-item  label="关联商品" prop="product_id" >
                     <Product v-model="form.product_id" :placeholder="form.product_name" ref="Product"
                             v-on:change="val=>form.product_id=val" :change="reqFun2" :list="changelistc">
                     </Product>
@@ -106,17 +106,6 @@
     import DateRange from '../component/form/DatetimeRangePicker.vue'
     import { time2String } from '../../utils/timeUtils.js'
 
-    function clearFn() {
-        return {
-            typeSelect: '',
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
-            name: ''
-        }
-    }
     export default {
         name: 'live-form',
         components: {

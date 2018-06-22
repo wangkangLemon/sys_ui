@@ -96,7 +96,7 @@
                 <!-- <router-link tag="el-button" :to="{name: ''}">管理分类</router-link> -->
             </div>
             <div class="classify-tree">
-                 <MenuTree v-model="SecMenu" :req="req" ref="chapterCategory" :mark = this.mark :onNodeClick="treeNodeClick.bind(this,1)"></MenuTree>
+                <MenuTree v-model="SecMenu" :req="req" ref="chapterCategory" :mark = this.mark :onNodeClick="treeNodeClick.bind(this,1)"></MenuTree>
             </div>
         </section>
         <section class="right-content">

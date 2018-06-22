@@ -51,18 +51,6 @@
 
 <script>
     import financeService from '../../../../services/finance/financeService'
-
-    function clearFn() {
-        return {
-            typeSelect: '',
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
-            name: ''
-        }
-    }
     export default {
         name: 'finance-product-edit',
         components: {
@@ -70,13 +58,7 @@
         data() {
             return {
                 loadingData: false,
-                currentData: {
-                    data: {},
-                    pindex: -1,
-                    index: -1
-                },
                 fetchParam: getOriginData(),
-                // passValue: true,
                 role_list:[
                     {
                         name: '管理员',
@@ -101,13 +83,6 @@
                     appleid_origin: { required: true, message: '请输入苹果原价商品id',trigger: 'blur'},
                     appleid_discount: { required: true, message: '请输入苹果折扣价商品id',trigger: 'blur'},
             },
-                multi: {
-                    data: [{
-                        id: -1
-                    }],
-                },
-                resultData: [],
-                hospital_list:[],
                 changelist:{}
             }
         },
@@ -120,7 +95,6 @@
         created() {
             xmview.setContentLoading(false)
             if (this.$route.params.id != undefined) {    //路由id传递
-                // this.passValue = false
                 financeService.getProduct(this.$route.params.id).then((ret) => {
                     this.fetchParam = ret
                     // this.fillImgPath = ret.image
@@ -157,11 +131,6 @@
                         xmview.showTip('success', '数据提交成功')
                         // this.fetchParam=getOriginData(),
                         this.$refs['form'].resetFields();
-                        this.currentData = {
-                            data: [],
-                            pindex: -1,
-                            index: -1
-                        }
                         if (!this.fetchParam.id) this.fetchParam.id = ret.id;
                         this.$router.go(-1)
                     })

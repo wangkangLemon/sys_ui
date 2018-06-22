@@ -15,6 +15,11 @@
                 <el-form-item label="简介" prop="remark">
                     <el-input v-model="selectData.remark" ></el-input>
                 </el-form-item>
+                <el-form-item  label="关联商品" prop="product_id" >
+                    <Product v-model="selectData.product_id" :placeholder="selectData.product_name" ref="Product"
+                            v-on:change="val=>selectData.product_id=val" :change="reqFun2" :list="changelistc">
+                    </Product>
+                </el-form-item>
                 <el-form-item label="分类排序" prop="sort">
                     <el-input placeholder="最小的排在前面"  v-model="selectData.sort"></el-input>
                 </el-form-item>
@@ -31,9 +36,11 @@
     import UploadImg from '../../component/upload/UploadImg.vue'
     import commonService from '../../../services/commonService'
     import authUtils from '../../../utils/authUtils.js'
+    import Product from '../../component/select/CommonSelect.vue'
+    import financeService from '../../../services/finance/financeService.js'
     export default {
         components: {
-            UploadImg
+            UploadImg,Product
         },
         data() {
             return {
@@ -62,7 +69,8 @@
                 uploadextraData:{
                     biz:'course',
                     extpath:'category'
-                }
+                },
+                changelistc:[],//关联商品列表
             }
         },
         props: ['data', 'type','category','chaptertype'],
@@ -74,6 +82,8 @@
             'data' () {
                 //判断是否存在传过来的数据 有则使用无则初始化
                 if (this.data) {
+                    console.log('子组件',this.data);
+                    
                     this.selectData = Object.assign({}, this.data)
                 }
             }
@@ -88,6 +98,32 @@
             this.uploadImgUrl = commonService.commonUploadImage()
         },
         methods: {
+             //商品搜索
+            reqFun2(val, length){
+                let param={
+                    page: parseInt(length / 15) + 1||1,
+                    pagesize: 15,
+                    name:val,
+                }
+                let _this=this
+                return financeService.fetchProductList(param)
+                .then((ret)=>{
+                    console.log('param=',typeof(param.page));
+                    console.log(ret.data);
+                    if(param.page==1){
+                        ret.data=[{id:0,name:'免费直播'}].concat(ret.data)
+                        console.log(ret.data);
+                        _this.$emit('changelistc', ret.data)
+                    }else{
+                        _this.$emit('changelistc', ret.data)
+                    }
+                    // _this.$refs.Product.fetchData()
+                     //到父组件 这个就是 后面依次是子组件 孙组件
+                     //问题?在父组件change 因为现在编辑页默认有了ID 就不加载全部列表 只显示默认的ID对应的值 列表只有一项
+                    // _this.changelistc = ret.data //会改变数据 让列表显示当前
+                    return ret
+                })
+            },
             initData() {
                 this.selectData  = setSelectData()
             },
@@ -96,6 +132,9 @@
                     if (!valid) {
                         return false
                     }    
+                    this.selectData.product_name=''
+                    console.log(' this.selectData',this.selectData);
+                    
                     this.$emit('handleSave', this.selectData)
                 })
             },
@@ -112,13 +151,14 @@
 
     function setSelectData(){
         return {
-
                     category_id:void 0,
                     price: void 0,
                     name: '',
                     image: null,
                     remark :'',
                     sort:void 0,
+                    product_id:void 0,
+                    product_name:'',
                 }
     }
 </script>

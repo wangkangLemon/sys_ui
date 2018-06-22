@@ -48,6 +48,8 @@
                         remark:v.remark,
                         sort:v.sort,
                         level:v.level,
+                        product_id:v.product_id,
+                        product_name:v.product_name,
                         children: []
                     })
                 // }
@@ -67,6 +69,8 @@
                                 remark:v.remark,
                                 sort:v.sort,
                                 level:v.level,
+                                product_id:v.product_id,
+                                product_name:v.product_name,
                                 children: []
                             })
                         }
