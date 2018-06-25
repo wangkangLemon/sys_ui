@@ -39,6 +39,7 @@
     import Product from '../../component/select/CommonSelect.vue'
     import financeService from '../../../services/finance/financeService.js'
     export default {
+        name:'exam-cate-card',
         components: {
             UploadImg,Product
         },
@@ -71,10 +72,10 @@
                     extpath:'category'
                 },
                 changelistc:[],//关联商品列表
+                originProductId:void 0,
             }
         },
         props: ['data', 'type','category','chaptertype'],
-
         watch: {
             'type' () {
                 this.initData()
@@ -82,14 +83,14 @@
             'data' () {
                 //判断是否存在传过来的数据 有则使用无则初始化
                 if (this.data) {
-                    console.log('子组件',this.data);
-                    
                     this.selectData = Object.assign({}, this.data)
+                    this.originProductId=this.selectData.product_id
+                    this.selectData.product_id= this.selectData.product_name
                 }
+            },
+            'selectData.product_name'(){
+                // alert(this.selectData.product_name)
             }
-            // '$store.state.index.secMenu'(){
-            //     this.selectData = Object.assign({},this.$store.state.index.secMenu)
-            // }
         },
         activated () {
             this.selectData.category_id=this.category
@@ -108,18 +109,12 @@
                 let _this=this
                 return financeService.fetchProductList(param)
                 .then((ret)=>{
-                    console.log('param=',typeof(param.page));
-                    console.log(ret.data);
                     if(param.page==1){
                         ret.data=[{id:0,name:'免费直播'}].concat(ret.data)
-                        console.log(ret.data);
                         _this.$emit('changelistc', ret.data)
                     }else{
                         _this.$emit('changelistc', ret.data)
                     }
-                    // _this.$refs.Product.fetchData()
-                     //到父组件 这个就是 后面依次是子组件 孙组件
-                     //问题?在父组件change 因为现在编辑页默认有了ID 就不加载全部列表 只显示默认的ID对应的值 列表只有一项
                     // _this.changelistc = ret.data //会改变数据 让列表显示当前
                     return ret
                 })
@@ -133,8 +128,10 @@
                         return false
                     }    
                     this.selectData.product_name=''
+                    if(typeof(this.selectData.product_id)=='string'){
+                        this.selectData.product_id=this.originProductId
+                    }
                     console.log(' this.selectData',this.selectData);
-                    
                     this.$emit('handleSave', this.selectData)
                 })
             },

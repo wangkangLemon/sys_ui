@@ -69,7 +69,7 @@
         },
         methods: {
             handleNodeClick (data, node, store) { //点击
-                 this.$emit('onNodeClick', {data, node, store})
+                 this.$emit('onNodeClick', {data, node, store})// 强制触发父组件的方法存值
                  if(this.onNodeClick) this.onNodeClick(1, data, node, store) 
 
                 //  根节点无法被选中 

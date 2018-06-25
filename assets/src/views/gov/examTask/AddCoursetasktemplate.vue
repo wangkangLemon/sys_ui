@@ -14,7 +14,8 @@
                 // height: 50%
             }
             .shortInput{
-                width:40%
+                width:40%;
+                vertical-align:middle;
             }
         }
         /*.search {
@@ -85,11 +86,11 @@
     <article class="create-course-task">
          <el-tabs type="border-card" v-model="activeTab">
             <el-tab-pane label="题库简介" name="first">
-                <el-form :model="form" :rules="rules" label-position="right" ref="form" label-width="120px" style="width: 60%">
+                <el-form :model="form" :rules="rules1" label-position="right" ref="form1" label-width="120px" style="width: 60%">
                     <!-- <el-form label-width="120px" ref="formFirst" :model="fetchParam"> -->
                     <el-form-item  label="分类" prop="category_id" :fetch-suggestions="querySearch">
                         <el-select clearable class="select" v-model="form.category_id" placeholder="请选择部门">
-                            <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            <el-option  v-for="item in category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item prop="title" label="标题">
@@ -114,23 +115,23 @@
                             {{c.course_name}}
                         </el-tag>
                         <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
-                    </el-form-item> -->
+                        </el-form-item> -->
                    
                     <!-- <el-form-item prop="sort" label="排序">
                         <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
-                    </el-form-item> -->
+                        </el-form-item> -->
 
                     <!--<el-form-item label="时间">
                         <DateRange :start="form.stime" :end="form.etime" @changeStart="val=> form.stime=val"
                             @changeEnd="val=> form.etime=val" :defaultStart="form.stime" :defaultEnd="form.etime">
                         </DateRange>
-                    </el-form-item>
+                        </el-form-item>
                     <el-form-item label="发布对象" prop="type">
                         <el-select clearable v-model="form.type" @change="choosePushType" placeholder="请选择指定人员或部门">
                             <el-option label="部门任务" :value="1"></el-option>
                             <el-option label="个人任务" :value="2"></el-option>
                         </el-select>
-                    </el-form-item>
+                        </el-form-item>
                     <el-form-item
                         :label="pushTypeDialog.title"
                         v-if="form.type && form.type==pushTypeDialog.type">
@@ -142,10 +143,10 @@
                                 {{item.name}}
                             </el-tag>
                         </div>
-                    </el-form-item>-->
+                        </el-form-item>-->
                     <!-- <el-form-item label="可得学分">
                         <el-input style="width: auto;" v-model.number="form.score" type="number"  placeholder="请输入可获得学分值"></el-input>
-                    </el-form-item> -->
+                        </el-form-item> -->
                     <el-form-item>
                         <el-button style="float: right" type="primary" @click="btnNextClick">下一步</el-button>
                     </el-form-item>
@@ -153,17 +154,8 @@
                 
             </el-tab-pane>
             <el-tab-pane label="抽题设置" name="second">
-                <el-form label-width="120px" ref="form" :model="form">
-                    <el-form-item label="试题总数">
-                        <p>100个</p>
-                        <!-- <el-input v-model="form.title" auto-complete="off"></el-input> -->
-                    </el-form-item>
-                    <el-form-item label="试卷总分">
-                        <p>100分</p>
-                    </el-form-item>
-                    <el-form-item prop="pass_score" label="及格分数">
-                        <el-input-number v-model="form.pass_score" auto-complete="off"></el-input-number>
-                    </el-form-item>
+                <el-form label-width="120px" ref="form2" :model="form" :rules="rules2">
+                   
                      <el-form-item prop="range" label="选择范围">
                         <el-tag style="margin-right: 3px"
                                 v-for="(c,index) in form.range" :key="index"
@@ -176,20 +168,31 @@
                     </el-form-item>
                     <el-form-item style="color:red">
                         <i>出题数目范围 ：</i>
-                        <span>单选题 60 个 ，</span><span>多选题 30 个 ，</span><span>判断题 20 个</span>
+                        <span>单选题 {{s}} 个 ，</span><span>多选题 {{m}} 个 ，</span><span>判断题 {{j}} 个</span>
                     </el-form-item> 
                     <el-form-item prop="single_score" label="单选题">
-                        <el-input v-model="form.single_num" auto-complete="off" class="shortInput"></el-input> 个，
-                        每题 <el-input class="shortInput" v-model="form.single_score" auto-complete="off"></el-input> 分
+                        <el-input-number v-model="form.single_num" :max="this.s" auto-complete="off" class="shortInput"></el-input-number> 个，
+                        每题 <el-input-number class="shortInput" v-model="form.single_score" auto-complete="off"></el-input-number> 分
                     </el-form-item>
                     <el-form-item prop="multi_score" label="多选题">
-                        <el-input v-model="form.multi_num" auto-complete="off" class="shortInput"></el-input> 个，
-                        每题 <el-input class="shortInput" v-model="form.multi_score" auto-complete="off"></el-input> 分
+                        <el-input-number v-model="form.multi_num" :max="this.m" auto-complete="off" class="shortInput"></el-input-number> 个，
+                        每题 <el-input-number class="shortInput" v-model="form.multi_score" auto-complete="off"></el-input-number> 分
                     </el-form-item>
                     <el-form-item prop="judgment_score" label="判断题">
-                        <el-input v-model="form.judgment_num" auto-complete="off" class="shortInput"></el-input> 个，
-                        每题 <el-input class="shortInput" v-model="form.judgment_score" auto-complete="off"></el-input> 分
-                    </el-form-item>   
+                        <el-input-number v-model="form.judgment_num" :max="this.j" auto-complete="off" class="shortInput"></el-input-number> 个，
+                        每题 <el-input-number class="shortInput" v-model="form.judgment_score" auto-complete="off"></el-input-number> 分
+                    </el-form-item> 
+                     <el-form-item label="试题总数">
+                        <p>{{form.single_num+form.multi_num+form.judgment_num}}个</p>
+                        <!-- <el-input v-model="form.title" auto-complete="off"></el-input> -->
+                    </el-form-item>
+                    <el-form-item label="试卷总分">
+                        <p>{{form.single_score*form.single_num+form.multi_score*form.multi_num+form.judgment_score*form.judgment_num}}分</p>
+                    </el-form-item>
+                    <el-form-item prop="pass_score" label="及格分数">
+                        <el-input-number v-model="form.pass_score"  :max="form.single_score*form.single_num+form.multi_score*form.multi_num+form.judgment_score*form.judgment_num"
+                                        auto-complete="off"></el-input-number>
+                    </el-form-item>  
                     <el-form-item>
                             <el-button type="primary" @click="submit(0)">提交</el-button>
                             <!--<el-button type="warning" @click="submit(1)">存草稿</el-button>-->
@@ -210,7 +213,7 @@
 
         <!-- 选取范围弹窗----------------------- -->
         <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" title="选取范围"
-                          @changeSelected="val=>form.range=val"  item-key="contentid">
+                           item-key="contentid">
             <!-- <div slot="search" class="course-search">
                 <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
                           icon="search"
@@ -276,11 +279,16 @@
             },
         },
         data () {
+            var validatePass = (rule, value, callback) => {
+                if (value > this.form.single_score*this.form.single_num+this.form.multi_score*this.form.multi_num+this.form.judgment_score*this.form.judgment_num) {
+                    callback(new Error('及格分数不得大于总分'))
+                }
+                callback()
+            }
             return {
-                activeTab: 'second',
+                activeTab: 'first',
                 selectData:[],
                 form: {                // 表单属性值
-                    id: void 0,
                     title: void 0,          // 标题
                     category_id: void 0,       // 分类
                     image: void 0,        // 图片地址
@@ -296,6 +304,8 @@
                     // type:void 0,       // 发送任务类型  ---要改名
                     // stime:'',
                     // etime:'',
+                    pass_score:void 0,
+                    total_score:void 0,
                     total_subject:100,
                     total_score:100,
                     pass_score:void 0,
@@ -306,23 +316,28 @@
                     judgment_num:void 0,
                     judgment_score:void 0,
                 },
-                rules: {
-                    // title:  [
-                    //     {required: true,  message: '请输入任务标题', trigger: 'blur'},
-                    //     {
-                    //         min: 1,
-                    //         max: 40,
-                    //         message: '长度不得大于 40 个字符'
-                    //     },{
-                    //         pattern:  /\S$/,
-                    //         message: '请输入非空格或非特殊字符的标题'
-                    //     }
-                    // ],
-                    // description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
-                    // image: [{required: true, message: '必须填写', trigger: 'blur'}],
-                    // sort: [{required: true, message: '必须填写'}],
-                    // course: [{ required: true, message: '必须填写'}],
-                    // category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
+                rules1: {
+                    title:  [
+                        {required: true,  message: '请输入任务标题', trigger: 'blur'},
+                        {
+                            min: 1,
+                            max: 40,
+                            message: '长度不得大于 40 个字符'
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的标题'
+                        }
+                    ],
+                    description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
+                    image: [{required: true, message: '必须填写', trigger: 'blur'}],
+                    category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'},
+                },
+                  rules2: {
+                    range: [{ required: true, message: '*请选择出题范围'}],
+                    pass_score: {required: true,validator: validatePass, trigger: 'blur'},
+                    single_score: {type: 'number', required: true, message: '请输入', trigger: 'change'},
+                    multi_score	: {type: 'number', required: true, message: '请输入', trigger: 'change'},
+                    judgment_score: {type: 'number', required: true, message: '请输入', trigger: 'change'},
                 },
                 dialogCourse: {
                     loading: false,
@@ -358,7 +373,17 @@
                 mark:{
                     type:'menu',
                     name:'name'
-                }
+                },
+                // limit:{
+                //     s:void 0, //单选
+                //     m:void 0, //多选
+                //     j:void 0  //判断
+                // },
+                // limit:{
+                    s:void 0, //单选
+                    m:void 0, //多选
+                    j:void 0, //判断
+                // },
             }
         },
         watch:{
@@ -374,8 +399,7 @@
             },
             '$refs.courseCategory.$refs.tree'(){
                 console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
-
-            }
+            },
 
         },
         created () {
@@ -406,16 +430,27 @@
                     xmview.setContentLoading(false)
                 })
             }
+            // this.getLimitNum()
 
             this.pushTypeDialog.selectedData[this.pushTypeDialog.type] = []
             this.getCategory()
         },
         methods: {
+            getLimitNum(){
+                this.s=this.form.single_num=40
+                this.m=this.form.multi_num=30
+                this.j=this.form.judgment_num=5
+            },
              btnNextClick() {
-                if(this.activeTab=='first'){
-                    this.activeTab = 'second' 
-                    return
-                }
+                this.$refs.form1.validate((valid) => {
+                    if (!valid) {
+                        return false
+                    }
+                    if(this.activeTab=='first'){
+                        this.activeTab = 'second' 
+                        return
+                    }
+                 })
             },
             req(param){
                 return courseService.getCategoryTree({ //传递方法
@@ -448,10 +483,13 @@
                 this.dialogTree.isShow=false
                 // console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
                 let arr=this.$refs.courseCategory.$refs.tree.getCheckedNodes()
+                console.log(11111111111,JSON.stringify(arr));
+                
                     //数组筛选ended==1
                     function func(arr, lable, box) {
                         arr.forEach(v => {
                             if (v.ended == 0) {
+                                if(!v.children)xmview.showTip('error', "数据结构异常")
                                 func(v.children, lable, box)
                             } else {
                                 box.push(v)
@@ -476,6 +514,25 @@
                     }
                     console.log(11111111111,format(t))
                     this.form.range=format(t)
+                    this.getCategoryCheck()
+                    courseTaskService.getCategoryCheck({categorys:this.form.category_ids}).then((ret) => {
+                        console.log('ret=====',ret);
+                        xmview.showTip('success', '获取试题数目成功')
+                        this.s=this.form.single_num=ret.single_num
+                        this.m=this.form.multi_num=ret.multi_num
+                        this.j=this.form.judgment_num=ret.trueorfalse_num
+
+                    })
+
+            },
+            getCategoryCheck(){
+                 let categorys=[] //放栏目范围的空容器
+                    this.form.range.forEach((c) => {
+                        categorys.push(c.contentid||c.id) //开始出错
+                        // console.log(this.form.course_ids)
+                    })
+                    this.form.category_ids = categorys.join(',')
+                    console.log(this.form)
             },
             getCategory(val){
                 courseTaskService.getCategoryTree({pagesize:-1,type:2}).then((ret)=>{
@@ -583,23 +640,29 @@
             },
             
             submit(s) {
-                this.$refs.form.validate((valid) => {
+                 this.$refs.form1.validate((valid) => {
                     if (!valid) {
                         return false
                     }
+                this.$refs.form2.validate((valid) => {
+                    if (!valid) {
+                        return false
+                    }
+                    // if()
                     // 处理课程id
                     // this.form.course_ids = []
                     // this.form.course.forEach((c) => {
                     //     this.form.course_ids.push(c.id)
                     // })
-                    console.log(this.form.range)  //这里数据都没错
-                    console.log(this.form.category_ids)  //这里数据都没错
-                      this.form.range.forEach((c) => {
-                        this.form.category_ids.push(c.contentid||c.id) //开始出错
-                        // console.log(this.form.course_ids)
-                    })
-                    this.form.category_ids = this.form.category_ids.join(',')
-                    console.log(this.form)
+                    console.log('this.form.range',this.form.range)  //这里数据都没错
+                    console.log('this.form.category_ids',this.form.category_ids)  //这里数据都没错
+                    // let categorys=[] //放栏目范围的空容器
+                    // this.form.range.forEach((c) => {
+                    //     categorys.push(c.contentid||c.id) //开始出错
+                    //     // console.log(this.form.course_ids)
+                    // })
+                    // this.form.category_ids = categorys.join(',')
+                    // console.log(this.form)
 
                     // if(this.form.type==1){
                     //     // 处理govids
@@ -622,12 +685,13 @@
                         reqFn = courseTaskService.updateCourseTaskTemplate
                     }
                     // console.log(this.form)
-                    // reqFn(this.form).then((ret) => {
-                    //     xmview.showTip('success', '保存成功')
-                    //     this.$router.back()
-                    // }).catch((ret) => {
-                    //     xmview.showTip('error', ret.message)
-                    // })
+                    reqFn(this.form).then((ret) => {
+                        xmview.showTip('success', '保存成功')
+                        this.$router.push({name: 'gov-examtasktemplate'})
+                    }).catch((ret) => {
+                        xmview.showTip('error', ret.message)
+                    })
+                })
                 })
             }
         },

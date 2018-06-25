@@ -51,7 +51,7 @@
                     <el-button :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" disabled>移动分类下内容</el-button>
                     <el-button type="danger"  @click="del">删除分类</el-button>
                 </div>
-                <ExamCateCard @handleSave="submit" :data="selectData" :type="type" :category='category'  :chaptertype='chaptertype'></ExamCateCard>
+                <ExamCateCard @handleSave="submit" :data="selectData" ref="card" :type="type" :category='category'  :chaptertype='chaptertype'></ExamCateCard>
             </section>
             <!--{{secMenu}}-->
     </article>
@@ -82,6 +82,8 @@
             image: null,
             remark :'',
             sort:void 0,
+            product_id:void 0,
+            product_name:'',
            
         }
     }
@@ -106,9 +108,9 @@
         },
         watch: {
             '$store.state.index.secMenu'(){
-                this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份右边card 里面vuex存储的值 
+                // this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份右边card 里面vuex存储的值 
                 // this.selectData.sort=''
-                // console.log(this.$store.state.index.secMenu)
+                console.log('this.$store.state.index.secMenu',this.$store.state.index.secMenu)
             },
             'type'(){
                 console.log(this.type,this.$store.state.index.secPid)
@@ -122,10 +124,11 @@
         methods: {
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
-                // console.log('===========   node.data.data==========  ')
-                console.log(this.$parent)
-                console.log('node',node);
+                console.log('===========   node.data.data==========  ')
+                this.selectData = node
+                // console.log('000000',this.$refs.card.data.product_name);
                 
+                // console.log(11111,this.$refs.card.$refs.Product.$refs.selectScroll.filter(this.$refs.card.data.product_name));
                 this.type='update'
             },
             // 清空选中项
@@ -134,10 +137,9 @@
             },
             fetchData() {
                 examService.fetchExamCategory( this.fetchParam).then((ret) => {
-                        console.log('this.fetchParam='+this.fetchParam)
-                        // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.data) 
-                        console.log('examService.fetchExamCategory-ret====',ret);
-                        
+                        // console.log('this.fetchParam='+this.fetchParam)
+                        // this.$store.state.index.secMenu.commit('INDEX_SET__SETSECMENU', ret.node) 
+                        // console.log('examService.fetchExamCategory-ret====',ret);
                         this.SecMenu=ret
                         xmview.setContentLoading(false)     
                     })
@@ -147,7 +149,6 @@
                 // if(){
                 //     xmview.showDialog('请先添加要保存的数据')
                 // }else{}
-         
                 transformParam(message)
                     // 应试考试价格推服务端*100倍（分）
                     console.log(typeof(message.price))
@@ -156,12 +157,10 @@
                     lastdata.price=Number( lastdata.price)*100
                     console.log(typeof(lastdata.price),lastdata.price)
                 if( this.type == 'P'|| this.type == 'S' ){
-        
                     if(this.type == 'P'){
                         lastdata.pid=0
                     } else if( this.type == 'S'){
                         lastdata.pid=this.$store.state.index.secPid
-
                     }
                     examService.ExamCategoryCreate( lastdata ).then(( ret ) => {
                         this.selectData=null
@@ -175,8 +174,8 @@
                         this.$forceUpdate()
                         }
                     )
-                }else {
-                    //    console.log(lastdata)
+                }else{
+                    //console.log(lastdata)
                     examService.ExamCategoryEdit( lastdata ,lastdata.id).then(( ret ) => {
                         setTimeout(() => {
                             this.fetchData() // 重新刷新数据 

@@ -104,7 +104,7 @@
             <div class="content-list">
                 <div class="search">
                     <section class="fi">
-                     <i>标题</i><el-input id="input" v-model="section.course_name" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
+                     <i>标题</i><el-input id="input" v-model="section.title" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
                     <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
                         @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
@@ -119,14 +119,7 @@
                     </section> 
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
-                    <el-table-column prop="course_name" label="课程名称" min-width="230"></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" width="190">
-                        <!-- <template scope="scope">
-                            {{scope.row.category_name || '无'}}
-                        </template> -->
-                    </el-table-column>
-                    <el-table-column prop="sort" label="排序" width="70"></el-table-column>
-                    <el-table-column prop="tags" label="标签" width="100"></el-table-column>
+                    <el-table-column prop="title" label="任务标题" min-width="230"></el-table-column>
                     <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
                         <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                     </el-table-column> -->
@@ -281,15 +274,16 @@
             fetchCourseLists () {
                 this.section.loading = true
                 let params={
-                    course_name:this.section.course_name,
+                    title:this.section.title,
                     status:this.section.status,
                     stime:this.section.stime ,
                     etime:this.section.etime,
                     page: this.section.page,
                     pagesize: this.section.pagesize,
                     chapter_id: this.category.currentData.id,
-                    category_type: 2,
-                    category_id:""
+                    category_type: this.section.category_type,
+                    type:2,
+                    category_id: this.section.category_id
                 }
                 return courseTaskService.getCourseTaskTemplateList(params).then((ret) => {
                     console.log(ret.data)

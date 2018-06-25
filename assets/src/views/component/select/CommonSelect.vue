@@ -7,7 +7,7 @@
 <!--</IndustryCompanySelect>-->
 
 <template>
-    <SelectScroll :changeCb="handleChange" :requestCb="fetchData" :placeholder="placeholder" :list="list" v-model="currVal" :disabled="disabled" :isend="isend">
+    <SelectScroll :changeCb="handleChange" ref="selectScroll" :requestCb="fetchData" :placeholder="placeholder" :list="list" v-model="currVal" :disabled="disabled" :isend="isend">
     </SelectScroll>
 </template>
 

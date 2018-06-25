@@ -71,7 +71,8 @@
             })
             },  
             handleNodeClick (data, node, store) { //点击
-                this.onNodeClick(1, data, node, store) 
+                 this.$emit('onNodeClick', {data, node, store})
+                 if(this.onNodeClick) this.onNodeClick(1, data, node, store) 
                 //  根节点无法被选中 
                 if (data.value == 0) return
                 this.selectable = true

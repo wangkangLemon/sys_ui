@@ -114,10 +114,11 @@ class sysService {
                                    deleted="-1",
                                    status="-1",
                                    page,
+                                   type,
                                    pagesize
                                }) {
         let finalUrl = urlPre + '/template/lists'
-        return api.get(finalUrl, { category_id, category_type,title, deleted, status, page, pagesize}).then((ret) => {
+        return api.get(finalUrl, { category_id, category_type, title, deleted, status, page, type, pagesize}).then((ret) => {
             return ret
         })
     }
@@ -127,11 +128,17 @@ class sysService {
         let url = urlPre + `/template/cover`
         return api.post(url, {avatar, alias})
     }
-
+    // 选择栏目试题总数检测
+    getCategoryCheck (ids){
+        let finalUrl = urlPre + '/template/category/check'
+        return api.get(finalUrl, ids).then((ret) => {
+            return ret.data
+        })
+    }
     // 创建课程任务模板 /create
-    addCourseTaskTemplate ({category_id, title, description, image, course_ids, sort, score}) {
+    addCourseTaskTemplate (params) {
         let finalUrl = urlPre + `/template/create`
-        return api.post(finalUrl, {category_id, title, description, image, course_ids, sort, score}).then((ret) => {
+        return api.post(finalUrl, params).then((ret) => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

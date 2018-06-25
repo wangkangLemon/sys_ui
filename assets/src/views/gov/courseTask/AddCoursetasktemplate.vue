@@ -209,7 +209,6 @@
             return {
                 selectData:[],
                 form: {                // 表单属性值
-                    id: void 0,
                     title: void 0,          // 标题
                     category_id: void 0,       // 分类
                     image: void 0,        // 图片地址
@@ -221,7 +220,7 @@
                     // status: void 0,       // 状态
                     course: [],
                     score: 0,     // 可获得学分
-                    type:void 0,       // 任务类型
+                    // type:void 0,       // 任务类型
                     stime:'',
                     etime:'',
                 },
@@ -450,8 +449,6 @@
                         return item.id
                         }).join(',')
                     }
-
-
                     // this.fetchParam.end_time = this.timeFormatter(this.fetchParam.end_time, true)
 
                     if (s > 0) { //存草稿箱
@@ -464,7 +461,7 @@
                     console.log(this.form)
                     reqFn(this.form).then((ret) => {
                         xmview.showTip('success', '保存成功')
-                        this.$router.back()
+                        this.$router.push({name: 'gov-coursetasktemplate'})
                     }).catch((ret) => {
                         xmview.showTip('error', ret.message)
                     })

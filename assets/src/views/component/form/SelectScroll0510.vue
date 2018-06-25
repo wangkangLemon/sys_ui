@@ -66,6 +66,8 @@
         },
         watch: {
             'data'(val) {
+                console.log('data',val);
+                
                 if (val.length < 1) this.currPlaceholder = this.placeholder
                   if(this.isend==true){
                             this.isShowGetMore= false
