@@ -56,7 +56,7 @@
             getData (type) {  
                 // alert(this.treeType)
                 let param
-                if(type=='course')param={ id:'', name, pagesize:-1 }
+                if(type=='course')param={ id:'', name, pagesize:-1,type:1 }
                 else if(type=='exam')param={ id:'', name, pagesize:-1,type:2 }
                 if(!param)return
                 courseTaskService.getCategoryTree(param).then(ret=>{ 

@@ -16,7 +16,7 @@
                     <el-input v-model="selectData.remark" ></el-input>
                 </el-form-item>
                 <el-form-item  label="关联商品" prop="product_id" >
-                    <Product v-model="selectData.product_id" :placeholder="selectData.product_name" ref="Product"
+                    <Product v-model="selectData.product_id" :placeholder="selectData.product_name" ref="Product" :disabled="this.type=='update'"
                             v-on:change="val=>selectData.product_id=val" :change="reqFun2" :list="changelistc">
                     </Product>
                 </el-form-item>
@@ -93,6 +93,7 @@
             }
         },
         activated () {
+            this.originProductId=void 0,
             this.selectData.category_id=this.category
             this.selectData.chapter_type=this.chaptertype
             xmview.setContentLoading(false)

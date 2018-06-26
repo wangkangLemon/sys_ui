@@ -318,7 +318,7 @@
             
              //获取部门组下拉列表
             getCategory(val){
-                courseTaskService.getCategoryTree({pagesize:-1}).then((ret)=>{
+                courseTaskService.getCategoryTree({pagesize:-1,type:1}).then((ret)=>{
                  this.category_list = ret.data;
                 })
             },
