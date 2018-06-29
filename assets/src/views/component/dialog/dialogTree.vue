@@ -1,3 +1,7 @@
+
+<!-- 包含选择树的弹出框子组件 待完善 2018-06-26 zhaoyicheng -->
+
+
 <!--弹出表格选则数据-->
 <!--使用demo-->
 
@@ -29,6 +33,7 @@
 
 <template>
     <el-dialog :title="title" v-model="currVal" class="comp-dialog-select4table">
+
         <main>
             <CourseCategoryTree v-model="treeData" ref="courseCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseCategoryTree>
             <div class="buttons">

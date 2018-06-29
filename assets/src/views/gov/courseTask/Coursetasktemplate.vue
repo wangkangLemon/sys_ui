@@ -210,10 +210,9 @@
                 // 以下执行接口删除动作
                 return () => {
                     courseTaskService.deleteCourseTaskTemplate(id).then((ret) => {
+                        this.coursetasktemplateData.splice(index, 1)
                         xmview.showTip('success', '删除成功')
-                        this.getData()
-                    }).catch((ret) => {
-                        xmview.showTip('error', ret.message)
+                        
                     })
                 }
             },
@@ -266,7 +265,8 @@
                     deleted: this.fetchParam.deleted,
                     status: this.fetchParam.status,
                     page: this.currentPage,
-                    pagesize: this.pagesize
+                    pagesize: this.pagesize,
+                    task_type:1,
                 }).then((ret) => {
                     this.coursetasktemplateData = ret.data
                     this.total = ret._exts.total

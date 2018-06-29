@@ -282,7 +282,6 @@
             }
         },
         created () {
-
             xmview.setContentLoading(false)
             console.log(this.$route.params.coursetaskInfo)
             if (this.$route.params.coursetaskInfo) {
@@ -293,6 +292,7 @@
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
                      xmview.setContentTile('编辑课程任务模板 ')
+                     debugger
                     this.form.course = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v
@@ -306,11 +306,9 @@
                     else if(ret.data.users.length!==0){
                         this.pushTypeDialog.selectedData[this.pushTypeDialog.type] = this.generatorList(ret.data.users || [])
                     }
-                   
                     xmview.setContentLoading(false)
                 })
             }
-
             this.pushTypeDialog.selectedData[this.pushTypeDialog.type] = []
             this.getCategory()
         },

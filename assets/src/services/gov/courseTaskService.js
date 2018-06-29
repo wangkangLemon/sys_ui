@@ -114,11 +114,11 @@ class sysService {
                                    deleted="-1",
                                    status="-1",
                                    page,
-                                   type,
+                                   task_type,
                                    pagesize
                                }) {
         let finalUrl = urlPre + '/template/lists'
-        return api.get(finalUrl, { category_id, category_type, title, deleted, status, page, type, pagesize}).then((ret) => {
+        return api.get(finalUrl, { category_id, category_type, title, deleted, status, page, task_type, pagesize}).then((ret) => {
             return ret
         })
     }

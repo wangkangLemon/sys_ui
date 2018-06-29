@@ -77,11 +77,8 @@
                             message: '请输入非空格或非特殊字符的内容'
                         }
                     ],
-                    mark: { required: true, type:'string',message: '请输入商品标记',trigger: 'change'},
                     price: { required: true,type:'number', message: '请输入商品金额',trigger: 'blur'},
                     description: { required: true, message: '请输入商品简介',trigger: 'blur'},
-                    appleid_origin: { required: true, message: '请输入苹果原价商品id',trigger: 'blur'},
-                    appleid_discount: { required: true, message: '请输入苹果折扣价商品id',trigger: 'blur'},
             },
                 changelist:{}
             }

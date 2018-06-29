@@ -99,24 +99,13 @@
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>课程列表
-                 <el-button type="primary" icon="plus"  @click="$router.push({ name:'examtask-template-add',params:{herbalInfo:this.section,handle:'add'}})">抽取试题</el-button>
+                 <el-button type="primary" icon="plus"  @click="$router.push({ name:'examtask-template-add',params:{herbalInfo:this.section,handle:'add',add:1}})">抽取试题</el-button>
             </div>
             <div class="content-list">
                 <div class="search">
                     <section class="fi">
                      <i>标题</i><el-input id="input" v-model="section.title" placeholder="请输入标题" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>  
-                    <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
-                        @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
-                    </DateRange>
-                    <section>
-                        <i>状态</i>
-                        <el-select v-model="section.status" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
-                            <el-option label="全部" :value="-1"></el-option>
-                            <el-option label="正常" value="0"></el-option>
-                            <el-option label="禁用 " value="1"></el-option>
-                        </el-select>
-                    </section> 
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="title" label="任务标题" min-width="230"></el-table-column>
@@ -125,7 +114,7 @@
                     </el-table-column> -->
                     <el-table-column width="80" label="状态">
                         <template scope="scope">
-                            <el-tag v-if="scope.row.status == 0" type="success">正常</el-tag>
+                            <el-tag v-if="scope.row.status == 2" type="success">正常</el-tag>
                             <el-tag v-else type="danger">禁用 </el-tag>
                         </template>
                     </el-table-column>
@@ -133,10 +122,7 @@
                     <el-table-column prop="operate" label="操作" width="150" fixed="right">
                         <template scope="scope">
                             <el-button type="text" size="small" @click="update(scope.$index, scope.row)">
-                                编辑
-                            </el-button>
-                            <el-button @click="offline(scope.$index, scope.row)" type="text" size="small">
-                                <i>{{ scope.row.status == 1 ? '正常 ' : '禁用 ' }}</i>
+                                查看
                             </el-button>
                             <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">
                                 删除
@@ -163,11 +149,10 @@
     import courseTaskService from '../../../services/gov/courseTaskService.js'
     import MenuTree from '../../component/tree/CourseTaskTemplateCategory.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
-    import DateRange from '../../component/form/DateRangePicker.vue'
 
     export default {
         components: {
-            MenuTree,ImagEcropperInput,DateRange
+            MenuTree,ImagEcropperInput
         },
         data () {
             return {
@@ -251,19 +236,7 @@
                     this.moveToNode = node
                 }
             },
-            // 下线 或者上线课程 0为下线，1为上线
-            offline(index, row) {
-                let txt = row.status == 0 ? '禁用' : '启用'
-                let finalStatus = row.status == 0 ? 1 : 0
-                xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
-                    courseTaskService.offlineCourse({
-                        id: row.id,
-                        status: finalStatus
-                    }).then((ret) => {
-                        row.status = finalStatus
-                    })
-                })
-            },
+
             fetchData() {//获取左边栏目数据
                 let param={ id:'', name, pagesize:-1,type:2 }
                 courseTaskService.getCategoryTree( param).then((ret) => {
@@ -282,33 +255,36 @@
                     pagesize: this.section.pagesize,
                     chapter_id: this.category.currentData.id,
                     category_type: this.section.category_type,
-                    type:2,
+                    task_type:2,
                     category_id: this.section.category_id
                 }
                 return courseTaskService.getCourseTaskTemplateList(params).then((ret) => {
-                    console.log(ret.data)
                     this.section.data = ret.data
                     this.section.total = ret._exts.total
                     this.section.loading = false
                 })
             },
             handleDelete (index, row) {
-                xmview.showDialog(`确认要删除课程【<i style="color:red">${row.course_name}</i>】吗？`, () => {
-                    courseTaskService.deleteCourse(row.id).then(() => {
-                        xmview.showTip('success', '删除成功')
-                        this.fetchCourseLists()
-                    }).catch((ret) => {
-                        xmview.showTip('error', ret.message)
-                    })
-                })
+                xmview.showDialog(`你将要删除课程任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, this.deleteItem(row.id))
             },
-           
+            deleteItem (id) {
+                // 以下执行接口删除动作
+                return () => {
+                    courseTaskService.deleteCourseTaskTemplate(id).then((ret) => {
+                        xmview.showTip('success', '删除成功')
+                        this.section.data.splice(index, 1)
+                    })
+                }
+            },
             update (index, row) {
+                console.log(row);
+                
                 this.$router.push({
-                    name:'exam-course-edit',
+                    name:'examtask-template-add',
                     params:{
                         id:row.id,
-                        courseInfo:row,
+                        taskInfo:row,
+                        add:0
                     }
                 })
             },

@@ -44,6 +44,12 @@
             UploadImg,Product
         },
         data() {
+              var validatePass = (rule, value, callback) => {
+                if (value==undefined ) {
+                    callback(new Error('请选择关联商品'))
+                }
+                callback()
+            }
             return {
                 SecMenu: [],
                 selectData: setSelectData(),
@@ -65,7 +71,9 @@
                     ],
                     image: [
                         {required: true, message: '请上传图片', trigger: 'blur'}
-                    ]
+                    ],
+                    product_id: {required: true,validator: validatePass, trigger: 'change'},
+
                 },
                 uploadextraData:{
                     biz:'course',

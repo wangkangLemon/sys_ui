@@ -46,11 +46,11 @@
             <div class="info">
                 <h2>{{clerkDetail.name}}</h2>
                 <p><i class="title">商品名称：</i><span class="value">{{clerkDetail.name }}</span></p>
-                <p><i class="title">标记：</i><span class="value">{{clerkDetail.mark }}</span></p>
-                <!-- <p><i class="title">标记：</i> 
-                    <el-tag type="warning" size="medium" v-if="clerkDetail.mark=='vip_discount'">vip打折</el-tag>
-                    <el-tag type="primary" size="medium" v-if="clerkDetail.mark=='vip_original'">vip原价</el-tag>
-                </p> -->
+                <p><i class="title">标记：</i> 
+                  <el-tag type="warning" size="medium" v-if="clerkDetail.mark=='fc'">虚拟币商品</el-tag>
+                    <el-tag type="danger" size="medium" v-else-if="clerkDetail.mark=='vip'">会员商品</el-tag>
+                    <el-tag type="primary" size="medium" v-else-if="clerkDetail.mark">{{clerkDetail.mark}}</el-tag>
+                </p>
                 <p><i class="title">价格(元)：</i> <span class="value">{{clerkDetail.price_yuan}}</span></p>
                 <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
                 <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
@@ -78,10 +78,11 @@
             <el-table-column min-width="100" prop="price_yuan" label="价格(元)">
             </el-table-column>
             <el-table-column min-width="70" prop="mark" label="标记">
-                <!-- <template scope="scope">
-                    <el-tag type="warning" size="medium" v-if="scope.row.mark=='vip_discount'">vip打折</el-tag>
-                    <el-tag type="primary" size="medium" v-if="scope.row.mark=='vip_original'">vip原价</el-tag>
-                </template> -->
+                <template scope="scope">
+                    <el-tag type="warning" size="medium" v-if="scope.row.mark=='fc'">虚拟币商品</el-tag>
+                    <el-tag type="danger" size="medium" v-else-if="scope.row.mark=='vip'">会员商品</el-tag>
+                    <el-tag type="primary" size="medium" v-else-if="scope.row.mark">{{scope.row.mark}}</el-tag>
+                </template>
             </el-table-column>
             <el-table-column min-width="150" prop="addate" label="创建时间">
             </el-table-column>

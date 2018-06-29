@@ -5,9 +5,9 @@ const urlPre = config.apiHost + '/course'
 
 class CourseService {
     //========================种类数据请求===================================
-    getCategoryTree({ id = 'tree', type, filter = true, pid =-1 , level=-1, pagesize=-1}) {
+    getCategoryTree({ id = 'tree', type, filter = true, pid = -1, level = -1, pagesize = -1, category_type}) {
         let finalUrl = urlPre + '/category/lists'
-        return api.get(finalUrl, { id, filter, type, pid, level, pagesize }).then((ret) => {
+        return api.get(finalUrl, { id, filter, type, pid, level, pagesize, category_type}).then((ret) => {
             return ret
         })
     }
