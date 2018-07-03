@@ -265,7 +265,7 @@
                 })
             },
             handleDelete (index, row) {
-                xmview.showDialog(`你将要删除课程任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, this.deleteItem(row.id))
+                xmview.showDialog(`你将要删除考试任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, this.deleteItem(row.id))
             },
             deleteItem (id) {
                 // 以下执行接口删除动作
@@ -278,7 +278,6 @@
             },
             update (index, row) {
                 console.log(row);
-                
                 this.$router.push({
                     name:'examtask-template-add',
                     params:{

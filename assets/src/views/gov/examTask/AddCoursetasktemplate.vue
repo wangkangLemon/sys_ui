@@ -159,12 +159,14 @@
                      <el-form-item prop="categorys" label="选择范围">
                         <el-tag style="margin-right: 3px"
                                 v-for="(c,index) in form.categorys" :key="index"
-                                :closable="true"
+                                :closable="delRange"
                                 @close="delTag(index)"
                                 type="success">
                             {{c.name}}
                         </el-tag>
-                        <el-button type="primary" @click="dialogTree.isShow=true" size="small">选取范围</el-button>
+                        <el-button type="primary" @click="dialogTree.isShow=true" size="small"
+                                    v-if="this.$route.params.add==1"
+                        >选取范围</el-button>
                     </el-form-item>
                     <el-form-item style="color:red">
                         <i>出题数目范围 ：</i>
@@ -373,16 +375,11 @@
                     type:'menu',
                     name:'name'
                 },
-                // limit:{
-                //     s:void 0, //单选
-                //     m:void 0, //多选
-                //     j:void 0  //判断
-                // },
-                // limit:{
-                    s:void 0, //单选
-                    m:void 0, //多选
-                    j:void 0, //判断
-                // },
+                //获取到限制的题目数量
+                s:void 0, //单选
+                m:void 0, //多选
+                j:void 0, //判断
+                delRange:this.$route.params.add==1,
             }
         },
         watch:{

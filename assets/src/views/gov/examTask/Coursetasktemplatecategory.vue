@@ -113,7 +113,16 @@
     import treeUtils from '../../../utils/treeUtils'
     import CourseTaskTemplateCategoryTree from '../../component/tree/CourseTaskTemplateCategory.vue'
     // import UploadImg from '../../component/upload/UploadImg.vue'
-
+    function getFetchParam() {
+        return {
+                    parent_id: void 0,
+                    name: void 0,
+                    image: void 0,
+                    sort: '',
+                    id: 0,
+                    type:2,
+                }
+    }
     export default {
         data() {
             return {
@@ -133,14 +142,7 @@
                     confirmClick: {}
                 },
                 placeholder:'最小的排在前面',
-                fetchParam: {
-                    parent_id: void 0,
-                    name: void 0,
-                    image: void 0,
-                    sort: '',
-                    id: 0,
-                    type:2,
-                },
+                fetchParam: getFetchParam(),
                 rules: {
                     // sort: [{
                     //     required: true,
