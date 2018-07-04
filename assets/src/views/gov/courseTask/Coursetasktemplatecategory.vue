@@ -194,8 +194,7 @@
                     courseTaskService.delCategory({
                         id: node.value
                     }).then(() => {
-                         this.dialogConfirm.isShow = false
-                        xmview.showTip('success', '操作成功!')
+                        this.dialogConfirm.isShow = false
                         this.$refs.courseTaskTemplateCategory.removeItem(node, this.nodeParentSelected)
                         node = null
                         this.resetForm()

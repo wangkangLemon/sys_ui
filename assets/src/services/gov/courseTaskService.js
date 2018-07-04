@@ -197,7 +197,11 @@ class sysService {
     delCategory ({id}) {
         let finalUrl = urlPre + `/template/category/delete/${id}`
         return api.post(finalUrl).then((ret) => {
-            if (ret.code) {
+            if (ret.code == 0) {
+                xmview.showTip('success', ret.message)
+                return ret.data
+            } else {
+                xmview.showTip('error', ret.message)
                 return Promise.reject(ret)
             }
         })

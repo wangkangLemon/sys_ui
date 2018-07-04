@@ -291,8 +291,7 @@
                     // this.form.etime =  ret.data.end_date.split(' ')[0]
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
-                     xmview.setContentTile('编辑课程任务模板 ')
-                     debugger
+                    xmview.setContentTile('编辑课程任务模板 ')
                     this.form.course = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v
@@ -313,7 +312,6 @@
             this.getCategory()
         },
         methods: {
-            
              //获取部门组下拉列表
             getCategory(val){
                 courseTaskService.getCategoryTree({pagesize:-1,type:1}).then((ret)=>{
