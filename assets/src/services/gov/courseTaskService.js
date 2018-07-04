@@ -105,6 +105,13 @@ class sysService {
             return ret
         })
     }
+    //可得学时检测接口
+    getCourseTaskTemplateStudyCheck(ids) {
+        let finalUrl = urlPre + '/template/study/check'
+        return api.get(finalUrl, ids).then((ret) => {
+            return ret.data
+        })
+    }
 
     // 课程任务模板管理
     getCourseTaskTemplateList ({
@@ -146,9 +153,9 @@ class sysService {
     }
 
     // 更新课程任务模板
-    updateCourseTaskTemplate ({id,category_id, title, description, image, course_ids, sort, score}) {
+    updateCourseTaskTemplate({ id, category_id, title, description, image, course_ids, sort, score, study_duration}) {
         let finalUrl = urlPre + `/template/edit/${id}`
-        return api.post(finalUrl, {category_id, title, description, image, course_ids, sort, score }).then((ret) => {
+        return api.post(finalUrl, { category_id, title, description, image, course_ids, sort, score, study_duration }).then((ret) => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

@@ -221,7 +221,6 @@
                           icon="search"
                           placeholder="请输入关键字搜索"></el-input>
             </div> -->
-            <!-- <CourseTree v-model="treeData" ref="courseCategory" :checkbox="true" ></CourseTree> -->
             <CourseTree v-model="treeData" :req="req" ref="courseCategory" :change="val=>form.categorys=val" :checkbox="true" :mark = this.mark ></CourseTree>
             <span slot="footer">
                 <!-- <el-button type="warning" @click="resetChecked">清空</el-button> -->

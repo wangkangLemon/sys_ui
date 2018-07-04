@@ -60,5 +60,13 @@ function transformParam(obj) {
     }
 }
 
+function delParam(obj,name) {
+    for (let i in obj) {
+        obj[name].splice(i, 1)
+        console.log(obj);
+        
+    }
+}
+
 
 export default new FormUtils()

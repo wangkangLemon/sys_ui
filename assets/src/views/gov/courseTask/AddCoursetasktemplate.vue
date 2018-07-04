@@ -110,6 +110,7 @@
                     {{c.course_name}}
                 </el-tag>
                 <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
+                <p v-if="form.course.length>0">可得学时{{this.studyCheck.minute}} </p>
             </el-form-item>
             <el-form-item prop="sort" label="排序">
                 <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
@@ -223,24 +224,25 @@
                     // type:void 0,       // 任务类型
                     stime:'',
                     etime:'',
+                    study_duration: '',
                 },
                 rules: {
-                    title:  [
-                        {required: true,  message: '请输入任务标题', trigger: 'blur'},
-                        {
-                            min: 1,
-                            max: 40,
-                            message: '长度不得大于 40 个字符'
-                        },{
-                            pattern:  /\S$/,
-                            message: '请输入非空格或非特殊字符的标题'
-                        }
-                    ],
-                    description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
-                    image: [{required: true, message: '必须填写', trigger: 'blur'}],
-                    sort: [{required: true, message: '必须填写'}],
-                    course: [{ required: true, message: '必须填写'}],
-                    category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
+                    // title:  [
+                    //     {required: true,  message: '请输入任务标题', trigger: 'blur'},
+                    //     {
+                    //         min: 1,
+                    //         max: 40,
+                    //         message: '长度不得大于 40 个字符'
+                    //     },{
+                    //         pattern:  /\S$/,
+                    //         message: '请输入非空格或非特殊字符的标题'
+                    //     }
+                    // ],
+                    // description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
+                    // image: [{required: true, message: '必须填写', trigger: 'blur'}],
+                    // sort: [{required: true, message: '必须填写'}],
+                    // course: [{ required: true, message: '必须填写'}],
+                    // category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
                 },
                 dialogCourse: {
                     loading: false,
@@ -266,7 +268,8 @@
                     pagesize: 15,
                     total: 0,
                 },
-                category_list:[]
+                category_list:[],
+                studyCheck:{}
             }
         },
         watch:{
@@ -277,8 +280,17 @@
                     this.form.gov_ids= ''
                 }
             },
-            'form.course'(){
-                // console.log(this.form.course) 
+            'form.course'(){   //--------------注销新功能-----------
+                this.getCourseIds()
+                console.log(111111111);
+                let param={course_ids:this.form.course_ids}
+                courseTaskService.getCourseTaskTemplateStudyCheck(param).then((ret) => {
+                    console.log(ret);
+                    this.studyCheck=ret
+                    this.form.study_duration=ret.second
+                    console.log('thid.form',this.form);
+                    
+                    })
             }
         },
         created () {
@@ -292,7 +304,6 @@
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
                      xmview.setContentTile('编辑课程任务模板 ')
-                     debugger
                     this.form.course = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v
@@ -313,7 +324,16 @@
             this.getCategory()
         },
         methods: {
-            
+            //把数组转化成接口提交的 最终字符串
+            getCourseIds(){
+                let courses=[] //放栏目范围的空容器
+                 console.log(this.form.course)  //这里数据都没错
+                      this.form.course.forEach((c) => {
+                        courses.push(c.contentid||c.course_id) //开始出错
+                        // console.log(this.form.course_ids)
+                    })
+                    this.form.course_ids = courses.join(',')
+            },
              //获取部门组下拉列表
             getCategory(val){
                 courseTaskService.getCategoryTree({pagesize:-1,type:1}).then((ret)=>{
@@ -424,18 +444,7 @@
                         return false
                     }
                     // 处理课程id
-                    // this.form.course_ids = []
-                    // this.form.course.forEach((c) => {
-                    //     this.form.course_ids.push(c.id)
-                    // })
-                    console.log(this.form.course)  //这里数据都没错
-                      this.form.course.forEach((c) => {
-                        this.form.course_ids.push(c.contentid||c.course_id) //开始出错
-                        // console.log(this.form.course_ids)
-                    })
-                    this.form.course_ids = this.form.course_ids.join(',')
-
-
+                    this.getCourseIds()
                     if(this.form.type==1){
                         // 处理govids
                         this.form.gov_ids = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
@@ -456,7 +465,11 @@
                     if (this.form.id) {
                         reqFn = courseTaskService.updateCourseTaskTemplate
                     }
-                    console.log(this.form)
+                    // console.log(111,this.form)
+                    // for (let i in this.form) {
+                    //     this.form['course'].splice(i, 1)
+                    // }
+                    console.log(222,this.form);
                     reqFn(this.form).then((ret) => {
                         xmview.showTip('success', '保存成功')
                         this.$router.push({name: 'gov-coursetasktemplate'})
