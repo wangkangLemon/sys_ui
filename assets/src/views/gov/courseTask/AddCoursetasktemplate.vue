@@ -24,7 +24,6 @@
             padding: 3px 30px 3px 10px;
             border: 1px solid #bfcbd9;
         }
-
         .u-course-tag {
             margin-right: 10px;
             background-color: rgba(32,160,255,.1);
@@ -65,7 +64,6 @@
         .row-class {
             border: 1px solid #d1dbe5;
         }
-
         .course-search {
             margin-bottom: 12px;
             .el-input {
@@ -86,8 +84,7 @@
                     <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-
-           <el-form-item prop="title" label="标题">
+            <el-form-item prop="title" label="标题">
                 <el-input v-model="form.title" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item prop="description" label="描述">
@@ -101,16 +98,16 @@
                 <ImagEcropperInput :isRound="false" :confirmFn="cropperFn"
                                    class="upload-btn"></ImagEcropperInput>
             </el-form-item>
-            <el-form-item prop="course" label="选择课程">
+            <el-form-item prop="course_ids" label="选择课程">
                 <el-tag style="margin-right: 3px"
-                        v-for="(c,index) in form.course" :key="index"
+                        v-for="(c,index) in courseBox" :key="index"
                         :closable="true"
-                        @close="form.course.splice(index,1)"
+                        @close="courseBox.splice(index,1)"
                         type="success">
                     {{c.course_name}}
                 </el-tag>
                 <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
-                <p v-if="form.course.length>0">可得学时{{this.studyCheck.minute}} </p>
+                <h5 style="color:#20a0ff" v-if="courseBox.length>0">检测到可得学时 <i style="color:red">{{this.studyCheck.minute}} </i>分钟 </h5>
             </el-form-item>
             <el-form-item prop="sort" label="排序">
                 <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
@@ -150,7 +147,7 @@
 
         <!-- 选择课程弹窗 -->
         <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
-                          :selectedList="form.course" @changeSelected="val=>form.course=val"  item-key="contentid">
+                          :selectedList="courseBox" @changeSelected="val=>courseBox=val"  item-key="contentid">
             <div slot="search" class="course-search">
                 <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
                           icon="search"
@@ -209,6 +206,7 @@
         data () {
             return {
                 selectData:[],
+                courseBox:[],
                 form: {                // 表单属性值
                     title: void 0,          // 标题
                     category_id: void 0,       // 分类
@@ -219,7 +217,6 @@
                     // gov_ids: void 0,     // 部门
                     // user_ids: void 0,     // 用户
                     // status: void 0,       // 状态
-                    course: [],
                     score: 0,     // 可获得学分
                     // type:void 0,       // 任务类型
                     stime:'',
@@ -227,22 +224,22 @@
                     study_duration: '',
                 },
                 rules: {
-                    // title:  [
-                    //     {required: true,  message: '请输入任务标题', trigger: 'blur'},
-                    //     {
-                    //         min: 1,
-                    //         max: 40,
-                    //         message: '长度不得大于 40 个字符'
-                    //     },{
-                    //         pattern:  /\S$/,
-                    //         message: '请输入非空格或非特殊字符的标题'
-                    //     }
-                    // ],
-                    // description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
-                    // image: [{required: true, message: '必须填写', trigger: 'blur'}],
-                    // sort: [{required: true, message: '必须填写'}],
-                    // course: [{ required: true, message: '必须填写'}],
-                    // category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
+                    title:  [
+                        {required: true,  message: '请输入任务标题', trigger: 'blur'},
+                        {
+                            min: 1,
+                            max: 40,
+                            message: '长度不得大于 40 个字符'
+                        },{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的标题'
+                        }
+                    ],
+                    description: [{required: true, pattern:  /\S$/, min: 1,message: '请输入非空格或非特殊字符的描述', trigger: 'blur'}],
+                    image: [{required: true, message: '必须填写', trigger: 'blur'}],
+                    sort: [{required: true, message: '必须填写'}],
+                    course_ids: [{ required: true, message: '必须填写'}],
+                    category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
                 },
                 dialogCourse: {
                     loading: false,
@@ -280,18 +277,10 @@
                     this.form.gov_ids= ''
                 }
             },
-            'form.course'(){   //--------------注销新功能-----------
-                this.getCourseIds()
-                console.log(111111111);
-                let param={course_ids:this.form.course_ids}
-                courseTaskService.getCourseTaskTemplateStudyCheck(param).then((ret) => {
-                    console.log(ret);
-                    this.studyCheck=ret
-                    this.form.study_duration=ret.second
-                    console.log('thid.form',this.form);
-                    
-                    })
-            }
+            
+            
+
+            
         },
         created () {
             xmview.setContentLoading(false)
@@ -304,11 +293,11 @@
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
                      xmview.setContentTile('编辑课程任务模板 ')
-                    this.form.course = ret.data.courses.map(v=>{
+                    this.courseBox = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v
                     }) 
-                    console.log('selectedData : ', this.form.course)
+                    console.log('selectedData : ', this.courseBox)
                     this.$refs.dialogSelect.setSelected()
                     this.choosePushType()
                     if(ret.data.govs.length!==0){
@@ -327,8 +316,8 @@
             //把数组转化成接口提交的 最终字符串
             getCourseIds(){
                 let courses=[] //放栏目范围的空容器
-                 console.log(this.form.course)  //这里数据都没错
-                      this.form.course.forEach((c) => {
+                 console.log(this.courseBox)  //这里数据都没错
+                      this.courseBox.forEach((c) => {
                         courses.push(c.contentid||c.course_id) //开始出错
                         // console.log(this.form.course_ids)
                     })
@@ -465,11 +454,7 @@
                     if (this.form.id) {
                         reqFn = courseTaskService.updateCourseTaskTemplate
                     }
-                    // console.log(111,this.form)
-                    // for (let i in this.form) {
-                    //     this.form['course'].splice(i, 1)
-                    // }
-                    console.log(222,this.form);
+                    console.log(222222222222,this.form);
                     reqFn(this.form).then((ret) => {
                         xmview.showTip('success', '保存成功')
                         this.$router.push({name: 'gov-coursetasktemplate'})

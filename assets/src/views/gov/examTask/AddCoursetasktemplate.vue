@@ -158,7 +158,7 @@
                    
                      <el-form-item prop="categorys" label="选择范围">
                         <el-tag style="margin-right: 3px"
-                                v-for="(c,index) in form.categorys" :key="index"
+                                v-for="(c,index) in categorysBox" :key="index"
                                 :closable="delRange"
                                 @close="delTag(index)"
                                 type="success">
@@ -221,7 +221,7 @@
                           icon="search"
                           placeholder="请输入关键字搜索"></el-input>
             </div> -->
-            <CourseTree v-model="treeData" :req="req" ref="courseCategory" :change="val=>form.categorys=val" :checkbox="true" :mark = this.mark ></CourseTree>
+            <CourseTree v-model="treeData" :req="req" ref="courseCategory" :change="val=>categorysBox=val" :checkbox="true" :mark = this.mark ></CourseTree>
             <span slot="footer">
                 <!-- <el-button type="warning" @click="resetChecked">清空</el-button> -->
                 <el-button type="primary" @click="getCheckedNodes">确定</el-button>
@@ -288,6 +288,7 @@
             return {
                 activeTab: 'first',
                 selectData:[],
+                categorysBox:[],
                 form: {                // 表单属性值
                     title: void 0,          // 标题
                     category_id: void 0,       // 分类
@@ -299,7 +300,7 @@
                     // user_ids: void 0,     // 用户
                     category_ids: [],     // 栏目范围
                     // status: void 0,       // 状态
-                    categorys: [],
+                    // categorys: [],
                     // score: 0,     // 可获得学分
                     // type:void 0,       // 发送任务类型  ---要改名
                     // stime:'',
@@ -333,7 +334,7 @@
                     category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'},
                 },
                   rules2: {
-                    categorys: [{ required: true, message: '*请选择出题范围'}],
+                    category_ids: [{ required: true, message: '*请选择出题范围'}],
                     pass_score: {required: true,validator: validatePass, trigger: 'blur'},
                     single_score: {type: 'number', required: true, message: '请输入', trigger: 'change'},
                     multi_score	: {type: 'number', required: true, message: '请输入', trigger: 'change'},
@@ -389,8 +390,8 @@
                     this.form.gov_ids= ''
                 }
             },
-            'form.categorys'(){
-                console.log(this.form.categorys) 
+            'categorysBox'(){
+                console.log(this.categorysBox) 
             },
             '$refs.courseCategory.$refs.tree'(){
                 console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
@@ -411,7 +412,7 @@
                     for(let i in e){  
                         this.form[i]=e[i]   
                     } 
-                    this.form.categorys = e.categorys.map(v=>{
+                    this.categorysBox = e.categorys.map(v=>{
                         v.contentid = v.id
                         return v
                     }) 
@@ -436,7 +437,7 @@
         },
         methods: {
             delTag(index){
-                this.form.categorys.splice(index,1)
+                this.categorysBox.splice(index,1)
                 this.getCategoryids()
                 this.getCategoryCheck()
             },
@@ -509,7 +510,7 @@
                         return result
                     }
                     console.log(11111111111,format(t))
-                    this.form.categorys=format(t)
+                    this.categorysBox=format(t)
                     this.getCategoryids()
                     this.getCategoryCheck()
             },
@@ -526,7 +527,7 @@
             //把数组转化成接口提交的 最终字符串
             getCategoryids(){
                  let categorys=[] //放栏目范围的空容器
-                    this.form.categorys.forEach((c) => {
+                    this.categorysBox.forEach((c) => {
                         categorys.push(c.contentid||c.id) //开始出错
                         // console.log(this.form.course_ids)
                     })
@@ -656,11 +657,11 @@
                     // this.form.course.forEach((c) => {
                     //     this.form.course_ids.push(c.id)
                     // })
-                    console.log('this.form.categorys',this.form.categorys)  //这里数据都没错
+                    console.log('this.categorysBox',this.categorysBox)  //这里数据都没错
                     console.log('this.form.category_ids',this.form.category_ids)  //这里数据都没错
                     this.getCategoryids()
                     // let categorys=[] //放栏目范围的空容器
-                    // this.form.categorys.forEach((c) => {
+                    // this.categorysBox.forEach((c) => {
                     //     categorys.push(c.contentid||c.id) //开始出错
                     //     // console.log(this.form.course_ids)
                     // })
