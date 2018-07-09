@@ -105,7 +105,7 @@ class sysService {
             return ret
         })
     }
-    //可得学时检测接口
+    //可得课时检测接口
     getCourseTaskTemplateStudyCheck(ids) {
         let finalUrl = urlPre + '/template/study/check'
         return api.get(finalUrl, ids).then((ret) => {

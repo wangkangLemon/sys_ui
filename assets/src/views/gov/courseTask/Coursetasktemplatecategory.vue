@@ -174,9 +174,9 @@
             // }
         },
         activated() {
-            console.log(this.$route.path);
-                this.treeType='course'
-                this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
+            this.fetchParam= getFetchParam()
+            this.treeType='course'
+            this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
             xmview.setContentLoading(false)
         },
         methods: {

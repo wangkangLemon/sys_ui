@@ -102,12 +102,12 @@
                 <el-tag style="margin-right: 3px"
                         v-for="(c,index) in courseBox" :key="index"
                         :closable="true"
-                        @close="courseBox.splice(index,1)"
+                        @close="delCourseTag(index)"
                         type="success">
                     {{c.course_name}}
                 </el-tag>
                 <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
-                <h5 style="color:#20a0ff" v-if="courseBox.length>0">检测到可得学时 <i style="color:red">{{this.studyCheck.minute}} </i>分钟 </h5>
+                <h5 style="color:#20a0ff" v-if="courseBox.length>0">检测到可得课时 <i style="color:red">{{this.studyCheck.minute}} </i>分钟 </h5>
             </el-form-item>
             <el-form-item prop="sort" label="排序">
                 <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
@@ -147,7 +147,7 @@
 
         <!-- 选择课程弹窗 -->
         <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
-                          :selectedList="courseBox" @changeSelected="val=>courseBox=val"  item-key="contentid">
+                          :selectedList="courseBox" @changeSelected="val=>courseBox=val"  item-key="contentid" get-item-key="course_id">
             <div slot="search" class="course-search">
                 <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
                           icon="search"
@@ -277,10 +277,24 @@
                     this.form.gov_ids= ''
                 }
             },
-            
-            
+            // 'courseBox'(){   //--------------注销新功能-----------
+            //     this.getCourseIds()
+            //     console.log(111111111);
+            //     let param={course_ids:this.form.course_ids}
+            //     courseTaskService.getCourseTaskTemplateStudyCheck(param).then((ret) => {
+            //         console.log(ret);
+            //         this.studyCheck=ret
+            //         this.form.study_duration=ret.second
+            //         console.log('this.form',this.form);
+            //         })
+            // },
+            'dialogCourse.isShow'(){
+                if(this.dialogCourse.isShow==false){
+                    this.getCourseIds()
+                    this.getStudyCheck()
+                }
+            }
 
-            
         },
         created () {
             xmview.setContentLoading(false)
@@ -292,11 +306,13 @@
                     // this.form.etime =  ret.data.end_date.split(' ')[0]
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
-                     xmview.setContentTile('编辑课程任务模板 ')
+                    xmview.setContentTile('编辑课程任务模板 ')
                     this.courseBox = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v
                     }) 
+                    this.getCourseIds()
+                    this.getStudyCheck()
                     console.log('selectedData : ', this.courseBox)
                     this.$refs.dialogSelect.setSelected()
                     this.choosePushType()
@@ -313,15 +329,26 @@
             this.getCategory()
         },
         methods: {
+            delCourseTag(index){
+                this.courseBox.splice(index,1)
+                this.getCourseIds()
+                this.getStudyCheck()
+            },
             //把数组转化成接口提交的 最终字符串
             getCourseIds(){
                 let courses=[] //放栏目范围的空容器
-                 console.log(this.courseBox)  //这里数据都没错
-                      this.courseBox.forEach((c) => {
-                        courses.push(c.contentid||c.course_id) //开始出错
-                        // console.log(this.form.course_ids)
-                    })
-                    this.form.course_ids = courses.join(',')
+                this.courseBox.forEach((c) => {
+                    courses.push(c.contentid||c.course_id) 
+                })
+                this.form.course_ids = courses.join(',')
+            },
+            //可得课时检测接口
+            getStudyCheck(){
+                let param={course_ids:this.form.course_ids}
+                courseTaskService.getCourseTaskTemplateStudyCheck(param).then((ret) => {
+                    this.studyCheck=ret
+                    this.form.study_duration=ret.second
+                })
             },
              //获取部门组下拉列表
             getCategory(val){

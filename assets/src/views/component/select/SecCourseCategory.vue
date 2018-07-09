@@ -70,6 +70,7 @@
                     courseService.search_cate({
                         pid: 0,
                         level: -1,
+                        pagesize:-1
                     }).then((ret) => {
                         ret.data.forEach(v => {
                             this.options.push({
@@ -110,6 +111,7 @@
                 courseService.search_cate({
                     pid: val[val.length - 1],
                     level: -1,
+                    pagesize:-1,
                 }).then((ret) => {
          
                     var arr = ret.data.map(v => {

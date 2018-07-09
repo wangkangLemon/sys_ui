@@ -53,7 +53,6 @@
                 </p>
                 <p><i class="title">价格(元)：</i> <span class="value">{{clerkDetail.price_yuan}}</span></p>
                 <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
-                <p><i class="title">商品简介：</i> <span class="value">{{clerkDetail.description}}</span></p>
                 <p><i class="title">苹果原价商品id：</i> <span class="value">{{clerkDetail.appleid_origin}}</span></p>
                 <p><i class="title">苹果折扣价商品id：</i><span class="value">{{clerkDetail.appleid_discount}}</span></p>
             </div>
