@@ -145,3 +145,8 @@ ERROR:root:version updated : [0.0.0.127] ---> [0.0.0.128]
 ERROR:root:version updated : [0.0.0.128] ---> [0.0.0.129]
 ERROR:root:version updated : [0.0.0.129] ---> [0.0.0.130]
 >>>>>>> a88f4762c625d3b172c11b11ca3c7443e968477a
+ERROR:root:bad version: <<<<<<< HEAD
+ 
+ERROR:root:bad version: <<<<<<< HEAD
+ 
+ERROR:root:version updated : [0.0.0.130] ---> [0.0.0.131]
