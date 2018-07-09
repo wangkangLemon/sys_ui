@@ -194,11 +194,7 @@
                     courseTaskService.delCategory({
                         id: node.value
                     }).then(() => {
-<<<<<<< HEAD
                          this.dialogConfirm.isShow = false
-=======
-                        this.dialogConfirm.isShow = false
->>>>>>> a88f4762c625d3b172c11b11ca3c7443e968477a
                         this.$refs.courseTaskTemplateCategory.removeItem(node, this.nodeParentSelected)
                         node = null
                         this.resetForm()
