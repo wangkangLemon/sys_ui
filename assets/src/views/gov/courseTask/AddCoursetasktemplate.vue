@@ -307,7 +307,11 @@
                     // this.form.type = ret.data.type
                     // this.pushTypeDialog.type = ret.data.type
                     xmview.setContentTile('编辑课程任务模板 ')
+<<<<<<< HEAD
                     this.courseBox = ret.data.courses.map(v=>{
+=======
+                    this.form.course = ret.data.courses.map(v=>{
+>>>>>>> a88f4762c625d3b172c11b11ca3c7443e968477a
                         v.contentid = v.course_id
                         return v
                     }) 
@@ -329,6 +333,7 @@
             this.getCategory()
         },
         methods: {
+<<<<<<< HEAD
             delCourseTag(index){
                 this.courseBox.splice(index,1)
                 this.getCourseIds()
@@ -350,6 +355,8 @@
                     this.form.study_duration=ret.second
                 })
             },
+=======
+>>>>>>> a88f4762c625d3b172c11b11ca3c7443e968477a
              //获取部门组下拉列表
             getCategory(val){
                 courseTaskService.getCategoryTree({pagesize:-1,type:1}).then((ret)=>{
