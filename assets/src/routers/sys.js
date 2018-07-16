@@ -220,7 +220,7 @@ export default {
                 title: '后台操作日志',
                 noback: true
             }
-        }, 
+        },
         {
             path: 'push/msg',
             name: 'push-msg',
@@ -233,7 +233,6 @@ export default {
                 title: '推送消息',
                 noback: true
             }
-        }, 
-
+        },
     ]
 }

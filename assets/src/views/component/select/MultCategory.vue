@@ -104,10 +104,9 @@
                         pagesize:-1
                     }).then((ret) => {
                         console.log(this.options)
-                         let data=transfor(ret.data,this.mark.name)
+                        let data=transfor(ret.data,this.mark.name)
                         this.options=func(data)
                         
-
                         // ret.data.forEach(v => {
                         //     this.options.push({
                         //         data: v,
@@ -162,7 +161,6 @@
                     //         v.children = arr
                     //     }
                     // })
-                    
                     var arr = ret.data.map(v => {
                         v.label = v.menu_name
                         v.value = v.id
@@ -174,11 +172,6 @@
                     this.loading = false
                     xmview.setContentLoading(false)
                 })
-
-
-
-
-
                 // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
                 // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
                 //     .then(ret => {

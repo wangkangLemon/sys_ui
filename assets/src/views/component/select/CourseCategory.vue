@@ -140,11 +140,6 @@
                     this.loading = false
                     xmview.setContentLoading(false)
                 })
-
-
-
-
-
                 // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})//id: val[val.length - 1 ]
                 // courseService.getCategoryTree({type: this.type, govid: this.govid, id: val[val.length - 1]})
                 //     .then(ret => {

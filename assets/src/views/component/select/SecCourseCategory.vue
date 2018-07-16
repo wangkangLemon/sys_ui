@@ -123,7 +123,6 @@
                     // console.log(currItem)
 
                     currItem.children = arr
-
                     this.loading = false
                     xmview.setContentLoading(false)
                 })

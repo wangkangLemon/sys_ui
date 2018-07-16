@@ -213,7 +213,33 @@ export default {
                 noback: false
             }
         },
-
+        //题库管理
+        {
+            path: '/exam/questionbank/category',
+            name: 'exam-questionbank-category',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/questionbank/category.vue'))
+                })
+            },
+            meta: {
+                title: '栏目管理-题库',
+                noback: true
+            }
+        },
+        {
+            path: '/exam/questionbank/manage',
+            name: 'exam-questionbank-manage',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/exam/questionbank/TestPaperManage.vue'))
+                })
+            },
+            meta: {
+                title: ' 试题管理-题库',
+                noback: true
+            }
+        },
 
       
     ]

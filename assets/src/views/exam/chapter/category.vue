@@ -72,7 +72,6 @@
             stime: void 0,
             etime: void 0,
             // need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
-           
         }
     }
      function getSelectData() {
@@ -83,7 +82,6 @@
             image: null,
             remark :'',
             sort:void 0,
-           
         }
     }
     export default {

@@ -91,7 +91,6 @@
                             <el-radio :label="1">是</el-radio>
                         </el-radio-group>
                     </el-form-item >
-                    
                     <el-form-item label="栏目练习题数量" prop="category_subject_num" v-if="fetchParam.ended">
                         <el-input placeholder="请输入习题数量" v-if="fetchParam.ended" 
                                   v-model="fetchParam.category_subject_num">

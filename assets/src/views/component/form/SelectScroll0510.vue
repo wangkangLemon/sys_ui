@@ -17,9 +17,9 @@
             <el-input @change="filter" placeholder="搜索内容"></el-input>
         </el-option>
         <el-option v-for="item in data"
-                   :label="item.name"
-                   :key="item.id"
-                   :value="item.id">
+                   :label="item[itemObj[1]]"
+                   :key="item[itemObj[0]]"
+                   :value="item[itemObj[0]]">
         </el-option>
 
         <el-option v-loading="loading" value="xmyst2" :disabled="true" v-show="!this.data || this.data.length < 1">
@@ -51,6 +51,10 @@
             },
             list: Array, // 已有的数据集合
             isend:Boolean,
+            itemObj: {
+                type:Array,
+                default: ['id','name']
+            },
         },
         data () {
             return {
@@ -67,7 +71,6 @@
         watch: {
             'data'(val) {
                 console.log('data',val);
-                
                 if (val.length < 1) this.currPlaceholder = this.placeholder
                   if(this.isend==true){
                             this.isShowGetMore= false
@@ -82,7 +85,7 @@
             'value' (val) {
                 this.selectVal != val && (this.selectVal = val)
                 if (this.value != null && this.currPlaceholder && this.data.length < 1) {
-                    this.data.push({id: this.value, name: this.placeholder})
+                    this.data.push({[this.itemObj[0]]: this.value, [this.itemObj[1]]: this.placeholder})
                 }
             },
             'list' (val) {//处理数据只渲染默认一项
@@ -92,8 +95,8 @@
                 this.data = this.list
                 if (this.value && this.currPlaceholder && this.data.length < 1) {
                     this.data.push({
-                        id: this.value,
-                        name: this.placeholder
+                        [this.itemObj[0]]: this.value,
+                        [this.itemObj[1]]: this.placeholder
                     })
                 }
             }
@@ -165,7 +168,7 @@
                     //debugger
                     // 把结果过滤掉当前选中的
                     let t = ret.filter((item) => {
-                        return item.id != this.value
+                        return item[this.itemObj[0]] != this.value
                     })
                     this.data = this.data.concat(t)
                 } else{

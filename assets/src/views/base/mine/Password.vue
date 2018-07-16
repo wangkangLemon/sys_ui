@@ -23,8 +23,8 @@
                 <!--<el-form-item prop="origin_password" label="原密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.origin_password" placeholder="原密码" auto-complete="off"></el-input>
                 </el-form-item>-->
-                <el-form-item prop="passwd" label="修改密码" :label-width="formLabelWidth">
-                    <el-input type="password" v-model="form.passwd" placeholder="新密码" auto-complete="off"></el-input>
+                <el-form-item prop="password" label="修改密码" :label-width="formLabelWidth">
+                    <el-input type="password" v-model="form.password" placeholder="新密码" auto-complete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item prop="re_password" label="确认密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.re_password" placeholder="确认密码" auto-complete="off"></el-input>
@@ -52,7 +52,7 @@ export default {
         return {
             imgUrl: '',
             form: {
-                passwd: '',
+                password: '',
                 // origin_password: '',
                 // new_password: '',
                 // re_password: ''
@@ -60,7 +60,7 @@ export default {
             formLabelWidth: '120px', // 表单label的宽度
             rules: {
                 // origin_password: { required: true, message: '必须填写', trigger: 'blur' }, //原密码
-                passwd: { required: true, message: '必须填写', trigger: 'blur' },
+                password: { required: true, message: '必须填写', trigger: 'blur' },
                 re_password: [
                     { required: true, message: '必须填写', trigger: 'blur' },  //确认密码
                     // { validator: validateRepass, trigger: 'blur' }

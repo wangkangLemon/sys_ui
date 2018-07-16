@@ -67,9 +67,9 @@ class MineService {
     //     })
     // }
     // 更新 id, role_id, avatar, password, area_id, gov_id, name, nickname, mobile, email, sex, address
-    modifyPassword({ id, passwd }) {
+    modifyPassword({ id, password }) {
         let url = `${config.apiHost}/admin/update/${id}`
-        return api.post(url, { passwd }).then(ret => {
+        return api.post(url, { password }).then(ret => {
             if (ret.code) {
                 return Promise.reject(ret)
             }

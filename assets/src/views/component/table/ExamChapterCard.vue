@@ -21,9 +21,14 @@
                 <el-form-item label="分类排序" prop="sort">
                     <el-input placeholder="最小的排在前面"  v-model="selectData.sort"></el-input>
                 </el-form-item>
+                <el-form-item label="是否最终菜单" prop="ended" v-if="checkended">
+                    <el-radio-group v-model="selectData.ended" >
+                        <el-radio :label="0">否</el-radio>
+                        <el-radio :label="1">是</el-radio>
+                    </el-radio-group>
+                </el-form-item >
                 <el-form-item>
-                    <el-button type="info"  @click="save">保存
-                    </el-button>
+                    <el-button type="info"  @click="save">保存</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -67,7 +72,7 @@
                 }
             }
         },
-        props: ['data', 'type','category','chaptertype'],
+        props: ['data', 'type','category','chaptertype','checkended'],
 
         watch: {
             'type' () {
@@ -115,13 +120,14 @@
 
     function setSelectData(){
         return {
-
                     category_id:void 0,
                     chapter_type: void 0,
                     name: '',
                     image: null,
                     remark :'',
                     sort:void 0,
+                    ended:0,
+                    pid: void 0, //父级id
                 }
     }
 </script>

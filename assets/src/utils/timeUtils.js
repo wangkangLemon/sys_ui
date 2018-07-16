@@ -39,8 +39,6 @@ export function time2String (time, withoutDate = false, withoutSeconds = true, i
         //  返回字符串
         return fillZero(finalDate.getHours(), 2) + ':' + fillZero(finalDate.getMinutes(), 2)
     } else if (withoutSeconds) {
-        alert(1111)
-        
         //  返回字符串
         return finalDate.getFullYear() + '-' + fillZero(finalDate.getMonth() + 1) + '-' + fillZero(finalDate.getDate()) +
             ' ' + fillZero(finalDate.getHours(), 2) + ':' + fillZero(finalDate.getMinutes(), 2)

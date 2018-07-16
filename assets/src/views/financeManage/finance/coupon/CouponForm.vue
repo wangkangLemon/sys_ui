@@ -121,7 +121,7 @@
             this.loadingData=false
         },
         methods: {
-              //商品搜索
+            //商品搜索
             reqFun2(val, length){
                 let param={
                     page: parseInt(length / 15) + 1||1,

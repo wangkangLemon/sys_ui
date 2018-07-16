@@ -69,6 +69,7 @@
                             remark:v.remark,
                             sort:v.sort,
                             level:v.level,
+                            ended:v.ended,
                             children: []
                         })
                     }
@@ -88,6 +89,7 @@
                                     remark:v.remark,
                                     sort:v.sort,
                                     level:v.level,
+                                    ended:v.ended,
                                     children: []
                                 })
                             }

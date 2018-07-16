@@ -145,9 +145,6 @@
                 // 重新给父容器赋值  不然数据不同步
                 this.$emit('input', this.data)
             },
-
-
-
             setCurrVal (val) { //给输入框设置值
                 if (val === this.data) return
                 this.data = val
