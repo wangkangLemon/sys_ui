@@ -62,9 +62,9 @@
                     chapter_type: [
                         {required: true,type:'number', message: '请输入	章节类型', trigger: 'blur'},
                     ],
-                    image: [
-                        {required: true, message: '请上传图片', trigger: 'blur'}
-                    ]
+                    // image: [
+                    //     {required: true, message: '请上传图片', trigger: 'blur'}
+                    // ]
                 },
                 uploadextraData:{
                     biz:'course',

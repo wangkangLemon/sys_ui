@@ -27,62 +27,32 @@
             }
         },
         created () {
-            // console.log(111,this.req);
-            // console.log(22,this.param);
-            console.log(33,this.req(this.param));
-            this.req(this.param).then(ret=>{ 
-                console.log(2222222222222222,ret);
-            // this.req(this.param).then(ret=>{ 
-               ret.forEach(v => {
-                    this.data.push({
-                        data: v,
-                        label: v.name,
-                        value: v.id,
-                        children: v.ended ? null : [{
-                            label: '正在加载',
-                            value: -1,
-                        }]  //是否最终菜单？点箭头触发请求
-                    })
-               })
-               console.log(2222222222222222,ret);
-               this.loading = false
-               xmview.setContentLoading(false)
-            })
-        },
-        watch: {
-
-            // 'value' (val) {  
-            //     if (val.length != this.data.length) {
-            //         this.setCurrVal(val)
-            //     }
-            // },
-            // 'data' (val) {
-            //     this.$emit('input', val)
-            // }
+           this.getdata()
         },
         methods: {
-            // handleNodeClick ({data, node, store}) {
-                //     this.onNodeClick && this.onNodeClick(data, node, store)
-                //                     console.log(node)
-                //     // console.log('===========onNodeClick    data==========  ')
-                // },
-                // removeItem (item, parent) {
-                //     this.$refs.tree.removeItem(item, parent)
-                // },
-                // setCurrVal (val) {
-                //     if (val === this.data) return
-                //     this.data = val
-                //     this.$emit('input', val)
-                // },
-            // 给子元素获取数据的方法
+            getdata(){
+                console.log(33,this.req(this.param));
+                this.param.pid=0
+                this.req(this.param).then(ret=>{ 
+                console.log(2222222222222222,ret);
+                // this.req(this.param).then(ret=>{ 
+                ret.forEach(v => {
+                        this.data.push({
+                            data: v,
+                            label: v.name,
+                            value: v.id,
+                            children: v.ended ? null : [{
+                                label: '正在加载',
+                                value: -1,
+                            }]  //是否最终菜单？点箭头触发请求
+                        })
+                })
+                console.log(2222222222222222,ret);
+                this.loading = false
+                xmview.setContentLoading(false)
+                })
 
-
-            // req (params) {
-            //     return courseService.getCategoryTree(params)
-            // },
-
-//========================================  opeeableTree============================================================
-
+            },
             handleNodeExpand (data, node, nodeDom) { //点下拉箭头  
                 // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
                 this.param.pid=node.data.value
@@ -106,29 +76,8 @@
                 })
             },
             handleNodeClick (data, node, store) { //点击
-                // console.log(node.data)
-                // if (node.data.ended) return
-                    //     let currItem = treeUtils.findItem(this.data, node.data, 'value')   //拿到当前项 
-                    //     var arr = []
-                    //     this.req({
-                    //         pid: data.data.id, 
-                    //         level:-1,
-                    //     }).then((ret) => {
-                    //         var arr = ret.map(v=>{
-                    //             v.label = v.name
-                    //             v.value = v.id
-                    //             v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组
-                    //             return v
-                    //         })
-                    //         currItem.children = arr
-                    //         this.loading = false
-                    //         xmview.setContentLoading(false)
-                    //    })
-
-                 // this.$emit('onNodeClick', {data, node, store})
                 if(!this.onNodeClick)return
                 this.onNodeClick(1, data, node, store) 
-
                 //  根节点无法被选中 
                 if (data.value == 0) return
                 this.selectable = true
@@ -137,7 +86,6 @@
             clearSelected () {
                 this.selectable = false
             },
-
             removeItem (item, parent) {
                 // 父节点没有children 说明当前是根节点
                 if (!parent.data.children) {
@@ -154,19 +102,14 @@
                 // 重新给父容器赋值  不然数据不同步
                 this.$emit('input', this.data)
             },
-
-
-
             setCurrVal (val) { //给输入框设置值
                 if (val === this.data) return
                 this.data = val
                 this.$emit('input', val)
             },
- 
         },
     }
-
-      function findItem(arr,key,value){
+    function findItem(arr,key,value){
         arr.forEach(item=>{
             if(item[key] == value ){
                 return item

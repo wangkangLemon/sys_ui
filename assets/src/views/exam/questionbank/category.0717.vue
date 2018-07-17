@@ -41,8 +41,6 @@
     <article id="course-index-container">
             <!--<section class="manage-container"><button type="button" icon="plus" class="el-button el-button--primary"  @click="ChapterCategoryCreate"><span>新建分类</span></button></section>-->
             <section class="left-container">
-                <!-- <MenuTree v-model="SecMenu" ref="qustionbankCategory" :Mult='Mult' 
-                :onNodeClick="treeNodeClick.bind(this,1)" :req="req" :param="initparam"></MenuTree> -->
                 <MenuTree v-model="SecMenu" ref="qustionbankCategory" :Mult='Mult' 
                 :onNodeClick="treeNodeClick.bind(this,1)" :req="req" :param="initparam"></MenuTree>
             </section>
@@ -64,7 +62,7 @@
 <script>
     //这是 主页面   区别 ：1有子分类 2. ExamChapterCard传递参数  chaptertype:1
     import examService from '../../../services/exam/examService'
-    import MenuTree from '../../component/tree/QustionsCategory.vue'
+    import MenuTree from '../../component/tree/commonEnded.vue'
     import ExamChapterCard from '../../component/table/ExamChapterCard.vue'
     import {transformParam} from '../../../utils/common'
     function getFetchParam() {
@@ -94,7 +92,6 @@
     }
 
     export default {
-        name:'exam-questionbank-category',
         components: {
             MenuTree,
             ExamChapterCard
@@ -111,14 +108,8 @@
                 Mult:'true',
                 category:'',
                 chaptertype:1,
-                checkended:1, 
-                initparam:{  //传参用的现在没用
-                    category_id:this.$store.state.index.examCate, // 3- 供应商
-                    chapter_type:4,
-                    pid:0,
-                    pagesize:-1,
-                    level:-1,
-                },//栏目树传参用的对象
+                checkended:1,
+                initparam:{},//栏目树传参用的对象
             }
         },
         watch: {
@@ -134,13 +125,12 @@
                 this.fetchParam.category_id = this.$store.state.index.examCate
                 this.initparam=this.fetchParam
                 console.log('this.fetchParam.category_id ',this.fetchParam.category_id );
-                this.$refs.qustionbankCategory.getInitData();
+                console.log(1111,this.$refs.qustionbankCategory.getdata());
                 // this.fetchData()
             // }
             } ,
         },
-        created() {
-            console.log('进入试题管理-栏目');
+        activated() {
             this.selectData={}
             this.loadingData=false
             xmview.setLoading(false)
@@ -158,8 +148,6 @@
                 this.type='update'
                 if (type == 1) { 
                     this.selectData = Object.assign({},node.data)  //解决左右数据
-                    console.log( this.selectData);
-                    
                 }
             },
             // 清空选中项
@@ -168,7 +156,7 @@
             },
             fetchData() {
                 this.SecMenu=[]
-                examService.fetchChapterCategory( this.fetchParam ).then((ret) => {
+                examService.fetchChapterCategory( this.fetchParam).then((ret) => {
                         this.SecMenu=ret
                         console.log(ret);
                         console.log('this.SecMenu',this.SecMenu);
@@ -191,12 +179,8 @@
                     if(this.type == 'P'){
                         message.pid=0
                     } else if( this.type == 'S'){
-                        // message.pid=this.$store.state.index.secPid
-                        message.pid=this.selectData.id
+                        message.pid=this.$store.state.index.secPid
                     }
-                    message.category_id=this.$store.state.index.examCate
-                    message.chapter_type=4
-                    console.log(message);
                     examService.ChapterCategoryCreate( message ).then(( ret ) => {
                         this.selectData = getSelectData()  //通过初始化组件传值清空
                         this.selectData.category_id	= this.$store.state.index.examCate
@@ -205,7 +189,6 @@
                         setTimeout(() => {
                             // this.fetchData() // 重新刷新数据
                             this.$forceUpdate()
-                    this.$refs.qustionbankCategory.getInitData();
                         }, 300)
                     }).then(()=>{
                         this.$forceUpdate()
@@ -213,12 +196,9 @@
                     )
                 }else {
                     transformParam(message)
-                    console.log(message);
-                    
                     examService.ChapterCategoryEdit( message ,message.id).then(( ret ) => {
                         setTimeout(() => {
-                            // this.fetchData() // 重新刷新数据 
-                            this.$refs.qustionbankCategory.getInitData();
+                            this.fetchData() // 重新刷新数据 
                         }, 300)
                     })
                 }

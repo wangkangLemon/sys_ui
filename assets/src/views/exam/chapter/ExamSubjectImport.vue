@@ -64,8 +64,8 @@
     <article class="exam-subject-import">
          <article class="temp-container" >
             <el-form class="cate" label-width="120px" :model="form"  :rules="rules" ref="cate">
-                <el-form-item  label="所属栏目" prop="chapter_id">
-                    <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
+                <el-form-item  label="所属栏目" v-if="$route.params.chapterInfo.chapter_type!==4 " prop="chapter_id">
+                    <Section-category-menu  :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                 </el-form-item>
             </el-form>         
             <section class="temp-item" >
@@ -165,9 +165,11 @@
             // console.log(typeof(this.$route.params.chapterInfo.id),this.$route.params.chapterInfo)
             if(this.$route.params.chapterInfo){
                 this.form={
-                chapter_id:this.$route.params.chapterInfo.id,
-                chapter_name:this.$route.params.chapterInfo.name
+                    chapter_id:this.$route.params.chapterInfo.id,
+                    chapter_name:this.$route.params.chapterInfo.name
                 }
+                console.log('33333',typeof(this.form.chapter_id),this.form.chapter_id);
+                
             }else{
                xmview.showTip('error', "请先选择试题所属分类")
                 this.$router.back()
@@ -198,7 +200,8 @@
         methods: {
             openDailog(){
                 console.log(typeof(this.form.chapter_id),'this.form.chapter_id=============='+this.form.chapter_id)
-                if(typeof(this.form.chapter_id)!=='number'){
+                
+                if(typeof(this.form.chapter_id)!=='number'&&this.$route.params.chapterInfo.chapter_type!==4){
                     xmview.showTip('error', "请先选择试题所属栏目")
                     return
                 }

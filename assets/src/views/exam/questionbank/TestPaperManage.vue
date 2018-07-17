@@ -130,16 +130,18 @@
                 <router-link tag="el-button" :to="{name: 'exam-questionbank-category'}">管理分类</router-link>
             </div>
             <div class="classify-tree">
-                 <MenuTree :data="SecMenu" v-if="SecMenu.length" ref="chapterCategory"></MenuTree>
+                <!-- <MenuTree v-model="SecMenu" ref="qustionbankCategory" :Mult='Mult' 
+                :onNodeClick="treeNodeClick.bind(this,1)" :req="req" :param="initparam"></MenuTree> -->
+                 <MenuTree :data="SecMenu" v-if="SecMenu.length" :onNodeClick="treeNodeClick.bind(this,1)" ref="qustionbankCategory"></MenuTree>
             </div>
         </section>
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>考题列表
                 <el-button type="primary" icon="plus" >添加考题</el-button>
-                <el-button type="danger" icon="plus"  @click="$router.push({ name:'exam-subject-import',params:{chapterInfo:category.currentData,qtype:qtype}})">试题导入</el-button>
+                <el-button type="danger" icon="plus"  @click="importQuestion">试题导入</el-button>
                 <section>
-                      <el-select v-model="qtype" placeholder="未选择" @change="$router.push({ name:'exam-subject-add',params:{chapterInfo:category.currentData,qtype:qtype}})" >
+                      <el-select v-model="qtype" placeholder="" @change="addQuestion" >
                             <el-option label="A1" value="A1"></el-option>
                             <el-option label="A2" value="A2"></el-option>
                             <el-option label="A3" value="A3"></el-option>
@@ -202,7 +204,7 @@
 </template>
 <script>
     import examService from '../../../services/exam/examService'
-    import MenuTree from '../../component/tree/MenuTreeExam.vue'
+    import MenuTree from '../../component/tree/QustionsCategory.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import formUtils from '../../../utils/formUtils'
@@ -214,8 +216,9 @@
             stime :'',
             etime:'',
             page: 1,
-            pagesize: 10,
+            pagesize: -1,
             total: 0,
+            pid:0,
             status,
             title:'',
             qtype:'',
@@ -223,7 +226,7 @@
         }
     }
     export default {
-        name:'exam-subject-manage',
+        name:'exam-questionbank-manage',
         components: {
             MenuTree,ImagEcropperInput
             ,DateRange
@@ -257,13 +260,13 @@
                 SecMenu:[],
                 category_id:void 0,
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
-                qtype:''
+                qtype:'',
+                selectData:{},
             }
         },
         watch: {
             '$store.state.index.secMenu'(){
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
-                
             },
             'category.currentData.id'(){
                 console.log(this.category.currentData)
@@ -271,13 +274,19 @@
                 // this.$refs.secCategory.handleNodeClick()
             },
             '$store.state.index.examCate'(){
+                console.log(11111111,this.$refs);
+                
+                // this.$refs.qustionbankCategory.getInitData();
                this.fetchCourseLists() 
                this.fetchData()
             }     
         },
         created () {
+            // this.$refs.qustionbankCategory.getInitData();
+            xmview.setContentLoading(false)     
+            console.log('进入试题管理-题库');
             this.category.currentData.id = ''
-            this.category.currentData.chapter_type = 2
+            this.category.currentData.chapter_type = 4
             this.category.loading = true
             this.qtype=''
             // this.section=initSection()
@@ -290,6 +299,30 @@
             }
         },
         methods: {
+            importQuestion(){
+                if(!this.selectData.id){
+                     xmview.showTip('error','请先选择左侧栏目，再进行添加')
+                     return
+                }
+                this.$router.push({ name:'exam-subject-import',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
+            },
+            addQuestion(){
+                if(!this.selectData.id){
+                     xmview.showTip('error','请先选择左侧栏目，再进行添加')
+                     return
+                }
+                this.$router.push({ name:'exam-subject-add',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
+            },
+            // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                if (type == 1) { 
+                    this.selectData = Object.assign({},node.data)  //解决左右数据
+                    console.log('1111',this.selectData);
+                    this.category.currentData.id=this.selectData.id
+                    this.category.currentData.name=this.selectData.name
+                    console.log('2222',this.category.currentData);
+                }
+            },
             dropDown(){
                 console.log(this)
             },
@@ -310,8 +343,9 @@
                 let param={
                             category_id: this.$store.state.index.examCate  , // 3- 供应商
                             page: 1,
-                            chapter_type:2,
+                            chapter_type:4,
                             pagesize: -1,
+                            pid:0,
                         }
                 examService.fetchChapterCategory( param).then((ret) => {
                         this.SecMenu=ret
@@ -323,7 +357,7 @@
                 this.section.loading = true
                 this.section.chapter_id =this.category.currentData.id
                 this.section.category_id =this.$store.state.index.examCate
-                this.section.chapter_type = 2
+                this.section.chapter_type = 4
                  delete this.section.data
                 // delete this.section.loading
                 // delete this.section.total
