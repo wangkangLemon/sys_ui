@@ -203,7 +203,8 @@
     </article>
 </template>
 <script>
-    import examService from '../../../services/exam/examService'
+    import examService from '../../../services/exam/examService'    
+    import courseService from '../../../services/course/courseService.js'
     import MenuTree from '../../component/tree/QustionsCategory.vue'
     import ImagEcropperInput from '../../component/upload/ImagEcropperInputSec.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
@@ -268,17 +269,13 @@
             '$store.state.index.secMenu'(){
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             },
-            'category.currentData.id'(){
-                console.log(this.category.currentData)
-                this.fetchCourseLists () 
-                // this.$refs.secCategory.handleNodeClick()
-            },
             '$store.state.index.examCate'(){
                 console.log(11111111,this.$refs);
-                
                 // this.$refs.qustionbankCategory.getInitData();
-               this.fetchCourseLists() 
-               this.fetchData()
+                this.fetchData().then(v=>{
+                    this.fetchCourseLists() 
+                })
+                // this.fetchCourseLists() 
             }     
         },
         created () {
@@ -290,8 +287,7 @@
             this.category.loading = true
             this.qtype=''
             // this.section=initSection()
-            this.fetchData()
-            this.fetchCourseLists()
+            
         },
          computed: {
             examCateid( ){
@@ -320,6 +316,7 @@
                     console.log('1111',this.selectData);
                     this.category.currentData.id=this.selectData.id
                     this.category.currentData.name=this.selectData.name
+                    // this.fetchCourseLists () 
                     console.log('2222',this.category.currentData);
                 }
             },
@@ -347,11 +344,13 @@
                             pagesize: -1,
                             pid:0,
                         }
+                // courseService.getCategoryTree( param).then((ret) => {
                 examService.fetchChapterCategory( param).then((ret) => {
                         this.SecMenu=ret
                         // console.log('this.SecMenu+++++++',param,this.SecMenu)
                         xmview.setContentLoading(false)     
                     })
+                    // this.fetchCourseLists()
             },
             fetchCourseLists () {// 获取右边栏目数据
                 this.section.loading = true
@@ -371,7 +370,7 @@
                 xmview.showDialog(`确认要删除试题【<i style="color:red">${row.description}</i>】吗？`, () => {
                     examService.delSubject(row.id).then(() => {
                         xmview.showTip('success', '删除成功')
-                        this.fetchCourseLists()
+                        // this.fetchCourseLists()
                     }).catch((ret) => {
                         xmview.showTip('error', ret.message)
                     })
@@ -394,7 +393,7 @@
             },
             sectionPageChange (val) {
                 this.section.page = val
-                this.fetchCourseLists()
+                // this.fetchCourseLists()
             }
         }
     }
