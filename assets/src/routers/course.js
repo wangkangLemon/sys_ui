@@ -215,7 +215,7 @@ export default {
         },
         //题库管理
         {
-            path: '/exam/questionbank/category',
+            path: '/questionbank/category',
             name: 'exam-questionbank-category',
             component: resolve => {
                 require.ensure([], () => {
@@ -228,7 +228,7 @@ export default {
             }
         },
         {
-            path: '/exam/questionbank/manage',
+            path: '/questionbank/manage',
             name: 'exam-questionbank-manage',
             component: resolve => {
                 require.ensure([], () => {
@@ -240,6 +240,45 @@ export default {
                 noback: true
             }
         },
+        // {//导入考题表单
+        //     path: 'subject/import',
+        //     name: 'exam-subject-import',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/exam/questionbank/ExamSubjectImport.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '试题导入',
+        //         noback: false
+        //     }
+        // },
+        // {//添加修改考题表单
+        //     path: 'subject/add',
+        //     name: 'exam-subject-add',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/exam/chapter/ExamSubjectForm.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '试题添加',
+        //         noback: false
+        //     }
+        // },
+        // {
+        //     path: 'subject/edit/:id',
+        //     name: 'exam-subject-edit',
+        //     component: resolve => {
+        //         require.ensure([], () => {
+        //             resolve(require('../views/exam/chapter/ExamSubjectForm.vue'))
+        //         })
+        //     },
+        //     meta: {
+        //         title: '试题更新',
+        //         noback: false
+        //     }
+        // },
 
       
     ]

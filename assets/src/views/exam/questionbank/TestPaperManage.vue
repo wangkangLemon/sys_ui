@@ -217,7 +217,7 @@
             stime :'',
             etime:'',
             page: 1,
-            pagesize: -1,
+            pagesize: 15,
             total: 0,
             pid:0,
             status,
@@ -263,6 +263,7 @@
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
                 qtype:'',
                 selectData:{},
+                categoryVal:'' //掉接口存储category_id
             }
         },
         watch: {
@@ -270,23 +271,24 @@
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             },
             '$store.state.index.examCate'(){
-                console.log(11111111,this.$refs);
                 // this.$refs.qustionbankCategory.getInitData();
-                this.fetchData().then(v=>{
-                    this.fetchCourseLists() 
-                })
-                // this.fetchCourseLists() 
+                this.fetchData()
+                this.fetchCourseLists() 
             }     
         },
         created () {
             // this.$refs.qustionbankCategory.getInitData();
             xmview.setContentLoading(false)     
-            console.log('进入试题管理-题库');
             this.category.currentData.id = ''
             this.category.currentData.chapter_type = 4
             this.category.loading = true
             this.qtype=''
-            // this.section=initSection()
+            this.section=initSection()
+            this.fetchCategoryVal()
+            setTimeout(() => {
+                this.fetchData()
+                this.fetchCourseLists() 
+            }, 300);
             
         },
          computed: {
@@ -295,12 +297,20 @@
             }
         },
         methods: {
+            // 掉接口存储category_id
+            fetchCategoryVal(){
+                 examService.fetchCategoryVal({category:'questions'}).then((ret) => {
+                        this.categoryVal=ret[0].val
+                    })
+            },
             importQuestion(){
                 if(!this.selectData.id){
                      xmview.showTip('error','请先选择左侧栏目，再进行添加')
                      return
                 }
                 this.$router.push({ name:'exam-subject-import',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
+                console.log('this.category.currentData',this.category.currentData);
+                
             },
             addQuestion(){
                 if(!this.selectData.id){
@@ -313,15 +323,12 @@
             treeNodeClick (type, data, node, store) {
                 if (type == 1) { 
                     this.selectData = Object.assign({},node.data)  //解决左右数据
-                    console.log('1111',this.selectData);
-                    this.category.currentData.id=this.selectData.id
-                    this.category.currentData.name=this.selectData.name
-                    // this.fetchCourseLists () 
-                    console.log('2222',this.category.currentData);
+                    this.category.currentData.chapter_id=this.selectData.id
+                    this.category.currentData.chapter_name=this.selectData.name
+                    this.category.currentData.category_id=this.categoryVal
+                    this.fetchCourseLists () 
+                    // console.log('2222',this.category.currentData);
                 }
-            },
-            dropDown(){
-                console.log(this)
             },
             // 下线 或者上线课程 0为下线，1为上线
             offline(index, row) {
@@ -338,7 +345,7 @@
             },
             fetchData() {//获取左边栏目数据
                 let param={
-                            category_id: this.$store.state.index.examCate  , // 3- 供应商
+                            category_id: this.categoryVal  , // 3- 供应商
                             page: 1,
                             chapter_type:4,
                             pagesize: -1,
@@ -353,17 +360,19 @@
                     // this.fetchCourseLists()
             },
             fetchCourseLists () {// 获取右边栏目数据
+                this.section=initSection()
                 this.section.loading = true
-                this.section.chapter_id =this.category.currentData.id
-                this.section.category_id =this.$store.state.index.examCate
+                this.section.chapter_id =this.category.currentData.chapter_id
+                this.section.category_id =this.categoryVal
                 this.section.chapter_type = 4
                  delete this.section.data
                 // delete this.section.loading
                 // delete this.section.total
                 return examService.fetchSubjectLists(this.section).then((ret) => {
                     this.section.data = ret.data
-                    this.section.total = ret._exts.total
                     this.section.loading = false
+                    this.section.total = ret._exts.total
+                    let total= ret._exts.total
                 })
             },
             handleDelete (index, row) {
@@ -379,13 +388,13 @@
            
             update (index, row) {
                 console.log(row)
-                
                 this.$router.push({
                     name:'exam-subject-edit',
                     params:{
                         id:row.id,
                         //category_id:row.category_id,
                         chapter_id:row.chapter_id,
+                        chapterInfo:{chapter_type:4},//判断栏目是否显示的条件
                         subjectInfo:row,
                         readonly:true,
                     }

@@ -353,6 +353,7 @@
                         id:row.id,
                         //category_id:row.category_id,
                         chapter_id:row.chapter_id,
+                        chapterInfo:{chapter_type:2},//判断栏目是否显示的条件
                         subjectInfo:row,
                         readonly:true,
                     }

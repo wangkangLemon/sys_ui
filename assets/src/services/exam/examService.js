@@ -19,6 +19,17 @@ class examService {
             }
         })
     }
+    fetchCategoryVal(fetchParam) {
+        let url = `${config.apiHost}` + '/setting/lists'
+        return api.get(url, fetchParam
+        ).then(ret => {
+            if (ret.code == 0) {
+                return ret.data
+            } else {
+                return Promise.reject(ret)
+            }
+        })
+    }
 
 
     // 搜索章节chapter栏目

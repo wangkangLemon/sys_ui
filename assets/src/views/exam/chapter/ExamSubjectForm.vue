@@ -29,7 +29,6 @@
             &:first-of-type {
                 padding-top: 0;
             }
-
             hr {
                 position: absolute;
                 width: 100%;
@@ -49,7 +48,6 @@
                     margin-bottom: 0;
                 }
             }
-    
         }
         .cate{
             .el-cascader{
@@ -65,7 +63,6 @@
                 width: 100%;
                 vertical-align: middle;
             }
-
         }
         .multy-choose-item {
                 margin: 5px 0;
@@ -74,18 +71,15 @@
                 width: 80%;
                 vertical-align: middle;
             }
-
-        .bottom-btns {
-            .submit {
-                float: right;
-            }
-        }
     }
     .addtype{
         margin-top:22px;
         .item{
              margin-top:22px;
         }
+    }
+    .submit {
+        float: right;
     }
 }
 </style>
@@ -94,9 +88,9 @@
     <article id="course-manage-addcourse-container">
         <!-- <el-tabs v-model="activeTab" class="tab"> -->
             <!-- <el-tab-pane  label="考试题目设置" name="second" class="testing-set"> -->
-                <el-form  class="testing-set"  >
-                    <el-form class="cate" label-width="120px" :model="form" :rules="rules" ref="cate">
-                        <el-form-item  label="所属栏目" prop="chapter_id">
+                <el-form  class="testing-set" label-width="90px" >
+                    <el-form class="cate" label-width="120px" :model="form" :rules="rules" ref="cate" >
+                        <el-form-item  label="所属栏目" prop="chapter_id" v-if="$route.params.chapterInfo.chapter_type!==4 ">
                             <Section-category-menu :placeholder="form.chapter_name" :autoClear="true" v-model="form.chapter_id" :reqFun="reqFun"></Section-category-menu>
                         </el-form-item>
                         <!--A3题干部分-->
@@ -122,7 +116,7 @@
                                 <el-button v-if="!readonly"  type="text" @click="addMoreTestingOption(ansoption)">添加更多选项</el-button>
                             </div>
                         </el-form-item>
-                        <hr>
+                        <hr >
                     </el-form>
                     <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index" :model="item"  ref="test">
                         <el-form-item label="" v-if="!readonly">
@@ -302,10 +296,20 @@ export default {
                 xmview.showTip('error', ret.message)
             })
         }else{  // 新建
+            if(!this.$route.params.chapterInfo){
+                    xmview.showTip('warning', "请先选择试题所属分类")
+                    this.$router.back()
+                    return
+            }
+             
+
             this.form={
                 chapter_id:this.$route.params.chapterInfo.id,
                 chapter_name:this.$route.params.chapterInfo.name
             }
+            if(this.$route.params.chapterInfo.chapter_type==4){
+                    this.form.chapter_id=this.$route.params.chapterInfo.chapter_id
+                }
             this.qtype=this.$route.params.qtype
             xmview.setContentTile(`试题添加-${this.qtype}题型`)
             console.log(this.qtype)
@@ -466,8 +470,6 @@ export default {
                             "subjects":requestParam,
                         }
                     }
-                    
-                    
                 }
                 params={ 
                         category_id:this.$store.state.index.examCate,
@@ -476,6 +478,11 @@ export default {
                         style:this.qtype.toLowerCase(),
                         noJson:0  
                     }
+                if(this.$route.params.chapterInfo.chapter_type==4){
+                    params.category_id=this.$route.params.chapterInfo.category_id
+                }
+                console.log('params',params);
+                    
                 examService.addSubject(params).then((ret) => {
                     xmview.showTip('success', '操作成功')
                     this.$router.back()

@@ -272,11 +272,10 @@
                     {{mainTitle}}
                     <!--asd-->
                     <small>{{subTitle}}</small>
-                    <div v-if="/^\/exam(?:\/(?=$))?/i.test($route.fullPath)" class="examcate"> 
+                    <div v-if="/^\/exam(?:\/(?=$))?/i.test($route.fullPath)&&cateShow" class="examcate"> 
                         <Section-category-menu :placeholder="examCate.category_name" :clearable="false" :autoClear="false" v-model="examCate.category_id" :reqExamCateFun="reqExamCateFun"></Section-category-menu>
                     </div>
                 </h2>
-                
                 <div class="route-content" v-loading="contentLoading">
                     <router-view></router-view>
                 </div>
@@ -312,7 +311,15 @@
                         pagesize:-1
                     })
                 },
+                cateShow:1
             }
+        },
+        beforeRouteUpdate (to, from, next) {
+            this.cateShow=1
+            if (from.path =='/questionbank/manage'){
+                this.cateShow=0
+            }
+            next()
         },
         computed: {
             userInfo () {
@@ -333,10 +340,10 @@
             },
             '$store.state.index.webpathSub': function () {
                 this.subTitle = this.$store.state.index.webpathSub
-            }
+            },
         },
         created () {
-            console.log(this.$route)
+            // console.log('this.$route',this.$router)
              getMenutree().then(ret=>{
                 this.$store.dispatch('setIndexNavMenu',{menu:ret});
              })

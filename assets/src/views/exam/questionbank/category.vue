@@ -1,4 +1,4 @@
-<!--公开课管理-->
+<!--题库管理-->
 <style lang='scss' rel='stylesheet/scss'>
     @import "../../../utils/mixins/common";
     @import "../../../utils/mixins/topSearch";
@@ -57,6 +57,31 @@
                 </div>
                 <ExamChapterCard @handleSave="submit" :data="selectData" :type="type" :category='category' :chaptertype='chaptertype' :checkended="checkended"></ExamChapterCard>
             </section>
+
+            <!--移动子分类的弹出框-->
+            <div class="el-dialog__wrapper" v-show="dialogTree.isShow">
+                <article class="el-dialog el-dialog--tiny">
+                    <section class="el-dialog__header">
+                        移动分类【
+                        <span style="color:red">
+                            {{nodeSelected && nodeSelected.label}}
+                        </span> <i>】到</i>
+                    </section>
+                    <section class="el-dialog__body">
+                        <!-- <ArticleCategoryTree v-model="treeData" node-key="id"
+                                            :onNodeClick="treeNodeClick.bind(this,2)"></ArticleCategoryTree> -->
+                        <MenuTree v-model="SecMenu" node-key="id" :Mult='Mult' 
+                :onNodeClick="treeNodeClick.bind(this,2)" :req="req" :param="initparam"></MenuTree>
+                    </section>
+
+                    <section class="el-dialog__footer">
+                        <span class="dialog-footer">
+                            <el-button @click="dialogTree.isShow = false">取 消</el-button>
+                            <el-button type="primary" @click="dialogTree.confirmClick">确 定</el-button>
+                        </span>
+                    </section>
+                </article>
+            </div>
             <!--{{secMenu}}-->
     </article>
 </template>
@@ -113,30 +138,31 @@
                 chaptertype:1,
                 checkended:1, 
                 initparam:{  //传参用的现在没用
-                    category_id:this.$store.state.index.examCate, // 3- 供应商
+                    category_id:this.categoryVal, // 3- 供应商
                     chapter_type:4,
                     pid:0,
                     pagesize:-1,
                     level:-1,
                 },//栏目树传参用的对象
+                //移动栏目
+                dialogTree: { //移动弹窗
+                    isShow: false,
+                    confirmClick: {}
+                },
+                nodeSelected: void 0, // 被选中的node节点
+                nodeParentSelected: void 0, // 被选中node节点的父节点
+                moveToNode: void 0, // 将要移动到最终的分类
+                categoryVal:'' //掉接口存储category_id
             }
         },
         watch: {
-            // '$store.state.index.secMenu'(){
-            //     this.selectData = Object.assign({},this.$store.state.index.secMenu) //复制一份右边card 里面vuex存储的值 
-            //     this.selectData.category_id	= this.$store.state.index.examCate
-            // },
             'type'(){
                 console.log(this.type,this.$store.state.index.secPid)
             },
             '$store.state.index.examCate'(){ //大量请求
-            // if(this.fetchParam.category_id!==1){
                 this.fetchParam.category_id = this.$store.state.index.examCate
                 this.initparam=this.fetchParam
-                console.log('this.fetchParam.category_id ',this.fetchParam.category_id );
                 this.$refs.qustionbankCategory.getInitData();
-                // this.fetchData()
-            // }
             } ,
         },
         created() {
@@ -145,11 +171,11 @@
             this.loadingData=false
             xmview.setLoading(false)
             // this.fetchData() // 避免初始化多次请求
+            this.fetchCategoryVal()
         },
         methods: {
             //获取题库菜栏目列表
             req(param){
-                this.fetchParam.category_id = this.$store.state.index.examCate
                     return examService.fetchChapterCategory(this.fetchParam)
                 },
             // 左边的节点被点击
@@ -159,12 +185,19 @@
                 if (type == 1) { 
                     this.selectData = Object.assign({},node.data)  //解决左右数据
                     console.log( this.selectData);
-                    
+                }
+                else if (type == 2) {
+                    this.moveToNode = node
                 }
             },
             // 清空选中项
             clearSelected () {
                 this.selectable = false
+            },
+            fetchCategoryVal(){
+                 examService.fetchCategoryVal({category:'questions'}).then((ret) => {
+                        this.categoryVal=ret[0].val
+                    })
             },
             fetchData() {
                 this.SecMenu=[]
@@ -194,12 +227,12 @@
                         // message.pid=this.$store.state.index.secPid
                         message.pid=this.selectData.id
                     }
-                    message.category_id=this.$store.state.index.examCate
+                    message.category_id=this.categoryVal
                     message.chapter_type=4
                     console.log(message);
                     examService.ChapterCategoryCreate( message ).then(( ret ) => {
                         this.selectData = getSelectData()  //通过初始化组件传值清空
-                        this.selectData.category_id	= this.$store.state.index.examCate
+                        this.selectData.category_id	= this.categoryVal
                         console.log(this)
                         console.log(this.selectData)
                         setTimeout(() => {
@@ -214,7 +247,6 @@
                 }else {
                     transformParam(message)
                     console.log(message);
-                    
                     examService.ChapterCategoryEdit( message ,message.id).then(( ret ) => {
                         setTimeout(() => {
                             // this.fetchData() // 重新刷新数据 
@@ -227,7 +259,7 @@
                 this.type = type
                 if(type!="update"){
                     this.$store.dispatch('setSecMenu', { //通过清空vuex清空
-                    category_id:this.$store.state.index.examCate,
+                    category_id:this.categoryVal,
                     chapter_type:4,
                     name: '',
                     image: null,
@@ -241,6 +273,33 @@
                     console.log(this.$refs.chapterCategory)
                     this.$refs.chapterCategory.clearSelected()
                 }
+                if(type == 'C'){
+                     if (!this.nodeSelected) {
+                        xmview.showTip('warning', '请先选中一个分类')
+                        return
+                    }
+
+                    this.dialogTree.isShow = true
+                    this.dialogTree.confirmClick = () => {
+                        let id = this.nodeSelected.value
+                        let to = this.moveToNode.data.value
+                        if (id === to) {
+                            xmview.showTip('warning', '请选择不同的分类')
+                            return
+                        }
+                        articleService.moveCategory({id, to}).then((ret) => {
+                            // 重新渲染树节点
+                            if (ret.code === 0) {
+                                xmview.showTip('success', '操作成功!')
+                                this.$refs.articleCategory.initData()
+                                this.dialogTree.isShow = false
+                            } else if (ret.code === 1) {
+                                xmview.showTip('error', ret.message)
+                            }
+                        })
+                    }
+                }
+
             },
             // 单条删除
             del() {

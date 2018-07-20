@@ -165,7 +165,6 @@
             processRequestRet (ret, type = 0) {
                 // return 
                 if (type === 0) {
-                    //debugger
                     // 把结果过滤掉当前选中的
                     let t = ret.filter((item) => {
                         return item[this.itemObj[0]] != this.value

@@ -22,11 +22,15 @@
             return {
                 data: this.value,
                 loading: false,
-                selectable: true, // 是否可选中
+                selectable: true, // 是否可选中,
+                categoryVal:'' //掉接口存储category_id
             }
         },
         created () {
-           this.getInitData()
+            this.fetchCategoryVal()
+            setTimeout(() => {
+                this.getInitData()
+            }, 300);
         },
         watch: {
 
@@ -53,28 +57,30 @@
                 //     this.data = val
                 //     this.$emit('input', val)
                 // },
+            // 掉接口存储category_id    
+            fetchCategoryVal(){
+                 examService.fetchCategoryVal({category:'questions'}).then((ret) => {
+                        this.categoryVal=ret[0].val
+                    })
+            },
             getInitData(){
                 this.data=[]
-                 console.log('questioncategory ++++++   this.param.category_id',this.$store.state.index.examCate);
-            
-            // this.getData(this.param).then(ret=>{ 
-            this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1,category_id:this.$store.state.index.examCate,chapter_type:4}).then(ret=>{ 
-                console.log(ret);
-                ret.forEach(v => {
-                    this.data.push({
-                        data: v,
-                        label: v.name,
-                        value: v.id,
-                        children: v.ended ? null : [{
-                            label: '正在加载',
-                            value: -1,
-                        }]  //是否最终菜单？点箭头触发请求
-                    })
-               })
-               console.log(2222222222222222,this.data);
-               this.loading = false
-               xmview.setContentLoading(false)
-            })
+                // this.getData(this.param).then(ret=>{ 
+                this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1,category_id:this.categoryVal,chapter_type:4}).then(ret=>{ 
+                    ret.forEach(v => {
+                        this.data.push({
+                            data: v,
+                            label: v.name,
+                            value: v.id,
+                            children: v.ended ? null : [{
+                                label: '正在加载',
+                                value: -1,
+                            }]  //是否最终菜单？点箭头触发请求
+                        })
+                })
+                this.loading = false
+                xmview.setContentLoading(false)
+                })
             },    
             // 给子元素获取数据的方法
             getData (params) {
@@ -86,7 +92,7 @@
             handleNodeExpand (data, node, nodeDom) { //点下拉箭头  
                 // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
     
-                this.getData({id : 'tree', type :'course', filter : true , pid :node.data.value , level:-1, pagesize:-1,category_id:this.$store.state.index.examCate,chapter_type:4}).then(ret=>{
+                this.getData({id : 'tree', type :'course', filter : true , pid :node.data.value , level:-1, pagesize:-1,category_id:this.categoryVal,chapter_type:4}).then(ret=>{
                     let arr = []
                     
                     ret.forEach(v => {

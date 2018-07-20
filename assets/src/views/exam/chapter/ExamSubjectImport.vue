@@ -138,8 +138,8 @@
                 form:{
                     chapter_id:void 0,
                     chapter_name:'',
-                    // category_id:'',
-                    // category_name:'',
+                    chapter_type:'',
+                    category_id:'',
                 },
                 rules: {
                     chapter_id: { required: true, type: 'number', message: '请选择试题栏目', trigger: 'change' },
@@ -155,52 +155,52 @@
                     reasons: [],
                 },
                 params:{ 
-                    category_id:this.$store.state.index.examCate,
+                    category_id:void 0,
                     chapter_id:void 0,
                     },
                 name:'input'
             }
         },
         created () {
+            console.log('this',this);
             // console.log(typeof(this.$route.params.chapterInfo.id),this.$route.params.chapterInfo)
             if(this.$route.params.chapterInfo){
-                this.form={
-                    chapter_id:this.$route.params.chapterInfo.id,
-                    chapter_name:this.$route.params.chapterInfo.name
+                for(let i in this.$route.params.chapterInfo){
+                    this.form[i]=this.$route.params.chapterInfo[i]
                 }
-                console.log('33333',typeof(this.form.chapter_id),this.form.chapter_id);
-                
+                xmview.setContentTile(`试题导入- ${this.form.chapter_name}`)
+                if(this.form.chapter_type==4){ //导入传参
+                    this.params={
+                        category_id:this.form.category_id,
+                        chapter_id:this.form.chapter_id,
+                    }
+                }
             }else{
-               xmview.showTip('error', "请先选择试题所属分类")
+                xmview.showTip('warning', "请先选择试题所属分类")
                 this.$router.back()
                 return
             }
-           
-            // this.getTaskData().then(() => {
                 xmview.setContentLoading(false)
-            // })
         },
         watch:{
             '$store.state.index.examCate'(){
+                if(this.form.chapter_type==4) return
                 this.params={
                     category_id:this.$store.state.index.examCate,
                     chapter_id:this.form.chapter_id,
                     }
-                    console.log(this.params)
             },
-
             'form.chapter_id'(){
+                if(this.form.chapter_type==4) return
                 this.params={
                     category_id:this.$store.state.index.examCate,
                     chapter_id:this.form.chapter_id,
                     }
-                    console.log(this.params)
             }
         },
         methods: {
             openDailog(){
-                console.log(typeof(this.form.chapter_id),'this.form.chapter_id=============='+this.form.chapter_id)
-                
+                // console.log(typeof(this.form.chapter_id),'this.form.chapter_id=============='+this.form.chapter_id)
                 if(typeof(this.form.chapter_id)!=='number'&&this.$route.params.chapterInfo.chapter_type!==4){
                     xmview.showTip('error', "请先选择试题所属栏目")
                     return
@@ -224,7 +224,6 @@
                 //     formData.append('category_id',this.$store.state.index.examCate)
                 //     formData.append('chapter_id',110)
                 //     examService.upload(formData).then((ret) => {
-                    console.log(response.data)
                     let reasons = []
                     if (response.errs) {
                         response.errs.forEach((message) => {

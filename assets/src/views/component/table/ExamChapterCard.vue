@@ -62,9 +62,9 @@
                     chapter_type: [
                         {required: true,type:'number', message: '请输入	章节类型', trigger: 'blur'},
                     ],
-                    // image: [
-                    //     {required: true, message: '请上传图片', trigger: 'blur'}
-                    // ]
+                    image: [
+                        {required: true, message: '请上传图片', trigger: 'blur'}
+                    ]
                 },
                 uploadextraData:{
                     biz:'course',
@@ -72,6 +72,7 @@
                 }
             }
         },
+        //                                                是否最终极
         props: ['data', 'type','category','chaptertype','checkended'],
 
         watch: {
@@ -89,10 +90,11 @@
             // }
         },
         activated () {
+            this.uploadImgUrl = commonService.commonUploadImage()
             this.selectData.category_id=this.category
             this.selectData.chapter_type=this.chaptertype
             xmview.setContentLoading(false)
-            this.uploadImgUrl = commonService.commonUploadImage()
+            
         },
         methods: {
             initData() {

@@ -129,7 +129,6 @@
                     console.log(this.$refs.chapterCategory)
                     this.$refs.chapterCategory.clearSelected()
                 }
-          
             }, 
         },
         activated() {
