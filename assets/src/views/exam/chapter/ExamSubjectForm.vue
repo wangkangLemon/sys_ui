@@ -264,6 +264,8 @@ export default {
         }
     },
     created(){
+        console.log('this.$route.params.qtype',this.$route.params.qtype);
+        
         let _this=this
         if(this.$route.params.chapter_id){  //编辑
             examService.getExamSubject(this.$route.params.id).then((ret) => {
@@ -301,8 +303,6 @@ export default {
                     this.$router.back()
                     return
             }
-             
-
             this.form={
                 chapter_id:this.$route.params.chapterInfo.id,
                 chapter_name:this.$route.params.chapterInfo.name

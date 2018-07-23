@@ -130,6 +130,10 @@
                         <el-radio class="radio" v-model="fetchParam.share" :label="1">是</el-radio>
                         <el-radio class="radio" v-model="fetchParam.share" :label="0">否</el-radio>
                     </el-form-item>
+                    <el-form-item label="屏蔽组是否可见" prop="noaccess">
+                        <el-radio class="radio" v-model="fetchParam.noaccess" :label="1">隐藏</el-radio>
+                        <el-radio class="radio" v-model="fetchParam.noaccess" :label="0">可见</el-radio>
+                    </el-form-item>
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
                         <el-radio class="radio" v-model="fetchParam.need_testing" :label="1">需要</el-radio>
@@ -569,7 +573,8 @@ function getOrignData() {
         experts_id: void 0,
         experts_name:'',
         sort:void 0,
-        share:void 0,
+        share:0,
+        noaccess:0,
     }
 
     return orignData

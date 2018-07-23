@@ -138,10 +138,10 @@
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>考题列表
-                <el-button type="primary" icon="plus" >添加考题</el-button>
+                <el-button type="primary" icon="plus">添加考题</el-button>
                 <el-button type="danger" icon="plus"  @click="importQuestion">试题导入</el-button>
                 <section>
-                      <el-select v-model="qtype" placeholder="" @change="addQuestion" >
+                      <el-select v-model="qtype" placeholder="" @change="addQuestion" ref="qtype">
                             <el-option label="A1" value="A1"></el-option>
                             <el-option label="A2" value="A2"></el-option>
                             <el-option label="A3" value="A3"></el-option>
@@ -218,7 +218,7 @@
             etime:'',
             page: 1,
             pagesize: 15,
-            total: 0,
+            total:0,
             pid:0,
             status,
             title:'',
@@ -263,7 +263,8 @@
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
                 qtype:'',
                 selectData:{},
-                categoryVal:'' //掉接口存储category_id
+                categoryVal:'' ,//掉接口存储category_id
+                ended:void 0,
             }
         },
         watch: {
@@ -304,8 +305,8 @@
                     })
             },
             importQuestion(){
-                if(!this.selectData.id){
-                     xmview.showTip('error','请先选择左侧栏目，再进行添加')
+                if(!this.selectData.id||!this.ended==1){
+                     xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
                      return
                 }
                 this.$router.push({ name:'exam-subject-import',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
@@ -313,8 +314,8 @@
                 
             },
             addQuestion(){
-                if(!this.selectData.id){
-                     xmview.showTip('error','请先选择左侧栏目，再进行添加')
+                if(!this.selectData.id||!this.ended==1){
+                     xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
                      return
                 }
                 this.$router.push({ name:'exam-subject-add',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
@@ -322,10 +323,14 @@
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
                 if (type == 1) { 
+                    console.log(this.$refs.qtype);
+                    // this.$refs.qtype.value=''
+                    // this.$refs.qtype.resetFields()
                     this.selectData = Object.assign({},node.data)  //解决左右数据
                     this.category.currentData.chapter_id=this.selectData.id
                     this.category.currentData.chapter_name=this.selectData.name
                     this.category.currentData.category_id=this.categoryVal
+                    this.ended=node.data.ended
                     this.fetchCourseLists () 
                     // console.log('2222',this.category.currentData);
                 }
@@ -351,23 +356,17 @@
                             pagesize: -1,
                             pid:0,
                         }
-                // courseService.getCategoryTree( param).then((ret) => {
                 examService.fetchChapterCategory( param).then((ret) => {
                         this.SecMenu=ret
-                        // console.log('this.SecMenu+++++++',param,this.SecMenu)
                         xmview.setContentLoading(false)     
                     })
-                    // this.fetchCourseLists()
             },
             fetchCourseLists () {// 获取右边栏目数据
-                this.section=initSection()
                 this.section.loading = true
                 this.section.chapter_id =this.category.currentData.chapter_id
                 this.section.category_id =this.categoryVal
                 this.section.chapter_type = 4
                  delete this.section.data
-                // delete this.section.loading
-                // delete this.section.total
                 return examService.fetchSubjectLists(this.section).then((ret) => {
                     this.section.data = ret.data
                     this.section.loading = false
@@ -379,7 +378,7 @@
                 xmview.showDialog(`确认要删除试题【<i style="color:red">${row.description}</i>】吗？`, () => {
                     examService.delSubject(row.id).then(() => {
                         xmview.showTip('success', '删除成功')
-                        // this.fetchCourseLists()
+                        this.section.data.splice(index, 1) //删除选中项
                     }).catch((ret) => {
                         xmview.showTip('error', ret.message)
                     })
@@ -402,7 +401,7 @@
             },
             sectionPageChange (val) {
                 this.section.page = val
-                // this.fetchCourseLists()
+                this.fetchCourseLists()
             }
         }
     }

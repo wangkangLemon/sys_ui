@@ -331,7 +331,7 @@
                         course_id: row.contentid
                     }).then(() => {
                         xmview.showTip('success', '操作成功')
-                        this.data.splice(index, 1)
+                        this.section.data.splice(index, 1)
                     })
                 })
             },

@@ -181,9 +181,11 @@
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
                 // console.log('===========   node.data.data==========  ')
-                this.type='update'
                 if (type == 1) { 
+                    this.type='update'
                     this.selectData = Object.assign({},node.data)  //解决左右数据
+                    this.nodeParentSelected = node.parent// 记录父节点
+                    this.nodeSelected = data // 记录当前节点
                     console.log( this.selectData);
                 }
                 else if (type == 2) {
@@ -283,6 +285,9 @@
                     this.dialogTree.confirmClick = () => {
                         let id = this.nodeSelected.value
                         let to = this.moveToNode.data.value
+
+                        console.log(id,to);
+                        
                         if (id === to) {
                             xmview.showTip('warning', '请选择不同的分类')
                             return
