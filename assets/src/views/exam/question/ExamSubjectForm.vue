@@ -311,7 +311,7 @@ export default {
             // console.log(this.qtype)
             if(this.qtype==undefined){
                 xmview.showTip('error', "请点击添加考题按钮 => 选择题型")
-                this.$router.push({'name':'exam-chapter-manage'})
+                this.$router.back()
                 return
             }
         }

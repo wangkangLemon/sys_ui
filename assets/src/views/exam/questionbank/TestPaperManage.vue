@@ -49,6 +49,11 @@
                 .el-tree-node{
                     overflow: hidden;
                 }
+                p{
+                    padding: 10px;
+                    font-size: 12px;
+                    color:red;
+                }
             }
         }
         .right-content {
@@ -132,22 +137,23 @@
             <div class="classify-tree">
                 <!-- <MenuTree v-model="SecMenu" ref="qustionbankCategory" :Mult='Mult' 
                 :onNodeClick="treeNodeClick.bind(this,1)" :req="req" :param="initparam"></MenuTree> -->
+                <p>提示：请先选择左侧最终极栏目再进行添加考题</p>
                  <MenuTree :data="SecMenu" v-if="SecMenu.length" :onNodeClick="treeNodeClick.bind(this,1)" ref="qustionbankCategory"></MenuTree>
             </div>
         </section>
         <section class="right-content">
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>考题列表
-                <el-button type="primary" icon="plus">添加考题</el-button>
-                <el-button type="danger" icon="plus"  @click="importQuestion">试题导入</el-button>
-                <section>
-                      <el-select v-model="qtype" placeholder="" @change="addQuestion" ref="qtype">
+                <el-button type="primary" icon="plus" @click="addQuestion" >添加考题</el-button>
+                <el-button type="danger" icon="plus"  @click="importQuestion" >试题导入</el-button>
+                <!-- <section>
+                      <el-select v-model="qtype" clearable  @change="addQuestion" ref="qtype">
                             <el-option label="A1" value="A1"></el-option>
                             <el-option label="A2" value="A2"></el-option>
                             <el-option label="A3" value="A3"></el-option>
                             <el-option label="A4" value="A4"></el-option>
                     </el-select>
-                </section>   
+                </section>    -->
                 
             </div>
             <div class="content-list">
@@ -173,7 +179,7 @@
                 </div>     
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="description" label="考题" width="180"></el-table-column>
-                    <el-table-column prop="chapter_name" label="绑定栏目" >
+                    <el-table-column prop="category_name" label="绑定栏目" >
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
                     <el-table-column prop="addate" label="创建时间" width="200"></el-table-column>
@@ -203,6 +209,7 @@
     </article>
 </template>
 <script>
+    import libService from '../../../services/course/libService.js'
     import examService from '../../../services/exam/examService'    
     import courseService from '../../../services/course/courseService.js'
     import MenuTree from '../../component/tree/QustionsCategory.vue'
@@ -219,10 +226,9 @@
             page: 1,
             pagesize: 15,
             total:0,
-            pid:0,
+            // pid:0,
             status,
             title:'',
-            qtype:'',
             deleted:-1,
         }
     }
@@ -263,29 +269,29 @@
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
                 qtype:'',
                 selectData:{},
-                categoryVal:'' ,//掉接口存储category_id
+                // categoryVal:'' ,//掉接口存储category_id
                 ended:void 0,
+                disabled:true,
             }
         },
         watch: {
             '$store.state.index.secMenu'(){
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             },
-            '$store.state.index.examCate'(){
-                // this.$refs.qustionbankCategory.getInitData();
-                this.fetchData()
-                this.fetchCourseLists() 
-            }     
+            // '$store.state.index.examCate'(){
+            //     // this.$refs.qustionbankCategory.getInitData();
+            //     this.fetchData()
+            //     this.fetchCourseLists() 
+            // }     
         },
         created () {
             // this.$refs.qustionbankCategory.getInitData();
             xmview.setContentLoading(false)     
             this.category.currentData.id = ''
-            this.category.currentData.chapter_type = 4
+            // this.category.currentData.chapter_type = 4
             this.category.loading = true
             this.qtype=''
             this.section=initSection()
-            this.fetchCategoryVal()
             setTimeout(() => {
                 this.fetchData()
                 this.fetchCourseLists() 
@@ -298,16 +304,81 @@
             }
         },
         methods: {
-            // 掉接口存储category_id
-            fetchCategoryVal(){
-                 examService.fetchCategoryVal({category:'questions'}).then((ret) => {
-                        this.categoryVal=ret[0].val
+            
+            // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                if (type == 1) { 
+                    this.selectData = Object.assign({},node.data)  //解决左右数据
+                    this.ended=node.data.ended
+                    console.log('node.data.ended',node.data.ended);
+                    if(this.selectData.id&&this.ended==1){
+                        this.disabled=false
+                    }else{
+                        this.disabled=true
+                    }
+                    // this.$refs.qtype.resetFields()
+                    this.category.currentData.category_id=this.selectData.id
+                    this.category.currentData.category_name=this.selectData.name
+                    this.category.currentData.questionBank = 1
+                    this.fetchCourseLists () 
+                    // console.log('2222',this.category.currentData);
+                }
+            },
+            // 下线 或者上线课程 0为下线，1为上线
+            offline(index, row) {
+                let txt = row.status == 0 ? '禁用' : '启用'
+                let finalStatus = row.status == 0 ? 1 : 0
+                xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
+                    libService.offlineCourse({
+                        id: row.id,
+                        status: finalStatus
+                    }).then((ret) => {
+                        row.status = finalStatus
                     })
+                })
+            },
+            fetchData() { //获取左边栏目数据
+                let param={
+                            // category_id: this.categoryVal  , // 3- 供应商
+                            page: 1,
+                            // chapter_type:4,
+                            pagesize: -1,
+                            pid:0,
+                        }
+                libService.fetchLibCategory( param).then((ret) => {
+                    this.SecMenu=ret
+                    console.log(ret);
+                    console.log('this.SecMenu',this.SecMenu);
+                    xmview.setContentLoading(false)     
+                })
+            },
+            fetchCourseLists () { // 获取右边栏目数据
+                this.section.loading = true
+                this.section.category_id = this.category.currentData.category_id
+                let param=Object.assign({},this.section)
+                delete param.total
+                delete param.data
+                return libService.fetchSubjectLists(param).then((ret) => {
+                    this.section.data = ret.data
+                    this.section.loading = false
+                    this.section.total = ret._exts.total
+                    let total= ret._exts.total
+                })
+            },
+            handleDelete (index, row) {
+                xmview.showDialog(`确认要删除试题【<i style="color:red">${row.description}</i>】吗？`, () => {
+                    libService.delLib(row.id).then(() => {
+                        xmview.showTip('success', '删除成功')
+                        this.section.data.splice(index, 1) //删除选中项
+                    }).catch((ret) => {
+                        xmview.showTip('error', ret.message)
+                    })
+                })
             },
             importQuestion(){
                 if(!this.selectData.id||!this.ended==1){
-                     xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
-                     return
+                    xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
+                    return
                 }
                 this.$router.push({ name:'exam-subject-import',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
                 console.log('this.category.currentData',this.category.currentData);
@@ -318,85 +389,14 @@
                      xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
                      return
                 }
-                this.$router.push({ name:'exam-subject-add',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
+                this.$router.push({ name:'course-manage-addLib',params:{addcourseInfo:this.category.currentData,handle:'add'}})
             },
-            // 左边的节点被点击
-            treeNodeClick (type, data, node, store) {
-                if (type == 1) { 
-                    console.log(this.$refs.qtype);
-                    // this.$refs.qtype.value=''
-                    // this.$refs.qtype.resetFields()
-                    this.selectData = Object.assign({},node.data)  //解决左右数据
-                    this.category.currentData.chapter_id=this.selectData.id
-                    this.category.currentData.chapter_name=this.selectData.name
-                    this.category.currentData.category_id=this.categoryVal
-                    this.ended=node.data.ended
-                    this.fetchCourseLists () 
-                    // console.log('2222',this.category.currentData);
-                }
-            },
-            // 下线 或者上线课程 0为下线，1为上线
-            offline(index, row) {
-                let txt = row.status == 0 ? '禁用' : '启用'
-                let finalStatus = row.status == 0 ? 1 : 0
-                xmview.showDialog(`你将要${txt}课程 <span style="color:red">${row.course_name}</span> 确认吗?`, () => {
-                    examService.offlineCourse({
-                        id: row.id,
-                        status: finalStatus
-                    }).then((ret) => {
-                        row.status = finalStatus
-                    })
-                })
-            },
-            fetchData() {//获取左边栏目数据
-                let param={
-                            category_id: this.categoryVal  , // 3- 供应商
-                            page: 1,
-                            chapter_type:4,
-                            pagesize: -1,
-                            pid:0,
-                        }
-                examService.fetchChapterCategory( param).then((ret) => {
-                        this.SecMenu=ret
-                        xmview.setContentLoading(false)     
-                    })
-            },
-            fetchCourseLists () {// 获取右边栏目数据
-                this.section.loading = true
-                this.section.chapter_id =this.category.currentData.chapter_id
-                this.section.category_id =this.categoryVal
-                this.section.chapter_type = 4
-                 delete this.section.data
-                return examService.fetchSubjectLists(this.section).then((ret) => {
-                    this.section.data = ret.data
-                    this.section.loading = false
-                    this.section.total = ret._exts.total
-                    let total= ret._exts.total
-                })
-            },
-            handleDelete (index, row) {
-                xmview.showDialog(`确认要删除试题【<i style="color:red">${row.description}</i>】吗？`, () => {
-                    examService.delSubject(row.id).then(() => {
-                        xmview.showTip('success', '删除成功')
-                        this.section.data.splice(index, 1) //删除选中项
-                    }).catch((ret) => {
-                        xmview.showTip('error', ret.message)
-                    })
-                })
-            },
-           
             update (index, row) {
                 console.log(row)
                 this.$router.push({
-                    name:'exam-subject-edit',
-                    params:{
-                        id:row.id,
-                        //category_id:row.category_id,
-                        chapter_id:row.chapter_id,
-                        chapterInfo:{chapter_type:4},//判断栏目是否显示的条件
-                        subjectInfo:row,
-                        readonly:true,
-                    }
+                    name:'course-manage-addLib',
+                    params: {courseInfo: row,handle:'edit'},
+                    query: {id: row.contentid}
                 })
             },
             sectionPageChange (val) {

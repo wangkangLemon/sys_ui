@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import examService from '../../../services/exam/examService'
+    import libService from '../../../services/course/libService.js'
     import treeUtils from '../../../utils/treeUtils'
 
     export default{
@@ -27,13 +27,12 @@
             }
         },
         created () {
-            this.fetchCategoryVal()
+            // this.fetchCategoryVal()
             setTimeout(() => {
                 this.getInitData()
             }, 300);
         },
         watch: {
-
             // 'value' (val) {  
             //     if (val.length != this.data.length) {
             //         this.setCurrVal(val)
@@ -49,24 +48,24 @@
                 //                     console.log(node)
                 //     // console.log('===========onNodeClick    data==========  ')
                 // },
-                // removeItem (item, parent) {
-                //     this.$refs.tree.removeItem(item, parent)
-                // },
+                removeItem (item, parent) {
+                    this.$refs.tree.removeItem(item, parent)
+                },
                 // setCurrVal (val) {
                 //     if (val === this.data) return
                 //     this.data = val
                 //     this.$emit('input', val)
                 // },
             // 掉接口存储category_id    
-            fetchCategoryVal(){
-                 examService.fetchCategoryVal({category:'questions'}).then((ret) => {
-                        this.categoryVal=ret[0].val
-                    })
-            },
+            // fetchCategoryVal(){
+            //      libService.fetchCategoryVal({category:'questions'}).then((ret) => {
+            //             this.categoryVal=ret[0].val
+            //         })
+            // },
             getInitData(){
                 this.data=[]
                 // this.getData(this.param).then(ret=>{ 
-                this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1,category_id:this.categoryVal,chapter_type:4}).then(ret=>{ 
+                this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1,category_id:this.categoryVal,ended:-1}).then(ret=>{ 
                     ret.forEach(v => {
                         this.data.push({
                             data: v,
@@ -84,7 +83,7 @@
             },    
             // 给子元素获取数据的方法
             getData (params) {
-                return examService.fetchChapterCategory(params)
+                return libService.fetchLibCategory(params)
             },
 
 //========================================  opeeableTree============================================================
@@ -92,7 +91,7 @@
             handleNodeExpand (data, node, nodeDom) { //点下拉箭头  
                 // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
     
-                this.getData({id : 'tree', type :'course', filter : true , pid :node.data.value , level:-1, pagesize:-1,category_id:this.categoryVal,chapter_type:4}).then(ret=>{
+                this.getData({id : 'tree', type :'course', filter : true , pid :node.data.value , level:-1, pagesize:-1,category_id:this.categoryVal,ended:-1}).then(ret=>{
                     let arr = []
                     
                     ret.forEach(v => {

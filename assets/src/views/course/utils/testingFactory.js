@@ -71,6 +71,22 @@ class TestingFactory {
             return data
         }
     }
+
+    /**
+     * 获取题库设置
+     * @param type 0-判断 1-单选 2-多选
+     */
+    getLibSet(type) {
+        let data = this.getOrignData()
+        data.subject_type = type
+        if (type == 0) {
+            delete data.options
+            data.correct = void 0
+            return data
+        } else if (type == 1 || type == 2) {
+            return data
+        }
+    }
 }
 
 export default new TestingFactory()

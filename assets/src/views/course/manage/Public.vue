@@ -255,19 +255,7 @@
         //     }
         // },
         methods: {
-            edit(row){
-                console.log(row,this.section)
-                if(row.category_type==3||row.category_type==4||row.category_type==5){
-                    this.$router.push({name: 'course-manage-addCourse-herbal', params: {herbalInfo: row,handle:'edit'}, query: {id: row.contentid}})
-                }
-                else if(row.category_type==6){
-                    this.$router.push({ name:'course-manage-addCourse-imgtxt',params:{imgtxtInfo:row,handle:'edit'}})
-                    return 
-                }
-                else{
-                    this.$router.push({name: 'course-manage-addCourse', params: {courseInfo: row,handle:'edit'}, query: {id: row.contentid}})
-                }
-            },
+            
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
                 console.log(node.data)
@@ -357,10 +345,23 @@
                 xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
                 return
             },
+            edit(row){
+                console.log(row,this.section)
+                if(row.category_type==3||row.category_type==4||row.category_type==5){
+                    this.$router.push({name: 'course-manage-addCourse-herbal', params: {herbalInfo: row,handle:'edit'}, query: {id: row.contentid}})
+                }
+                else if(row.category_type==6){
+                    this.$router.push({ name:'course-manage-addCourse-imgtxt',params:{imgtxtInfo:row,handle:'edit'}})
+                    return 
+                }
+                else{
+                    this.$router.push({name: 'course-manage-addCourse', params: {courseInfo: row,handle:'edit'}, query: {id: row.contentid}})
+                }
+            },
            //添加中草药
             addHerbal(){
-            console.log(this.section.category_type)
-            //  this.$router.push({ name:'course-manage-addCourse'}
+                console.log(this.section.category_type)
+                //  this.$router.push({ name:'course-manage-addCourse'}
                 if(this.ended==1){
                     if( this.section.category_type==3|| this.section.category_type==4||this.section.category_type==5){
                         this.$router.push({ name:'course-manage-addCourse-herbal',params:{herbalInfo:this.section,handle:'add'}})
@@ -373,15 +374,6 @@
                 }
                 xmview.showTip('error','请先选择中药栏目组最终级栏目添加')
                 return
-            },
-            update (index, row) {
-                this.$router.push({
-                    name:'exam-course-edit',
-                    params:{
-                        id:row.id,
-                        courseInfo:row,
-                    }
-                })
             },
             sectionPageChange (val) {
                 this.section.page = val

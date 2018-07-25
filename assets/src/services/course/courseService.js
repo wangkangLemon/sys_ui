@@ -230,7 +230,7 @@ class CourseService {
             return ret.data
         })
     }
-
+    
     // 添加或修改题目
     addOrEditTesting({ govid, course_id, subjects }) {
         govid = govid || authUtils.getUserInfo().company_id

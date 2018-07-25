@@ -51,7 +51,7 @@
                     <el-button :class="{'el-button--primary':type=='update'}" @click="changeType('update')">修改分类</el-button>
                     <el-button :class="{'el-button--primary':type=='P'}" @click="changeType('P')">新建分类</el-button>
                     <el-button :class="{'el-button--primary':type=='S'}" @click="changeType('S')">添加子分类</el-button>
-                    <el-button :class="{'el-button--primary':type=='C'}" @click="changeType('C')" disabled>移动分类</el-button>
+                    <el-button :class="{'el-button--primary':type=='C'}" @click="changeType('C')">移动分类</el-button>
                     <el-button :class="{'el-button--primary':type=='Cd'}" @click="changeType('Cd')" disabled>移动分类下内容</el-button>
                     <el-button type="danger"  @click="del">删除分类</el-button>
                 </div>
@@ -88,27 +88,28 @@
 
 <script>
     //这是 主页面   区别 ：1有子分类 2. ExamChapterCard传递参数  chaptertype:1
-    import examService from '../../../services/exam/examService'
+    import libService from '../../../services/course/libService.js'
     import MenuTree from '../../component/tree/QustionsCategory.vue'
     import ExamChapterCard from '../../component/table/ExamChapterCard.vue'
     import {transformParam} from '../../../utils/common'
     function getFetchParam() {
         return {
             status: void - 1, // 2- 视屏转码中 1-下线 0-正常
-            category_id: void 0, // 3- 供应商
-            chapter_type:4,
+            // category_id: void 0, // 3- 供应商
+            // chapter_type:4,
             page: 1,
             pagesize: -1,
             stime: void 0,
             etime: void 0,
             pid:0,
+            ended:-1
             // need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
         }
     }
     function getSelectData() {
         return {
-            category_id: void 0, // 3- 供应商
-            chapter_type:4,
+            // category_id: void 0, // 3- 供应商
+            // chapter_type:4,
             name: '',
             image: null,
             remark :'',
@@ -137,9 +138,9 @@
                 category:'',
                 chaptertype:1,
                 checkended:1, 
-                initparam:{  //传参用的现在没用
-                    category_id:this.categoryVal, // 3- 供应商
-                    chapter_type:4,
+                initparam:{  //向数组件传参
+                    // category_id:this.categoryVal, // 3- 供应商
+                    // chapter_type:4,
                     pid:0,
                     pagesize:-1,
                     level:-1,
@@ -152,18 +153,18 @@
                 nodeSelected: void 0, // 被选中的node节点
                 nodeParentSelected: void 0, // 被选中node节点的父节点
                 moveToNode: void 0, // 将要移动到最终的分类
-                categoryVal:'' //掉接口存储category_id
+                // categoryVal:'' //掉接口存储category_id
             }
         },
         watch: {
             'type'(){
                 console.log(this.type,this.$store.state.index.secPid)
             },
-            '$store.state.index.examCate'(){ //大量请求
-                this.fetchParam.category_id = this.$store.state.index.examCate
-                this.initparam=this.fetchParam
-                this.$refs.qustionbankCategory.getInitData();
-            } ,
+            // '$store.state.index.examCate'(){ //大量请求
+            //     this.fetchParam.category_id = this.$store.state.index.examCate
+            //     this.initparam=this.fetchParam
+            //     // this.$refs.qustionbankCategory.getInitData();
+            // } ,
         },
         created() {
             console.log('进入试题管理-栏目');
@@ -176,17 +177,16 @@
         methods: {
             //获取题库菜栏目列表
             req(param){
-                    return examService.fetchChapterCategory(this.fetchParam)
+                    return libService.fetchLibCategory(this.fetchParam)
                 },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
-                // console.log('===========   node.data.data==========  ')
+                console.log('===========   node==========  ',type,node, data)
                 if (type == 1) { 
                     this.type='update'
                     this.selectData = Object.assign({},node.data)  //解决左右数据
-                    this.nodeParentSelected = node.parent// 记录父节点
-                    this.nodeSelected = data // 记录当前节点
-                    console.log( this.selectData);
+                    this.nodeParentSelected = node.data.pid // 记录父节点
+                    this.nodeSelected = node // 记录当前节点
                 }
                 else if (type == 2) {
                     this.moveToNode = node
@@ -197,28 +197,19 @@
                 this.selectable = false
             },
             fetchCategoryVal(){
-                 examService.fetchCategoryVal({category:'questions'}).then((ret) => {
+                 libService.fetchCategoryVal({category:'questions'}).then((ret) => {
                         this.categoryVal=ret[0].val
                     })
             },
             fetchData() {
                 this.SecMenu=[]
-                examService.fetchChapterCategory( this.fetchParam ).then((ret) => {
+                 libService.fetchLibCategory( this.fetchParam ).then((ret) => {
                         this.SecMenu=ret
                         console.log(ret);
                         console.log('this.SecMenu',this.SecMenu);
                         xmview.setContentLoading(false)     
                     })
             },
-            // ChapterCategoryCreate( ) {
-                //     examService.ChapterCategoryCreate().then(() => {
-                //             console.log(ret)
-                //             this.selectData=null
-                //             setTimeout(() => {
-                //                 // this.fetchData() // 重新刷新数据
-                //             }, 300)
-                //         })
-                // },
             //处理保存的数据
             submit( message ) {
                 transformParam(message)
@@ -227,14 +218,18 @@
                         message.pid=0
                     } else if( this.type == 'S'){
                         // message.pid=this.$store.state.index.secPid
+                        if(!this.selectData.id){
+                            xmview.showTip('warning', '请先选中一个父级分类')
+                            return
+                        }
                         message.pid=this.selectData.id
                     }
-                    message.category_id=this.categoryVal
-                    message.chapter_type=4
+                    // message.category_id=this.categoryVal
+                    delete message.category_id
+                    delete message.chapter_type
                     console.log(message);
-                    examService.ChapterCategoryCreate( message ).then(( ret ) => {
+                    libService.LibCategoryCreate( message ).then(( ret ) => {
                         this.selectData = getSelectData()  //通过初始化组件传值清空
-                        this.selectData.category_id	= this.categoryVal
                         console.log(this)
                         console.log(this.selectData)
                         setTimeout(() => {
@@ -248,8 +243,9 @@
                     )
                 }else {
                     transformParam(message)
+                    delete message.category_id
                     console.log(message);
-                    examService.ChapterCategoryEdit( message ,message.id).then(( ret ) => {
+                    libService.LibCategoryEdit( message ,message.id).then(( ret ) => {
                         setTimeout(() => {
                             // this.fetchData() // 重新刷新数据 
                             this.$refs.qustionbankCategory.getInitData();
@@ -261,8 +257,8 @@
                 this.type = type
                 if(type!="update"){
                     this.$store.dispatch('setSecMenu', { //通过清空vuex清空
-                    category_id:this.categoryVal,
-                    chapter_type:4,
+                    // category_id:this.categoryVal,
+                    // chapter_type:4,
                     name: '',
                     image: null,
                     remark :'',
@@ -275,46 +271,63 @@
                     console.log(this.$refs.chapterCategory)
                     this.$refs.chapterCategory.clearSelected()
                 }
-                if(type == 'C'){
+                else if( this.type == 'S'){
+                        if(!this.selectData.id){
+                            xmview.showTip('warning', '请先选中一个父级分类')
+                            return
+                        }
+                    }
+                else if(type == 'C'){   //移动栏目
+                 this.$forceUpdate()
                      if (!this.nodeSelected) {
                         xmview.showTip('warning', '请先选中一个分类')
                         return
                     }
-
                     this.dialogTree.isShow = true
                     this.dialogTree.confirmClick = () => {
-                        let id = this.nodeSelected.value
-                        let to = this.moveToNode.data.value
-
-                        console.log(id,to);
+                        console.log(this.nodeSelected.data,this.moveToNode.data);
                         
+                        let id = this.nodeSelected.data.id
+                        let to = this.moveToNode.data.id
+                        console.log(this.nodeSelected);
+                        console.log(id,to);
                         if (id === to) {
                             xmview.showTip('warning', '请选择不同的分类')
                             return
                         }
-                        articleService.moveCategory({id, to}).then((ret) => {
-                            // 重新渲染树节点
-                            if (ret.code === 0) {
-                                xmview.showTip('success', '操作成功!')
-                                this.$refs.articleCategory.initData()
+                        let message = this.nodeSelected.data
+                        message.pid = to
+                        transformParam(message)
+                        console.log(message);
+                        libService.LibCategoryEdit( message ,id).then(( ret ) => {
+                            setTimeout(() => {
+                                // this.fetchData() // 重新刷新数据 
                                 this.dialogTree.isShow = false
-                            } else if (ret.code === 1) {
-                                xmview.showTip('error', ret.message)
-                            }
+                                this.$refs.qustionbankCategory.getInitData();
+                            }, 300)
                         })
+                        // articleService.moveCategory({id, to}).then((ret) => {
+                        //     // 重新渲染树节点
+                        //     if (ret.code === 0) {
+                        //         xmview.showTip('success', '操作成功!')
+                        //         this.$refs.articleCategory.initData()
+                        //         this.dialogTree.isShow = false
+                        //     } else if (ret.code === 1) {
+                        //         xmview.showTip('error', ret.message)
+                        //     }
+                        // })
                     }
                 }
-
             },
             // 单条删除
             del() {
                 if( this.selectData.name != undefined ){
                      xmview.showDialog(`您将要删除<span style="color:red">${this.selectData.name}</span>分类,确认吗？`, () => {
-                    examService.ChapterCategorydelete(this.selectData.id).then(() => {
+                    libService.libCategorydelete(this.selectData.id).then(() => {
                         // store.commit('increment', 10)
                         xmview.showTip('success', '操作成功')
-                        this.selectData = {}  //通过初始化组件传值清空
-                        this.$forceUpdate()
+                        console.log(node, this.nodeParentSelected);
+                        this.selectData = getSelectData()    //通过初始化组件传值清空
                     }).then(()=>{
                         this.$forceUpdate()
                         }

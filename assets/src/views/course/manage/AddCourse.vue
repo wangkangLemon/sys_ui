@@ -9,7 +9,6 @@
     h2 {
         margin-bottom: 10px;
     }
-
     .tab {
         max-width: 700px;
     }
@@ -297,7 +296,7 @@ export default {
         if (this.$route.params.courseInfo) {
             this.$route.params.courseInfo
             this.activeTab= 'first'
-            // this.fetchParam = this.$route.params.courseInfo   //从主页传递信息
+             //从主页传递信息
             for(let i in this.$route.params.courseInfo){
                  this.fetchParam[i]=this.$route.params.courseInfo[i]
             }
@@ -319,11 +318,10 @@ export default {
                 xmview.showTip('error', ret.message)
             })
         }else if(this.$route.params.addcourseInfo){ //添加页面
-            console.log(this.$route.params.addcourseInfo)
+            console.log('this.$route.params.addcourseInfo',this.$route.params.addcourseInfo)
             this.fetchParam.category_name=this.$route.params.addcourseInfo.category_name
             this.fetchParam.category_id=this.$route.params.addcourseInfo.category_id
             xmview.setContentTile(`添加课程-${this.fetchParam.category_name}`)
-            console.log(this.fetchParam.category_name)
         }
 
         this.$route.params.tab && (this.activeTab = this.$route.params.tab)

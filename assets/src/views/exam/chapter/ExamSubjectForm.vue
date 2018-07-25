@@ -122,7 +122,7 @@
                         <el-form-item label="" v-if="!readonly">
                             <!-- <el-button icon="plus" :class="{'el-button--primary':type==0}" @click='addTesting(0, index)'>判断题</el-button> -->
                             <el-button icon="plus" :class="{'el-button--primary':type==1}" @click='addTesting(1, index)' ref="single">单选题</el-button>
-                            <!-- <el-button icon="plus" :class="{'el-button--primary':type==2}" @click='addTesting(2, index)'>多选题</el-button> -->
+                            <el-button icon="plus" :class="{'el-button--primary':type==2}" @click='addTesting(2, index)' v-if="$route.params.chapterInfo.chapter_type==4">多选题</el-button>
                             <el-button icon="delete" type="danger" @click='deleteTesting(index, item)'>删除</el-button>
                         </el-form-item>
                         <el-form-item :label="'第' + (index+1) + '题' ">
@@ -205,7 +205,7 @@
                     <el-form-item label="" class="item">
                         <!-- <el-button icon="plus" @click='addTesting(0, fetchTesting.length)'>判断题</el-button> -->
                         <el-button icon="plus" @click='addTesting(1, fetchTesting.length)'>单选题</el-button>
-                        <!-- <el-button icon="plus" @click='addTesting(2, fetchTesting.length)'>多选题</el-button> -->
+                        <el-button icon="plus" @click='addTesting(2, fetchTesting.length)' v-if="$route.params.chapterInfo.chapter_type==4">多选题</el-button>
                     </el-form-item>
                 </el-form>
 
@@ -264,7 +264,7 @@ export default {
         }
     },
     created(){
-        console.log('this.$route.params.qtype',this.$route.params.qtype);
+        // console.log('this.$route.params.chapterInfo.chapter_type',this.$route.params.chapterInfo.chapter_type);
         
         let _this=this
         if(this.$route.params.chapter_id){  //编辑
@@ -313,9 +313,9 @@ export default {
             this.qtype=this.$route.params.qtype
             xmview.setContentTile(`试题添加-${this.qtype}题型`)
             console.log(this.qtype)
-            if(this.qtype==undefined){
+            if(this.qtype==undefined&&this.$route.params.chapterInfo.chapter_type!==4){
                 xmview.showTip('error', "请点击添加考题按钮 => 选择题型")
-                this.$router.push({'name':'exam-chapter-manage'})
+                this.$router.back()
                 return
             }
         }
@@ -391,12 +391,11 @@ export default {
         handleSubmitTesting() {
             // 处理当前的数据
             let item = null
-
             if (!this.fetchTesting || this.fetchTesting.length < 1) {
                 this.$router.back()
                 return
             }
-             console.log(typeof(ansoption),this.ansoption)
+            console.log(typeof(ansoption),this.ansoption)
             this.$refs.cate.validate((valid) => {
                 if (!valid) {
                         return false
@@ -408,7 +407,7 @@ export default {
                         xmview.showTip('error', "请先添加题干")
                         return false
                     }
-                     for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
+                    for (let i = 0; i < requestParam.length, item = requestParam[i]; i++) {
                     // 处理单选题的正确答案选中
                         if (item.type == 1 && typeof item.correct == 'number') {
                             if(item.options){
@@ -482,7 +481,6 @@ export default {
                     params.category_id=this.$route.params.chapterInfo.category_id
                 }
                 console.log('params',params);
-                    
                 examService.addSubject(params).then((ret) => {
                     xmview.showTip('success', '操作成功')
                     this.$router.back()
@@ -496,7 +494,4 @@ export default {
     },
     components: { UploadImg,SectionCategoryMenu,optionItemA4}
 }
-
-
-
 </script>

@@ -99,6 +99,18 @@ export default {
             }
         },
         {
+            path: 'manage/add-lib', // 添加和编辑视频课程
+            name: 'course-manage-addLib',
+            component: resolve => {
+                require.ensure([], () => {
+                    resolve(require('../views/course/manage/AddLib.vue'))
+                })
+            },
+            meta: {
+                title: '添加题库',
+            }
+        },
+        {
             path: 'manage/add-course/herbal', // 添加和编辑中草药课程
             name: 'course-manage-addCourse-herbal',
             component: resolve => {
