@@ -57,6 +57,7 @@ class examService {
             }
         })
     }
+    
     // 更新章节chapter栏目
     ChapterCategoryEdit(fetchParam,id) {
         let url = `${urlPre}/chapter/edit/${id}`

@@ -90,7 +90,9 @@
 
             handleNodeExpand (data, node, nodeDom) { //点下拉箭头  
                 // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
-    
+                // console.log(this.param.lastId,node.data.value);
+                
+                // if(this.param.lastId==node.data.value){return false}
                 this.getData({id : 'tree', type :'course', filter : true , pid :node.data.value , level:-1, pagesize:-1,category_id:this.categoryVal,ended:-1}).then(ret=>{
                     let arr = []
                     

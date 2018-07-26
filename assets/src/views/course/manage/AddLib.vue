@@ -154,20 +154,19 @@ export default {
         this.uploadImgUrl = courseService.commonUploadImage()
         //编辑页面
         if (this.$route.params.courseInfo) {
-            this.readonly = true
              //从主页传递信息
             for(let i in this.$route.params.courseInfo){
                  this.fetchParam[i]=this.$route.params.courseInfo[i]
             }
             console.log(this.$route.params.courseInfo, this.fetchParam)
-            xmview.setContentTile(`编辑考题-${this.fetchParam.category_name}`)
+            xmview.setContentTile(`查看考题-${this.fetchParam.category_name}`)
+            this.readonly = this.$route.params.readonly
             this.getLibSubject()
-        } else if (this.$route.query.contentid) {//编辑页面
-            this.readonly = true
+        } else if (this.$route.query.contentid) {//查看页面
             courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
                 this.fetchParam = ret.course                  // 没拿到信息 获取信息
                 this.fetchParam.course_name= this.$route.params.courseInfo.course_name
-                 xmview.setContentTile(`编辑考题-${this.fetchParam.category_name}`)
+                 xmview.setContentTile(`查看考题-${this.fetchParam.category_name}`)
                 this.getLibSubject()
                  
             }).catch((ret) => {
@@ -180,7 +179,8 @@ export default {
             xmview.setContentTile(`添加考题-${this.fetchParam.category_name}`)
         }
         this.$route.params.tab && (this.activeTab = this.$route.params.tab)
-        this.readonly = this.$route.params.readonly
+        
+        
         xmview.setContentLoading(false)
     },
 
@@ -190,7 +190,10 @@ export default {
                 xmview.setContentLoading(true)
                 libService.getLibSubject(this.fetchParam.id ).then((ret) => {
                     console.log('ret',ret);
-                    this.fetchTesting = ret
+                    //返回数据少一层[]
+                    var arr = []
+                    arr.push(ret)
+                    this.fetchTesting = arr
                     this.fetchTesting.forEach((item) => {
                         if (item.subject_type == 1) {
                             item.options.forEach((optionItem, index) => {

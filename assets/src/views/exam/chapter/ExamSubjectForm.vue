@@ -264,12 +264,9 @@ export default {
         }
     },
     created(){
-        // console.log('this.$route.params.chapterInfo.chapter_type',this.$route.params.chapterInfo.chapter_type);
-        
         let _this=this
         if(this.$route.params.chapter_id){  //编辑
             examService.getExamSubject(this.$route.params.id).then((ret) => {
-                console.log(ret)
                 xmview.setContentTile('试题查看')
                 this.form.chapter_name=ret.chapter_name
                 this.qtype=ret.qtype
@@ -279,7 +276,6 @@ export default {
                 this.fetchTesting.forEach((item) => {
                     // if (item.category == 1) {
                         item.options.forEach((optionItem, index) => {
-                            console.log(item)
                             if (optionItem.correct == 1) item.correct = index //item是外层题的的数据 ，把内层index 拿出来给外层的item.correct 
                         })
                     // }
@@ -312,7 +308,6 @@ export default {
                 }
             this.qtype=this.$route.params.qtype
             xmview.setContentTile(`试题添加-${this.qtype}题型`)
-            console.log(this.qtype)
             if(this.qtype==undefined&&this.$route.params.chapterInfo.chapter_type!==4){
                 xmview.showTip('error', "请点击添加考题按钮 => 选择题型")
                 this.$router.back()
@@ -327,7 +322,6 @@ export default {
         //     for(let i in this.$route.params.courseInfo){
         //          this.fetchTesting[i]=this.$route.params.courseInfo[i]
         //     }
-        //     console.log(this.fetchTesting)
         //     xmview.setContentTile('编辑课程-培训')
         // } else 
         this.readonly = this.$route.params.readonly
@@ -372,13 +366,11 @@ export default {
         },
         // 添加多选 单选的选项
         addMoreTestingOption(options) {
-            console.log(options.length)
             if(this.qtype=="A4"){
                 options.push({
                     opid:this.ansSelect[options.length],
                     description: '',
                 })
-                console.log(this.options)
             }else{
                 options.push({
                     description: '',
@@ -395,12 +387,10 @@ export default {
                 this.$router.back()
                 return
             }
-            console.log(typeof(ansoption),this.ansoption)
             this.$refs.cate.validate((valid) => {
                 if (!valid) {
                         return false
                     }
-                console.log(this.fetchTesting)
                 let requestParam = JSON.parse(JSON.stringify(this.fetchTesting))
                 if(this.qtype!=="A4"){
                     if((this.qtype =="A3")&&(this.form.title ==undefined)){
@@ -425,7 +415,7 @@ export default {
                                 itemOptions.sort = index + 1
                             })
                         }
-                        console.log(item.options)
+                        // console.log(item.options)
                     }
                 }else{
                      if(this.ansoption[0].description==''){
@@ -480,7 +470,7 @@ export default {
                 if(this.$route.params.chapterInfo.chapter_type==4){
                     params.category_id=this.$route.params.chapterInfo.category_id
                 }
-                console.log('params',params);
+                // console.log('params',params);
                 examService.addSubject(params).then((ret) => {
                     xmview.showTip('success', '操作成功')
                     this.$router.back()

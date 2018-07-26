@@ -145,16 +145,7 @@
             <div class="content-title">
                 <span v-if="category.title">{{category.title}}-</span>考题列表
                 <el-button type="primary" icon="plus" @click="addQuestion" >添加考题</el-button>
-                <el-button type="danger" icon="plus"  @click="importQuestion" >试题导入</el-button>
-                <!-- <section>
-                      <el-select v-model="qtype" clearable  @change="addQuestion" ref="qtype">
-                            <el-option label="A1" value="A1"></el-option>
-                            <el-option label="A2" value="A2"></el-option>
-                            <el-option label="A3" value="A3"></el-option>
-                            <el-option label="A4" value="A4"></el-option>
-                    </el-select>
-                </section>    -->
-                
+                <!-- <el-button type="danger" icon="plus"  @click="importQuestion" >试题导入</el-button> -->
             </div>
             <div class="content-list">
                 <div class="search">
@@ -164,15 +155,6 @@
                     <section class="fi">
                      <i>题目</i><el-input id="input" v-model="section.title" placeholder="请输入题目关键字" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>    
-                    <section>
-                        <i>题型</i>
-                        <el-select v-model="section.qtype" placeholder="未选择" @change="fetchCourseLists" :clearable="true">
-                            <el-option label="A1" value="A1"></el-option>
-                            <el-option label="A2" value="A2"></el-option>
-                            <el-option label="A3" value="A3"></el-option>
-                            <el-option label="A4" value="A4"></el-option>
-                        </el-select>
-                    </section> 
                     <DateRange title="创建时间" :start="section.stime " :end="section.etime" @changeStart="val=> section.stime =val "
                         @changeEnd="val=> section.etime=val" :change="fetchCourseLists">
                     </DateRange>
@@ -229,7 +211,7 @@
             // pid:0,
             status,
             title:'',
-            deleted:-1,
+            deleted:0
         }
     }
     export default {
@@ -267,7 +249,6 @@
                 SecMenu:[],
                 category_id:void 0,
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
-                qtype:'',
                 selectData:{},
                 // categoryVal:'' ,//掉接口存储category_id
                 ended:void 0,
@@ -290,7 +271,6 @@
             this.category.currentData.id = ''
             // this.category.currentData.chapter_type = 4
             this.category.loading = true
-            this.qtype=''
             this.section=initSection()
             setTimeout(() => {
                 this.fetchData()
@@ -316,7 +296,6 @@
                     }else{
                         this.disabled=true
                     }
-                    // this.$refs.qtype.resetFields()
                     this.category.currentData.category_id=this.selectData.id
                     this.category.currentData.category_name=this.selectData.name
                     this.category.currentData.questionBank = 1
@@ -380,7 +359,7 @@
                     xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
                     return
                 }
-                this.$router.push({ name:'exam-subject-import',params:{chapterInfo:this.category.currentData,qtype:this.qtype}})
+                this.$router.push({ name:'exam-subject-import',params:{chapterInfo:this.category.currentData}})
                 console.log('this.category.currentData',this.category.currentData);
                 
             },
@@ -395,8 +374,8 @@
                 console.log(row)
                 this.$router.push({
                     name:'course-manage-addLib',
-                    params: {courseInfo: row,handle:'edit'},
-                    query: {id: row.contentid}
+                    params: {courseInfo: row,handle:'edit', readonly:true},
+                    query: {id: row.contentid},
                 })
             },
             sectionPageChange (val) {

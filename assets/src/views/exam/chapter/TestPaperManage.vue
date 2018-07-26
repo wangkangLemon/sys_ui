@@ -266,7 +266,6 @@
                 
             },
             'category.currentData.id'(){
-                console.log(this.category.currentData)
                 this.fetchCourseLists () 
                 // this.$refs.secCategory.handleNodeClick()
             },
@@ -290,9 +289,6 @@
             }
         },
         methods: {
-            dropDown(){
-                console.log(this)
-            },
             // 下线 或者上线课程 0为下线，1为上线
             offline(index, row) {
                 let txt = row.status == 0 ? '禁用' : '启用'
@@ -315,7 +311,6 @@
                         }
                 examService.fetchChapterCategory( param).then((ret) => {
                         this.SecMenu=ret
-                        // console.log('this.SecMenu+++++++',param,this.SecMenu)
                         xmview.setContentLoading(false)     
                     })
             },
@@ -345,8 +340,6 @@
             },
            
             update (index, row) {
-                console.log(row)
-                
                 this.$router.push({
                     name:'exam-subject-edit',
                     params:{

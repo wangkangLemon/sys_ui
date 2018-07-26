@@ -81,7 +81,7 @@ class TestingFactory {
         data.subject_type = type
         if (type == 0) {
             delete data.options
-            data.correct = void 0
+            data.correct = 1
             return data
         } else if (type == 1 || type == 2) {
             return data

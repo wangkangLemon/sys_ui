@@ -71,7 +71,7 @@
                         <!-- <ArticleCategoryTree v-model="treeData" node-key="id"
                                             :onNodeClick="treeNodeClick.bind(this,2)"></ArticleCategoryTree> -->
                         <MenuTree v-model="SecMenu" node-key="id" :Mult='Mult' 
-                :onNodeClick="treeNodeClick.bind(this,2)" :req="req" :param="initparam"></MenuTree>
+                            :onNodeClick="treeNodeClick.bind(this,2)" :req="req" :param="initparam"></MenuTree>
                     </section>
 
                     <section class="el-dialog__footer">
@@ -144,6 +144,8 @@
                     pid:0,
                     pagesize:-1,
                     level:-1,
+                    lastId:void 0,
+
                 },//栏目树传参用的对象
                 //移动栏目
                 dialogTree: { //移动弹窗
@@ -167,7 +169,6 @@
             // } ,
         },
         created() {
-            console.log('进入试题管理-栏目');
             this.selectData={}
             this.loadingData=false
             xmview.setLoading(false)
@@ -181,15 +182,22 @@
                 },
             // 左边的节点被点击
             treeNodeClick (type, data, node, store) {
-                console.log('===========   node==========  ',type,node, data)
                 if (type == 1) { 
                     this.type='update'
                     this.selectData = Object.assign({},node.data)  //解决左右数据
                     this.nodeParentSelected = node.data.pid // 记录父节点
                     this.nodeSelected = node // 记录当前节点
+                    // this.initparam.lastId = this.nodeSelected.data.id 
+                    //     console.log('this.initparam.lastId ',this.initparam.lastId );
                 }
                 else if (type == 2) {
                     this.moveToNode = node
+                   
+                    if(this.nodeSelected.data.id==this.moveToNode.data.id){
+                       xmview.showTip('warning', '请选择不同的分类')
+                       return
+                    }
+                    
                 }
             },
             // 清空选中项
@@ -205,8 +213,6 @@
                 this.SecMenu=[]
                  libService.fetchLibCategory( this.fetchParam ).then((ret) => {
                         this.SecMenu=ret
-                        console.log(ret);
-                        console.log('this.SecMenu',this.SecMenu);
                         xmview.setContentLoading(false)     
                     })
             },
@@ -227,11 +233,8 @@
                     // message.category_id=this.categoryVal
                     delete message.category_id
                     delete message.chapter_type
-                    console.log(message);
                     libService.LibCategoryCreate( message ).then(( ret ) => {
                         this.selectData = getSelectData()  //通过初始化组件传值清空
-                        console.log(this)
-                        console.log(this.selectData)
                         setTimeout(() => {
                             // this.fetchData() // 重新刷新数据
                             this.$forceUpdate()
@@ -244,7 +247,6 @@
                 }else {
                     transformParam(message)
                     delete message.category_id
-                    console.log(message);
                     libService.LibCategoryEdit( message ,message.id).then(( ret ) => {
                         setTimeout(() => {
                             // this.fetchData() // 重新刷新数据 
@@ -268,7 +270,6 @@
                 });
                 }
                 if(type == 'p'){
-                    console.log(this.$refs.chapterCategory)
                     this.$refs.chapterCategory.clearSelected()
                 }
                 else if( this.type == 'S'){
@@ -285,12 +286,8 @@
                     }
                     this.dialogTree.isShow = true
                     this.dialogTree.confirmClick = () => {
-                        console.log(this.nodeSelected.data,this.moveToNode.data);
-                        
-                        let id = this.nodeSelected.data.id
+                        let id  =this.nodeSelected.data.id 
                         let to = this.moveToNode.data.id
-                        console.log(this.nodeSelected);
-                        console.log(id,to);
                         if (id === to) {
                             xmview.showTip('warning', '请选择不同的分类')
                             return
@@ -298,7 +295,6 @@
                         let message = this.nodeSelected.data
                         message.pid = to
                         transformParam(message)
-                        console.log(message);
                         libService.LibCategoryEdit( message ,id).then(( ret ) => {
                             setTimeout(() => {
                                 // this.fetchData() // 重新刷新数据 
@@ -326,7 +322,6 @@
                     libService.libCategorydelete(this.selectData.id).then(() => {
                         // store.commit('increment', 10)
                         xmview.showTip('success', '操作成功')
-                        console.log(node, this.nodeParentSelected);
                         this.selectData = getSelectData()    //通过初始化组件传值清空
                     }).then(()=>{
                         this.$forceUpdate()

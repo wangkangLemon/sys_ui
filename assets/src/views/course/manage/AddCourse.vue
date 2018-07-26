@@ -300,10 +300,7 @@ export default {
             for(let i in this.$route.params.courseInfo){
                  this.fetchParam[i]=this.$route.params.courseInfo[i]
             }
-            console.log(this.$route.params.courseInfo)
-            // console.log(this.fetchParam.category_name,this.$route.params.courseInfo.category_name)
             this.fetchParam.material_name= this.$route.params.courseInfo.course_name
-            // this.fetchParam.experts_id = this.$route.params.courseInfo.experts_name
             this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
             xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
         } else if (this.$route.query.contentid) {//编辑页面
@@ -318,7 +315,6 @@ export default {
                 xmview.showTip('error', ret.message)
             })
         }else if(this.$route.params.addcourseInfo){ //添加页面
-            console.log('this.$route.params.addcourseInfo',this.$route.params.addcourseInfo)
             this.fetchParam.category_name=this.$route.params.addcourseInfo.category_name
             this.fetchParam.category_id=this.$route.params.addcourseInfo.category_id
             xmview.setContentTile(`添加课程-${this.fetchParam.category_name}`)
@@ -416,12 +412,10 @@ export default {
             this.$refs.formFirst.validate((isValidate) => {
                 if (!isValidate) return
                 transformParam(this.fetchParam)
-                //  console.log(this.fetchParam)
                 // for(let i in this.fetchParam){
                 //     this.fetchParam[i] = this.fetchParam[i]== undefined ?'': this.fetchParam[i]
                     
                 // }
-                console.log(this.fetchParam)
                 let p
                 // 如果是编辑
                 if (this.fetchParam.contentid) {
@@ -515,7 +509,6 @@ export default {
                 }
             }
             xmview.setContentLoading(true)
-            console.log(encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B'))
             courseService.addOrEditTesting({
                 course_id: this.fetchParam.contentid,
                 subjects: encodeURI(formUtils.serializeArray(requestParam)).replace(/\+/g, '%2B')
