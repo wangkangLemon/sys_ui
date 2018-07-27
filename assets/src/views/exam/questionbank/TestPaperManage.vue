@@ -7,26 +7,6 @@
 
     .block-manage {
         @extend %justify;
-            // .manage-container {
-            //     @extend %right-top-btnContainer;
-            //     >* {
-            //         color: #fff;
-            //         border-radius: 5px;
-            //     } // 添加课程
-            //     .add {
-            //         background: rgb(0, 204, 255);
-            //     } // 管理栏目
-            //     .catmange {
-            //         background: rgb(153, 102, 204);
-            //     }
-            // }
-        .topright{
-             @extend %right-top-btnContainer;
-              >* {
-                    color: #fff;
-                    border-radius: 5px;
-                } // 添加课程
-        }
         .content-title {
             padding: 10px 20px;
             background: #f0f3f5;
@@ -125,19 +105,13 @@
 </style>
 <template>
     <article class="block-manage">
-        <!-- <section class="topright">
-                <el-button type="danger" icon="plus"  @click="$router.push({ name:'exam-subject-import'})">试题导入</el-button>
-                <el-button type="primary" icon="plus" >添加考题</el-button>
-        </section> -->
         <section class="left-content">
             <div class="content-title">
                 所有分类
                 <router-link tag="el-button" :to="{name: 'exam-questionbank-category'}">管理分类</router-link>
             </div>
             <div class="classify-tree">
-                <!-- <MenuTree v-model="SecMenu" ref="qustionbankCategory" :Mult='Mult' 
-                :onNodeClick="treeNodeClick.bind(this,1)" :req="req" :param="initparam"></MenuTree> -->
-                <p>提示：请先选择左侧最终极栏目再进行添加考题</p>
+                <p>提示：请先选择左侧最终极栏目再添加考题</p>
                  <MenuTree :data="SecMenu" v-if="SecMenu.length" :onNodeClick="treeNodeClick.bind(this,1)" ref="qustionbankCategory"></MenuTree>
             </div>
         </section>
@@ -149,9 +123,6 @@
             </div>
             <div class="content-list">
                 <div class="search">
-                    <!-- <section class="fi"> -->
-                     <!-- <i>题目</i><el-input id="input" v-model="section.description" placeholder="请输入标题搜索" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
-                    </section> -->
                     <section class="fi">
                      <i>题目</i><el-input id="input" v-model="section.title" placeholder="请输入题目关键字" @keyup.enter.native="fetchCourseLists" auto-complete="off" ></el-input>
                     </section>    
@@ -250,7 +221,6 @@
                 category_id:void 0,
                 Mult:'true',// 判断左边 课程多级栏目树状标识,
                 selectData:{},
-                // categoryVal:'' ,//掉接口存储category_id
                 ended:void 0,
                 disabled:true,
             }
@@ -259,17 +229,11 @@
             '$store.state.index.secMenu'(){
                 this.category.currentData = Object.assign({},this.$store.state.index.secMenu) //复制一份vuex存储的值 
             },
-            // '$store.state.index.examCate'(){
-            //     // this.$refs.qustionbankCategory.getInitData();
-            //     this.fetchData()
-            //     this.fetchCourseLists() 
-            // }     
         },
         created () {
             // this.$refs.qustionbankCategory.getInitData();
             xmview.setContentLoading(false)     
             this.category.currentData.id = ''
-            // this.category.currentData.chapter_type = 4
             this.category.loading = true
             this.section=initSection()
             setTimeout(() => {
@@ -300,7 +264,6 @@
                     this.category.currentData.category_name=this.selectData.name
                     this.category.currentData.questionBank = 1
                     this.fetchCourseLists () 
-                    // console.log('2222',this.category.currentData);
                 }
             },
             // 下线 或者上线课程 0为下线，1为上线
@@ -318,9 +281,7 @@
             },
             fetchData() { //获取左边栏目数据
                 let param={
-                            // category_id: this.categoryVal  , // 3- 供应商
                             page: 1,
-                            // chapter_type:4,
                             pagesize: -1,
                             pid:0,
                         }
@@ -356,7 +317,7 @@
             },
             importQuestion(){
                 if(!this.selectData.id||!this.ended==1){
-                    xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
+                    xmview.showTip('warning','请先选择左侧最终级栏目，再进行添加')
                     return
                 }
                 this.$router.push({ name:'exam-subject-import',params:{chapterInfo:this.category.currentData}})
@@ -365,7 +326,7 @@
             },
             addQuestion(){
                 if(!this.selectData.id||!this.ended==1){
-                     xmview.showTip('error','请先选择左侧最终级栏目，再进行添加')
+                     xmview.showTip('warning','请先选择左侧最终级栏目，再进行添加')
                      return
                 }
                 this.$router.push({ name:'course-manage-addLib',params:{addcourseInfo:this.category.currentData,handle:'add'}})

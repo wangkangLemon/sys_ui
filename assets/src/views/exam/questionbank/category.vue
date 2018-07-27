@@ -162,17 +162,11 @@
             'type'(){
                 console.log(this.type,this.$store.state.index.secPid)
             },
-            // '$store.state.index.examCate'(){ //大量请求
-            //     this.fetchParam.category_id = this.$store.state.index.examCate
-            //     this.initparam=this.fetchParam
-            //     // this.$refs.qustionbankCategory.getInitData();
-            // } ,
         },
         created() {
             this.selectData={}
             this.loadingData=false
             xmview.setLoading(false)
-            // this.fetchData() // 避免初始化多次请求
             this.fetchCategoryVal()
         },
         methods: {
@@ -238,7 +232,7 @@
                         setTimeout(() => {
                             // this.fetchData() // 重新刷新数据
                             this.$forceUpdate()
-                    this.$refs.qustionbankCategory.getInitData();
+                            this.$refs.qustionbankCategory.getInitData();
                         }, 300)
                     }).then(()=>{
                         this.$forceUpdate()
@@ -259,8 +253,6 @@
                 this.type = type
                 if(type!="update"){
                     this.$store.dispatch('setSecMenu', { //通过清空vuex清空
-                    // category_id:this.categoryVal,
-                    // chapter_type:4,
                     name: '',
                     image: null,
                     remark :'',
