@@ -48,64 +48,72 @@
         },
         props: ['data'],
         created() {
-            var arr = []
-            this.data.forEach(v => {
-                if (v.level == 0) {
-                    arr.push({
-                        id: v.id,
-                        name: v.name,
-                        pid: v.pid,
-                        model:v.model,
-                        path:v.path,
-                        level:v.level,
-                        image:v.image,
-                        rkey:v.rkey,
-                        children: []
-                    })
-                }
-            })
-            this.data.forEach(v => {
-                if (v.level == 1) {
-                    arr.forEach(item => {
-                        if (v.pid == item.id) {
-                            item.children.push({
-                                id: v.id,
-                                name: v.name,
-                                pid: v.pid,
-                                model:v.model,
-                                path:v.path,
-                                level:v.level,
-                                image:v.image,
-                                rkey:v.rkey,
-                                children: []
-                            })
-                        }
-                    })
-                }
-            })
-            this.data1 = arr
-            // console.log('---------++++++++++++++')
-            // console.log(this.data1)
-
-            let hasChildCItems = []
-            let leafChildren = []
-            if (this.data.children) {
-                this.data.children.forEach((item) => {
-                    if (item.children != null) {
-                        hasChildCItems.push(item)
-                    } else {
-                        leafChildren.push(item)
-                    }
-                })
-            }
-
-            this.hasChildCItems = hasChildCItems
-            this.leafChildren = leafChildren
+            // setTimeout(() => {
+                this. getInitData()
+            // }, 1000);
+           
         },
         components: {
             MenuTree
         },
         methods: {
+            getInitData(){
+                var arr = []
+                this.data.forEach(v => {
+                    if (v.level == 0) {
+                        arr.push({
+                            id: v.id,
+                            name: v.name,
+                            pid: v.pid,
+                            model:v.model,
+                            path:v.path,
+                            level:v.level,
+                            image:v.image,
+                            rkey:v.rkey,
+                            sort:v.sort,
+                            children: []
+                        })
+                    }
+                })
+                this.data.forEach(v => {
+                    if (v.level == 1) {
+                        arr.forEach(item => {
+                            if (v.pid == item.id) {
+                                item.children.push({
+                                    id: v.id,
+                                    name: v.name,
+                                    pid: v.pid,
+                                    model:v.model,
+                                    path:v.path,
+                                    level:v.level,
+                                    image:v.image,
+                                    rkey:v.rkey,
+                                    sort:v.sort,
+                                    children: []
+                                })
+                            }
+                        })
+                    }
+                })
+                this.data1 = arr
+                // console.log('---------++++++++++++++')
+                // console.log(this.data1)
+
+                let hasChildCItems = []
+                let leafChildren = []
+                if (this.data.children) {
+                    this.data.children.forEach((item) => {
+                        if (item.children != null) {
+                            hasChildCItems.push(item)
+                        } else {
+                            leafChildren.push(item)
+                        }
+                    })
+                }
+
+                this.hasChildCItems = hasChildCItems
+                this.leafChildren = leafChildren
+            },
             handleNodeClick(a){
                 if (!a)return
                 if( a.level == 0 ){

@@ -51,9 +51,9 @@
             },
             list: Array, // 已有的数据集合
             isend:Boolean,
-            itemObj: {
+            itemObj: { //父组件默认的键值
                 type:Array,
-                default: ['id','name']
+                // default:()=>  ['id','name']
             },
         },
         data () {

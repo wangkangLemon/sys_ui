@@ -400,12 +400,11 @@
                             msg = '修改成功'
                         }
                         // this.form.category_id = this.fetchParam.category_id
-
                         if (this.form.tags === '热门') this.form.tags_color = '#FFD220'
                         if (this.form.tags === '最新') this.form.tags_color = '#FF4B20'
                         if (this.form.tags === '推荐') this.form.tags_color = '#3953C3'
-                        console.log(this.form)
-                        reqFn({
+                        console.log('this.form',this.form)
+                        let param={
                             id: this.form.id,
                             category_id: this.form.category_id,
                             ref_type: this.form.ref_type,
@@ -420,7 +419,15 @@
                             tags: this.form.tags,
                             tags_color: this.form.tags_color,
                             sort: this.form.sort,
-                        }).then((ret) => {
+                            model:'native',
+                            path:'courseview'
+
+                        }
+                        if(this.form.content.drug_id){
+                            param.path='industry'
+                        }
+                        console.log('param',param)
+                        reqFn(param).then((ret) => {
                             xmview.showTip('success', msg)
                             this.addForm = false
                             this.content.isShow = false
@@ -495,7 +502,7 @@
                 this.form.content = dataObj
                 // this.form.category_id = dataObj.category_id  
                 // this.form.ref_id = dataObj.contentid
-                this.form.ref_id = dataObj.contentid
+                this.form.ref_id = dataObj.contentid||dataObj.id
                 this.form.ref_sync = 1
                 this.form.tags = ''
                 // this.category = dataObj.category
@@ -561,7 +568,7 @@
 
         //     // 单条删除
             del(index, row) {
-                xmview.showDialog(`你将要删除第 <span style="color:red">${row.id}</span> 条数据,  此操作不可恢复确认吗?`, () => {
+                xmview.showDialog(`你将要删除数据 <span style="color:red">${row.title}</span> ,  此操作不可恢复确认吗?`, () => {
                     dataService.delete(row.id).then(() => {
                         this.dataCache.splice(index, 1) //删除选中项
                         row.deleted = 1

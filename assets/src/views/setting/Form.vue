@@ -93,9 +93,9 @@
                     ftype: [
                         {required: true, message: '必须输入', trigger: 'blur'}
                     ],
-                    val: [
-                        {required: true, message: '必须输入', trigger: 'blur'}
-                    ],
+                    // val: [
+                    //     {required: true, message: '必须输入', trigger: 'blur'}
+                    // ],
                 }
             }
         },

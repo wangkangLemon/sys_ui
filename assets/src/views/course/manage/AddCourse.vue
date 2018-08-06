@@ -83,10 +83,6 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item  label="关联专家"  :fetch-suggestions="querySearch">
-                        <!--<el-select clearable v-model="fetchParam.experts_id" placeholder="未选择">
-                            <el-option v-for="(item, index) in experts_list" :label="item.name" :value="item.id" :key="item.id">
-                            </el-option>
-                        </el-select>-->
                         <Experts v-model="fetchParam.experts_id" :placeholder="fetchParam.experts_name"
                             v-on:change="val=>fetchParam.experts_id=val" :change="getExpertsList" :list="changelist">
                         </Experts>

@@ -71,7 +71,7 @@ exports.styleLoaders = function (options) {
 }
 
 
-exports.getMd5 = function (filename) {
+exports.getMd5 = function (filename) { 
     var crypto = require('crypto')
     var fs = require('fs')
 

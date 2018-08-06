@@ -37,14 +37,14 @@
                 </el-form-item>-->
                 <el-form-item label="父级菜单" prop="pid" :fetch-suggestions="querySearch">
                     <el-select v-model="fetchParam.pid" placeholder="请输入父级菜单">
-                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.id + item.node_name" :value="item.id"></el-option>
+                        <el-option  v-for="item in drop_list" :key="item.id" :label="item.node_name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="菜单层级" prop="level">
-                    <el-input v-model="fetchParam.level" type="number"></el-input>
+                    <el-input-number :min="0" v-model="fetchParam.level" type="number"></el-input-number>
                 </el-form-item>
                 <el-form-item label="排序字段" prop="sort">
-                    <el-input v-model="fetchParam.sort"></el-input>
+                    <el-input-number  :min="0" v-model="fetchParam.sort"></el-input-number>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
                     <el-input v-model="fetchParam.remark"></el-input>
@@ -88,13 +88,19 @@
                     sort: [
                         {required: true,type:'number',message: '必须输入', trigger: 'blur'}
                     ],
-                    pid: [
-                        {required: true, type:'number',message: '必须输入', trigger: 'blur'}
-                    ],
+                    // pid: [
+                    //     {required: true, type:'number',message: '必须输入', trigger: 'blur'}
+                    // ],
                     level: [
                         {required: true,type:'number', message: '必须输入', trigger: 'blur'}
                     ],
                 }
+            }
+        },
+        watch:{
+            'fetchParam.level'(){
+                console.log(typeof(this.fetchParam.level),this.fetchParam.level);
+                
             }
         },
         created() {

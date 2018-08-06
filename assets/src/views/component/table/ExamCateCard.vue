@@ -96,9 +96,6 @@
                     this.selectData.product_id= this.selectData.product_name
                 }
             },
-            'selectData.product_name'(){
-                // alert(this.selectData.product_name)
-            }
         },
         activated () {
             this.originProductId=void 0,

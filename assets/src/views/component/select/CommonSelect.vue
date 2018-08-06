@@ -19,7 +19,10 @@
             change: Function,
             placeholder: String,
             list: Array,
-            itemObj:Array,
+            itemObj: { //父组件默认的键值
+                type:Array,
+                default:()=>  ['id','name']
+            },
             disabled: {
                 type: Boolean,
                 default: false

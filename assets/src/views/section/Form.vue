@@ -223,6 +223,8 @@
                     // this.fetchParam.tags = this.courseTags.join(',')
                     let req = dataService.create
                     if (this.$route.params.sys_id) req = dataService.edit
+                    console.log(this.fetchParam);
+                    
                     req(this.fetchParam).then((ret) => {
                         // 重置当前数据
                         xmview.showTip('success', '数据提交成功')

@@ -18,34 +18,59 @@
     <article>
         <!--选取组件-->
         <el-dialog class="choose-course main-container" title="选取内容" :visible.sync="curValue">
-            <section class="search">
-                <section>
-                    <i>课程名称</i>
-                    <el-input @keyup.enter.native="fetchData" v-model="search.course_name"></el-input>
-                </section>
+            <el-tabs  @tab-click="handleClick"  v-model="activeTab">
+                <el-tab-pane label="视频课程" name="first">
+                    <section class="search">
+                        <section>
+                            <i>课程名称</i>
+                            <el-input @keyup.enter.native="fetchData" v-model="search.course_name"></el-input>
+                        </section>
 
-                <section>
-                    <i>栏目分类</i>
-                    <Course-category-select :onchange="fetchData" v-model="fetchParam.category_id"></Course-category-select>
-                </section>
+                        <section>
+                            <i>栏目分类</i>
+                            <Course-category-select :onchange="fetchData" v-model="search.category_id"></Course-category-select>
+                        </section>
 
-            </section>
-            <el-table v-loading="loadingData" border :data="data" :highlight-current-row="true">
-                <el-table-column prop="course_name" label="课程名称"></el-table-column>
-                <el-table-column prop="category_name" label="所属栏目" width="100"></el-table-column>
-                <el-table-column prop="material_type" label="课程类别" width="150">
-                    <template scope="scope">
-                        {{material_type[scope.row.material_type]}}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="operate" label="点击" width="100">
-                    <template scope="scope">
-                        <el-button type="text" @click="courseConfirm(scope.row)">选取</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-
- 
+                    </section>
+                    <el-table v-loading="loadingData" border :data="data" :highlight-current-row="true">
+                        <el-table-column prop="course_name" label="课程名称"></el-table-column>
+                        <el-table-column prop="category_name" label="所属栏目" width="100"></el-table-column>
+                        <el-table-column prop="material_type" label="课程类别" width="150">
+                            <template scope="scope">
+                                {{material_type[scope.row.material_type]}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="operate" label="点击" width="100">
+                            <template scope="scope">
+                                <el-button type="text" @click="courseConfirm(scope.row)">选取</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-tab-pane>
+                <el-tab-pane label="工业课程" name="second">
+                    <section class="search">
+                        <section>
+                            <i>课程名称</i>
+                            <el-input @keyup.enter.native="fetchData" v-model="search.course_name"></el-input>
+                        </section>
+                    </section>
+                    <el-table v-loading="loadingData" border :data="data" :highlight-current-row="true">
+                        <el-table-column prop="course_name" label="课程名称"></el-table-column>
+                        <el-table-column prop="material_type" label="课程类别" width="150">
+                            <template scope="scope">
+                                {{material_type[scope.row.material_type]}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="operate" label="点击" width="100">
+                            <template scope="scope">
+                                <el-button type="text" @click="courseConfirm(scope.row)">选取</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-tab-pane>
+            
+            </el-tabs>
+            
             <div class="block">
                 <el-pagination
                         @size-change="courseSizeChange"
@@ -62,22 +87,14 @@
 </template>
 <script>
     import courseService from '../../../services/course/courseService.js'
+    import industryService from '../../../services/course/industryService.js'
     import speakingService from '../../../services/course/courseService.js'
     import ArticleService from '../../../services/course/courseService.js'
     import CourseCategorySelect from '../../component/select/SecCourseCategory.vue'
     function getFetchParam() {
         return {
-            gov_id: void 0, // 部门id
-            category_id: void 0, // 栏目id
-            course_name:'',
-            type:'',
             page:  1,
             pagesize: 10,
-            level: void 0,
-            time_start: void 0,
-            time_end: void 0,
-            need_testing: void 0, //  不赋值则表示全部，0为不需要，1为需要
-            status: -1, // 2- 视屏转码中 1-下线 0-正常
         }
     }
     export default {
@@ -87,10 +104,12 @@
         },
         data () {
             return {
+                activeTab: 'first',
                 curValue: this.value,
                 loadingData: false,
                 search: {
                     course_name: '',
+                    category_id: void 0, // 栏目id
                 },
                 category: 'course',
                 data: [],
@@ -120,12 +139,25 @@
             curValue (val) {
                 this.curValue = val
                 this.$emit('input', val)
+            },
+            'activeTab'(val) {
+                console.log(typeof(val),val);
+                if (val === 'second' ){
+                    console.log('111111this.activeTab',this.activeTab);
+                }
+                // this.fetchData()
             }
         },
         created () {
             this.fetchData()
+            // this.activeTab= 'first'
         },
         methods: {
+            handleClick(tab, event) {
+                 console.log('this.activeTab',this.activeTab);
+                 this.search.course_name=''
+                 this.fetchData()
+            },
             // 课程当前页
             coursePageChange (val) {
                 this.fetchParam.page = val
@@ -143,14 +175,28 @@
                 this.$emit('result', item)
             },
             fetchData () {
+                let p,param
+                if(this.activeTab=== 'first'){
+                    p=courseService.getPublicCourselist
+                    param={
+                        course_name: this.search.course_name,
+                        category_id: this.search.category_id,
+                        page: this.fetchParam.page,
+                        pagesize: this.fetchParam.pagesize
+                    }
+                }else if(this.activeTab=== 'second'){
+                    p=industryService.fetchCourseList
+                    param={
+                        course_name: this.search.course_name,
+                        page: this.fetchParam.page,
+                        pagesize: this.fetchParam.pagesize
+                    }
+                }
+                console.log(p);
+                
                 this.loadingData = true
                 // 获取课程数据
-                return courseService.getPublicCourselist({
-                    course_name: this.search.course_name,
-                    category_id: this.fetchParam.category_id,
-                    page: this.fetchParam.page,
-                    pagesize: this.fetchParam.pagesize
-                }).then((ret) => {
+                return p(param).then((ret) => {
                     this.data = ret.data
                     this.total = ret._exts.total
                     this.loadingData = false

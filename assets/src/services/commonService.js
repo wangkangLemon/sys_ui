@@ -48,7 +48,7 @@ class CommonService {
         })
     }
 
-    // 公共添加编辑头像  ---传base64
+    // 公共添加编辑头像  ---传base64  可配置 biz, extpath
     commonUploadAvatar({ image, alias = Date.now() + '.jpg', biz, extpath }) {
 
         let url = `${config.apiHost}/common/upload/base64`

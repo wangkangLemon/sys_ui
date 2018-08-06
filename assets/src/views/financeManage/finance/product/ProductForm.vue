@@ -59,16 +59,6 @@
             return {
                 loadingData: false,
                 fetchParam: getOriginData(),
-                role_list:[
-                    {
-                        name: '管理员',
-                        id: 1
-                    },
-                    {
-                        name: '部门人员',
-                        id: 0
-                    },
-                ],
                 rules: {
                     name:[
                         {required: true, message: '必须输入', trigger: 'blur'},

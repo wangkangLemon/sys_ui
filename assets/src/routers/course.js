@@ -159,7 +159,6 @@ export default {
                 title: '课程题目分析',
             }
         },
-      
         {
             path: 'manage/experts', //  专家管理
             name: 'course-manage-experts',
@@ -292,6 +291,73 @@ export default {
         //     }
         // },
 
+        //企业管理
+        //商品管理 
+        {
+          path: 'industry/product',
+          name: 'industry-product',
+          component: resolve => {
+            require.ensure([], () => {
+              resolve(require('../views/course/industry/product/Product.vue'))
+            })
+          },
+          meta: {
+            title: '药品列表',
+            noback: true
+          }
+        }, 
+        {
+          path: 'industry/product/add', //专家管理表单 -修改
+          name: 'industry-product-add',
+          component: resolve => {
+            require.ensure([], () => {
+              resolve(require('../views/course/industry/product/ProductForm.vue'))
+            })
+          },
+          meta: {
+            title: '药品新建',
+            noback: false
+          }
+        }, 
+        {
+          path: 'industry/product/edit/:id', //专家管理表单 -修改
+          name: 'industry-product-edit',
+          component: resolve => {
+            require.ensure([], () => {
+              resolve(require('../views/course/industry/product/ProductForm.vue'))
+            })
+          },
+          meta: {
+            title: '药品修改',
+            noback: false
+          }
+        },
+        //课程管理
+        {
+          path: 'industry/manage', // 公开课管理
+          name: 'industry-manage',
+          component: resolve => {
+            require.ensure([], () => {
+              resolve(require('../views/course/industry/course/List.vue'))
+            })
+          },
+          meta: {
+            title: '企业 - 课程管理',
+            noback: true
+          }
+        },
+        {
+        path: 'industry/add-course', // 添加和编辑工业课程
+        name: 'course-industry-addCourse',
+        component: resolve => {
+            require.ensure([], () => {
+            resolve(require('../views/course/industry/course/AddCourse.vue'))
+            })
+        },
+        meta: {
+            title: '添加课程-工业课',
+        }
+        },
       
     ]
 }

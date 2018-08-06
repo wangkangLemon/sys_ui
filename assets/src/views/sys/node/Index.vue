@@ -52,21 +52,10 @@
         </article>
 
         <el-table class="data-table" v-loading="loadingData" :data="dataCache" :fit="true" @select="selectRow" @select-all="selectRow" border>
-            <!--<el-table-column type="selection"></el-table-column>-->
-            <el-table-column min-width="100" prop="id" label="ID" v-if="data">
-            </el-table-column>
             <el-table-column min-width="200" prop="node_name" label="权限节点名称">
             </el-table-column>
             <el-table-column min-width="200" prop="node" label="节点标识">
             </el-table-column>
-            <!--<el-table-column min-width="200" prop="pid" label="父级菜单id">
-            </el-table-column>
-            <el-table-column min-width="200" prop="level" label="菜单层级">
-            </el-table-column>
-            <el-table-column min-width="150" prop="pid" label="父级节点id">
-            </el-table-column>
-            <el-table-column min-width="200" prop="level" label="节点层级">
-            </el-table-column>-->
             <el-table-column min-width="200" prop="addate" label="添加时间">
             </el-table-column>
             <el-table-column min-width="200" prop="update" label="更新时间">

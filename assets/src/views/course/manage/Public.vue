@@ -125,14 +125,14 @@
                 <el-table v-loading="section.loading" border :data="section.data">
                     <el-table-column prop="course_name" label="课程名称" min-width="230"></el-table-column>
                     <el-table-column prop="category_name" label="绑定栏目" width="190">
-                        <!-- <template scope="scope">
+                        <!--<template scope="scope">
                             {{scope.row.category_name || '无'}}
                         </template> -->
                     </el-table-column>
                     <el-table-column prop="sort" label="排序" width="70"></el-table-column>
                     <el-table-column prop="tags" label="标签" width="100"></el-table-column>
                     <!-- <el-table-column class="tag" label="标签" :label-width="formLabelWidth">
-                        <span @click="toggleTag(item.value)" :class="{'active': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
+                        <span @click="toggleTag(item.value)" :class="{'ac  tive': item.value == form.tags}" v-for="(item, index) in tags">{{item.name}}</span>
                     </el-table-column> -->
                     <el-table-column width="80" label="状态">
                         <template scope="scope">
