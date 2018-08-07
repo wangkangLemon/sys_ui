@@ -127,7 +127,6 @@ let authUtils = {
         refreshIntervalId && clearInterval(refreshIntervalId)
         firstRefreshTimeoutId && clearTimeout(firstRefreshTimeoutId)
         // alert('clearAuthRefreshToken()+Date.now()===' + Date.now())
-        
     },
     clearAuthInfo () {
         authUtils.setAuthToken('')

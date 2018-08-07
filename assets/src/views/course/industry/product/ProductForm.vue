@@ -71,6 +71,7 @@
                             message: '请输入非空格或非特殊字符的内容'
                         }
                     ],
+                    image: { required: true, message: '请上传封面', trigger: 'change' },
                     price: { required: true, type:'number', message: '请输入药品金额',trigger: 'blur'},
                     summary: { required: true, message: '请输入药品简介',trigger: 'blur'},
             },

@@ -212,7 +212,6 @@
             save(response){
                 let param = {save_sign:response}
                 return examService.subjectSave(param).then((ret) => {
-                    // alert('试题批量导入保存')
                 })
             },
             importQuestion (response) {
@@ -241,8 +240,6 @@
                 // }).then((ret)=>{
                     examService.subjectSave({save_sign:response.data.save_sign}).then((ret) => {
                         xmview.showTip('success', '保存成功')
-
-                        // alert('上传成功')
                     })
                 // })
                  

@@ -220,7 +220,6 @@
                     console.log('flag='+flag);
                     console.log('this.noinit='+this.noinit);
                     if (flag&&this.noinit) {//刚进来会走一遍这个导致数据清掉，初始化我给了false，阻止进来，可是不知道在哪改成true
-                        // alert(222222)
                         this.fetchParam[v] = ''
                     }
                     if (this.fetchParam[v] == this.finallyVal) {

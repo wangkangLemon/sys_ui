@@ -61,7 +61,7 @@
                                > 查看
                         </el-button>
                     </el-form-item>
-                    <el-form-item  label="关联药品" prop="drug_id" >
+                    <el-form-item  label="关联药品" prop="drug_id">
                         <Product v-model="fetchParam.drug_id" :placeholder="fetchParam.drug_name" ref="Product"
                                  v-on:change="val=>fetchParam.drug_id=val" 
                                 :change="reqFun2" :list="changelistc">
@@ -193,6 +193,7 @@ export default {
                     }],
                 image: { required: true, message: '请上传课程封面', trigger: 'change' },
                 description: { required: true, message: '请输入课程介绍', trigger: 'change' },
+                drug_id: { required: true, type: 'number', message: '请选择', trigger: 'change' },
                 material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
                 material_type: { required: true,  message: '请选择题材类型', trigger: 'change' },
             },
