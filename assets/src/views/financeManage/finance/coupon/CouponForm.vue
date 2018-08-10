@@ -93,7 +93,11 @@
                     //     }
                     // ],
                     product_id: { required: true, type:'number',message: '关联商品',trigger: 'change'},
-                    value: { required: true,type:'number', message: '请输入优惠券金额',trigger: 'blur'},
+                    value: [{ required: true,type:'number', message: '请输入优惠券金额',trigger: 'blur'},
+                            {pattern:  /^\d+$/,
+                            message: '请输入整数'
+                        }
+                    ],
                     description: { required: true, message: '请输入优惠券简介',trigger: 'blur'},
                 },
                 changelistc:[],

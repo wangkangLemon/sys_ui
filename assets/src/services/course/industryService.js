@@ -119,6 +119,64 @@ class FinanceService {
             }
         })
     }
+
+    // 订单列表
+    fetchOrderList(params) {
+      let url = urlPre + '/consultation/lists'
+      return api.get(url, params).then(ret => {
+        if (ret.code == 0) {
+          return ret
+        } else {
+          return Promise.reject(ret)
+        }
+      })
+    }
+    //订单获取
+    getOrder(id) {
+      let url = `${urlPre}/consultation/get/${id}` //传递的地址的id
+      return api.get(url).then(ret => {
+        return ret.data
+      })
+    }
+    // 订单创建
+    createOrder(fetchParam) {
+      let url = urlPre + '/consultation/create'
+      return api.post(url, fetchParam).then(ret => {
+        if (ret.code == 0) {
+          xmview.showTip('success', ret.message)
+          return ret.data
+        } else {
+          xmview.showTip('error', ret.message)
+          return Promise.reject(ret)
+        }
+      })
+    }
+    // 订单更新
+    editOrder(fetchParam, id) {
+      let url = `${urlPre}/consultation/edit/${id}`
+      return api.post(url, fetchParam).then(ret => {
+        if (ret.code == 0) {
+          xmview.showTip('success', ret.message)
+          return ret.data
+        } else {
+          xmview.showTip('error', ret.message)
+          return Promise.reject(ret)
+        }
+      })
+    }
+    // 订单删除
+    deleteOrder(id) {
+      let url = `${urlPre}/consultation/delete/${id}`
+      return api.post(url, {}).then(ret => {
+        if (ret.code == 0) {
+          xmview.showTip('success', ret.message)
+          return ret.data
+        } else {
+          xmview.showTip('error', ret.message)
+          return Promise.reject(ret)
+        }
+      })
+    }
 }
 
 export default new FinanceService()

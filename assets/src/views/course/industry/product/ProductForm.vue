@@ -72,7 +72,11 @@
                         }
                     ],
                     image: { required: true, message: '请上传封面', trigger: 'change' },
-                    price: { required: true, type:'number', message: '请输入药品金额',trigger: 'blur'},
+                    price: [{ required: true, type:'number', message: '请输入药品金额',trigger: 'blur'}
+                            ,{
+                            pattern:  /^\d+$/,
+                            message: '请输入整数'
+                        }],
                     summary: { required: true, message: '请输入药品简介',trigger: 'blur'},
             },
                 changelist:{}

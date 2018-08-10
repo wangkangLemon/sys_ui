@@ -67,7 +67,12 @@
                             message: '请输入非空格或非特殊字符的内容'
                         }
                     ],
-                    price: { required: true,type:'number', message: '请输入商品金额',trigger: 'blur'},
+                    price: [{ required: true,type:'number', message: '请输入商品金额',trigger: 'blur'}
+                            ,{
+                            pattern:  /^\d+$/,
+                            message: '请输入整数'
+                        }
+                    ],
                     description: { required: true, message: '请输入商品简介',trigger: 'blur'},
             },
                 changelist:{}

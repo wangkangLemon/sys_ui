@@ -81,7 +81,6 @@
                 </el-select>
             </section>
         </article>
-
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true" border>
             <el-table-column min-width="120" prop="product_name" label="商品名称" v-if="data">
             </el-table-column>

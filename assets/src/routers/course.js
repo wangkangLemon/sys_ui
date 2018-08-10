@@ -358,6 +358,43 @@ export default {
             title: '添加课程-工业课',
         }
         },
-      
+        //订单管理
+        {
+            path: 'order',
+            name: 'industry-order',
+            component: resolve => {
+            require.ensure([], () => {
+                resolve(require('../views/course/industry/order/Order.vue'))
+            })
+            },
+            meta: {
+            title: '订单列表',
+            noback: true
+            }
+        }, {
+            path: 'order/add', //专家管理表单 -修改
+            name: 'industry-order-add',
+            component: resolve => {
+            require.ensure([], () => {
+                resolve(require('../views/course/industry/order/OrderForm.vue'))
+            })
+            },
+            meta: {
+            title: '订单新建',
+            noback: false
+            }
+        }, {
+          path: 'order/edit/:id', //专家管理表单 -修改
+          name: 'industry-order-edit',
+          component: resolve => {
+            require.ensure([], () => {
+                resolve(require('../views/course/industry/order/OrderForm.vue'))
+            })
+          },
+          meta: {
+            title: '订单修改',
+            noback: false
+          }
+        },
     ]
 }
