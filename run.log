@@ -165,3 +165,4 @@ ERROR:root:version updated : [0.0.0.141] ---> [0.0.0.142]
 ERROR:root:shell execute have error! code: 2  cmd:
 GIT_POOL=`git remote -v  | grep push | awk '{print $2}' ` ; CUR_BRANCH=`git branch | grep \* | awk '{print $2}'`; git pull $GIT_POOL $CUR_BRANCH ; git push $GIT_POOL $CUR_BRANCH ; 
 ERROR:root:version updated : [0.0.0.142] ---> [0.0.0.143]
+ERROR:root:version updated : [0.0.0.143] ---> [0.0.0.144]

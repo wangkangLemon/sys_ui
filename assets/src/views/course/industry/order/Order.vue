@@ -49,7 +49,7 @@
             </el-table-column>
             <el-table-column min-width="150" :show-overflow-tooltip="true" label="药品">
                 <template scope="scope">
-                    <p v-if="scope.row.industry_course.industry_drug">{{ scope.row.industry_course.industry_drug.name}}</p>
+                    <p v-if="scope.row.industry_course">{{ scope.row.industry_course.industry_drug.name||''}}</p>
                 </template>
             </el-table-column>
             <el-table-column min-width="120" prop="contact" label="联系人" v-if="data">
@@ -93,9 +93,8 @@ function getFetchParam() {
     return {
         page: 1,
         pagesize: 15,
-        used:void 0,
         address:'',
-        status:'-1',
+        status:'',
     }
 }
 
@@ -111,12 +110,6 @@ export default {
             name:'',
             fetchParam: getFetchParam(),
         }
-    },
-    watch: {
-          'fetchParam.status'(){
-                this.fetchParam.status=Number(this.fetchParam.status)
-                console.log('typeof(this.fetchParam.status)===='+typeof(this.fetchParam.status));
-            },
     },
     activated () {
         this.fetchData()
@@ -141,11 +134,17 @@ export default {
             this.fetchData()
         },
         fetchData(val) {
-            console.log(this.fetchParam.used);
+            console.log('this.fetchParam.status',this.fetchParam.status);
             let obj = Object.assign({},this.fetchParam)
-            if(obj.used === undefined){
-                obj.used = -1
+            console.log('obj',obj);
+            
+            if(obj.status === ''||!obj.status){
+                console.log(111111111);
+                
+                obj.status = -1
             }
+            console.log(obj);
+            
             return industryService.fetchOrderList(obj).then((ret) => {
                 this.data = ret.data
                 this.total = ret._exts.total
