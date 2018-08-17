@@ -14,9 +14,18 @@
             display: inline-block;
             vertical-align: top;
         }
-        .left-container {
-            min-width: 300px;
-            border-right: 1px solid #ededed;
+        // .left-container {
+        //     min-width: 300px;
+        //     border-right: 1px solid #ededed;
+        // }
+        .left-content {
+            display: inline-block;
+            vertical-align: top;
+            width: 25%;
+            background: #fff;
+            .select {
+                margin-bottom: 10px;
+            }
         }
 
         .right-container {
@@ -45,10 +54,22 @@
             <el-button type="primary" @click="addRootCategory">新建分类</el-button>
         </section>-->
 
-        <section class="left-container">
+        <!-- <section class="left-container">
             <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :treeType="treeType" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
+        </section> -->
+         <section class="left-content">
+            <div class="content-title">
+                所有分类
+                <el-select v-model="fetchParam.type" class="select">
+                    <el-option label="课程任务" :value="1"></el-option>
+                    <el-option label="学习任务" :value="3"></el-option>
+                </el-select>
+            </div>
+            <div class="classify-tree">
+            <CourseTaskTemplateCategoryTree v-model="treeData" ref="courseTaskTemplateCategory" :treeType="treeType" :onNodeClick="treeNodeClick.bind(this,1)"></CourseTaskTemplateCategoryTree>
+                <!-- <CourseCategoryTree v-model="treeData" ref="courseCategory" :onNodeClick="treeNodeClick.bind(this,1)"></CourseCategoryTree> -->
+            </div>
         </section>
-
         <section class="right-container">
             <div>
                 <el-button :class="{'btn-selected': activeTab == 'edit'}" @click="activeTab = 'edit'">修改分类</el-button>
@@ -124,6 +145,7 @@
                     sort: '',
                     id: 0,
                     type:1,
+                    task_type:1,
                 }
     }
     export default {
@@ -159,7 +181,7 @@
                         trigger: 'blur'
                     }],
                 },
-                treeType:''
+                treeType:1
             }
         },
         watch: {
@@ -168,6 +190,10 @@
                     this.resetForm()
                 }
             },
+            'fetchParam.type'(){
+                console.log('fetchParam.type',this.fetchParam.type);
+                this.treeType=this.fetchParam.type
+            }
             // 'fetchParam.sort'(){
             //     this.fetchParam.sort=Number(this.fetchParam.sort)
             //     console.log(typeof(this.fetchParam.sort))
@@ -175,7 +201,6 @@
         },
         activated() {
             this.fetchParam= getFetchParam()
-            this.treeType='course'
             this.uploadImgUrl = courseTaskService.getCategoryImageUrl()
             xmview.setContentLoading(false)
         },

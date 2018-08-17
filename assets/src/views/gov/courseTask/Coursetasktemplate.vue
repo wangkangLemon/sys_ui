@@ -84,6 +84,18 @@
         </article>
         <section class="search">
             <section>
+                <i>课程名称</i>
+                <el-input @keyup.enter.native="getData" class="name" v-model="fetchParam.title"/>
+            </section>
+            <section>
+                <i>栏目类型</i>
+                <el-select clearable v-model="fetchParam.task_type" placeholder="未选择" @change="getData">
+                    <el-option label="课程任务" value="1"></el-option>
+                    <el-option label="试题任务" value="2"></el-option>
+                    <el-option label="学习任务" value="3"></el-option>
+                </el-select>
+            </section>
+            <section>
                 <i>类别</i>
                 <!--<CourseTaskTemplateCategorySelect :onchange="getData"
                                                   v-model="fetchParam.category_id"></CourseTaskTemplateCategorySelect>-->
@@ -93,15 +105,17 @@
                     </el-select>
                 </el-form>
             </section>
-            <section>
-                <i>课程名称</i>
-                <el-input @keyup.enter.native="getData" class="name" v-model="fetchParam.title"/>
-            </section>
         </section>
         <el-table border :data="coursetasktemplateData" v-loading="loading">
             <el-table-column
                     prop="title"
                     label="课程任务">
+                    <template scope="scope">
+                        <el-tag type="primary" v-if="scope.row.task_type=='1'">课程</el-tag>
+                        <el-tag type="danger" v-else-if="scope.row.task_type=='2'">考试</el-tag>
+                        <el-tag type="success" v-else-if="scope.row.task_type=='3'">学习</el-tag>
+                        {{scope.row.title}}
+                    </template>
             </el-table-column>
             <el-table-column
                     prop="study_duration"
@@ -175,13 +189,15 @@
         },
         data () {
             return {
+                TYPE:['','课程','考试','学习'],
                 currCategoryName: '',
                 loading: false,
                 fetchParam: {
                     title: '',
                     category_id: '',
                     status: -1,
-                    deleted: -1
+                    deleted: -1,
+                    task_type:''
                 },
                 itemName: '',           // 要删除项名称
                 coursetasktemplateData: [],
@@ -197,10 +213,15 @@
             })
             this.getCategory()
         },
+        watch:{
+             'fetchParam.task_type'(){
+                this.getCategory()
+            }
+        },
         methods: {
             //获取部门组下拉列表
             getCategory(val){
-                courseTaskService.getCategoryTree({pagesize:-1,type:1}).then((ret)=>{
+                courseTaskService.getCategoryTree({pagesize:-1,type:this.fetchParam.task_type}).then((ret)=>{
                  this.category_list = ret.data;
                 })
             },
@@ -212,7 +233,8 @@
                 cb(results);
             },
             handleDelete (index, row) {
-                xmview.showDialog(`你将要删除课程任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, this.deleteItem(row.id))
+                let txt=this.TYPE[row.task_type]
+                xmview.showDialog(`你将要删除${txt}任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, this.deleteItem(row.id))
             },
             deleteItem (id) {
                 // 以下执行接口删除动作
@@ -266,7 +288,6 @@
             },
             getData () {
                 this.loading = true
-                console.log(this.fetchParam)
                 return courseTaskService.getCourseTaskTemplateList({
                     category_id: this.fetchParam.category_id,
                     title: this.fetchParam.title,
@@ -274,7 +295,7 @@
                     status: this.fetchParam.status,
                     page: this.currentPage,
                     pagesize: this.pagesize,
-                    task_type:1,
+                    task_type:this.fetchParam.task_type,
                 }).then((ret) => {
                     this.coursetasktemplateData = ret.data
                     this.total = ret._exts.total

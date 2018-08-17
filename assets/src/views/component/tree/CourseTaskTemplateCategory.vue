@@ -17,7 +17,7 @@
         props: {
             onNodeClick: Function,
             value: Array,
-            treeType:String,
+            treeType: [String, Number],
         },
         data () {
             return {
@@ -55,7 +55,10 @@
             // 给子元素获取数据的方法
             getData (type) {  
                 let param
-                if(type=='course')param={ id:'', name, pagesize:-1,type:1 }
+                console.log('type',type);
+                
+                if(type=='1')param={ id:'', name, pagesize:-1,type:1 }
+                else if(type=='3')param={ id:'', name, pagesize:-1,type:3 }
                 else if(type=='exam')param={ id:'', name, pagesize:-1,type:2 }
                 if(!param)return
                 courseTaskService.getCategoryTree(param).then(ret=>{ 

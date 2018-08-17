@@ -79,7 +79,14 @@
 <template>
     <article class="create-course-task">
         <el-form :model="form" :rules="rules" label-position="right" ref="form" label-width="120px" style="width: 60%">
-            <el-form-item  label="分类" prop="category_id" :fetch-suggestions="querySearch">
+            <el-form-item prop="task_type" label="任务类型">
+                <el-select v-model="form.task_type">
+                    <el-option label="课程任务" :value="1"></el-option>
+                    <!-- <el-option label="试题栏目" :value="2"></el-option> -->
+                    <el-option label="学习任务" :value="3"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item v-if="form.task_type" label="分类" prop="category_id" :fetch-suggestions="querySearch">
                 <el-select clearable class="select" v-model="form.category_id" placeholder="请选择分类">
                     <el-option  v-for="item in  category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
@@ -98,7 +105,7 @@
                 <ImagEcropperInput :isRound="false" :confirmFn="cropperFn"
                                    class="upload-btn"></ImagEcropperInput>
             </el-form-item>
-            <el-form-item prop="course_ids" label="选择课程">
+            <el-form-item v-if="form.task_type" prop="course_ids" label="选择课程">
                 <el-tag style="margin-right: 3px"
                         v-for="(c,index) in courseBox" :key="index"
                         :closable="true"
@@ -112,46 +119,25 @@
             <el-form-item prop="sort" label="排序">
                 <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
             </el-form-item>
-
-            <!--<el-form-item label="时间">
-                <DateRange :start="form.stime" :end="form.etime" @changeStart="val=> form.stime=val"
-                    @changeEnd="val=> form.etime=val" :defaultStart="form.stime" :defaultEnd="form.etime">
-                </DateRange>
-            </el-form-item>
-            <el-form-item label="发布对象" prop="type">
-                <el-select clearable v-model="form.type" @change="choosePushType" placeholder="请选择指定人员或部门">
-                    <el-option label="部门任务" :value="1"></el-option>
-                    <el-option label="个人任务" :value="2"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item
-                :label="pushTypeDialog.title"
-                v-if="form.type && form.type==pushTypeDialog.type">
-                <div class="collection" @click="openPushTypeDialog">
-                    <el-tag
-                        class="u-course-tag"
-                        v-for="item in pushTypeDialog.selectedData[this.pushTypeDialog.type]"
-                        :key="item.id">
-                        {{item.name}}
-                    </el-tag>
-                </div>
-            </el-form-item>-->
             <el-form-item label="可得学分">
                 <el-input style="width: auto;" v-model.number="form.score" type="number"  placeholder="请输入可获得学分值"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submit(0)">提交</el-button>
-                <!--<el-button type="warning" @click="submit(1)">存草稿</el-button>-->
+                    <!--<el-button type="warning" @click="submit(1)">存草稿</el-button>-->
             </el-form-item>
         </el-form>
 
         <!-- 选择课程弹窗 -->
         <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
-                          :selectedList="courseBox" @changeSelected="val=>courseBox=val"  item-key="contentid" get-item-key="course_id">
+                          :selectedList="courseBox" @changeSelected="val=>courseBox=val"  item-key="contentid" get-item-key="course_id" :task-type="form.task_type">
             <div slot="search" class="course-search">
                 <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
                           icon="search"
                           placeholder="请输入关键字搜索"></el-input>
+            </div>
+            <div slot="category" class="course-search">
+                
             </div>
         </dialogSelectData>
         <!-- 发布对象弹窗 -->
@@ -205,6 +191,7 @@
         },
         data () {
             return {
+                TYPE:['','课程','考试','学习'],
                 selectData:[],
                 courseBox:[],
                 form: {                // 表单属性值
@@ -219,9 +206,8 @@
                     // status: void 0,       // 状态
                     score: 0,     // 可获得学分
                     // type:void 0,       // 任务类型
-                    stime:'',
-                    etime:'',
                     study_duration: '',
+                    task_type:void 0
                 },
                 rules: {
                     title:  [
@@ -239,7 +225,8 @@
                     image: [{required: true, message: '必须填写', trigger: 'blur'}],
                     sort: [{required: true, message: '必须填写'}],
                     course_ids: [{ required: true, message: '必须填写'}],
-                    category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'}
+                    category_id: {type: 'number', required: true, message: '请选择栏目', trigger: 'change'},
+                    task_type:{type: 'number', required: true, message: '请选择任务类型', trigger: 'change'},
                 },
                 dialogCourse: {
                     loading: false,
@@ -266,7 +253,14 @@
                     total: 0,
                 },
                 category_list:[],
-                studyCheck:{}
+                studyCheck:{},
+                // passTasktype:void 0,
+                flag:false
+                // passFetchParam:{
+                //     page: 1,
+                //     pagesize: 15,
+                //     need_testing:'',
+                // }
             }
         },
         watch:{
@@ -293,27 +287,34 @@
                     this.getCourseIds()
                     this.getStudyCheck()
                 }
+            },
+            'form.task_type'(){
+                if(!this.flag){
+                    this.flag=true
+                }else{
+                    this.initCourse()
+                    this.form.category_id=''
+                    
+                }
+                this.getCategory()
+                this.$refs.dialogSelect.fetchCourse(true)
             }
 
         },
         created () {
             xmview.setContentLoading(false)
-            console.log(this.$route.params.coursetaskInfo)
             if (this.$route.params.coursetaskInfo) {
                 courseTaskService.getCourseTaskTemplateEditDetail(this.$route.query.id).then((ret) => {
                     this.form = Object.assign(this.form, ret.data)
-                    // this.form.stime =  ret.data.start_date.split(' ')[0]
-                    // this.form.etime =  ret.data.end_date.split(' ')[0]
-                    // this.form.type = ret.data.type
-                    // this.pushTypeDialog.type = ret.data.type
-                    xmview.setContentTile('编辑课程任务模板 ')
+                    console.log('form',this.form);
+                    let txt=this.TYPE[this.form.task_type]
+                    xmview.setContentTile(`编辑${txt}任务模板 `)
                     this.courseBox = ret.data.courses.map(v=>{
                         v.contentid = v.course_id
                         return v
                     }) 
                     this.getCourseIds()
                     this.getStudyCheck()
-                    console.log('selectedData : ', this.courseBox)
                     this.$refs.dialogSelect.setSelected()
                     this.choosePushType()
                     if(ret.data.govs.length!==0){
@@ -334,6 +335,13 @@
                 this.getCourseIds()
                 this.getStudyCheck()
             },
+            //初始化课程数据
+            initCourse(){
+                this.courseBox=[]
+                 this.getCourseIds()
+                this.studyCheck={}
+                this.form.study_duration=''
+            },
             //把数组转化成接口提交的 最终字符串
             getCourseIds(){
                 let courses=[] //放栏目范围的空容器
@@ -352,7 +360,7 @@
             },
              //获取部门组下拉列表
             getCategory(val){
-                courseTaskService.getCategoryTree({pagesize:-1,type:1}).then((ret)=>{
+                courseTaskService.getCategoryTree({pagesize:-1,type:this.form.task_type}).then((ret)=>{
                  this.category_list = ret.data;
                 })
             },
@@ -451,7 +459,13 @@
                 })
             },
             fetchCourse (params) {
-                // { course_name = '', status, category_id , time_start, time_end, page, pagesize}
+                if(this.form.task_type==1||this.form.task_type==2){
+                    params.need_testing= 1
+                    params.category_type=''
+                }else{
+                     params.need_testing= 0
+                     params.category_type=1
+                }
                 return courseService.getPublicCourselist(Object.assign({}, this.dialogCourse, params))
             },
             submit(s) {

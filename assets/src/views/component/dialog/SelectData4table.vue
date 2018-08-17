@@ -22,20 +22,32 @@
                 &:first-of-type {
                     margin-right: 5%;
                 }
+                .el-table__body-wrapper{
+                      width: 100%;
+                      .el-table__body{
+                          width: 100%;
+                      }
+                }
             }
         }
     }
 </style>
 
 <template>
-    <el-dialog :title="title" v-model="currVal" class="comp-dialog-select4table">
+    <el-dialog v-if="currVal" :title="title" v-model="currVal" class="comp-dialog-select4table">
         <main>
             <slot name="search"></slot>
             <section>
                 <aside>未选中</aside>
-                <el-table ref="courseTable" v-loading="loading" :data="data" :show-header="false"
-                          :height="500"
-                          @select="rowSelected">
+                <el-table 
+                    ref="courseTable" 
+                    v-loading="loading" 
+                    :data="data" 
+                    :show-header="false"
+                    :height="500"
+                    @select="rowSelected"  
+                    row-key="contentid"
+                    class="box">
                     <el-table-column type="selection" :selectable="(row) =>  row.id != -1"></el-table-column>
                     <el-table-column>
                         <template scope="scope" >
@@ -48,9 +60,9 @@
                     </el-table-column>
                 </el-table>
             </section>
-            <section>
+            <section >
                 <aside>已选中</aside>
-                <el-table :show-header="false" :height="500" :data="currSelectedList">
+                <el-table :show-header="false"  style=" width: 100%;" :height="500" :data="currSelectedList"  class="box">
                     <el-table-column>
                         <template scope="scope">
                             {{scope.row.course_name}}
@@ -87,7 +99,8 @@
             getItemKey: {
                 type:String,
                 default: 'id'
-            }
+            },
+            // taskType:void 0,
         },
         data () {
             return {
@@ -96,7 +109,8 @@
                 fetchParam: {
                     page: 1,
                     pagesize: 15,
-                    need_testing: 1,
+                    need_testing: '',
+                    category_type:'',
                 },
                 total: 0,
                 data: [],
@@ -113,17 +127,19 @@
                 val && this.setSelected()
             },
             selectedList (val) { //出现混乱是不是ID没有匹配对？？？ 拿到的值
-                console.log('右侧列表上次val====',val) 
+                // console.log('右侧列表上次val====',val) 
                 if (val !== this.currSelectedList && val.length !== this.currSelectedList.length)  //检测刷新赋值
                     this.currSelectedList = val
             }
         },
         created () {
+            console.log('进入子组件');
         },
         activated () {
         },
         methods: {
             fetchCourse (isFirst) {
+                // console.log('this.taskType=============',this.taskType);
                 this.loading = true
                 if (isFirst) this.fetchParam.page = 1
                 this.getData(this.fetchParam).then((ret) => {
@@ -136,7 +152,6 @@
                     }
                     this.data.splice(-1, 1)
                     this.data.push(...[...ret.data, {id: -1}])
-                    console.log('dataGot: ', this.data)
                     // 设置选中
                     this.setSelected()
 
@@ -148,25 +163,22 @@
             },
             rowSelected (selection, row) {// 选中 取消选中选择框！ //selection左侧选中 
                 // 排除已选课程
-                console.log(111111111111111,selection, row)  
                 if (selection.indexOf(row) > -1)
                     this.currSelectedList.push(row)
                 else
                     // this.currSelectedList.splice(this.currSelectedList.indexOf(row), 1)
                     this.currSelectedList.splice(this.currSelectedList.findIndex(item => {
                         row.id=row[this.itemKey]?row[this.itemKey]:row.id //2018-07-06 解决ID不对应，删除混乱 优先匹配[this.itemKey]删除
-                        console.log('item.id ===',row.id);
                         return item[this.itemKey] === row.id  // 优先匹配[this.itemKey]删除
                     }), 1)
                 // 重新设置选中
                 // this.setSelected ()
                 this.$emit('changeSelected', this.currSelectedList)
-                console.log('右侧选中的列表',this.currSelectedList)
+                // console.log('右侧选中的列表',this.currSelectedList)
             },
             delItem (row) {    // 右侧删除！
                 this.currSelectedList.splice(this.currSelectedList.findIndex(item => {
                     row.id=row.id?row.id:row[this.itemKey] //2018-07-06 解决ID不对应，删除混乱 优先匹配id删除
-                    console.log('item.id ===',row.id);
                     return item.id === row.id  
 
                 }), 1)
@@ -181,13 +193,12 @@
                     if (!this.$refs.courseTable) return
                     this.$refs.courseTable.clearSelection()
                     this.currSelectedList.forEach((row) => {
-                        console.log('左边数据',this.data)//左边数据
+                        // console.log('左边数据',this.data)//左边数据
                         let currRow = this.data.find((item) => {
                             return item[this.itemKey] == row[this.itemKey]
                         })
-                        console.log('左边选中数据',currRow)//左边选中数据
+                        // console.log('左边选中数据',currRow)//左边选中数据
                         this.$refs.courseTable.toggleRowSelection(currRow, true)
-                        console.log('setSelected finished')
                     })
                 })
             }

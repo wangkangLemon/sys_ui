@@ -153,9 +153,9 @@ class sysService {
     }
 
     // 更新课程任务模板
-    updateCourseTaskTemplate({ id, category_id, title, description, image, course_ids, sort, score, study_duration}) {
+    updateCourseTaskTemplate({ id, task_type, category_id, title, description, image, course_ids, sort, score, study_duration }) {
         let finalUrl = urlPre + `/template/edit/${id}`
-        return api.post(finalUrl, { category_id, title, description, image, course_ids, sort, score, study_duration }).then((ret) => {
+        return api.post(finalUrl, { task_type, category_id, title, description, image, course_ids, sort, score, study_duration }).then((ret) => {
             if (ret.code) {
                 return Promise.reject(ret)
             }
