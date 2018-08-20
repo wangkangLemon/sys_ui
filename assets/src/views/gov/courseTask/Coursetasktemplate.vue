@@ -234,17 +234,12 @@
             },
             handleDelete (index, row) {
                 let txt=this.TYPE[row.task_type]
-                xmview.showDialog(`你将要删除${txt}任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, this.deleteItem(row.id))
-            },
-            deleteItem (id) {
-                // 以下执行接口删除动作
-                return () => {
-                    courseTaskService.deleteCourseTaskTemplate(id).then((ret) => {
+                xmview.showDialog(`你将要删除${txt}任务【<i style="color:red">${row.title || ''}</i>】操作不可恢复确认吗？`, ()=>{
+                    courseTaskService.deleteCourseTaskTemplate(row.id).then((ret) => {
                         this.coursetasktemplateData.splice(index, 1)
                         xmview.showTip('success', '删除成功')
-                        
                     })
-                }
+                })
             },
             editItm (row) {
                 row.course = row.course || []

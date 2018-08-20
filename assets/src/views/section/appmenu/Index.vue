@@ -738,10 +738,8 @@
                         req(this.fetchGroup).then((ret) => {
                             //添加
                             if(!this.fetchGroup.id){
-                                // alert('返回添加')
                                 this.resultData.push(ret.data)
                             }else{ // 修改当前项
-                                // alert('返回编辑')
                                 console.log(this.resultData[this.currentGroupData.pindex])
                                 this.resultData[this.currentGroupData.pindex] = this.fetchGroup
                                 console.log(this.resultData[this.currentGroupData.pindex])

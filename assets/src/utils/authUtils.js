@@ -126,7 +126,6 @@ let authUtils = {
     clearAuthRefreshToken () { //清除信息刷新token
         refreshIntervalId && clearInterval(refreshIntervalId)
         firstRefreshTimeoutId && clearTimeout(firstRefreshTimeoutId)
-        // alert('clearAuthRefreshToken()+Date.now()===' + Date.now())
     },
     clearAuthInfo () {
         authUtils.setAuthToken('')

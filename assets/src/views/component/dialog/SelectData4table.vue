@@ -37,6 +37,7 @@
     <el-dialog v-if="currVal" :title="title" v-model="currVal" class="comp-dialog-select4table">
         <main>
             <slot name="search"></slot>
+            <!-- <slot name="category"></slot> -->
             <section>
                 <aside>未选中</aside>
                 <el-table 

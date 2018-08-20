@@ -65,6 +65,7 @@
             border: 1px solid #d1dbe5;
         }
         .course-search {
+            // display: inline-block;
             margin-bottom: 12px;
             .el-input {
                 width: 150px;
@@ -132,13 +133,16 @@
         <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
                           :selectedList="courseBox" @changeSelected="val=>courseBox=val"  item-key="contentid" get-item-key="course_id" :task-type="form.task_type">
             <div slot="search" class="course-search">
+                <i>课程名称</i>
                 <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
                           icon="search"
-                          placeholder="请输入关键字搜索"></el-input>
+                          placeholder="请输入关键字搜索">
+                </el-input>
             </div>
-            <div slot="category" class="course-search">
-                
-            </div>
+            <!-- <div slot="category" class="course-search">
+                <i>栏目</i>
+                <CourseCategorySelect v-model="dialogCourse.category_id" ></CourseCategorySelect>
+            </div> -->
         </dialogSelectData>
         <!-- 发布对象弹窗 -->
         <el-dialog
@@ -180,6 +184,7 @@
     import dialogSelectData from '../../component/dialog/SelectData4table.vue'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import DepSelect from '../../component/select/Department.vue'
+    import CourseCategorySelect from '../../component/select/CourseCategory.vue'
 
 
     export default{
@@ -232,6 +237,7 @@
                     loading: false,
                     isShow: false,
                     course_name: void 0,
+                    category_id:void 0,
                 },
                 pushTypeDialog: { //发布对象数据模型
                     fetchParam: {
@@ -287,6 +293,9 @@
                     this.getCourseIds()
                     this.getStudyCheck()
                 }
+            },
+            'dialogCourse.category_id'(){
+                this.$refs.dialogSelect.fetchCourse(true)
             },
             'form.task_type'(){
                 if(!this.flag){
@@ -505,6 +514,6 @@
                 })
             }
         },
-        components: {DateRange,ImagEcropperInput, dialogSelectData, Transfer, DepSelect }
+        components: {DateRange,ImagEcropperInput, dialogSelectData, Transfer, DepSelect, CourseCategorySelect }
     }
 </script>
