@@ -226,12 +226,50 @@ export default {
             name: 'push-msg',
             component: resolve => {
                 require.ensure([], () => {
-                    resolve(require('../views/sys/PushMsg.vue'))
+                resolve(require('../views/sys/PushMsg.vue'))
                 })
             },
             meta: {
                 title: '推送消息',
                 noback: true
+            }
+        }, 
+        {
+            path: 'message',
+            name: 'message',
+            component: resolve => {
+                require.ensure([], () => {
+                resolve(require('../views/sys/message/Message.vue'))
+                })
+            },
+            meta: {
+                title: '消息中心',
+                noback: true
+            }
+        },
+        {
+            path: 'message/add', //专家管理表单 -修改
+            name: 'message-add',
+            component: resolve => {
+                require.ensure([], () => {
+                resolve(require('../views/sys/message/MessForm.vue'))
+                })
+            },
+            meta: {
+                title: '消息新建',
+                noback: false
+            }
+            }, {
+            path: 'message/edit/:id', //专家管理表单 -修改
+            name: 'message-edit',
+            component: resolve => {
+                require.ensure([], () => {
+                resolve(require('../views/sys/message/MessForm.vue'))
+                })
+            },
+            meta: {
+                title: '消息修改',
+                noback: false
             }
         },
     ]

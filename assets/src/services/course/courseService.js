@@ -96,10 +96,10 @@ class CourseService {
         })
     }
 
-    // 获取公开课列表 { course_name = '', status, category_id , create_start, create_end, page, pagesize }
-    getPublicCourselist({ course_name = '', status, category_id, need_testing, create_start, create_end, page, pagesize, category_type }) {
+    // 获取公开课列表 
+    getPublicCourselist({ course_name = '', status, category_id, need_testing, create_start, create_end, page, pagesize, category_type, material_type }) {
         let url = urlPre + '/lists'
-        return api.get(url, { course_name, status, category_id, need_testing, create_start, create_end, page, pagesize, category_type }, false).then(ret => {
+        return api.get(url, { course_name, status, category_id, need_testing, create_start, create_end, page, pagesize, category_type, material_type }, false).then(ret => {
             if (ret.code == 0) {
                 return ret
             } else {
@@ -110,7 +110,6 @@ class CourseService {
 
     // 创建
     addCourse({ category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status, sort, share,noaccess}) {
-
         let url = urlPre + '/create'
         return api.post(url, { category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, sort, share, noaccess}).then(ret => {
             if (ret.code == 0) {
@@ -138,8 +137,11 @@ class CourseService {
             return ret.data
         })
     }
-   
 
+
+    
+
+    
     // 上下线课程
     offlineCourse({ id, status }) {
         let finalUrl = `${config.apiHost}/course/edit/${id}`

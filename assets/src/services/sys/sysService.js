@@ -56,7 +56,6 @@ class sysService {
         let url = `${urlPre}/update/${id}`
         return api.post(url, { role_id, name, mobile, email, password}).then(ret => {
             if (ret.code) {
-                console.log('update()')
                 return Promise.reject(ret)
             }
         })
@@ -148,6 +147,54 @@ class sysService {
                 return Promise.reject(ret)
             }
         })
+    }
+
+    //消息中心推送
+    messageCreate(param) {
+      let url = `${config.apiHost}/message/create`
+      return api.post(url, param).then(ret => {
+        if (ret.code == 0) {
+          return ret
+        } else {
+          return Promise.reject(ret)
+        }
+      })
+    }
+    //消息中心更新
+    messageEdit({ id, param }) {
+        let url = `${urlPre}/message/edit/${id}`
+        return api.post(url, { param }).then(ret => {
+          if (ret.code == 0) {
+            xmview.showTip('success', ret.message)
+            return ret.data
+          } else {
+            xmview.showTip('error', ret.message)
+            return Promise.reject(ret)
+          }
+        })
+    }
+
+    //消息中心推送列表
+    messageList(param) {
+      let url = `${config.apiHost}/message/lists`
+      return api.get(url, param).then(ret => {
+        if (ret.code == 0) {
+          return ret
+        } else {
+          return Promise.reject(ret)
+        }
+      })
+    }
+    //消息中心删除推送
+    messageDel(id) {
+      let url = `${config.apiHost}/message/delete/${id}`
+      return api.post(url).then(ret => {
+        if (ret.code == 0) {
+          return ret
+        } else {
+          return Promise.reject(ret)
+        }
+      })
     }
 
 }

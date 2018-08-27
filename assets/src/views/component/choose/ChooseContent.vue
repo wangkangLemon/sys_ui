@@ -182,7 +182,8 @@
                         course_name: this.search.course_name,
                         category_id: this.search.category_id,
                         page: this.fetchParam.page,
-                        pagesize: this.fetchParam.pagesize
+                        pagesize: this.fetchParam.pagesize,
+                        material_type : 'video',
                     }
                 }else if(this.activeTab=== 'second'){
                     p=industryService.fetchCourseList
