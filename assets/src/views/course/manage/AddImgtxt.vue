@@ -59,17 +59,6 @@
     import vTags from '../../component/form/Tags.vue'
 
 
-    function clearFn() {
-        return {
-            typeSelect: '',
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
-            name: ''
-        }
-    }
     export default {
         name: 'course-manage-addCourse-imgtxt',
         components: {

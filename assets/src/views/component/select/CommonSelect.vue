@@ -7,7 +7,9 @@
 <!--</IndustryCompanySelect>-->
 
 <template>
-    <SelectScroll :changeCb="handleChange" ref="selectScroll" :requestCb="fetchData" :placeholder="placeholder" :itemObj="itemObj" :list="list" v-model="currVal" :disabled="disabled" :isend="isend">
+    <SelectScroll :changeCb="handleChange" ref="selectScroll" :requestCb="fetchData" 
+                :placeholder="placeholder" :itemObj="itemObj" :list="list" v-model="currVal" 
+                :disabled="disabled" :isend="isend">
     </SelectScroll>
 </template>
 
@@ -47,7 +49,6 @@
             fetchData (val, length) {
                 return this.change(val, length).then((ret) => {
                     // this.$emit('changelitc', ret.data)
-
                     if(length+15 >= ret._exts.total){this.isend=true} //判断子组件是否显示加载更多按钮
                     return ret.data
                 })

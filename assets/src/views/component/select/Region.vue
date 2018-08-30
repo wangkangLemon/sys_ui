@@ -17,7 +17,7 @@
 <template>
     <section class="region-container" ref="container">
         <i>{{title}}</i>
-        <el-select :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(0, provinceSelect)" v-model="provinceSelect">
+        <el-select  :disabled="disabled" placeholder="全部" clearable @change="setCurrVal(0, provinceSelect)" v-model="provinceSelect">
             <el-option v-for="(item, index) in provinces" :label="item.name" :value="item.id" :key="item.id">
             </el-option>
         </el-select>
@@ -128,7 +128,7 @@
             }
         },
         created() {
-            console.log('111111',typeof(this.provinces),typeof(this.town),typeof(this.village));
+            // console.log('111111',typeof(this.provinces),typeof(this.town),typeof(this.village));
         },
         mounted() {
             // 获取数据  按需加载 按需处理数据？  三个独立的选择器
@@ -167,6 +167,8 @@
                     village_id: this.fetchParam.villageSelect,
 
                 }).then((ret) => {
+                // debugger
+
                     this.cityData = ret.data
                     let arr = []
                     this.cityData.forEach(v => {

@@ -79,7 +79,7 @@
             province(val) {
                 if (val) {
                     this.provinceSelect = val
-                    // console.log('this.provinceSelect='+this.provinceSelect)
+                    console.log('this.provinceSelect='+this.provinceSelect)
                     this.currentVal(0, val)
                 } else {
                     this.provinceSelect = ''

@@ -129,6 +129,17 @@
                         <el-radio class="radio" v-model="fetchParam.noaccess" :label="1">隐藏</el-radio>
                         <el-radio class="radio" v-model="fetchParam.noaccess" :label="0">可见</el-radio>
                     </el-form-item>
+                    <el-form-item
+                        :label="pushTypeDialog.title"  prop="receiver">
+                        <div class="collection" @click="openPushTypeDialog">
+                            <el-tag
+                                class="u-course-tag"
+                                v-for="item in pushTypeDialog.selectedData[this.pushTypeDialog.type]"
+                                :key="item.id">
+                                {{item.name}}
+                            </el-tag>
+                        </div>
+                    </el-form-item>
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
                         <el-radio class="radio" v-model="fetchParam.need_testing" :label="1">需要</el-radio>
@@ -228,6 +239,16 @@
             </el-tab-pane>
         </el-tabs>
 
+        <!-- 选择部门树弹窗 -->
+        <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" title="选取范围"
+                           item-key="contentid">
+            <CourseTree v-model="treeData" :req="req" ref="courseCategory"  :nodeExpand="1"
+                        :change="val=>categorysBox=val" :checkbox="true" :onNodeClick="treeNodeClick.bind(this,1)">
+            </CourseTree>
+            <span slot="footer">
+                <el-button type="primary" @click="getCheckedNodes">确定</el-button>
+            </span>
+        </el-dialog >
         <DialogVideo :onSelect="handleVideoSelected" v-model="isShowVideoDialog"></DialogVideo>
 
         <VideoPreview :url="videoUrl" :onchange="fetchVideoData" ref="videoPreview"></VideoPreview>
@@ -280,7 +301,34 @@ export default {
             uploadextraData:{
                 biz:'course',
                 extpath:'subject'
-            }
+            },
+            dialogTree:{
+                loading: false,
+                isShow: false,
+                course_name: void 0,
+            },
+             pushTypeDialog: { //发布对象数据模型
+                    fetchParam: {
+                        receiver: '',
+                        gov_ids: '',
+                        name: '',
+                        noself: 1,
+                        mobile:'',
+                    },
+                    title: '',
+                    isSearch: '',
+                    type: '',
+                    showDialog: false,
+                    selectedData: {
+                        2: [],
+                        1: []
+                    },
+                    data: [],
+                    page: 1,
+                    pagesize: 15,
+                    total: 0,
+                },
+            treeData: [],
         }
     },
 
@@ -359,6 +407,79 @@ export default {
         }
     },
     methods: {
+         //拿到栏目树里的所有节点 处理数据拿到ended：1
+            getCheckedNodes(){
+                this.dialogTree.isShow=false
+                // console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
+                let arr=this.$refs.courseCategory.$refs.tree.getCheckedNodes()
+                    //数组筛选ended==1
+                    function func(arr, lable, box) {
+                        arr.forEach(v => {
+                            if (v.ended == 0) {
+                                if(!v.children)xmview.showTip('error', "数据结构异常")
+                                func(v.children, lable, box)
+                            } else {
+                                box.push(v)
+                            }
+                        })
+                    }
+                    let t = []
+                    func(arr, 'children', t)
+                    //数组去重
+                    function format(t){
+                        let obj = {};
+                        let result = [];
+                        t.forEach(v => {
+                            obj[v.id] = v
+                        });
+                        for(let k in obj){
+                            result.push(obj[k])
+                        };
+                        return result
+                    }
+                    console.log(11111111111,format(t))
+                    this.categorysBox=format(t)
+                    this.getCategoryids()
+                    // this.getCategoryCheck()
+            },
+            //把数组转化成接口提交的 最终字符串
+            getCategoryids(){
+                 let categorys=[] //放栏目范围的空容器
+                    this.categorysBox.forEach((c) => {
+                        categorys.push(c.contentid||c.id) //开始出错
+                        // console.log(this.form.course_ids)
+                    })
+                    this.form.category_ids = categorys.join(',')
+                    console.log(this.form)
+            },
+            //打开发布对象弹出框
+            openPushTypeDialog () {
+                console.log('this.form.receive_type',this.form.receive_type);
+                //单选部门
+                // if(this.form.receive_type==2){
+                    this.pushTypeDialog.showDialog = true
+                // }else if(this.form.receive_type==1){
+                //      this.dialogTree.isShow=true
+                // }
+            },
+             //获取gov菜下拉列表
+            req(param){
+                return govService.getSelectList({
+                    pagesize:-1,pid:param,level:-1
+                })
+            },
+             // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                console.log(node.data)
+                if (type == 1) { 
+                    // this.section.category_id=node.data.id
+                    // this.section.category_name=node.data.name
+                    this.nodeParentSelected = node.parent// 记录父节点
+                    this.nodeSelected = node // 记录当前节点
+                } else if (type == 2) {
+                    this.moveToNode = node
+                }
+            },
         getExpertsList (val, length) {
                 return expertsService.fetchExpertsData({
                     name: val,

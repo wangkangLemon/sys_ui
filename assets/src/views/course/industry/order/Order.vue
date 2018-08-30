@@ -87,7 +87,6 @@
 
 <script>
 import industryService from '../../../../services/course/industryService.js'
-import Product from '../../../component/select/CommonSelect.vue'
 
 function getFetchParam() {
     return {
@@ -99,9 +98,6 @@ function getFetchParam() {
 }
 
 export default {
-    components: {
-        Product
-    },
     data() {
         return {
             loadingData: false,

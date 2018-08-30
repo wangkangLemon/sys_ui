@@ -86,21 +86,31 @@
                 <el-button type="primary" @click="transferConfirmFn">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 选择部门树弹窗 -->
+        <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" title="选取范围"
+                           item-key="contentid">
+            <CourseTree v-model="treeData" :req="req" ref="courseCategory"  :nodeExpand="1"
+                        :change="val=>categorysBox=val" :checkbox="true" :onNodeClick="treeNodeClick.bind(this,1)">
+            </CourseTree>
+            <span slot="footer">
+                <el-button type="primary" @click="getCheckedNodes">确定</el-button>
+            </span>
+        </el-dialog >
         <section class="submit-form">   
               <el-form :model="form" :rules="rules" ref="form" :label-width="formLabelWidth">
-                <el-form-item prop="title" label="推送标题">
-                    <el-input v-model="form.title" placeholder="请填写推送标题" auto-complete="off"></el-input>
+                <el-form-item prop="title" label="消息标题">
+                    <el-input v-model="form.title" placeholder="请填写消息标题" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="发布对象">
+                <el-form-item label="范围类型" prop="receive_type" >
                     <el-select clearable v-model="form.receive_type" @change="choosePushType" placeholder="请选择发送范围类型">
-                        <el-option label="全部" :value="3"></el-option>
+                        <!-- <el-option label="全部" :value="3"></el-option> -->
                         <el-option label="政府任务" :value="1"></el-option>
                         <el-option label="个人任务" :value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    :label="pushTypeDialog.title"
-                    v-if="form.receive_type!=3 && form.receive_type==pushTypeDialog.type">
+                    :label="pushTypeDialog.title"  prop="receiver"
+                    v-if="form.receive_type==2 && form.receive_type==pushTypeDialog.type">
                     <div class="collection" @click="openPushTypeDialog">
                         <el-tag
                             class="u-course-tag"
@@ -110,29 +120,27 @@
                         </el-tag>
                     </div>
                 </el-form-item>
-                 <el-form-item label="下发部门" prop="receiver" v-if="form.receive_type==1">
-                      <!--用v-if全部  v-else gov选择组件-->
-                        <el-checkbox v-model="govparam.checked" v-if="!govparam.provinceSelect">全部</el-checkbox>
-                        <Region :province="govparam.provinceSelect" 
-                                :city="govparam.citySelect" 
-                                :area="govparam.areaSelect" 
-                                :town="govparam.townSelect"
-                                :village="govparam.villageSelect" title="" 
-                                v-on:provinceChange="val => {govparam.provinceSelect = val;finallyVal = val}"
-                                v-on:cityChange="val => {govparam.citySelect = val;finallyVal = val}" 
-                                v-on:areaChange="val => {govparam.areaSelect = val;finallyVal = val}"
-                                v-on:townChange="val => {govparam.townSelect = val;finallyVal = val}" 
-                                v-on:villageChange="val => {govparam.villageSelect = val;finallyVal = val}"
+                 <el-form-item label="接收部门" v-if="form.receive_type==1">
+                        <!-- <el-checkbox v-model="govparam.checked" v-if="!govparam.provinceSelect">全部</el-checkbox> -->
+                        <Region :province="govparam.province_id "  v-model="govparam.province_id" 
+                                :city="govparam.city_id" 
+                                :area="govparam.area_id" 
+                                :town="govparam.town_id"
+                                :village="govparam.village_id" 
+                                title="" 
+                                v-on:provinceChange="val => {govparam.province_id = val;finallyVal = val}"
+                                v-on:cityChange="val => {govparam.city_id = val;finallyVal = val}" 
+                                v-on:areaChange="val => {govparam.area_id = val;finallyVal = val}"
+                                v-on:townChange="val => {govparam.town_id = val;finallyVal = val}" 
+                                v-on:villageChange="val => {govparam.village_id = val;finallyVal = val}"
                                 :change="changeR">
                         </Region>
-                        <!-- <Course-category-select :placeholder="govparam.name" :autoClear="true" :mark = this.mark :showNotCat="false" v-model="govparam.id" :req="req">
-                        </Course-category-select> -->
                 </el-form-item>
                  <el-form-item prop="sendtime" label="发送时间" >
                     <el-date-picker v-model="form.sendtime" type="datetime" placeholder="发送日期"
                                     :picker-options="pickerOptionsed"/>
                 </el-form-item>
-                <el-form-item label="推送类型" prop="msg_type">
+                <el-form-item label="消息类型" prop="msg_type">
                     <el-radio-group v-model="form.msg_type">
                         <el-radio :label="1">通知</el-radio>
                         <el-radio :label="2">课程</el-radio>
@@ -140,30 +148,36 @@
                         <!-- <el-radio :label="'task'">任务</el-radio> -->
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item prop="url" label="推送地址" v-if="form.msg_type=='url'||form.msg_type=='course'">
-                    <el-input v-model="form.url" placeholder="请填写推送地址" auto-complete="off"></el-input>
+                <el-form-item prop="url" label="消息地址" v-if="form.msg_type==1">
+                    <el-input v-model="form.url" placeholder="请填写消息地址" auto-complete="off"></el-input>
                 </el-form-item>
-                <!-- <el-form-item prop="content" label="推送内容">
-                    <el-input v-model="form.content" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请填写推送内容"></el-input>
+                <!-- <el-form-item prop="content" label="消息内容">
+                    <el-input v-model="form.content" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请填写消息内容"></el-input>
                 </el-form-item> -->
-                <el-form-item prop="biz_id" label="推送课程" v-if="form.msg_type==2">
-                     <Course v-model="form.biz_id" :placeholder="form.course_name" ref="Course"
-                            v-on:change="val=>form.biz_id=val" :change="reqFun2" :itemObj="['contentid','course_name']" :list="changelistc">
+                <el-form-item prop="biz_id" label="消息课程" v-if="form.msg_type==2">
+                     <Course v-model="form.biz_id" :placeholder="form.biz_name" ref="Course"
+                            v-on:change="val=>form.biz_id=val" :change="reqFun2" 
+                            :itemObj="['contentid','course_name']" :list="changelistc">
                     </Course>
                 </el-form-item>
-                <el-form-item prop="biz_id" label="推送直播" v-if="form.msg_type==3">
-                    <Course v-model="form.biz_id" :placeholder="form.title" ref="Live"
-                            v-on:change="val=>form.biz_id=val" :change="reqFun1" :itemObj="['id','title']" :list="changelistc">
-                    </Course>
+                <!-- <el-form-item  label="关联商品" prop="product_id" >
+                    <Product v-model="form.product_id" :placeholder="form.product_name" ref="Product"
+                            v-on:change="val=>form.product_id=val" :change="reqFun2" :list="changelistc">
+                    </Product>
+                </el-form-item> -->
+                <el-form-item prop="biz_id" label="消息直播" v-if="form.msg_type==3">
+                    <Biz v-model="form.biz_id" :placeholder="form.biz_name" ref="Live"
+                            v-on:change="val=>form.biz_id=val" :change="reqFun1" :itemObj="['id','title']" :list="changelistc1">
+                    </Biz>
                 </el-form-item>
-                <el-form-item prop="content" label="推送内容" id="editor" :label-width="formLabelWidth">
+                <el-form-item prop="content" label="消息内容" id="editor" :label-width="formLabelWidth">
                     <vue-editor v-model="form.content" @ready="ueReady"></vue-editor>
                 </el-form-item>
           
                  <el-form-item label="" >
                     <!--<el-button @click="$router.push({ name:'medical-index'})">取消</el-button>-->
                     <div>
-                    <el-button type="primary" @click="btnNextClick">确认</el-button>
+                    <el-button type="primary" @click="btnNextClick" v-if="!this.$route.params.look">确认</el-button>
                     </div>
                 </el-form-item>
             </el-form>
@@ -183,63 +197,68 @@
     import userService from '../../../services/gov/userService.js'
     import DateRange from '../../component/form/DateRangePicker.vue'
     import Course from '../../component/select/CommonSelect.vue'
+    import Biz from '../../component/select/CommonSelect.vue'
     import CourseCategorySelect from '../../component/select/MultCategory'
-    import Region from '../../component/select/Region.vue'
+    import Region from '../../component/select/RegionImport.vue'
     import { time2String } from '../../../utils/timeUtils.js'
     import VueEditor from '../../component/form/UEditor.vue'
     import Transfer from '../../component/dialog/Transfer.vue'
     import DepSelect from '../../component/select/DepartmentNoself.vue'
+    import CourseTree from '../../component/tree/MenuTree.vue'
 
-
-    function clearFn() {
-        return {
-            typeSelect: '',
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
-            name: ''
-        }
-    }
     function clearForm() { //添加
         return {
-            receive_type:void 0,
-            msg_type: '',
+            receive_type:void 0,//发送范围类型:1.政府 2.个人
+            msg_type: '', //消息类型	1.通知 2.课程 3.直播
             title: '',
             content: '',
             url:'',
-            receiver:'',
+            receiver:0,   //接收人id、部门id	英文逗号间隔
             // gov_id:void 0,
-            biz_id:void 0,
-            sendtime:'',
+            biz_id:void 0,  //跳转id	课程id、直播id
+            biz_name:'',
+            sendtime:void 0,
             status:1
         }
     }
     function clearGovParam() { //添加
         return {
-            checked:false,
+            // checked:false,
             receiver: void 0,
             pid: void -1,
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
+            province_id: '',
+            city_id: '',
+            area_id: '',
+            town_id: '',
+            village_id: '',
             name: '',
         }
     }
     export default {
-        name: 'messages-edit',
+        name: 'message-edit',
         components: {
-            ImagEcropperInput, DateRange,Course,CourseCategorySelect,Region,VueEditor, Transfer, DepSelect
+            ImagEcropperInput, DateRange,Course,Biz,CourseCategorySelect,
+            Region,VueEditor, Transfer, DepSelect,CourseTree
         },
         data() {
-            let validateGov = (rule, value, callback) => { 
-            console.log('validateGov',value,this.govparam.provinceSelect,this.govparam.checked);
-            console.log('provinceSelect',this.govparam.provinceSelect==undefined,this.govparam.checked==false);
-                if ((!this.govparam.provinceSelect&&this.govparam.checked==false)){
-                    callback(new Error('请输入部门'))
+            // let validateGov = (rule, value, callback) => { 
+            // // console.log('validateGov',value,this.govparam.province_id,this.govparam.checked);
+            // // console.log('province_id',this.govparam.province_id==undefined,this.govparam.checked==false);
+            //     if ((!this.govparam.province_id&&this.govparam.checked==false)){
+            //         callback(new Error('请输入部门'))
+            //     }
+            //     callback()
+            // }
+            let validate=(rule, value, callback) => { 
+                if (this.form.sendtime==undefined){
+                    callback(new Error('请输入发送时间'))
+                }
+                callback()
+            }
+            let validate1=(rule, value, callback) => { 
+                console.log(typeof(this.form.receiver),this.form.receiver);
+                if (this.form.receive_type==2&&this.pushTypeDialog.selectedData[this.pushTypeDialog.type].length==0){
+                    callback(new Error('请选择接收人员'))
                 }
                 callback()
             }
@@ -270,16 +289,6 @@
                     pagesize: 15,
                     total: 0,
                 },
-                role_list:[
-                    {
-                        name: '管理员',
-                        id: 1
-                    },
-                    {
-                        name: '部门人员',
-                        id: 0
-                    },
-                ],
                 rules: {
                     title:[
                         {required: true, message: '必须输入', trigger: 'blur'},
@@ -288,9 +297,12 @@
                             message: '请输入非空格或非特殊字符的内容'
                         }
                     ],
-                    author: { required: true, message: '请输入作者姓名',trigger: 'blur'},
-                    info: { required: true, message: '请输入简介内容',trigger: 'blur'},
-                    html: { required: true, message: '请输入资讯内容',trigger: 'blur'},
+                    receive_type: { required: true,type: 'number', message: '请输入发送范围类型',trigger: 'change'},
+                    msg_type: { required: true,type: 'number', message: '请输入消息类型',trigger: 'change'},
+                    biz_id: { required: true,type: 'number', message: '请跳转路径',trigger: 'change'},
+                    sendtime: { required: true, validator:validate, trigger: 'blur'},
+                    content: { required: true, message: '请输入消息内容',trigger: 'blur'},
+                    receiver: { required: true, validator:validate1,trigger: 'blur'},
                 },
                 pickerOptionsed: {
                     disabledDate (time) {
@@ -300,36 +312,144 @@
                 formLabelWidth: '120px', // 表单label的宽度
                 govid:'',
                 changelistc:[],//课程列表
+                changelistc1:[],
+                default:{
+                    live_name:'',
+                    course_name:''
+                },
+                dialogTree:{
+                    loading: false,
+                    isShow: false,
+                    course_name: void 0,
+                },
+                treeData: [],
+                noinit:false,
+                msgtypeSwich:0,
+                originbiz:void 0,
             }
         },
         watch:{
-            'fetchParam.price'(){
-                this.fetchParam.price=Number(this.fetchParam.price)
-                console.log('typeof(this.fetchParam.price)===='+typeof(this.fetchParam.price));
+            'form.msg_type'(){
+                if(!this.msgtypeSwich){
+                    this.msgtypeSwich=1
+                    return
+                }
+                this.form.biz_id=null
+                this.form.biz_name=''
+                
+                // console.log('typeof(this.fetchParam.price)===='+typeof(this.fetchParam.price));
+            },
+            'govparam.province_id'(){
+                this.changeR()
+                console.log('typeof(this.govparam.province_id)===='+typeof(this.govparam.province_id));
             }
         },
         created() {
-            // debugger
-            // xmview.setContentLoading(false)
-            // if (this.$route.params.id != undefined) {    //路由id传递
-            //     newsService.getProduct(this.$route.params.id).then((ret) => {
-            //         this.fetchParam = ret
-            //         this.fillImgPath = ret.image
-            //     })
-            // } 
-            // this.loadingData=false
-        },
-        activated () {
              xmview.setContentLoading(false)
+             if(this.$route.params.look)xmview.setContentTile('消息查看')
             if (this.$route.params.id != undefined) {    //路由id传递
-                newsService.getProduct(this.$route.params.id).then((ret) => {
-                    this.fetchParam = ret
-                    this.fillImgPath = ret.image
+                sysService.getMsgInfo(this.$route.params.id).then((ret) => {
+                    this.form = ret
+                    this.form.sendtime=this.form.senddate 
+                    this.originbiz=this.form.biz_id
+                    this.form.biz_id=this.form.biz_name
+
+                    this.pushTypeDialog.type = ret.receive_type
+                    if(ret.receive_type==1){
+                        console.log(1,this.govparam);
+                        console.log(2,ret.gov.province_id);
+                        this.govparam.province_id=Number(ret.gov.province_id)
+                        // this.govparam.city_id=ret.gov.city_id
+                        // this.govparam.area_id=ret.gov.area_id
+                        // this.govparam.town_id=ret.gov.town_id
+                        console.log('this.govparam.province_id',this.govparam.province_id);
+                    }
+                    if(ret.receive_type==2&&ret.users&&ret.users.length!==0){
+                        this.pushTypeDialog.selectedData[this.pushTypeDialog.type] = this.generatorList(ret.users || [])
+                    }
                 })
+                setTimeout(() => {
+                    // this.changeR()
+                    this.noinit=true
+                }, 500);
             } 
             this.loadingData=false
         },
         methods: {
+            generatorList (arr) {
+                return arr.map(item => {
+                    return {
+                        id:  item['id'] || item['group_id'],
+                        name:  item['name'] || item['group_name']
+                    }
+                })
+            },
+             // 左边的节点被点击
+            treeNodeClick (type, data, node, store) {
+                console.log(node.data)
+                if (type == 1) { 
+                    // this.section.category_id=node.data.id
+                    // this.section.category_name=node.data.name
+                    this.nodeParentSelected = node.parent// 记录父节点
+                    this.nodeSelected = node // 记录当前节点
+                } else if (type == 2) {
+                    this.moveToNode = node
+                }
+            },
+            resetChecked(){
+                this.$refs.courseCategory.$refs.tree.setCheckedKeys([]);
+            },
+            //拿到栏目树里的所有节点 处理数据拿到ended：1
+            getCheckedNodes(){
+                this.dialogTree.isShow=false
+                // console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
+                let arr=this.$refs.courseCategory.$refs.tree.getCheckedNodes()
+                    //数组筛选ended==1
+                    function func(arr, lable, box) {
+                        arr.forEach(v => {
+                            if (v.ended == 0) {
+                                if(!v.children)xmview.showTip('error', "数据结构异常")
+                                func(v.children, lable, box)
+                            } else {
+                                box.push(v)
+                            }
+                        })
+                    }
+                    let t = []
+                    func(arr, 'children', t)
+                    //数组去重
+                    function format(t){
+                        let obj = {};
+                        let result = [];
+                        t.forEach(v => {
+                            obj[v.id] = v
+                        });
+                        for(let k in obj){
+                            result.push(obj[k])
+                        };
+                        return result
+                    }
+                    console.log(11111111111,format(t))
+                    this.categorysBox=format(t)
+                    this.getCategoryids()
+                    // this.getCategoryCheck()
+            },
+            //把数组转化成接口提交的 最终字符串
+            getCategoryids(){
+                 let categorys=[] //放栏目范围的空容器
+                    this.categorysBox.forEach((c) => {
+                        categorys.push(c.contentid||c.id) //开始出错
+                        // console.log(this.form.course_ids)
+                    })
+                    this.form.category_ids = categorys.join(',')
+                    console.log(this.form)
+            },
+            //栏目树接口
+            getCategory(val){
+                courseTaskService.getCategoryTree({pagesize:-1,type:2}).then((ret)=>{
+                    this.category_list = ret.data;
+                })
+            },
              ueReady (ue) {
                 this.editor = ue
             },
@@ -347,31 +467,43 @@
                 })
             },
             btnNextClick() {
+                 if(typeof(this.form.biz_id)=='string') {
+                            this.form.biz_id = this.originbiz
+                        }
                  this.$refs.form.validate((valid) => {
                     if (valid) {
                         
-                        this.form.sendtime = this.form.sendtime ? time2String(this.form.sendtime) : ''
                         if(this.form.receive_type==1){
                         // 处理政府govids
-                            if(this.govparam.checked==true){
-                                this.form.receiver=0
-                            }else{
-                                this.form.receiver = this.govparam.villageSelect || this.govparam.townSelect || this.govparam.areaSelect || this.govparam.citySelect || this.govparam.provinceSelect
-                            }
+                            // if(this.govparam.checked==true){
+                            //     this.form.receiver=0
+                            // }else{
+                                this.form.receiver = this.govparam.village_id || this.govparam.town_id || this.govparam.area_id || this.govparam.city_id || this.govparam.province_id
+                                
+                                if(this.form.receiver=='')this.form.receiver=0
+                            // }
                         }else if(this.form.receive_type==2){
                             // 处理userids
                             this.form.receiver = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
                             return item.id
                             }).join(',')
                         }
+                        console.log(11111,typeof(this.form.sendtime),)
+                        if(typeof(this.form.sendtime)=='object') {
+                            this.form.sendtime = this.form.sendtime ? time2String(this.form.sendtime,0,0) : ''
+                        }
                         console.log('this.form',this.form);
-                        sysService.messageCreate(this.form).then((ret) => {
-                            xmview.showTip('success', '添加成功')
-                        }).then(() => {
-                            this.addForm = false
-                            // this.initFetchParam()
-                            this.fetchData()
-                            this.page = 1
+                        let req,param
+                        if(this.$route.params.id){
+                            req=sysService.messageEdit
+
+                        }else{
+                            req=sysService.messageCreate
+                        }
+                        delete this.form.users
+                        delete this.form.gov
+                        req(this.form).then((ret) => {
+                            this.$router.push({name: 'message'})
                         })
                     } else {
                         return false
@@ -380,7 +512,13 @@
             },
             //打开发布对象弹出框
             openPushTypeDialog () {
-                this.pushTypeDialog.showDialog = true
+                console.log('this.form.receive_type',this.form.receive_type);
+                //单选部门
+                // if(this.form.receive_type==2){
+                    this.pushTypeDialog.showDialog = true
+                // }else if(this.form.receive_type==1){
+                //      this.dialogTree.isShow=true
+                // }
                 this.pushTypeDialog.page = 1
                 this.pushTypeDialog.fetchParam.receiver = ''
                 this.pushTypeDialog.fetchParam.gov_ids = ''
@@ -393,6 +531,7 @@
             //选择发布对象
             choosePushType(){
                 let map = {
+                    //单选部门注销
                     // 1: {
                     //     type: 1,
                     //     label: '选择部门',
@@ -404,10 +543,7 @@
                         isSearch: true,
                     }
                 }
-                console.log(1111111,typeof(this.form.receive_type),this.form.receive_type);
                 let param = map[this.form.receive_type]
-                console.log(param);
-                
                 if(param!=undefined){
                     this.pushTypeDialog.title = param.label
                     this.pushTypeDialog.isSearch = param.isSearch
@@ -436,6 +572,8 @@
                     param.mobile = this.pushTypeDialog.fetchParam.mobile
                     param.name = this.pushTypeDialog.fetchParam.name
                     param.receiver = this.pushTypeDialog.fetchParam.receiver
+                    param.no_empty_gov_id = 1
+                    param.active = -1
                     param.role_id = -1
                     param.noself = 1
                 }
@@ -452,29 +590,28 @@
                 this.editor = ue
             },
             changeR(type){
-                let level_pid=this.govparam.villageSelect || this.govparam.townSelect || this.govparam.areaSelect || this.govparam.citySelect || this.govparam.provinceSelect
+                let level_pid=this.govparam.village_id || this.govparam.town_id || this.govparam.area_id || this.govparam.city_id || this.govparam.province_id
                 let flag = false
                 let index
-                let arr = ['provinceSelect', 'citySelect', 'areaSelect', 'townSelect', 'villageSelect']
+                let arr = ['province_id', 'city_id', 'area_id', 'town_id', 'village_id']
                 arr.forEach((v,i) => {
-                    if (flag) {
-                        this.govparam[v] = null
+                    if (flag&&this.noinit) {
+                        this.govparam[v] = ''
                     }
-                        console.log(this.govparam.provinceSelect,this.govparam.citySelect ,this.govparam.areaSelect,this.govparam.townSelect, this.govparam.villageSelect);
+                        console.log(this.govparam.province_id,this.govparam.city_id ,this.govparam.area_id,this.govparam.town_id, this.govparam.village_id);
                     if (this.govparam[v] == this.finallyVal) {
                         flag = true
                         index = i
                     }
                 })
-
             },
             //获取gov菜下拉列表
             req(param){
                 return govService.getSelectList({
-                    pagesize:-1,pid:0,level:-1
+                    pagesize:-1,pid:param,level:-1
                 })
             },
-            //推送直播搜索
+            //消息直播搜索
             reqFun1(val, length){
                 let param={
                     page: parseInt(length / 15) + 1||1,
@@ -486,17 +623,11 @@
                 .then((ret)=>{
                     console.log('param=',typeof(param.page));
                     console.log('ret.data',ret.data);
-                    // if(param.page==1){
-                    //     ret.data=[{id:0,name:'免费直播'}].concat(ret.data)
-                    //     console.log(ret.data);
-                    //     _this.$emit('changelistc', ret.data)
-                    // }else{
-                        _this.$emit('changelistc', ret.data)
-                    // }
+                    _this.$emit('changelistc', ret.data)
                     return ret
                 })
             },
-            //推送课程搜索
+            //消息课程搜索
             reqFun2(val, length){
                 let param={
                     page: parseInt(length / 15) + 1||1,
@@ -508,13 +639,7 @@
                 .then((ret)=>{
                     console.log('param=',typeof(param.page));
                     console.log('ret.data',ret.data);
-                    // if(param.page==1){
-                    //     ret.data=[{id:0,name:'免费直播'}].concat(ret.data)
-                    //     console.log(ret.data);
-                    //     _this.$emit('changelistc', ret.data)
-                    // }else{
-                        _this.$emit('changelistc', ret.data)
-                    // }
+                    // _this.$emit('changelistc', ret.data)
                     return ret
                 })
             },

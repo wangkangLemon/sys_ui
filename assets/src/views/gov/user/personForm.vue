@@ -102,17 +102,6 @@
     import clone from 'clone'
     import Region from '../../component/select/Region.vue'
 
-    function clearFn() {
-        return {
-            typeSelect: '',
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
-            name: ''
-        }
-    }
     export default {
         name: 'sys-form',
         components: {
@@ -210,6 +199,7 @@
         },
         methods: {
             changeR(type){
+                // debugger
                 console.log(type)
                   console.log(1,this.fetchParam.province_id,this.fetchParam.city_id ,this.fetchParam.area_id,this.fetchParam.town_id, this.fetchParam.village_id);
                   let level_pid=this.fetchParam.village_pid || this.fetchParam.town_pid || this.fetchParam.area_pid || this.fetchParam.city_pid || this.fetchParam.province_pid

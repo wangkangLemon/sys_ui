@@ -101,17 +101,6 @@
     import ImagEcropperInput from '../../component/upload/ImagEcropperInput.vue'
     import clone from 'clone'
 
-    function clearFn() {
-        return {
-            typeSelect: '',
-            provinceSelect: '',
-            citySelect: '',
-            areaSelect: '',
-            townSelect: '',
-            villageSelect: '',
-            name: ''
-        }
-    }
     export default {
         name: 'person-edit',
         components: {

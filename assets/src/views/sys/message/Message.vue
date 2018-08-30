@@ -60,7 +60,7 @@
 <template>
     <article id="medical-index-container">
         <!--详情-->
-        <el-dialog class="show-detail" title="查看推送跳转地址" v-model="showDetail">
+        <el-dialog class="show-detail" title="查看消息跳转地址" v-model="showDetail">
             <div class="info">
                 <p>{{clerkDetail.url?clerkDetail.url:'暂无'}}</p>
             </div>
@@ -69,8 +69,8 @@
         
         <el-dialog v-model="addForm">
             <!-- <el-form :model="form" :rules="rules" ref="form" :label-width="formLabelWidth">
-                <el-form-item prop="title" label="推送标题">
-                    <el-input v-model="form.title" placeholder="请填写推送标题" auto-complete="off"></el-input>
+                <el-form-item prop="title" label="消息标题">
+                    <el-input v-model="form.title" placeholder="请填写消息标题" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="发布对象">
                     <el-select clearable v-model="form.type" @change="choosePushType" placeholder="请选择指定人员或部门">
@@ -110,27 +110,27 @@
                     <el-date-picker v-model="form.sendtime" type="datetime" placeholder="发送日期"
                                     :picker-options="pickerOptionsed"/>
                 </el-form-item>
-                <el-form-item label="推送类型" prop="type">
+                <el-form-item label="消息类型" prop="type">
                     <el-radio-group v-model="form.type">
                         <el-radio :label="'url'">网址</el-radio>
                         <el-radio :label="'course'">课程</el-radio>
                         <el-radio :label="'call'">通知</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item prop="url" label="推送地址" v-if="form.type=='url'||form.type=='course'">
-                    <el-input v-model="form.url" placeholder="请填写推送地址" auto-complete="off"></el-input>
+                <el-form-item prop="url" label="消息地址" v-if="form.type=='url'||form.type=='course'">
+                    <el-input v-model="form.url" placeholder="请填写消息地址" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="content" label="推送内容" id="editor" :label-width="formLabelWidth">
+                <el-form-item prop="content" label="消息内容" id="editor" :label-width="formLabelWidth">
                     <vue-editor v-model="form.content" @ready="ueReady"></vue-editor>
                 </el-form-item>
                 
-                <el-form-item prop="biz_id" label="推送课程" v-if="form.type=='course'">
+                <el-form-item prop="biz_id" label="消息课程" v-if="form.type=='course'">
                      <Course v-model="form.biz_id" :placeholder="form.course_name" ref="Course"
                             v-on:change="val=>form.biz_id=val" :change="reqFun2" :itemObj="['contentid','course_name']" :list="changelistc">
                     </Course>
                 </el-form-item>
-                <el-form-item prop="biz_id" label="推送任务" v-if="form.type=='task'">
-                    <el-input v-model="form.url" placeholder="请填写推送任务" auto-complete="off"></el-input>
+                <el-form-item prop="biz_id" label="消息任务" v-if="form.type=='task'">
+                    <el-input v-model="form.url" placeholder="请填写消息任务" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form> -->
             <div slot="footer" class="dialog-footer">
@@ -171,13 +171,13 @@
         <section class="manage-container">
             <!--<el-button type="primary" icon="plus" @click="$router.push({ name:'person-add',params:{sys_type:'add'}})">-->
             <el-button type="primary" icon="plus" @click="addAdmin">
-                <i>推送</i>
+                <i>添加消息</i>
             </el-button>
         </section>
         <article class="search">
             <section>
-                <i>推送标题</i>
-                <el-input v-model="fetchParam.title" placeholder="请输入推送标题" @keyup.enter.native="fetchData" ></el-input>
+                <i>标题</i>
+                <el-input v-model="fetchParam.title" placeholder="请输入消息标题" @keyup.enter.native="fetchData" ></el-input>
             </section>
             <section>
                 <DateRange title="发送时间" :start="fetchParam.stime " :end="fetchParam.etime" @changeStart="val=> fetchParam.stime =val"
@@ -188,14 +188,14 @@
                 <i>状态</i>
                 <el-select v-model="fetchParam.status" placeholder="未选择" @change="fetchData">
                     <el-option label="全部" :value="-1"></el-option>
-                    <el-option label="未发送" value="0"></el-option>
-                    <el-option label="发送中  " value="1"></el-option>
+                    <el-option label="待发送" value="1"></el-option>
                     <el-option label="已发送" value="2"></el-option>
-                    <el-option label="发送失败" value="3"></el-option>
+                    <el-option label="发送中" value="3"></el-option>
+                    <el-option label="发送失败" value="4"></el-option>
                 </el-select>
             </section>
             <!-- <section>
-                <i>推送类型</i>
+                <i>消息类型</i>
                 <el-select v-model="fetchParam.type" placeholder="未选择" @change="fetchData">
                     <el-option label="全部" :value="'-1'"></el-option>
                     <el-option label="地址" :value="'url'"></el-option>
@@ -211,40 +211,31 @@
             </el-table-column>
             <el-table-column min-width="300" :show-overflow-tooltip="true" prop="content" label="内容">
             </el-table-column>
-            <el-table-column min-width="200" :show-overflow-tooltip="true" prop="type" label="推送类型">
+            <el-table-column min-width="100" :show-overflow-tooltip="true" prop="receive_type" label="类型">
                  <template scope="scope">
-                    <p v-if="scope.row.type == 'url'">
-                        <el-tag type="primary">地址</el-tag>
-                        <el-button v-if="scope.row.url" @click="urlDetail(scope.$index, scope.row)" type="text" size="small">详情</el-button>
-                        <span class="nourl" v-else>暂无地址</span>
-                    </p>
-                    <p v-if="scope.row.type == 'course'">
-                        <el-tag type="warning">课程</el-tag>
-                        <span class="nourl" >{{scope.row.biz_name}}</span>
-                    </p>
-                    <p v-if="scope.row.type == 'task'">
-                        <el-tag type="Danger">任务</el-tag>
-                        <span class="nourl" >{{scope.row.biz_name}}</span>
+                    <p>
+                        <el-tag type="primary"  v-if="scope.row.receive_type">{{receiveType[scope.row.receive_type]}}</el-tag>
+                        <el-tag type="warning"  v-if="scope.row.msg_type">{{msgType[scope.row.msg_type]}}</el-tag>
                     </p>
                 </template>
             </el-table-column>
-            <el-table-column min-width="100" prop="gov_name" label="下发部门">
+            <el-table-column width="100" label="状态">
+                <template scope="scope">
+                    <el-tag v-if="scope.row.status == 1" type="warning">待发送</el-tag>
+                    <el-tag v-if="scope.row.status == 2" type="success">已发送</el-tag>
+                    <el-tag v-if="scope.row.status == 3" type="danger">发送中 </el-tag>
+                    <el-tag v-if="scope.row.status == 4" type="gray">发送失败</el-tag>
+                </template>
             </el-table-column>
             <el-table-column min-width="80" prop="admin_name" label="发布者">
             </el-table-column>
-            <el-table-column width="100" label="状态">
-                        <template scope="scope">
-                            <el-tag v-if="scope.row.status == 2" type="success">已发送</el-tag>
-                            <el-tag v-if="scope.row.status == 1" type="warning">发送中</el-tag>
-                            <el-tag v-if="scope.row.status == 0" type="gray">未发送</el-tag>
-                            <el-tag v-if="scope.row.status == 3" type="danger">发送失败 </el-tag>
-                        </template>
-                    </el-table-column>
             <el-table-column min-width="170" prop="senddate" label="发送时间">
             </el-table-column>
-            <el-table-column fixed="right" width="80" label="操作">
+            <el-table-column fixed="right" width="160" label="操作">
                 <template scope="scope">
-                    <el-button  v-show="scope.row.status==0" @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
+                    <el-button  @click="look(scope.$index, scope.row)" type="text" size="small"> 详情</el-button>
+                    <el-button  @click="edit(scope.$index, scope.row)" type="text" size="small"> 修改</el-button>
+                    <el-button  @click="del(scope.$index, scope.row)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -312,6 +303,8 @@ export default {
             //     }
         return {
             // selectData:[],
+            receiveType:['','政府','个人'],
+            msgType:['','通知','课程','直播'],
             loadingData: false,
             data: [], // 表格数据
             total: 0,
@@ -454,7 +447,7 @@ export default {
             //         pagesize:-1,pid:0,level:-1
             //     })
             // },
-            // //推送课程搜索
+            // //消息课程搜索
             // reqFun2(val, length){
             //         let param={
             //             page: parseInt(length / 15) + 1||1,
@@ -491,6 +484,25 @@ export default {
 
             // this.addForm = true
             },
+                  // 查看信息
+        look(index, row) {
+            this.$router.push({
+                name: 'message-edit',
+                params: {
+                    id: row.id,
+                    look:1
+                }
+            })
+        },
+               // 修改信息
+        edit(index, row) {
+            this.$router.push({
+                name: 'message-edit',
+                params: {
+                    id: row.id,
+                }
+            })
+        },
         //添加人员提交
             // submit (form) {
             //     this.$refs[form].validate((valid) => {

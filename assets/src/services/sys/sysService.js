@@ -137,6 +137,17 @@ class sysService {
             }
         })
     }
+     // 搜索
+     getMsgInfo(id) {
+       let url = `${config.apiHost}/message/get/${id}` //传递的地址的id
+       return api.get(url, {}, false).then(ret => {
+         if (ret.code == 0) {
+           return ret.data
+         } else {
+           return Promise.reject(ret)
+         }
+       })
+     }
     //删除推送
     pushMsgDel(id) {
         let url = `${config.apiHost}/push/msg/delete/${id}`
@@ -154,6 +165,7 @@ class sysService {
       let url = `${config.apiHost}/message/create`
       return api.post(url, param).then(ret => {
         if (ret.code == 0) {
+            xmview.showTip('success', ret.message)
           return ret
         } else {
           return Promise.reject(ret)
@@ -161,9 +173,9 @@ class sysService {
       })
     }
     //消息中心更新
-    messageEdit({ id, param }) {
-        let url = `${urlPre}/message/edit/${id}`
-        return api.post(url, { param }).then(ret => {
+    messageEdit(param) {
+        let url = `${config.apiHost}/message/edit/${param.id}`
+        return api.post(url, param ).then(ret => {
           if (ret.code == 0) {
             xmview.showTip('success', ret.message)
             return ret.data

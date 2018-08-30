@@ -10,7 +10,7 @@
 </style>
 
 <template>
-    <el-select v-model="selectVal" :placeholder="currPlaceholder" ref="container" @visible-change="handleVisibleChange"
+    <el-select  v-model="selectVal" :placeholder="currPlaceholder" ref="container" @visible-change="handleVisibleChange"
                @change="handleChange" :clearable="true" no-data-text="暂无数据" :disabled="disabled"
                no-match-text="没有数据">
         <el-option :disabled="true" value="xmystinputval" style="height: 50px">
