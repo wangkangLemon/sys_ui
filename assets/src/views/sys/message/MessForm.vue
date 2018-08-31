@@ -147,9 +147,6 @@
                         <el-radio :label="3">直播</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item prop="url" label="消息地址" v-if="form.msg_type==1">
-                    <el-input v-model="form.url" placeholder="请填写消息地址" auto-complete="off"></el-input>
-                </el-form-item>
                 <el-form-item prop="biz_id" label="消息课程" v-if="form.msg_type==2">
                      <Course v-model="form.biz_id" :placeholder="form.biz_name" ref="Course"
                             v-on:change="val=>form.biz_id=val" :change="reqFun2" 
@@ -202,7 +199,6 @@
             msg_type: '', //消息类型	1.通知 2.课程 3.直播
             title: '',
             content: '',
-            url:'',
             receiver:0,   //接收人id、部门id	英文逗号间隔
             // gov_id:void 0,
             biz_id:void 0,  //跳转id	课程id、直播id
@@ -454,8 +450,6 @@
                     extpath: this.govid,
                 }).then((ret) => {
                     this.fetchParam.image = ret.url 
-                    // xmview.showTip('success', '上传成功')
-                    // authUtils.setAvatar(ret.data.url)
                 })
             },
             btnNextClick() {
@@ -480,10 +474,10 @@
                             return item.id
                             }).join(',')
                         }
-                        console.log(11111,typeof(this.form.sendtime),)
                         if(typeof(this.form.sendtime)=='object') {
                             this.form.sendtime = this.form.sendtime ? time2String(this.form.sendtime,0,0) : ''
                         }
+                        if(this.form.msg_type==1)this.form.biz_id=''
                         console.log('this.form',this.form);
                         let req,param
                         if(this.$route.params.id){

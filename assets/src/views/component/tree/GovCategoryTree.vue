@@ -2,8 +2,13 @@
 
 <template> 
     <!--这是父组件-->
-    <el-tree v-loading="loading" :data="data" show-checkbox :expand-on-click-node="false" @node-click="handleNodeClick"
-             @node-expand="handleNodeExpand" :highlight-current="selectable">
+    <el-tree v-loading="loading" 
+            :data="data" show-checkbox 
+            :expand-on-click-node="false" 
+            @node-click="handleNodeClick"
+            @node-expand="handleNodeExpand" 
+            :highlight-current="selectable"
+            ref="tree" >
     </el-tree>
 </template>
 
@@ -29,11 +34,12 @@
                     this.data.push({
                         data: v,
                         label: v.name,
+                        name: v.name,
                         value: v.id,
-                        children: v.level>2 ? null : [{
-                            label: '正在加载',
-                            value: -1,
-                        }]  //是否最终菜单？点箭头触发请求
+                        // children: v.level>2 ? null : [{
+                        //     label: '正在加载',
+                        //     value: -1,
+                        // }]  //是否最终菜单？点箭头触发请求
                     })
                })
                this.loading = false
@@ -82,11 +88,12 @@
                         arr.push({
                             data: v,
                             label: v.name,
+                            name: v.name,
                             value: v.id,
-                            children: v.level>2 ? null : [{ 
-                                label: '正在加载',
-                                value: -1,
-                            }]  //是否最终菜单？
+                            // children: v.level>2 ? null : [{ 
+                            //     label: '正在加载',
+                            //     value: -1,
+                            // }]  //是否最终菜单？
                         })
                 })
                 

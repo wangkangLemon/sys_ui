@@ -355,7 +355,7 @@
                     return 
                 }
                 else{
-                    this.$router.push({name: 'course-manage-addCourse', params: {courseInfo: row,handle:'edit'}, query: {id: row.contentid}})
+                    this.$router.push({name: 'course-manage-addCourse', params: {courseInfo: row,handle:'edit'}, query: {contentid: row.contentid}})
                 }
             },
            //添加中草药

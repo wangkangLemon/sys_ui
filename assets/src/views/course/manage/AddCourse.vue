@@ -19,6 +19,9 @@
         padding: 3px 30px 3px 10px;
         border: 1px solid #bfcbd9;
     }
+    .region{
+        color:rgb(131, 145, 165)
+    }
     .u-course-tag {
         margin-right: 10px;
         background-color: rgba(32,160,255,.1);
@@ -154,17 +157,18 @@
                         <el-radio class="radio" v-model="fetchParam.noaccess" :label="0">可见</el-radio>
                     </el-form-item>
                     <!-- 新需求可见省份 待完成 -->
-                    <!-- <el-form-item
-                        label="可见省份"  prop="receiver">
+                    <el-form-item
+                        label="可见省份"  prop="region">
                         <div class="collection" @click="openPushTypeDialog">
+                            <span class="region" v-if="categorysBox.length==0">默认全部可见</span>
                             <el-tag
                                 class="u-course-tag"
-                                v-for="item in pushTypeDialog.selectedData[this.pushTypeDialog.type]"
+                                v-for="item in categorysBox"
                                 :key="item.id">
                                 {{item.name}}
                             </el-tag>
                         </div>
-                    </el-form-item> -->
+                    </el-form-item>
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
                         <el-radio class="radio" v-model="fetchParam.need_testing" :label="1">需要</el-radio>
@@ -179,7 +183,6 @@
                     <!-- <el-form-item label="及格分数" prop="score_pass">
                         <el-input :disabled="fetchParam.need_testing == 0" v-model="fetchParam.score_pass"></el-input>
                     </el-form-item> -->
-
                     <el-form-item label="" v-if="!readonly">
                         <el-button style="float: right" type="primary" @click="btnNextClick">
                             <i>{{ fetchParam.need_testing == 0 ? '保存' : '保存并下一步' }}</i>
@@ -267,9 +270,9 @@
         <!-- 选择部门树弹窗 -->
         <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" title="选取范围"
                            item-key="contentid">
-            <CourseTree v-model="treeData" :req="req" ref="courseCategory"  :nodeExpand="1"
+            <GovTree v-model="treeData" :req="req" ref="courseCategory"  :nodeExpand="1"
                         :change="val=>categorysBox=val" :checkbox="true" :onNodeClick="treeNodeClick.bind(this,1)">
-            </CourseTree>
+            </GovTree>
             <span slot="footer">
                 <el-button type="primary" @click="getCheckedNodes">确定</el-button>
             </span>
@@ -296,7 +299,7 @@ import {transformParam} from '../../../utils/common'
 import vTags from '../../component/form/Tags.vue'
 import VideoPreview from '../../component/dialog/VideoPreview.vue'
 import Experts from '../../component/select/Experts'
-import CourseTree from '../../component/tree/MenuTree.vue'
+import GovTree from '../../component/tree/GovCategoryTree'
 import govService from "../../../services/gov/govService.js"
 
 export default {
@@ -356,6 +359,7 @@ export default {
                     total: 0,
                 },
             treeData: [],
+            categorysBox:[]
         }
     },
 
@@ -364,26 +368,37 @@ export default {
         this.uploadImgUrl = courseService.commonUploadImage()
 
         //编辑页面
-        if (this.$route.params.courseInfo) {
-            this.$route.params.courseInfo
+        // if (this.$route.params.courseInfo) {
+        //     this.$route.params.courseInfo
+        //     this.activeTab= 'first'
+        //      //从主页传递信息
+        //     for(let i in this.$route.params.courseInfo){
+        //          this.fetchParam[i]=this.$route.params.courseInfo[i]
+        //     }
+        //     this.fetchParam.material_name= this.$route.params.courseInfo.course_name
+        //     this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
+        //     //可见省份id
+        //     // this.categorysBox = this.fetchParam.categorys.map(v=>{
+        //     //     v.contentid = v.id
+        //     //     return v
+        //     // }) 
+        //     xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
+        // } else
+        console.log(this.$route.query);
+        
+        if (this.$route.query.contentid) {//编辑页面
             this.activeTab= 'first'
-             //从主页传递信息
-            for(let i in this.$route.params.courseInfo){
-                 this.fetchParam[i]=this.$route.params.courseInfo[i]
-            }
-            this.fetchParam.material_name= this.$route.params.courseInfo.course_name
-            this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
-            xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
-        } else if (this.$route.query.contentid) {//编辑页面
-            this.activeTab= 'first'
-            courseService.getCourseInfo({ course_id: this.$route.query.contentid }).then((ret) => {
-                this.fetchParam = ret.course                  // 没拿到信息 获取信息
+            courseService.getCourseInfo( this.$route.query.contentid ).then((ret) => {
+                this.fetchParam = ret                  // 没拿到信息 获取信息
                 this.fetchParam.course_name= this.$route.params.courseInfo.course_name
                 this.fetchParam.material_name= this.$route.params.courseInfo.course_name
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
+                //可见省份id
+                this.categorysBox = this.fetchParam.region_info.map(v=>{
+                    v.contentid = v.id
+                    return v
+                }) 
                  xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
-            }).catch((ret) => {
-                xmview.showTip('error', ret.message)
             })
         }else if(this.$route.params.addcourseInfo){ //添加页面
             this.fetchParam.category_name=this.$route.params.addcourseInfo.category_name
@@ -399,6 +414,10 @@ export default {
     },
 
     watch: {
+        'categorysBox'(){
+            console.log(this.categorysBox);
+            
+        },
         'fetchParam.need_testing'(val) {
             if (val == 1) { // 需要考试
                 this.rulesFirst.limit_time = { required: true, message: '请输入考试时间', trigger: 'change' }
@@ -437,52 +456,59 @@ export default {
          //拿到栏目树里的所有节点 处理数据拿到ended：1
             getCheckedNodes(){
                 this.dialogTree.isShow=false
-                // console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
+                console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
                 let arr=this.$refs.courseCategory.$refs.tree.getCheckedNodes()
                     //数组筛选ended==1
-                    function func(arr, lable, box) {
-                        arr.forEach(v => {
-                            if (v.ended == 0) {
-                                if(!v.children)xmview.showTip('error', "数据结构异常")
-                                func(v.children, lable, box)
-                            } else {
-                                box.push(v)
-                            }
-                        })
-                    }
-                    let t = []
-                    func(arr, 'children', t)
-                    //数组去重
-                    function format(t){
-                        let obj = {};
-                        let result = [];
-                        t.forEach(v => {
-                            obj[v.id] = v
-                        });
-                        for(let k in obj){
-                            result.push(obj[k])
-                        };
-                        return result
-                    }
-                    console.log(11111111111,format(t))
-                    this.categorysBox=format(t)
+                    // function func(arr, lable, box) {
+                    //     arr.forEach(v => {
+                    //         if (v.ended == 0) {
+                    //             if(!v.children)xmview.showTip('error', "数据结构异常")
+                    //             func(v.children, lable, box)
+                    //         } else {
+                    //             box.push(v)
+                    //         }
+                    //     })
+                    // }
+                    // let t = []
+                    // func(arr, 'children', t)
+                    // //数组去重
+                    // function format(t){
+                    //     let obj = {};
+                    //     let result = [];
+                    //     t.forEach(v => {
+                    //         obj[v.id] = v
+                    //     });
+                    //     for(let k in obj){
+                    //         result.push(obj[k])
+                    //     };
+                    //     return result
+                    // }
+                    // console.log(11111111111,format(t))
+                    // this.categorysBox=format(t)
+
+                    //在没有ended 判断的时候用什么代替 怎么代替 方法
+                    this.categorysBox=arr
+
                     this.getCategoryids()
                     // this.getCategoryCheck()
             },
             //把数组转化成接口提交的 最终字符串
             getCategoryids(){
+                // console.log( this.categorysBox);
+                
                  let categorys=[] //放栏目范围的空容器
                     this.categorysBox.forEach((c) => {
-                        categorys.push(c.contentid||c.id) //开始出错
+                        categorys.push(c.contentid||c.id||c.value) //开始出错
                         // console.log(this.form.course_ids)
                     })
-                    this.form.category_ids = categorys.join(',')
-                    console.log(this.form)
+                    this.fetchParam.region = categorys.join(',')
+                    console.log(this.fetchParam.region)
             },
             //打开发布对象弹出框
             openPushTypeDialog () {
                 //单选部门
-                     this.dialogTree.isShow=true
+                this.categorysBox=[]
+                this.dialogTree.isShow=true
             },
              //获取gov菜下拉列表
             req(param){
@@ -674,7 +700,7 @@ export default {
         }
     },
     components: { CropperImg, UploadFile, CourseAlbumSelect, DialogVideo, 
-                UploadImg, vTags ,VideoPreview,Experts,CourseTree}
+                UploadImg, vTags ,VideoPreview,Experts,GovTree}
 }
 
 function getOrignData() {
@@ -706,6 +732,7 @@ function getOrignData() {
         sort:void 0,
         share:0,
         noaccess:0,
+        region:0,
     }
 
     return orignData

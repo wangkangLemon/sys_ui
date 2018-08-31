@@ -18,9 +18,6 @@
                 vertical-align:middle;
             }
         }
-        /*.search {
-            @extend %top-search-container;
-        }*/
         .collection {
             align-items: center;
             min-height: 36px;
@@ -87,7 +84,6 @@
          <el-tabs type="border-card" v-model="activeTab">
             <el-tab-pane label="题库简介" name="first">
                 <el-form :model="form" :rules="rules1" label-position="right" ref="form1" label-width="120px" style="width: 60%">
-                    <!-- <el-form label-width="120px" ref="formFirst" :model="fetchParam"> -->
                     <el-form-item  label="分类" prop="category_id" :fetch-suggestions="querySearch">
                         <el-select clearable class="select" v-model="form.category_id" placeholder="请选择分类">
                             <el-option  v-for="item in category_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -106,47 +102,6 @@
                         <ImagEcropperInput :isRound="false" :confirmFn="cropperFn"
                                         class="upload-btn"></ImagEcropperInput>
                     </el-form-item>
-                    <!-- <el-form-item prop="course" label="选择课程">
-                        <el-tag style="margin-right: 3px"
-                                v-for="(c,index) in form.course" :key="index"
-                                :closable="true"
-                                @close="form.course.splice(index,1)"
-                                type="success">
-                            {{c.course_name}}
-                        </el-tag>
-                        <el-button type="primary" @click="dialogCourse.isShow=true" size="small">添加课程</el-button>
-                        </el-form-item> -->
-                   
-                    <!-- <el-form-item prop="sort" label="排序">
-                        <el-input-number v-model="form.sort" auto-complete="off"></el-input-number>
-                        </el-form-item> -->
-
-                    <!--<el-form-item label="时间">
-                        <DateRange :start="form.stime" :end="form.etime" @changeStart="val=> form.stime=val"
-                            @changeEnd="val=> form.etime=val" :defaultStart="form.stime" :defaultEnd="form.etime">
-                        </DateRange>
-                        </el-form-item>
-                    <el-form-item label="发布对象" prop="type">
-                        <el-select clearable v-model="form.type" @change="choosePushType" placeholder="请选择指定人员或部门">
-                            <el-option label="部门任务" :value="1"></el-option>
-                            <el-option label="个人任务" :value="2"></el-option>
-                        </el-select>
-                        </el-form-item>
-                    <el-form-item
-                        :label="pushTypeDialog.title"
-                        v-if="form.type && form.type==pushTypeDialog.type">
-                        <div class="collection" @click="openPushTypeDialog">
-                            <el-tag
-                                class="u-course-tag"
-                                v-for="item in pushTypeDialog.selectedData[this.pushTypeDialog.type]"
-                                :key="item.id">
-                                {{item.name}}
-                            </el-tag>
-                        </div>
-                        </el-form-item>-->
-                    <!-- <el-form-item label="可得学分">
-                        <el-input style="width: auto;" v-model.number="form.score" type="number"  placeholder="请输入可获得学分值"></el-input>
-                        </el-form-item> -->
                     <el-form-item>
                         <el-button style="float: right" type="primary" @click="btnNextClick">下一步</el-button>
                     </el-form-item>
@@ -164,9 +119,12 @@
                                 type="success">
                             {{c.name}}
                         </el-tag>
+                        <!-- <el-button type="primary" @click="dialogTree.isShow=true" size="small"
+                                    v-if="this.$route.params.add==1">选取范围
+                        </el-button> -->
                         <el-button type="primary" @click="dialogTree.isShow=true" size="small"
-                                    v-if="this.$route.params.add==1"
-                        >选取范围</el-button>
+                                    v-if="this.$route.params.add==1">选取范围
+                        </el-button>
                     </el-form-item>
                     <el-form-item style="color:red">
                         <i>出题数目范围 ：</i>
@@ -203,17 +161,7 @@
             </el-tab-pane>
         </el-tabs>
 
-        <!-- 选择课程弹窗 -->
-        <!-- <dialogSelectData ref="dialogSelect" v-model="dialogCourse.isShow" :getData="fetchCourse" title="选择课程"
-                          :selectedList="form.course" @changeSelected="val=>form.course=val"  item-key="contentid">
-            <div slot="search" class="course-search">
-                <el-input @keyup.enter.native="$refs.dialogSelect.fetchCourse(true)" v-model="dialogCourse.course_name"
-                          icon="search"
-                          placeholder="请输入关键字搜索"></el-input>
-            </div>
-        </dialogSelectData> -->
-
-        <!-- 选取范围弹窗----------------------- -->
+        <!-- 选取范围弹窗-->
         <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" title="选取范围"
                            item-key="contentid">
             <!-- <div slot="search" class="course-search">
@@ -294,17 +242,7 @@
                     category_id: void 0,       // 分类
                     image: void 0,        // 图片地址
                     description: void 0,  // 简介
-                    // sort: void 0,         // 排序
-                    // course_ids: [],     // 课程
-                    // gov_ids: void 0,     // 部门
-                    // user_ids: void 0,     // 用户
                     category_ids: [],     // 栏目范围
-                    // status: void 0,       // 状态
-                    // categorys: [],
-                    // score: 0,     // 可获得学分
-                    // type:void 0,       // 发送任务类型  ---要改名
-                    // stime:'',
-                    // etime:'',
                     pass_score:void 0,
                     total_score:void 0,
                     total_subject:void 0,
@@ -460,9 +398,6 @@
                     category_type:1
                 })
             },
-            // fetchCourseTree(params){
-            //     return courseService.getPublicCourselist(Object.assign({}, this.dialogCourse, params))
-            // },
             fetchCourseTree(){
                 let param={
                         pid:-1, // 3- 供应商
@@ -651,36 +586,7 @@
                     if (!valid) {
                         return false
                     }
-                    // if()
-                    // 处理课程id
-                    // this.form.course_ids = []
-                    // this.form.course.forEach((c) => {
-                    //     this.form.course_ids.push(c.id)
-                    // })
-                    console.log('this.categorysBox',this.categorysBox)  //这里数据都没错
-                    console.log('this.form.category_ids',this.form.category_ids)  //这里数据都没错
                     this.getCategoryids()
-                    // let categorys=[] //放栏目范围的空容器
-                    // this.categorysBox.forEach((c) => {
-                    //     categorys.push(c.contentid||c.id) //开始出错
-                    //     // console.log(this.form.course_ids)
-                    // })
-                    // this.form.category_ids = categorys.join(',')
-                    // console.log(this.form)
-
-                    // if(this.form.type==1){
-                    //     // 处理govids
-                    //     this.form.gov_ids = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
-                    //     return item.id
-                    //     }).join(',')
-                    // }else{
-                    //     // 处理userids
-                    //     this.form.user_ids = this.pushTypeDialog.type && this.pushTypeDialog.selectedData[this.pushTypeDialog.type].map(item => {
-                    //     return item.id
-                    //     }).join(',')
-                    // }
-                    // this.fetchParam.end_time = this.timeFormatter(this.fetchParam.end_time, true)
-
                     if (s > 0) { //存草稿箱
                         this.form.status = s
                     }

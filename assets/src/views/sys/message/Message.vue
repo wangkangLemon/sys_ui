@@ -106,9 +106,7 @@
 
         <el-table class="data-table" v-loading="loadingData" :data="data" :fit="true"  border>
             <!--<el-table-column type="selection"></el-table-column> 左侧选择按钮-->
-            <el-table-column min-width="200" :show-overflow-tooltip="true" prop="title" label="标题	" v-if="data">
-            </el-table-column>
-            <el-table-column min-width="300" :show-overflow-tooltip="true" prop="content" label="内容">
+            <el-table-column min-width="250" :show-overflow-tooltip="true" prop="title" label="标题	" v-if="data">
             </el-table-column>
             <el-table-column min-width="100" :show-overflow-tooltip="true" prop="receive_type" label="类型">
                  <template scope="scope">

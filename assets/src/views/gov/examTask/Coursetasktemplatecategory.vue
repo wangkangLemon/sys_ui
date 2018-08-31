@@ -144,12 +144,6 @@
                 placeholder:'最小的排在前面',
                 fetchParam: getFetchParam(),
                 rules: {
-                    // sort: [{
-                    //     required: true,
-                    //     type:'number',
-                    //     message: '请输入分类排序',
-                    //     trigger: 'blur'
-                    // }],
                     name: [{
                         required: true,
                         message: '请输入分类名称',
@@ -165,10 +159,6 @@
                     this.resetForm()
                 }
             },
-            // 'fetchParam.sort'(){
-            //     this.fetchParam.sort=Number(this.fetchParam.sort)
-            //     console.log(typeof(this.fetchParam.sort))
-            // }
         },
         activated() {
             this.fetchParam= getFetchParam()

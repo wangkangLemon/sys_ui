@@ -109,9 +109,9 @@ class CourseService {
     }
 
     // 创建
-    addCourse({ category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status, sort, share,noaccess}) {
+    addCourse({ category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, status, sort, share, noaccess, region }) {
         let url = urlPre + '/create'
-        return api.post(url, { category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, sort, share, noaccess}).then(ret => {
+        return api.post(url, { category_id, experts_id, course_name, image, description, tags, type, material_type, material_id, need_testing, sort, share, noaccess, region }).then(ret => {
             if (ret.code == 0) {
                 // console.log(ret)
                 return ret.data
@@ -122,18 +122,17 @@ class CourseService {
     }
 
     // 修改课程获取课程信息接口
-    getCourseInfo({ course_id }) {
-        let govid = authUtils.getUserInfo().company_id
+    getCourseInfo( course_id ) {
         let finalUrl = `${config.apiHost}/course/get/${course_id}`
         return api.get(finalUrl).then((ret) => {
             return ret.data
         })
     }
     // 修改课程
-    editCourse({ govid, contentid, category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, status, limit_time, limit_repeat, score_pass, sort, share, noaccess}) {
+    editCourse({ govid, contentid, category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, status, limit_time, limit_repeat, score_pass, sort, share, noaccess, region }) {
         govid = govid || authUtils.getUserInfo().company_id
         let finalUrl = `${config.apiHost}/course/edit/${contentid}`
-        return api.post(finalUrl, { category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, limit_time, status, limit_repeat, score_pass, sort, share, noaccess}).then((ret) => {
+        return api.post(finalUrl, { category_id, experts_id, course_name, image, tags, type, material_type, material_id, description, need_testing, limit_time, status, limit_repeat, score_pass, sort, share, noaccess, region }).then((ret) => {
             return ret.data
         })
     }
