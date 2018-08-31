@@ -128,6 +128,7 @@
             }
         },
         created() {
+                    console.log('this.provinceSelect='+this.provinces)
 
 
         },

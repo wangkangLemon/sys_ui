@@ -9,7 +9,7 @@
             @node-click="handleNodeClick" 
             :highlight-current="selectable" 
             :props="defaultProps"
-            @node-expand="handleNodeExpand">
+            >
     </el-tree>
 </template>
 
@@ -69,79 +69,14 @@
                 })
                return arr
             }
-            // this.req({id : 'tree', type :'menu', filter : true , pid :-1 , level:-1, pagesize:-1}).then(ret=>{ 
-            //     // console.log(ret.data);
-            //     let data=transfor(ret.data,this.mark.name)
-            //     this.data=func(data)
-            //     // xmview.setContentLoading(false)
-            // })
-            this.getData(0)
+            this.req({id : 'tree', type :'menu', filter : true , pid :-1 , level:-1, pagesize:-1}).then(ret=>{ 
+                // console.log(ret.data);
+                let data=transfor(ret.data,this.mark.name)
+                this.data=func(data)
+                // xmview.setContentLoading(false)
+            })
         },
         methods: {
-            // 获取数据两种方法
-            getData(pid){
-                // console.log(ret.data);
-                    if(this.nodeExpand){
-                        this.req(pid).then(ret=>{ 
-                            console.log('进入展开');
-                            ret.data.forEach(v => {
-                                console.log(this.data);
-                                console.log(v);
-                                this.data.push({
-                                    data: v,
-                                    label: v.name,
-                                    value: v.id,
-                                    children: v.level>2 ? null :[{
-                                        label: '正在加载',
-                                        value: -1,
-                                    }]  //是否最终菜单？点箭头触发请求
-                                    // children: v.ended ? null : [{
-                                    //     label: '正在加载',
-                                    //     value: -1,
-                                    // }]  //是否最终菜单？点箭头触发请求
-                                })
-                            })
-                        })
-
-                    }
-                    else{
-                        this.req({id : 'tree', type :'menu', filter : true , pid :-1 , level:-1, pagesize:-1}).then(ret=>{
-                            let data=transfor(ret.data,this.mark.name)
-                            //拿到最终节点数据
-                            this.data=func(data)
-                        })
-                    }
-                  
-                    // xmview.setContentLoading(false)
-            },
-
-            handleNodeExpand (data, node, nodeDom) { //点下拉箭头  
-                // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
-
-                //这里的方法里面的参数必须是可以传递的
-                console.log(data, node, nodeDom);
-    
-                this.getData(node.data.value).then(ret=>{
-                    // debugger
-                    let arr = []
-                    
-                    ret.data.forEach(v => {
-                        arr.push({
-                            data: v,
-                            label: v.name,
-                            value: v.id,
-                            children: v.level>2? null : [{ 
-                                label: '正在加载',
-                                value: -1,
-                            }]  //是否最终菜单？
-                        })
-                })
-                
-                node.data.children = arr
-                this.loading = false
-                xmview.setContentLoading(false)
-                })
-            },
             handleNodeClick (data, node, store) { //点击
                  this.$emit('onNodeClick', {data, node, store})// 强制触发父组件的方法存值
                  if(this.onNodeClick) this.onNodeClick(1, data, node, store) 

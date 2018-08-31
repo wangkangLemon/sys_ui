@@ -12,6 +12,30 @@
     .tab {
         max-width: 700px;
     }
+    .collection {
+        align-items: center;
+        min-height: 36px;
+        border-radius: 4px;
+        padding: 3px 30px 3px 10px;
+        border: 1px solid #bfcbd9;
+    }
+    .u-course-tag {
+        margin-right: 10px;
+        background-color: rgba(32,160,255,.1);
+        display: inline-block;
+        padding: 0 10px;
+        height: 32px;
+        line-height: 30px;
+        font-size: 12px;
+        color: #20a0ff;
+        border-radius: 4px;
+        box-sizing: border-box;
+        border: 1px solid rgba(32,160,255,.2);
+        white-space: nowrap;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
     .el-tab-pane {
         max-width: 700px;
     }
@@ -129,8 +153,9 @@
                         <el-radio class="radio" v-model="fetchParam.noaccess" :label="1">隐藏</el-radio>
                         <el-radio class="radio" v-model="fetchParam.noaccess" :label="0">可见</el-radio>
                     </el-form-item>
-                    <el-form-item
-                        :label="pushTypeDialog.title"  prop="receiver">
+                    <!-- 新需求可见省份 待完成 -->
+                    <!-- <el-form-item
+                        label="可见省份"  prop="receiver">
                         <div class="collection" @click="openPushTypeDialog">
                             <el-tag
                                 class="u-course-tag"
@@ -139,7 +164,7 @@
                                 {{item.name}}
                             </el-tag>
                         </div>
-                    </el-form-item>
+                    </el-form-item> -->
                     <h2>课后考试设置</h2>
                     <el-form-item label="课后考试" prop="need_testing">
                         <el-radio class="radio" v-model="fetchParam.need_testing" :label="1">需要</el-radio>
@@ -271,6 +296,8 @@ import {transformParam} from '../../../utils/common'
 import vTags from '../../component/form/Tags.vue'
 import VideoPreview from '../../component/dialog/VideoPreview.vue'
 import Experts from '../../component/select/Experts'
+import CourseTree from '../../component/tree/MenuTree.vue'
+import govService from "../../../services/gov/govService.js"
 
 export default {
     name: 'course-manage-addcourse',
@@ -454,13 +481,8 @@ export default {
             },
             //打开发布对象弹出框
             openPushTypeDialog () {
-                console.log('this.form.receive_type',this.form.receive_type);
                 //单选部门
-                // if(this.form.receive_type==2){
-                    this.pushTypeDialog.showDialog = true
-                // }else if(this.form.receive_type==1){
-                //      this.dialogTree.isShow=true
-                // }
+                     this.dialogTree.isShow=true
             },
              //获取gov菜下拉列表
             req(param){
@@ -651,7 +673,8 @@ export default {
             }
         }
     },
-    components: { CropperImg, UploadFile, CourseAlbumSelect, DialogVideo, UploadImg, vTags ,VideoPreview,Experts}
+    components: { CropperImg, UploadFile, CourseAlbumSelect, DialogVideo, 
+                UploadImg, vTags ,VideoPreview,Experts,CourseTree}
 }
 
 function getOrignData() {

@@ -121,12 +121,12 @@
                     </div>
                 </el-form-item>
                  <el-form-item label="接收部门" v-if="form.receive_type==1">
-                        <!-- <el-checkbox v-model="govparam.checked" v-if="!govparam.provinceSelect">全部</el-checkbox> -->
-                        <Region :province="govparam.province_id "  v-model="govparam.province_id" 
+                        <Region :province="govparam.province_id"  v-model="govparam.province_id" ref="govselect"
                                 :city="govparam.city_id" 
                                 :area="govparam.area_id" 
                                 :town="govparam.town_id"
                                 :village="govparam.village_id" 
+                                :provinces="govparam.provinces " 
                                 title="" 
                                 v-on:provinceChange="val => {govparam.province_id = val;finallyVal = val}"
                                 v-on:cityChange="val => {govparam.city_id = val;finallyVal = val}" 
@@ -145,26 +145,17 @@
                         <el-radio :label="1">通知</el-radio>
                         <el-radio :label="2">课程</el-radio>
                         <el-radio :label="3">直播</el-radio>
-                        <!-- <el-radio :label="'task'">任务</el-radio> -->
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item prop="url" label="消息地址" v-if="form.msg_type==1">
                     <el-input v-model="form.url" placeholder="请填写消息地址" auto-complete="off"></el-input>
                 </el-form-item>
-                <!-- <el-form-item prop="content" label="消息内容">
-                    <el-input v-model="form.content" type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请填写消息内容"></el-input>
-                </el-form-item> -->
                 <el-form-item prop="biz_id" label="消息课程" v-if="form.msg_type==2">
                      <Course v-model="form.biz_id" :placeholder="form.biz_name" ref="Course"
                             v-on:change="val=>form.biz_id=val" :change="reqFun2" 
                             :itemObj="['contentid','course_name']" :list="changelistc">
                     </Course>
                 </el-form-item>
-                <!-- <el-form-item  label="关联商品" prop="product_id" >
-                    <Product v-model="form.product_id" :placeholder="form.product_name" ref="Product"
-                            v-on:change="val=>form.product_id=val" :change="reqFun2" :list="changelistc">
-                    </Product>
-                </el-form-item> -->
                 <el-form-item prop="biz_id" label="消息直播" v-if="form.msg_type==3">
                     <Biz v-model="form.biz_id" :placeholder="form.biz_name" ref="Live"
                             v-on:change="val=>form.biz_id=val" :change="reqFun1" :itemObj="['id','title']" :list="changelistc1">
@@ -175,7 +166,6 @@
                 </el-form-item>
           
                  <el-form-item label="" >
-                    <!--<el-button @click="$router.push({ name:'medical-index'})">取消</el-button>-->
                     <div>
                     <el-button type="primary" @click="btnNextClick" v-if="!this.$route.params.look">确认</el-button>
                     </div>
@@ -199,7 +189,7 @@
     import Course from '../../component/select/CommonSelect.vue'
     import Biz from '../../component/select/CommonSelect.vue'
     import CourseCategorySelect from '../../component/select/MultCategory'
-    import Region from '../../component/select/RegionImport.vue'
+    import Region from '../../component/select/RegionImport0830.vue'
     import { time2String } from '../../../utils/timeUtils.js'
     import VueEditor from '../../component/form/UEditor.vue'
     import Transfer from '../../component/dialog/Transfer.vue'
@@ -231,6 +221,7 @@
             area_id: '',
             town_id: '',
             village_id: '',
+            provinces:[],
             name: '',
         }
     }
@@ -339,7 +330,7 @@
                 
                 // console.log('typeof(this.fetchParam.price)===='+typeof(this.fetchParam.price));
             },
-            'govparam.province_id'(){
+            'govparam.province_id'(val){
                 this.changeR()
                 console.log('typeof(this.govparam.province_id)===='+typeof(this.govparam.province_id));
             }
@@ -356,13 +347,14 @@
 
                     this.pushTypeDialog.type = ret.receive_type
                     if(ret.receive_type==1){
-                        console.log(1,this.govparam);
-                        console.log(2,ret.gov.province_id);
                         this.govparam.province_id=Number(ret.gov.province_id)
-                        // this.govparam.city_id=ret.gov.city_id
-                        // this.govparam.area_id=ret.gov.area_id
-                        // this.govparam.town_id=ret.gov.town_id
+                        
+                        // this.govparam.provinces=
+                        this.govparam.city_id=ret.gov.city_id
+                        this.govparam.area_id=ret.gov.area_id
+                        this.govparam.town_id=ret.gov.town_id
                         console.log('this.govparam.province_id',this.govparam.province_id);
+
                     }
                     if(ret.receive_type==2&&ret.users&&ret.users.length!==0){
                         this.pushTypeDialog.selectedData[this.pushTypeDialog.type] = this.generatorList(ret.users || [])
