@@ -8,6 +8,9 @@
             @node-click="handleNodeClick"
             @node-expand="handleNodeExpand" 
             :highlight-current="selectable"
+            :default-checked-keys="defaultCheckedkeys"
+            node-key="id"
+            :props="defaultProps"
             ref="tree" >
     </el-tree>
 </template>
@@ -20,63 +23,51 @@
         props: {
             onNodeClick: Function,
             value: Array,
+            defaultCheckedkeys:Array,
         },
         data () {
             return {
                 data: this.value,
                 loading: false,
                 selectable: true, // 是否可选中
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                }
             }
         },
         created () {
+            console.log(1111,this.defaultCheckedkeys);
+            
             this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1}).then(ret=>{ 
-               ret.data.forEach(v => {
-                    this.data.push({
-                        data: v,
+            //    ret.data.forEach(v => {
+            //         this.data.push({
+            //             id: v.id,
+            //             label: v.name,
+            //             // children: v.level>2 ? null : [{
+            //             //     label: '正在加载',
+            //             //     value: -1,
+            //             // }]  //是否最终菜单？点箭头触发请求
+            //         })
+            //    })
+               this.data = ret.data.map(v => {
+                   return {
+                        id: v.id,
                         label: v.name,
+                        data: v,
                         name: v.name,
-                        value: v.id,
-                        // children: v.level>2 ? null : [{
-                        //     label: '正在加载',
-                        //     value: -1,
-                        // }]  //是否最终菜单？点箭头触发请求
-                    })
+                    }
                })
+               console.log(this.data)
                this.loading = false
                xmview.setContentLoading(false)
             })
         },
-        watch: {
-
-            // 'value' (val) {  
-            //     if (val.length != this.data.length) {
-            //         this.setCurrVal(val)
-            //     }
-            // },
-            // 'data' (val) {
-            //     this.$emit('input', val)
-            // }
-        },
         methods: {
-            // handleNodeClick ({data, node, store}) {
-                //     this.onNodeClick && this.onNodeClick(data, node, store)
-                //                     console.log(node)
-                //     // console.log('===========onNodeClick    data==========  ')
-                // },
-                // removeItem (item, parent) {
-                //     this.$refs.tree.removeItem(item, parent)
-                // },
-                // setCurrVal (val) {
-                //     if (val === this.data) return
-                //     this.data = val
-                //     this.$emit('input', val)
-                // },
             // 给子元素获取数据的方法
             getData (params) {
                 return govService.getSelectList(params)
             },
-
-//========================================  opeeableTree============================================================
 
             handleNodeExpand (data, node, nodeDom) { //点下拉箭头  
                 // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
@@ -89,7 +80,7 @@
                             data: v,
                             label: v.name,
                             name: v.name,
-                            value: v.id,
+                            id: v.id,
                             // children: v.level>2 ? null : [{ 
                             //     label: '正在加载',
                             //     value: -1,

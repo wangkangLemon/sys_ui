@@ -270,7 +270,7 @@
         <!-- 选择部门树弹窗 -->
         <el-dialog  ref="dialogSelect" v-model="dialogTree.isShow" title="选取范围"
                            item-key="contentid">
-            <GovTree v-model="treeData" :req="req" ref="courseCategory"  :nodeExpand="1"
+            <GovTree v-model="treeData" :req="req" ref="courseCategory"  :nodeExpand="1" :defaultCheckedkeys="defaultCheckedkeys"
                         :change="val=>categorysBox=val" :checkbox="true" :onNodeClick="treeNodeClick.bind(this,1)">
             </GovTree>
             <span slot="footer">
@@ -359,7 +359,8 @@ export default {
                     total: 0,
                 },
             treeData: [],
-            categorysBox:[]
+            categorysBox:[],
+            defaultCheckedkeys:[]
         }
     },
 
@@ -384,7 +385,6 @@ export default {
         //     // }) 
         //     xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
         // } else
-        console.log(this.$route.query);
         
         if (this.$route.query.contentid) {//编辑页面
             this.activeTab= 'first'
@@ -394,10 +394,15 @@ export default {
                 this.fetchParam.material_name= this.$route.params.courseInfo.course_name
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
                 //可见省份id
+     
                 this.categorysBox = this.fetchParam.region_info.map(v=>{
                     v.contentid = v.id
+                    v.label = v.name
+                    this.defaultCheckedkeys.push(v.id)
                     return v
                 }) 
+                console.log('this.defaultCheckedkeys',this.defaultCheckedkeys);
+                
                  xmview.setContentTile(`编辑课程-${this.fetchParam.category_name}`)
             })
         }else if(this.$route.params.addcourseInfo){ //添加页面
@@ -414,10 +419,6 @@ export default {
     },
 
     watch: {
-        'categorysBox'(){
-            console.log(this.categorysBox);
-            
-        },
         'fetchParam.need_testing'(val) {
             if (val == 1) { // 需要考试
                 this.rulesFirst.limit_time = { required: true, message: '请输入考试时间', trigger: 'change' }
@@ -487,6 +488,8 @@ export default {
                     // this.categorysBox=format(t)
 
                     //在没有ended 判断的时候用什么代替 怎么代替 方法
+                    console.log(arr);
+                    
                     this.categorysBox=arr
 
                     this.getCategoryids()
@@ -507,8 +510,25 @@ export default {
             //打开发布对象弹出框
             openPushTypeDialog () {
                 //单选部门
-                this.categorysBox=[]
+               
+                // this.categorysBox=[]
                 this.dialogTree.isShow=true
+                 console.log('this.defaultCheckedkeys',this.defaultCheckedkeys);
+                // setTimeout(() => {
+                    // console.log( this.$refs.courseCategory.$refs.tree);
+                    // console.log('this.categorysBox',this.categorysBox);
+                    
+                    // console.log('box',box);
+                    // this.$nextTick(() => {
+                    //     this.$refs.courseCategory.$refs.tree.setCheckedNodes(box)
+                    //     console.log(this.$refs.courseCategory.$refs.tree.getCheckedNodes());
+                    // })
+                    
+                // }, 1000);
+                   
+
+                
+
             },
              //获取gov菜下拉列表
             req(param){
