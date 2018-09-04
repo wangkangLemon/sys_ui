@@ -74,6 +74,8 @@
                         }
                     ],
                     description: { required: true, message: '请输入商品简介',trigger: 'blur'},
+                    price1: { required: true ,type:'number', message: '请输入商品简介',trigger: 'blur'},
+                    num: { required: true ,type:'number', message: '请输入商品简介',trigger: 'blur'},
             },
                 changelist:{}
             }
@@ -138,7 +140,9 @@
             mark: '',
             price:void 0,
             appleid_origin:'',
-            appleid_discount:''
+            appleid_discount:'',
+            price1:void 0,
+            num:void 0,
         }
     }
 

@@ -49,7 +49,7 @@
             </el-table-column>
             <el-table-column min-width="150" :show-overflow-tooltip="true" label="药品">
                 <template scope="scope">
-                    <p v-if="scope.row.industry_course">{{ scope.row.industry_course.industry_drug.name||''}}</p>
+                    <p v-if="scope.row.industry_course" >{{ scope.row.industry_course&&scope.row.industry_course.industry_drug&&scope.row.industry_course.industry_drug.name||''}}</p>
                 </template>
             </el-table-column>
             <el-table-column min-width="120" prop="contact" label="联系人" v-if="data">

@@ -32,8 +32,14 @@
                     </ImagEcropperInput>
                 </el-form-item>
                 <el-form-item label="药品单价(分)" prop="price">
-                    <el-input type="number" :min="0" v-model="fetchParam.price"></el-input>
+                    <el-input-number type="number" :min="0" v-model="fetchParam.price"></el-input-number>
                 </el-form-item>
+                <el-form-item label="建议零售价(分)" prop="retail_price">
+                    <el-input-number :min="0" v-model="fetchParam.retail_price"></el-input-number>
+                </el-form-item> 
+                <el-form-item label="最低订购数量" prop="min_order">
+                    <el-input-number :min="0" v-model="fetchParam.min_order"></el-input-number>
+                </el-form-item> 
                 <el-form-item label="药品简介" prop="summary">
                     <el-input v-model="fetchParam.summary" type="textarea" :autosize="{ minRows: 2, maxRows: 7}" placeholder="请输入内容">
                     </el-input>
@@ -78,16 +84,24 @@
                             message: '请输入整数'
                         }],
                     summary: { required: true, message: '请输入药品简介',trigger: 'blur'},
+                    retail_price: [{required: true,type:'number', message: '请输入建议零售价', trigger: 'blur'},{
+                            pattern:  /^\d+$/,
+                            message: '请输入整数'
+                        }],
+                    min_order: [{required: true,type:'number', message: '请输入最低订购数量', trigger: 'blur'},{
+                            pattern:  /^\d+$/,
+                            message: '请输入整数'
+                        }],
             },
                 changelist:{}
             }
         },
-        watch:{
-            'fetchParam.price'(){
-                this.fetchParam.price=Number(this.fetchParam.price)
-                console.log('typeof(this.fetchParam.price)===='+typeof(this.fetchParam.price));
-            }
-        },
+        // watch:{
+        //     'fetchParam.price'(){
+        //         this.fetchParam.price=Number(this.fetchParam.price)
+        //         console.log('typeof(this.fetchParam.price)===='+typeof(this.fetchParam.price));
+        //     }
+        // },
         created() {
             xmview.setContentLoading(false)
             if (this.$route.params.id != undefined) {    //路由id传递
@@ -152,7 +166,9 @@
             image:'',
             summary: '',
             price:void 0,
-            explanation:''
+            explanation:'',
+            retail_price:void 0,
+            min_order:void 0,
 
         }
     }

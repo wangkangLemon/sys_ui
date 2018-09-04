@@ -396,5 +396,32 @@ export default {
             noback: false
           }
         },
+        //工业公司管理
+        {
+            path: 'industry/company',
+            name: 'industry-company',
+            component: resolve => {
+                require.ensure([], () => {
+                resolve(require('../views/course/industry/company/Company.vue'))
+                })
+            },
+            meta: {
+                title: '工业公司',
+                noback: true
+            }
+        }, 
+        {
+            path: 'industry/company/add', //专家管理表单 -修改
+            name: 'industry-company-add',
+            component: resolve => {
+                require.ensure([], () => {
+                resolve(require('../views/course/industry/company/CompanyForm.vue'))
+                })
+            },
+            meta: {
+                title: '工业公司新建',
+                noback: false
+            }
+        },
     ]
 }

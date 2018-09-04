@@ -23,11 +23,6 @@
             top: 5px;
         }
     } 
-        .bottom-btns {
-            .submit {
-                float: right;
-            }
-        }
 }
 </style>
 
@@ -43,14 +38,6 @@
                         <img :src="fetchParam.image | fillImgPath" width="200" height="112" v-show="fetchParam.image">
                         <CropperImg ref="imgcropper" :confirmFn="cropperImgSucc" :aspectRatio="16/9"></CropperImg>
                     </el-form-item>
-                    <!-- <el-form-item label="课程类型" prop="material_type">
-                        <el-select v-model="fetchParam.material_type" @change="typeChange" placeholder="请选择" >
-                            <el-option label="视频" value="video"></el-option>
-                            <el-option label="WORD" value="doc"></el-option>
-                            <el-option label="PPT" value="ppt"></el-option>
-                            <el-option label="PDF" value="pdf"></el-option>
-                        </el-select>
-                    </el-form-item> -->
                     <el-form-item label="课程文件" prop="material_id">
                         <UploadFile :onSuccess="handleUploadDoc" :url="uploadDocUrl" :accept="accept" :disabled="fetchParam.material_type == null" 
                                     v-show="fetchParam.material_type !== 'video'"></UploadFile>
@@ -74,83 +61,21 @@
                     <el-form-item label="课程标签">
                         <vTags v-model="courseTags"></vTags>
                     </el-form-item>
+                    <el-form-item label="观看红包(分)" prop="bonus">
+                        <el-input-number :min="0" v-model="fetchParam.bonus"></el-input-number>
+                    </el-form-item> 
+                    <el-form-item prop="company_id" label="关联公司">
+                        <Biz v-model="fetchParam.company_id" :placeholder="fetchParam.company_name" ref="Live"
+                                v-on:change="val=>fetchParam.company_id=val" :change="reqFun1" :itemObj="['id','name']" :list="changelistc1">
+                        </Biz>
+                    </el-form-item>
                     <el-form-item label="" v-if="!readonly">
                         <el-button style="float: right" type="primary" @click="btnNextClick">
                             保存
                         </el-button>
-                        <!-- <el-button class="submit" type="primary" @click="handleSubmitTesting">发布</el-button> -->
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
-            <!-- <el-tab-pane :disabled="!fetchParam.contentid" label="考试题目设置" name="second" class="testing-set">
-                <el-form>
-                    <el-form label-width="120px" v-for="(item,index) in fetchTesting" :key="index">
-                        <el-form-item label="" v-if="!readonly">
-                            <el-button icon="plus" @click='addTesting(0, index)'>判断题</el-button>
-                            <el-button icon="plus" @click='addTesting(1, index)'>单选题</el-button>
-                            <el-button icon="plus" @click='addTesting(2, index)'>多选题</el-button>
-                            <el-button icon="delete" type="danger" @click='deleteTesting(index, item)'>删除</el-button>
-                        </el-form-item>
-                        <el-form-item :label="'第' + (index+1) + '题'">
-                            <span v-if="item.category == 0">判断题</span>
-                            <span v-else-if="item.category == 1">单选题</span>
-                            <span v-else>多选题</span>
-                        </el-form-item>
-                        <el-form-item label="题目">
-                            <el-input v-model="item.description" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="配图">
-                            <UploadImg :defaultImg="item.image" :url="uploadImgUrl" :disabled="!item.editable" :onSuccess="res => item.image = res.data.url" :data='uploadextraData'></UploadImg>
-                        </el-form-item>
-                        <el-form-item label="选项" v-if="item.category == 0">
-                            <el-radio class="radio" :disabled="!item.editable" v-model="item.correct" :label="1">
-                                <i>正确</i>
-                            </el-radio>
-                            <el-radio class="radio" :disabled="!item.editable" v-model="item.correct" :label="0">
-                                <i>错误</i>
-                            </el-radio>
-                        </el-form-item>
-
-                        <el-form-item label="选项" v-else>
-                            <h5>请在正确答案前面打勾</h5>
-                            <div class="multy-choose-item" v-for="(option,indexOption) in item.options" :key="indexOption">
-                                <el-checkbox v-model="option.correct" :true-label="1" :disabled="!item.editable" v-if="item.category == 2"></el-checkbox>
-                                <el-radio class="radio" v-model="item.correct" :label="indexOption" :disabled="!item.editable" v-else>
-                                    <i></i>
-                                </el-radio>
-                                <el-input placeholder="填写描述" v-model="option.description" :disabled="!item.editable"></el-input>
-                                <el-button :disabled="!item.editable" type="text" @click="item.options.splice(indexOption, 1)">
-                                    <i>删除</i>
-                                </el-button>
-                            </div>
-                            <div class="multy-choose-item">
-                                <el-button v-if="item.editable" type="text" @click="addMoreTestingOption(item.options)">添加更多选项</el-button>
-                            </div>
-                        </el-form-item>
-
-                        <el-form-item label="答案详解">
-                            <el-input v-model="item.explain" :disabled="!item.editable" type="textarea" :autosize="{ minRows: 4, maxRows: 6}" placeholder="请输入内容">
-                            </el-input>
-                        </el-form-item>
-
-                        <hr>
-                    </el-form>
-                </el-form>
-
-                <el-form label-width="120px" v-if="!readonly">
-                    <el-form-item label="">
-                        <el-button icon="plus" @click='addTesting(0, fetchTesting.length)'>判断题</el-button>
-                        <el-button icon="plus" @click='addTesting(1, fetchTesting.length)'>单选题</el-button>
-                        <el-button icon="plus" @click='addTesting(2, fetchTesting.length)'>多选题</el-button>
-                    </el-form-item>
-                </el-form>
-
-                <div class="bottom-btns" v-if="!readonly">
-                    <el-button @click="btnPreClick">上一步</el-button>
-                    <el-button class="submit" type="primary" @click="handleSubmitTesting">发布</el-button>
-                </div>
-            </el-tab-pane> -->
         </el-tabs>
 
         <DialogVideo :onSelect="handleVideoSelected" v-model="isShowVideoDialog"></DialogVideo>
@@ -166,7 +91,6 @@ import industryService from '../../../../services/course/industryService.js'
 import CropperImg from '../../../component/upload/ImagEcropperInput.vue'
 import DialogVideo from '../../component/DialogVideo.vue'
 import UploadFile from '../../../component/upload/UploadFiles.vue'
-// import CourseCategorySelect from '../../component/select/CourseCategory.vue'
 import CourseAlbumSelect from '../../../component/select/CourseAlbum'
 import testingFactory from '../../utils/testingFactory'
 import formUtils from '../../../../utils/formUtils'
@@ -174,6 +98,7 @@ import {transformParam} from '../../../../utils/common'
 import vTags from '../../../component/form/Tags.vue'
 import VideoPreview from '../../../component/dialog/VideoPreview.vue'
 import Product from '../../../component/select/CommonSelect.vue'
+import Biz from '../../../component/select/CommonSelect.vue'
 
 export default {
     name: 'course-manage-addcourse',
@@ -196,6 +121,12 @@ export default {
                 drug_id: { required: true, type: 'number', message: '请选择', trigger: 'change' },
                 material_id: { required: true, type: 'number', message: '请上传课程文件', trigger: 'change' },
                 material_type: { required: true,  message: '请选择题材类型', trigger: 'change' },
+                bonus: [{required: true,type:'number', message: '请输入观看红包金额', trigger: 'blur'},
+                        {
+                                pattern:  /^\d+$/,
+                                message: '请输入整数'
+                        }],
+                company_id: { required: true,type: 'number', message: '请选择工业公司',trigger: 'change'},
             },
             accept: '*.doc,*.docx', // 上传的文件格式
             // 考试设置部分
@@ -206,6 +137,7 @@ export default {
                 extpath:'subject'
             },
             changelistc:[],
+            changelistc1:[],
         }
     },
 
@@ -223,8 +155,6 @@ console.log(this.$route.query.contentid);
                 this.fetchParam.material_name= ret.course_name
                 this.courseTags = this.fetchParam.tags ? this.fetchParam.tags.split(',') : []
                  xmview.setContentTile(`编辑课程`)
-            }).catch((ret) => {
-                xmview.showTip('error', ret.message)
             })
         }else if(this.$route.params.addcourseInfo){ //添加页面
             this.fetchParam.category_name=this.$route.params.addcourseInfo.category_name
@@ -238,6 +168,22 @@ console.log(this.$route.query.contentid);
     watch: {
     },
     methods: {
+         //工业公司搜索
+            reqFun1(val, length){
+                let param={
+                    page: parseInt(length / 15) + 1||1,
+                    pagesize: 15,
+                    name:val,
+                }
+                let _this=this
+                return industryService.fetchCompanyList(param)
+                .then((ret)=>{
+                    console.log('param=',typeof(param.page));
+                    console.log('ret.data',ret.data);
+                    _this.$emit('changelistc', ret.data)
+                    return ret
+                })
+            },
         //商品搜索
             reqFun2(val, length){
                 let param={
@@ -248,15 +194,7 @@ console.log(this.$route.query.contentid);
                 let _this=this
                 return industryService.fetchDrugList(param)
                 .then((ret)=>{
-                    console.log('param=',typeof(param.page));
-                    console.log(ret.data);
-                    // if(param.page==1){
-                    //     ret.data=[{id:0,name:'免费直播'}].concat(ret.data)
-                    //     console.log(ret.data);
-                    //     _this.$emit('changelistc', ret.data)
-                    // }else{
-                        _this.$emit('changelistc', ret.data)
-                    // }
+                    _this.$emit('changelistc', ret.data)
                     return ret
                 })
             },
@@ -273,7 +211,6 @@ console.log(this.$route.query.contentid);
                 // 拿到播放地址
                 videoService.getVideoPreviewUrl(index).then((ret) => {
                     this.videoUrl = ret.video
-                    // this.row = row
                     this.$refs.videoPreview.show(this.fetchParam.material_name) //返回视频的数据后显示弹窗
                 })
             },
@@ -290,7 +227,6 @@ console.log(this.$route.query.contentid);
                 transformParam(this.fetchParam)
                 // for(let i in this.fetchParam){
                 //     this.fetchParam[i] = this.fetchParam[i]== undefined ?'': this.fetchParam[i]
-                    
                 // }
                 let p
                 // 如果是编辑
@@ -337,7 +273,7 @@ console.log(this.$route.query.contentid);
             }
         }
     },
-    components: { CropperImg, UploadFile, CourseAlbumSelect, DialogVideo, vTags ,VideoPreview,Product}
+    components: { CropperImg, UploadFile, CourseAlbumSelect, DialogVideo, vTags ,VideoPreview,Product,Biz}
 }
 
 function getOrignData() {
@@ -351,6 +287,8 @@ function getOrignData() {
         material_name: '选择视频',
         drug_id: void 0,
         description: void 0,
+        bonus:void 0,
+        company_id:void 0,
     }
 
     return orignData

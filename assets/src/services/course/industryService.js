@@ -177,6 +177,64 @@ class FinanceService {
         }
       })
     }
+
+    // 工业公司列表
+    fetchCompanyList(params) {
+      let url = urlPre + '/company/lists'
+      return api.get(url, params).then(ret => {
+        if (ret.code == 0) {
+          return ret
+        } else {
+          return Promise.reject(ret)
+        }
+      })
+    }
+    //工业公司获取
+    getCompany(id) {
+      let url = `${urlPre}/company/get/${id}` //传递的地址的id
+      return api.get(url).then(ret => {
+        return ret.data
+      })
+    }
+    // 工业公司创建
+    createCompany(fetchParam) {
+      let url = urlPre + '/company/create'
+      return api.post(url, fetchParam).then(ret => {
+        if (ret.code == 0) {
+          xmview.showTip('success', ret.message)
+          return ret.data
+        } else {
+          xmview.showTip('error', ret.message)
+          return Promise.reject(ret)
+        }
+      })
+    }
+    // 工业公司更新
+    editCompany(fetchParam, id) {
+      let url = `${urlPre}/company/edit/${id}`
+      return api.post(url, fetchParam).then(ret => {
+        if (ret.code == 0) {
+          xmview.showTip('success', ret.message)
+          return ret.data
+        } else {
+          xmview.showTip('error', ret.message)
+          return Promise.reject(ret)
+        }
+      })
+    }
+    // 工业公司删除
+    deleteCompany(id) {
+      let url = `${urlPre}/company/delete/${id}`
+      return api.post(url, {}).then(ret => {
+        if (ret.code == 0) {
+          xmview.showTip('success', ret.message)
+          return ret.data
+        } else {
+          xmview.showTip('error', ret.message)
+          return Promise.reject(ret)
+        }
+      })
+    }
 }
 
 export default new FinanceService()

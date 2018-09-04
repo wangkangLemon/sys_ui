@@ -3,13 +3,15 @@
 <template> 
     <!--这是父组件-->
     <el-tree v-loading="loading" 
-            :data="data" show-checkbox 
+            :data="data" 
+            show-checkbox 
             :expand-on-click-node="false" 
             @node-click="handleNodeClick"
             @node-expand="handleNodeExpand" 
             :highlight-current="selectable"
             :default-checked-keys="defaultCheckedkeys"
             node-key="id"
+            :check-strictly="true"	
             :props="defaultProps"
             ref="tree" >
     </el-tree>
@@ -40,8 +42,8 @@
             console.log(1111,this.defaultCheckedkeys);
             
             this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1}).then(ret=>{ 
-               this.data = ret.data.map(v => {
-                   return {
+                this.data = ret.data.map(v => {
+                    return {
                         id: v.id,
                         label: v.name,
                         data: v,
@@ -51,7 +53,7 @@
                             value: -1,
                         }]  //是否最终菜单？
                     }
-               })
+                })
                this.loading = false
                xmview.setContentLoading(false)
             })
@@ -65,20 +67,8 @@
                 // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
                 console.log(data, node, nodeDom );
                 this.getData({id : 'tree', type :'course', filter : true , pid :data.id , level:-1, pagesize:-1}).then(ret=>{
-                    let arr = []
-                    if(node.level==2){
-                        node.data.children =  ret.data.map(v => {
-                        return {
-                                id: v.id,
-                                label: v.name,
-                                data: v,
-                                name: v.name,
-                            }
-                    })
-                    this.loading = false
-                    xmview.setContentLoading(false)
-                        
-                    }
+                    console.log(ret.data);
+                    console.log('expand========',this.defaultCheckedkeys);
                     node.data.children =  ret.data.map(v => {
                         return {
                                 id: v.id,
@@ -93,29 +83,11 @@
                     })
                     this.loading = false
                     xmview.setContentLoading(false)
+                    
                 })
             },
             handleNodeClick (data, node, store) { //点击
                 console.log(node.data)
-                // if (node.data.ended) return
-                    //     let currItem = treeUtils.findItem(this.data, node.data, 'value')   //拿到当前项 
-                    //     var arr = []
-                    //     this.getData({
-                    //         pid: data.data.id, 
-                    //         level:-1,
-                    //     }).then((ret) => {
-                    //         var arr = ret.map(v=>{
-                    //             v.label = v.name
-                    //             v.value = v.id
-                    //             v.children = v.ended ? null : [] //是否最终菜单？是为nulgl 否则为一个数组
-                    //             return v
-                    //         })
-                    //         currItem.children = arr
-                    //         this.loading = false
-                    //         xmview.setContentLoading(false)
-                    //    })
-
-                 // this.$emit('onNodeClick', {data, node, store})
                 this.onNodeClick(1, data, node, store) 
 
                 //  根节点无法被选中 
