@@ -39,8 +39,6 @@
             }
         },
         created () {
-            console.log(1111,this.defaultCheckedkeys);
-            
             this.getData({id : 'tree', type :'course', filter : true , pid :0 , level:-1, pagesize:-1}).then(ret=>{ 
                 this.data = ret.data.map(v => {
                     return {
@@ -65,7 +63,13 @@
             },
             handleNodeExpand (data, node, nodeDom) { //点下拉箭头  
                 // 如果是有children 并且只有一个[加载中...]的一项 则去服务器加载数据
+                console.log('expand========',this.defaultCheckedkeys);
+
                 console.log(data, node, nodeDom );
+                // node.data.children = [ {
+                //                 id: 711558,
+                //                 label: '演示区'}]
+
                 this.getData({id : 'tree', type :'course', filter : true , pid :data.id , level:-1, pagesize:-1}).then(ret=>{
                     console.log(ret.data);
                     console.log('expand========',this.defaultCheckedkeys);
@@ -83,7 +87,6 @@
                     })
                     this.loading = false
                     xmview.setContentLoading(false)
-                    
                 })
             },
             handleNodeClick (data, node, store) { //点击

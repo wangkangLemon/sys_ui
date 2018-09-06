@@ -61,6 +61,7 @@
             <el-table-column min-width="100" label="价格(元)">
                  <template scope="scope">
                     {{Number(scope.row.price)/100}}
+                    <span v-if="scope.row.unit">/ {{scope.row.unit}}</span>
                 </template>
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" min-width="150" prop="summary" label="简介">

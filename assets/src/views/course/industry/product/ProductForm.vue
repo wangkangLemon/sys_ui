@@ -40,6 +40,9 @@
                 <el-form-item label="最低订购数量" prop="min_order">
                     <el-input-number :min="0" v-model="fetchParam.min_order"></el-input-number>
                 </el-form-item> 
+                <el-form-item label="药品单位" prop="unit">
+                    <el-input v-model="fetchParam.unit"></el-input>
+                </el-form-item>
                 <el-form-item label="药品简介" prop="summary">
                     <el-input v-model="fetchParam.summary" type="textarea" :autosize="{ minRows: 2, maxRows: 7}" placeholder="请输入内容">
                     </el-input>
@@ -71,6 +74,13 @@
                 fetchParam: getOriginData(),
                 rules: {
                     name:[
+                        {required: true, message: '必须输入', trigger: 'blur'},
+                        ,{
+                            pattern:  /\S$/,
+                            message: '请输入非空格或非特殊字符的内容'
+                        }
+                    ],
+                    unit:[
                         {required: true, message: '必须输入', trigger: 'blur'},
                         ,{
                             pattern:  /\S$/,
